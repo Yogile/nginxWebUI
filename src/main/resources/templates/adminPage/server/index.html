@@ -51,9 +51,11 @@
 								<#if server.ssl== true> 是 </#if>
 								<#if server.ssl== false> 否 </#if>
 							<td>
-								pem:${server.pem}
+								<#if server.ssl== true>
+								pem: ${server.pem}
 								<br>
-								key:${server.key}
+								key: ${server.key}
+								</#if>
 							</td>
 							<td>${server.proxyPass}:${server.proxyPassPort}</td>
 							<td>
