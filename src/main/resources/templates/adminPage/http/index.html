@@ -24,7 +24,6 @@
 							<th>项</th>
 							<th>值</th>
 							<th>说明</th>
-							<th>生成内容</th>
 							<th>操作</th>
 						</tr>
 					</thead>
@@ -33,9 +32,8 @@
 							<td>gzip</td>
 							<td>${http.gzip}</td>
 							<td>开启gzip压缩</td>
-							<td>gzip ${http.gzip}</td>
 							<td>
-								<button class="layui-btn layui-btn-sm" onclick="edit('${admin.id}')">编辑</button>
+								<button class="layui-btn layui-btn-sm" onclick="edit('gzip','${http.gzip}')">编辑</button>
 							</td>
 						</tr>
 						
@@ -43,9 +41,8 @@
 							<td>clientMaxBodySize</td>
 							<td>${http.clientMaxBodySize}</td>
 							<td>最大上传文件尺寸</td>
-							<td>clientMaxBodySize ${http.clientMaxBodySize}</td>
 							<td>
-								<button class="layui-btn layui-btn-sm" onclick="edit('${admin.id}')">编辑</button>
+								<button class="layui-btn layui-btn-sm" onclick="edit('clientMaxBodySize','${http.clientMaxBodySize}')">编辑</button>
 							</td>
 						</tr>
 					</tbody>
@@ -58,21 +55,15 @@
 		<!-- 弹出框 -->
 		<div class="layui-form" id="windowDiv" style="padding: 15px; display: none">
 			<form id="addForm">
-				<input type="hidden" name="id" id="id">
+				<input type="hidden" name="name" id="name">
 
 				<div class="layui-form-item">
-					<label class="layui-form-label">姓名</label>
+					<label class="layui-form-label" id="nameDiv"></label>
 					<div class="layui-input-block">
-						<input type="text" name="name" id="name" class="layui-input">
+						<input type="text" name="value" id="value" class="layui-input">
 					</div>
 				</div>
 
-				<div class="layui-form-item">
-					<label class="layui-form-label">登录密码</label>
-					<div class="layui-input-block">
-						<input type="password" name="pass" id="pass" class="layui-input">
-					</div>
-				</div>
 
 				<div class="layui-form-item">
 					<button type="button" class="layui-btn layui-btn-normal" onclick="addOver()">提交</button>

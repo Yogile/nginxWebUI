@@ -1,30 +1,34 @@
 package com.cym.model;
 
-import java.util.List;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-public class Server {
+import cn.craccd.mongoHelper.bean.BaseModel;
+
+@Document
+public class Server extends BaseModel{
 	String serverName;
 	String listen;
 	Boolean ssl;
 	String pem;
 	String key;
-	List<Location> locations;
-	Boolean redirectToHttps;
 
-	public Boolean getRedirectToHttps() {
-		return redirectToHttps;
+	String proxyPass;
+	String proxyPassPort;
+	
+	public String getProxyPassPort() {
+		return proxyPassPort;
 	}
 
-	public void setRedirectToHttps(Boolean redirectToHttps) {
-		this.redirectToHttps = redirectToHttps;
+	public void setProxyPassPort(String proxyPassPort) {
+		this.proxyPassPort = proxyPassPort;
 	}
 
-	public List<Location> getLocations() {
-		return locations;
+	public String getProxyPass() {
+		return proxyPass;
 	}
 
-	public void setLocations(List<Location> locations) {
-		this.locations = locations;
+	public void setProxyPass(String proxyPass) {
+		this.proxyPass = proxyPass;
 	}
 
 	public String getServerName() {

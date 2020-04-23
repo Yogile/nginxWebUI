@@ -1,12 +1,13 @@
 package com.cym.model;
 
-import java.util.List;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-public class Http {
+import cn.craccd.mongoHelper.bean.BaseModel;
+
+@Document
+public class Http extends BaseModel{
 	String gzip;
 	String clientMaxBodySize;
-
-	List<Server> servers;
 
 	public String getGzip() {
 		return gzip;
@@ -22,14 +23,6 @@ public class Http {
 
 	public void setClientMaxBodySize(String clientMaxBodySize) {
 		this.clientMaxBodySize = clientMaxBodySize;
-	}
-
-	public List<Server> getServers() {
-		return servers;
-	}
-
-	public void setServers(List<Server> servers) {
-		this.servers = servers;
 	}
 
 }

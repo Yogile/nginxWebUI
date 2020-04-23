@@ -3,7 +3,7 @@ $(function() {
 	layer.open({
 		type : 1,
 		shade : false,
-		title : "mongoHelper脚手架",
+		title : "nginx配置器",
 		closeBtn : false,
 		area : [ '400px', '330px' ], //宽高
 		content : $('#windowDiv')

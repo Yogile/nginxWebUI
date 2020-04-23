@@ -26,10 +26,10 @@ public class LoginController extends BaseController {
 	@Value("${custom.admin.pass}")
 	private String pass;
 
-	@RequestMapping("")
-	public String admin() {
-		return "redirect:adminPage/login";
-	}
+//	@RequestMapping("")
+//	public String admin() {
+//		return "redirect:/adminPage/login";
+//	}
 
 	@RequestMapping("login")
 	public ModelAndView admin(ModelAndView modelAndView) {

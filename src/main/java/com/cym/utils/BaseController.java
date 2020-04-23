@@ -1,15 +1,18 @@
 package com.cym.utils;
 
-import javax.servlet.http.HttpSession;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties.Admin;
+
+import cn.craccd.mongoHelper.utils.MongoHelper;
 
 /**
  * Author: D.Yang Email: koyangslash@gmail.com Date: 16/10/9 Time: 下午1:37
  * Describe: 基础控制器
  */
 public class BaseController {
+	@Autowired
+	protected MongoHelper mongoHelper;
+	
 	@Value("${custom.nginx}")
 	protected String nginx;
 	
