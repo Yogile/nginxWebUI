@@ -5,21 +5,13 @@ import java.net.URI;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.cym.model.Admin;
-
-import cn.craccd.mongoHelper.utils.MongoHelper;
-import cn.hutool.core.util.StrUtil;
-
 @Component
 public class AdminInterceptor implements HandlerInterceptor {
 
-	@Autowired
-	MongoHelper mongoHelper;
 	
 	/*
 	 * 视图渲染之后的操作
@@ -48,8 +40,8 @@ public class AdminInterceptor implements HandlerInterceptor {
 			return true;
 		}
 
-		Admin admin = (Admin) request.getSession().getAttribute("admin");
-		if (admin == null) {
+		Boolean isLogin = (Boolean) request.getSession().getAttribute("isLogin");
+		if (isLogin == null || !isLogin) {
 			response.sendRedirect(ctx + "/adminPage/login");
 			return false;
 		}
