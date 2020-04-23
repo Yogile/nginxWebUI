@@ -1,0 +1,28 @@
+server:
+  port: 800
+  servlet: 
+    session:
+      timeout: 7200 
+      
+spring:
+  application:
+    name: mongoStudy
+  session:
+    store-type: mongodb
+  devtools:
+    restart:
+      enabled: false
+  jackson:
+    default-property-inclusion: NON_NULL
+  jmx:
+    enabled: true 
+  data:
+    mongodb:
+      uri:  mongodb://root:1qaz2WSX3edc@10.39.3.92:27017/bim?replicaSet=rs0&authSource=admin&w=majority&j=true&wtimeout=5000&readPreference=primary
+      package : com.cym.model
+      print : true
+    
+logging: 
+  level: 
+    root: info
+

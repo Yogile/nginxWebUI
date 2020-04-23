@@ -1,0 +1,27 @@
+<title>mongoHelper脚手架</title>
+
+<meta http-equiv="expires" content="0">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+
+<meta name="renderer" content="webkit" />
+<meta name="force-rendering" content="webkit" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+
+<link href="${ctx}/lib/layui/css/layui.css" rel="stylesheet" />
+<link href="${ctx}/css/adminPage/base.css" rel="stylesheet" />
+<script src="${ctx}/lib/layui/layui.all.js" type="text/javascript"></script>
+<script>
+	//根路径
+	var ctx = '${ctx}/';
+
+	// 翻页参数
+	var page = {
+			count : '${page.count!0}',
+			curr : '${page.curr!0}',
+			limit : '${page.limit!0}'
+	};
+</script>
+
+
+<script src="${ctx}/js/adminPage/base.js" type="text/javascript"></script>
