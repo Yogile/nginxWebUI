@@ -136,13 +136,5 @@ public class ConfController extends BaseController {
 		return null;
 	}
 
-//	public static void main(String[] args) {
-//		try {
-//			NgxConfig ngxConfig = NgxConfig.read(new ByteArrayInputStream("http{}".getBytes("UTF-8")));
-//
-//			System.out.println(new NgxDumper(ngxConfig).dump());
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
+
 }
