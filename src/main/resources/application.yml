@@ -22,7 +22,8 @@ logging:
     root: info
 
 custom:
-  nginx: /etc/nginx/nginx.conf
+  #nginx: /etc/nginx/nginx.conf
+  nginx: E:/nginx-1.17.10/conf/nginx.conf
   admin:
     name: admin
     pass: admin

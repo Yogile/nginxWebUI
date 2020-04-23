@@ -19,7 +19,7 @@ function login() {
 		dataType : 'json',
 		success : function(data) {
 			if (data.success) {
-				location.href = ctx + "adminPage/admin/goMenu";
+				location.href = ctx + "adminPage/http";
 			} else {
 				alert(data.msg);
 			}
