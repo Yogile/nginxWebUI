@@ -17,8 +17,6 @@ import com.github.odiszapc.nginxparser.NgxConfig;
 @Controller
 @RequestMapping("/adminPage/server")
 public class ServerController extends BaseController {
-	@Value("${custom.nginx}")
-	String nginx;
 	// http项
 	Http http;
 	

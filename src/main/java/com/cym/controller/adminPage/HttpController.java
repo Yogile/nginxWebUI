@@ -17,8 +17,7 @@ import com.github.odiszapc.nginxparser.NgxConfig;
 @Controller
 @RequestMapping("/adminPage/http")
 public class HttpController extends BaseController {
-	@Value("${custom.nginx}")
-	String nginx;
+	
 	// http项
 	Http http;
 	
@@ -28,8 +27,11 @@ public class HttpController extends BaseController {
 		NgxConfig ngxConfig = NgxConfig.read(nginx);
 
 		// 找到http{} 因为不是单独的一条数据所以使用findBlock
-		NgxBlock servers = ngxConfig.findBlock("http").findBlock("server");
+		NgxBlock httpBlock = ngxConfig.findBlock("http");
 
+		Http http = new Http();
+		http.setGzip(httpBlock.findParam("gzip").getValue());
+		http.setClientMaxBodySize(httpBlock.findParam("client_max_body_size").getValue());
 		
 
 		modelAndView.addObject("http", http);

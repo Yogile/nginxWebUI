@@ -2,6 +2,7 @@ package com.cym.utils;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties.Admin;
 
 /**
@@ -9,7 +10,9 @@ import org.springframework.boot.autoconfigure.kafka.KafkaProperties.Admin;
  * Describe: 基础控制器
  */
 public class BaseController {
-
+	@Value("${custom.nginx}")
+	protected String nginx;
+	
 	protected JsonResult renderError() {
 		JsonResult result = new JsonResult();
 		result.setSuccess(false);

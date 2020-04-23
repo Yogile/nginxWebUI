@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class nginxWebUI {
+public class NginxWebUI {
 
 	public static void main(String[] args) {
-		SpringApplication.run(nginxWebUI.class, args);
+		SpringApplication.run(NginxWebUI.class, args);
 	}
 }
