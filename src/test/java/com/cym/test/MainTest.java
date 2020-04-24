@@ -9,6 +9,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.cym.NginxWebUI;
 
+import cn.hutool.core.io.FileUtil;
+
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = NginxWebUI.class)
 public class MainTest {
@@ -21,7 +24,7 @@ public class MainTest {
 
 	@Test
 	public void testStartUp()  {
-	
+		System.out.println( FileUtil.getUserHomeDir());
 	}
 
 	@After

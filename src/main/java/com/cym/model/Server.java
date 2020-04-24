@@ -1,25 +1,31 @@
 package com.cym.model;
 
-import org.springframework.data.mongodb.core.mapping.Document;
-
-import cn.craccd.mongoHelper.bean.BaseModel;
-
-@Document
-public class Server extends BaseModel{
+public class Server {
+	String id;
+	
 	String serverName;
 	String listen;
-	Boolean ssl;
+	Integer ssl;
 	String pem;
 	String key;
 
 	String proxyPass;
-	String proxyPassPort;
+	Integer proxyPassPort;
 	
-	public String getProxyPassPort() {
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public Integer getProxyPassPort() {
 		return proxyPassPort;
 	}
 
-	public void setProxyPassPort(String proxyPassPort) {
+	public void setProxyPassPort(Integer proxyPassPort) {
 		this.proxyPassPort = proxyPassPort;
 	}
 
@@ -47,11 +53,12 @@ public class Server extends BaseModel{
 		this.listen = listen;
 	}
 
-	public Boolean getSsl() {
+
+	public Integer getSsl() {
 		return ssl;
 	}
 
-	public void setSsl(Boolean ssl) {
+	public void setSsl(Integer ssl) {
 		this.ssl = ssl;
 	}
 

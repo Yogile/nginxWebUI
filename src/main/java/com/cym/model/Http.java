@@ -1,13 +1,9 @@
 package com.cym.model;
 
-import org.springframework.data.mongodb.core.mapping.Document;
-
-import cn.craccd.mongoHelper.bean.BaseModel;
-
-@Document
-public class Http extends BaseModel{
+public class Http{
+	String id;
 	String gzip;
-	String clientMaxBodySize;
+	Integer clientMaxBodySize;
 
 	public String getGzip() {
 		return gzip;
@@ -17,12 +13,21 @@ public class Http extends BaseModel{
 		this.gzip = gzip;
 	}
 
-	public String getClientMaxBodySize() {
+	public Integer getClientMaxBodySize() {
 		return clientMaxBodySize;
 	}
 
-	public void setClientMaxBodySize(String clientMaxBodySize) {
+	public void setClientMaxBodySize(Integer clientMaxBodySize) {
 		this.clientMaxBodySize = clientMaxBodySize;
 	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
 
 }
