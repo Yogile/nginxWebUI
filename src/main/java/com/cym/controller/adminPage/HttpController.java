@@ -14,7 +14,7 @@ import com.cym.model.Http;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
 
-import cn.hutool.db.Db;
+import cn.hutool.core.lang.UUID;
 import cn.hutool.db.Entity;
 
 @Controller
@@ -24,13 +24,13 @@ public class HttpController extends BaseController {
 	@RequestMapping("")
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView) throws SQLException {
 		Http http = null;
-		List<Entity> result = Db.use().findAll("http");
+		List<Entity> result = sqliteUtils.use().findAll("http");
 
 		if (result.size() == 0) {
 			http = new Http();
 			http.setGzip("on");
 			http.setClientMaxBodySize(512);
-			Db.use().insert(Entity.parse(http).setTableName("http"));
+			sqliteUtils.use().insert(Entity.parse(http).setTableName("http"));
 		} else {
 			http = result.get(0).toBean(Http.class);
 		}
@@ -43,7 +43,7 @@ public class HttpController extends BaseController {
 	@RequestMapping(value = "addOver")
 	@ResponseBody
 	public JsonResult addOver(String name, String value) throws SQLException {
-		List<Entity> result = Db.use().findAll("http");
+		List<Entity> result = sqliteUtils.use().findAll("http");
 		
 		Http http = result.get(0).toBean(Http.class);
 		if (name.equals("gzip")) {
@@ -52,7 +52,7 @@ public class HttpController extends BaseController {
 			http.setClientMaxBodySize(Integer.parseInt(value));
 		}
 
-		Db.use().insertOrUpdate(Entity.parse(http).setTableName("http"), "id");
+		sqliteUtils.use().insertOrUpdate(Entity.parse(http).setTableName("http"), "id");
 
 		return renderSuccess();
 

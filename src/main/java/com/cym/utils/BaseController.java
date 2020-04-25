@@ -1,5 +1,6 @@
 package com.cym.utils;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 /**
@@ -7,6 +8,8 @@ import org.springframework.beans.factory.annotation.Value;
  * Describe: 基础控制器
  */
 public class BaseController {
+	@Autowired
+	protected SqliteUtils sqliteUtils;
 	
 	@Value("${custom.nginx}")
 	protected String nginx;

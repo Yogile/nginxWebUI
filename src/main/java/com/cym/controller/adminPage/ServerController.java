@@ -15,7 +15,7 @@ import com.cym.model.Server;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
 
-import cn.hutool.db.Db;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.db.Entity;
 
 @Controller
@@ -24,7 +24,7 @@ public class ServerController extends BaseController {
 
 	@RequestMapping("")
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView) throws IOException, SQLException {
-		List<Server> servers = Db.use().findAll(new Entity("server"), Server.class);
+		List<Server> servers = sqliteUtils.use().findAll(new Entity("server"), Server.class);
 
 		modelAndView.addObject("servers", servers);
 		modelAndView.setViewName("/adminPage/server/index");
@@ -34,7 +34,11 @@ public class ServerController extends BaseController {
 	@RequestMapping("addOver")
 	@ResponseBody
 	public JsonResult addOver(Server server) throws SQLException {
-		Db.use().insertOrUpdate(Entity.parse(server).setTableName("server"), "id");
+		if(StrUtil.isEmpty(server.getId())) {
+			server.setId(null); 
+		}
+		
+		sqliteUtils.use().insertOrUpdate(Entity.parse(server).setTableName("server"), "id");
 
 		return renderSuccess();
 	}
@@ -44,7 +48,7 @@ public class ServerController extends BaseController {
 	public JsonResult detail(String id) throws SQLException {
 		Entity where = new Entity("server");
 		where.put("id", id);
-		Entity entity = Db.use().get(where);
+		Entity entity = sqliteUtils.use().get(where);
 		return renderSuccess(entity.toBean(Server.class));
 	}
 
@@ -53,7 +57,7 @@ public class ServerController extends BaseController {
 	public JsonResult del(String id) throws SQLException {
 		Entity where = new Entity("server");
 		where.put("id", id);
-		Db.use().del(where);
+		sqliteUtils.use().del(where);
 		return renderSuccess();
 	}
 

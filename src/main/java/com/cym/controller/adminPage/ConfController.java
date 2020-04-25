@@ -20,7 +20,6 @@ import com.github.odiszapc.nginxparser.NgxConfig;
 import com.github.odiszapc.nginxparser.NgxDumper;
 import com.github.odiszapc.nginxparser.NgxParam;
 
-import cn.hutool.db.Db;
 import cn.hutool.db.Entity;
 
 @Controller
@@ -29,9 +28,9 @@ public class ConfController extends BaseController {
 
 	@RequestMapping("")
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView) throws IOException, SQLException {
-		Http http = Db.use().findAll("http").get(0).toBean(Http.class);
+		Http http = sqliteUtils.use().findAll("http").get(0).toBean(Http.class);
 		modelAndView.addObject("http", http);
-		List<Server> servers = Db.use().findAll(Entity.create("server"), Server.class);
+		List<Server> servers = sqliteUtils.use().findAll(Entity.create("server"), Server.class);
 		modelAndView.addObject("servers", servers);
 
 		String confStr = buildConf(http, servers);
