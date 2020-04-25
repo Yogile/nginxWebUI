@@ -1,8 +1,8 @@
 ## db.setting文件
 
 url = jdbc:sqlite:d:/nginx.db
-user = root
-pass = 123456
+#user = root
+#pass = 123456
 
 ## 可选配置
 # 是否在日志中显示执行的SQL

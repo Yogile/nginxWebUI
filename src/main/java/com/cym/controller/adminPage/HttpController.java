@@ -30,7 +30,7 @@ public class HttpController extends BaseController {
 			http = new Http();
 			http.setGzip("on");
 			http.setClientMaxBodySize(512);
-			Db.use().insert(Entity.parse(http));
+			Db.use().insert(Entity.parse(http).setTableName("http"));
 		} else {
 			http = result.get(0).toBean(Http.class);
 		}
@@ -52,7 +52,7 @@ public class HttpController extends BaseController {
 			http.setClientMaxBodySize(Integer.parseInt(value));
 		}
 
-		Db.use().insertOrUpdate(Entity.parse(http), "id");
+		Db.use().insertOrUpdate(Entity.parse(http).setTableName("http"), "id");
 
 		return renderSuccess();
 

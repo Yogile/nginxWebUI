@@ -1,5 +1,7 @@
 package com.cym.test;
 
+import java.sql.SQLException;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,8 +10,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.cym.NginxWebUI;
+import com.cym.model.Server;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.db.Db;
+import cn.hutool.db.Entity;
 
 
 @RunWith(SpringRunner.class)
@@ -23,7 +28,8 @@ public class MainTest {
 	}
 
 	@Test
-	public void testStartUp()  {
+	public void testStartUp() throws SQLException  {
+		Db.use().insert(Entity.parse(new Server()));
 		System.out.println( FileUtil.getUserHomeDir());
 	}
 
