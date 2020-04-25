@@ -6,9 +6,9 @@ server:
       
 spring:
   application:
-    name: mongoStudy
-  session:
-    store-type: mongodb
+    name: nginx配置器
+#  session:
+#    store-type: mongodb
   devtools:
     restart:
       enabled: false
@@ -19,7 +19,7 @@ spring:
   data:
     sqlite:
       package: com.cym.model
-
+      print: true
 
 logging: 
   level: 
