@@ -28,10 +28,10 @@ public class ConfController extends BaseController {
 
 	@RequestMapping("")
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView) throws IOException, SQLException {
-		Http http = nosqlHelper.findOneByQuery(null, null, Http.class);
+		Http http = sqliteHelper.findOneByQuery(null, null, Http.class);
 		modelAndView.addObject("http", http);
 		
-		List<Server> servers = nosqlHelper.findAll(Server.class);
+		List<Server> servers = sqliteHelper.findAll(Server.class);
 		modelAndView.addObject("servers", servers);
 
 		String confStr = buildConf(http, servers);

@@ -47,7 +47,7 @@ public class ServerController extends BaseController {
 //		}
 
 //		sqliteUtils.use().insertOrUpdate(Entity.parse(server).setTableName("server"), "id");
-		nosqlHelper.insertOrUpdate(server);
+		sqliteHelper.insertOrUpdate(server);
 
 		return renderSuccess();
 	}
@@ -58,7 +58,7 @@ public class ServerController extends BaseController {
 //		Entity where = new Entity("server");
 //		where.put("id", id);
 //		Entity entity = sqliteUtils.use().get(where);
-		return renderSuccess(nosqlHelper.findById(id, Server.class));
+		return renderSuccess(sqliteHelper.findById(id, Server.class));
 	}
 
 	@RequestMapping("del")
@@ -68,7 +68,7 @@ public class ServerController extends BaseController {
 //		where.put("id", id);
 //		sqliteUtils.use().del(where);
 
-		nosqlHelper.deleteById(id, Server.class);
+		sqliteHelper.deleteById(id, Server.class);
 		return renderSuccess();
 	}
 

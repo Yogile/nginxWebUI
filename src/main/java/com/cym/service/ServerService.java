@@ -9,13 +9,13 @@ import cn.craccd.sqlite.bean.Page;
 import cn.craccd.sqlite.bean.Sort;
 import cn.craccd.sqlite.utils.CriteriaAndWrapper;
 import cn.craccd.sqlite.utils.CriteriaOrWrapper;
-import cn.craccd.sqlite.utils.NosqlHelper;
+import cn.craccd.sqlite.utils.SqliteHelper;
 import cn.hutool.core.util.StrUtil;
 
 @Service
 public class ServerService {
 	@Autowired
-	NosqlHelper nosqlHelper;
+	SqliteHelper sqliteHelper;
 
 	public Page search(Page page, String word, Integer ssl) {
 		CriteriaAndWrapper criteriaAndWrapper = new CriteriaAndWrapper();
@@ -28,7 +28,7 @@ public class ServerService {
 			criteriaAndWrapper.eq("ssl", ssl);
 		}
 
-		page = nosqlHelper.findPage(criteriaAndWrapper, new Sort("id", "desc"), page, Server.class);
+		page = sqliteHelper.findPage(criteriaAndWrapper, new Sort("id", "desc"), page, Server.class);
 
 		return page;
 	}

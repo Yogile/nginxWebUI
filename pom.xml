@@ -60,7 +60,7 @@
 
 		<dependency>
 			<groupId>cn.craccd</groupId>
-			<artifactId>nosqlite</artifactId>
+			<artifactId>sqliteHepler</artifactId>
 			<version>0.0.1</version>
 		</dependency>
 
