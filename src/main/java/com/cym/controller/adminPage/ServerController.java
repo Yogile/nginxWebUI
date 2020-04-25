@@ -24,7 +24,6 @@ public class ServerController extends BaseController {
 
 	@RequestMapping("")
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView) throws IOException, SQLException {
-
 		List<Server> servers = Db.use().findAll(new Entity("server"), Server.class);
 
 		modelAndView.addObject("servers", servers);
