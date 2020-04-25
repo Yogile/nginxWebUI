@@ -6,15 +6,18 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cym.model.Server;
+import com.cym.service.ServerService;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
 
+import cn.craccd.sqlite.bean.Page;
 import cn.craccd.sqlite.bean.Sort;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.db.Entity;
@@ -22,12 +25,16 @@ import cn.hutool.db.Entity;
 @Controller
 @RequestMapping("/adminPage/server")
 public class ServerController extends BaseController {
-
+	@Autowired
+	ServerService serverService;
+	
 	@RequestMapping("")
-	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView) throws IOException, SQLException {
-		List<Server> servers = nosqlHelper.findAll(Server.class);
+	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView, Page page, String keywords,Integer ssl) {
+		page = serverService.search(page, keywords, ssl);
 
-		modelAndView.addObject("servers", servers);
+		modelAndView.addObject("page", page);
+		modelAndView.addObject("ssl", ssl);
+		modelAndView.addObject("keywords", keywords);
 		modelAndView.setViewName("/adminPage/server/index");
 		return modelAndView;
 	}
@@ -38,7 +45,7 @@ public class ServerController extends BaseController {
 //		if(StrUtil.isEmpty(server.getId())) {
 //			server.setId(null); 
 //		}
-		
+
 //		sqliteUtils.use().insertOrUpdate(Entity.parse(server).setTableName("server"), "id");
 		nosqlHelper.insertOrUpdate(server);
 
@@ -60,7 +67,7 @@ public class ServerController extends BaseController {
 //		Entity where = new Entity("server");
 //		where.put("id", id);
 //		sqliteUtils.use().del(where);
-		
+
 		nosqlHelper.deleteById(id, Server.class);
 		return renderSuccess();
 	}

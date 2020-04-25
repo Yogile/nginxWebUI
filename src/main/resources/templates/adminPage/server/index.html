@@ -6,7 +6,8 @@
 .layui-form-label {
 	width: 100px;
 }
-.layui-input-block{
+
+.layui-input-block {
 	margin-left: 130px;
 }
 </style>
@@ -25,9 +26,30 @@
 				</fieldset>
 
 				<form action="${ctx}/adminPage/server" id="searchForm" method="post">
-					<div class="layui-form">
+					<div class="layui-inline">
 						<button type="button" class="layui-btn layui-btn-normal" onclick="add()">添加server</button>
 					</div>
+
+					<div class="layui-inline">
+						<label class="layui-form-label">关键字</label>
+					</div>
+					<div class="layui-input-inline">
+						<input type="text" name="keywords" class="layui-input" value="${keywords}">
+					</div>
+					
+					<div class="layui-inline">
+						<label class="layui-form-label">开启ssl</label>
+					</div>
+					<div class="layui-input-inline">
+						<select name="ssl" id="ssl">
+							<option value="">--全部--</option>
+							<option value="1" ${(ssl==1)?string('selected','')}>开启</option>
+							<option value="0" ${(ssl==0)?string('selected','')}>关闭</option>
+						</select>
+					</div>
+					<button type="button" class="layui-btn" onclick="search()">搜索</button>
+
+					<input type="hidden" name="curr" value="${page.curr}">
 				</form>
 
 				<table class="layui-table">
@@ -43,19 +65,16 @@
 						</tr>
 					</thead>
 					<tbody>
-						<#list servers as server>
+						<#list page.records as server>
 						<tr>
 							<td>${server.serverName}</td>
 							<td>${server.listen}</td>
 							<td>
-								<#if server.ssl== 1> 是 </#if>
-								<#if server.ssl== 0> 否 </#if>
+								<#if server.ssl==1> 是 </#if>
+								<#if server.ssl==0> 否 </#if>
 							<td>
-								<#if server.ssl== 1>
-								pem: ${server.pem}
-								<br>
-								key: ${server.key}
-								</#if>
+								<#if server.ssl==1> pem: ${server.pem} <br>
+								key: ${server.key} </#if>
 							</td>
 							<td>${server.proxyPass}:${server.proxyPassPort}</td>
 							<td>
@@ -66,7 +85,7 @@
 						</#list>
 					</tbody>
 				</table>
-
+				<input type="hidden" name="curr" value="${page.curr}">
 			</div>
 		</div>
 	</div>
