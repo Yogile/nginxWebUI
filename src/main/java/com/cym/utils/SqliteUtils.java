@@ -17,7 +17,6 @@ import cn.hutool.db.ds.simple.SimpleDataSource;
 @Component
 public class SqliteUtils {
 	String dbpath;
-
 	DataSource ds;
 
 	@PostConstruct
