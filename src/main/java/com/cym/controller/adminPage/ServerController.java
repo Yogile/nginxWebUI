@@ -15,6 +15,7 @@ import com.cym.model.Server;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
 
+import cn.craccd.sqlite.bean.Sort;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.db.Entity;
 
@@ -24,7 +25,7 @@ public class ServerController extends BaseController {
 
 	@RequestMapping("")
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView) throws IOException, SQLException {
-		List<Server> servers = sqliteUtils.use().findAll(new Entity("server"), Server.class);
+		List<Server> servers = nosqlHelper.findAll(Server.class);
 
 		modelAndView.addObject("servers", servers);
 		modelAndView.setViewName("/adminPage/server/index");
@@ -34,11 +35,12 @@ public class ServerController extends BaseController {
 	@RequestMapping("addOver")
 	@ResponseBody
 	public JsonResult addOver(Server server) throws SQLException {
-		if(StrUtil.isEmpty(server.getId())) {
-			server.setId(null); 
-		}
+//		if(StrUtil.isEmpty(server.getId())) {
+//			server.setId(null); 
+//		}
 		
-		sqliteUtils.use().insertOrUpdate(Entity.parse(server).setTableName("server"), "id");
+//		sqliteUtils.use().insertOrUpdate(Entity.parse(server).setTableName("server"), "id");
+		nosqlHelper.insertOrUpdate(server);
 
 		return renderSuccess();
 	}
@@ -46,18 +48,20 @@ public class ServerController extends BaseController {
 	@RequestMapping("detail")
 	@ResponseBody
 	public JsonResult detail(String id) throws SQLException {
-		Entity where = new Entity("server");
-		where.put("id", id);
-		Entity entity = sqliteUtils.use().get(where);
-		return renderSuccess(entity.toBean(Server.class));
+//		Entity where = new Entity("server");
+//		where.put("id", id);
+//		Entity entity = sqliteUtils.use().get(where);
+		return renderSuccess(nosqlHelper.findById(id, Server.class));
 	}
 
 	@RequestMapping("del")
 	@ResponseBody
 	public JsonResult del(String id) throws SQLException {
-		Entity where = new Entity("server");
-		where.put("id", id);
-		sqliteUtils.use().del(where);
+//		Entity where = new Entity("server");
+//		where.put("id", id);
+//		sqliteUtils.use().del(where);
+		
+		nosqlHelper.deleteById(id, Server.class);
 		return renderSuccess();
 	}
 

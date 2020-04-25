@@ -59,8 +59,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.xerial</groupId>
-			<artifactId>sqlite-jdbc</artifactId>
+			<groupId>cn.craccd</groupId>
+			<artifactId>nosqlite</artifactId>
+			<version>0.0.1</version>
 		</dependency>
 
 		<dependency>

@@ -1,6 +1,10 @@
 package com.cym.model;
 
-public class Http{
+import cn.craccd.sqlite.bean.BaseModel;
+import cn.craccd.sqlite.config.Table;
+
+@Table
+public class Http extends BaseModel{ 
 	String id;
 	String gzip;
 	Integer clientMaxBodySize;

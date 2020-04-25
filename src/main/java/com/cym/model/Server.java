@@ -1,6 +1,11 @@
 package com.cym.model;
 
-public class Server {
+import cn.craccd.sqlite.bean.BaseModel;
+import cn.craccd.sqlite.config.InitValue;
+import cn.craccd.sqlite.config.Table;
+
+@Table
+public class Server extends BaseModel{
 	String id;
 	
 	String serverName;
@@ -12,6 +17,16 @@ public class Server {
 	String proxyPass;
 	Integer proxyPassPort;
 	
+	@InitValue("/home/www")
+	String root;
+	
+	public String getRoot() {
+		return root;
+	}
+
+	public void setRoot(String root) {
+		this.root = root;
+	}
 
 	public String getId() {
 		return id;

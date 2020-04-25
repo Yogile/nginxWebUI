@@ -48,10 +48,10 @@
 							<td>${server.serverName}</td>
 							<td>${server.listen}</td>
 							<td>
-								<#if server.ssl== true> 是 </#if>
-								<#if server.ssl== false> 否 </#if>
+								<#if server.ssl== 1> 是 </#if>
+								<#if server.ssl== 0> 否 </#if>
 							<td>
-								<#if server.ssl== true>
+								<#if server.ssl== 1>
 								pem: ${server.pem}
 								<br>
 								key: ${server.key}

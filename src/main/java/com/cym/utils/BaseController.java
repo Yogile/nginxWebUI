@@ -3,13 +3,17 @@ package com.cym.utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
+import cn.craccd.sqlite.utils.NosqlHelper;
+
 /**
  * Author: D.Yang Email: koyangslash@gmail.com Date: 16/10/9 Time: 下午1:37
  * Describe: 基础控制器
  */
 public class BaseController {
+//	@Autowired
+//	protected SqliteUtils sqliteUtils;
 	@Autowired
-	protected SqliteUtils sqliteUtils;
+	protected NosqlHelper nosqlHelper;
 	
 	@Value("${custom.nginx}")
 	protected String nginx;

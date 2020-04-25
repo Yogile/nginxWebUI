@@ -23,17 +23,15 @@ public class HttpController extends BaseController {
 
 	@RequestMapping("")
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView) throws SQLException {
-		Http http = null;
-		List<Entity> result = sqliteUtils.use().findAll("http");
+		Http http = nosqlHelper.findOneByQuery(null, null, Http.class);
 
-		if (result.size() == 0) {
+		if (http == null) {
 			http = new Http();
 			http.setGzip("on");
 			http.setClientMaxBodySize(512);
-			sqliteUtils.use().insert(Entity.parse(http).setTableName("http"));
-		} else {
-			http = result.get(0).toBean(Http.class);
-		}
+//			sqliteUtils.use().insert(Entity.parse(http).setTableName("http"));
+			nosqlHelper.insertOrUpdate(http);
+		} 
 
 		modelAndView.addObject("http", http);
 		modelAndView.setViewName("/adminPage/http/index");
@@ -43,16 +41,15 @@ public class HttpController extends BaseController {
 	@RequestMapping(value = "addOver")
 	@ResponseBody
 	public JsonResult addOver(String name, String value) throws SQLException {
-		List<Entity> result = sqliteUtils.use().findAll("http");
+		Http http = nosqlHelper.findOneByQuery(null, null, Http.class);
 		
-		Http http = result.get(0).toBean(Http.class);
 		if (name.equals("gzip")) {
 			http.setGzip(value);
 		} else if (name.equals("clientMaxBodySize")) {
 			http.setClientMaxBodySize(Integer.parseInt(value));
 		}
-
-		sqliteUtils.use().insertOrUpdate(Entity.parse(http).setTableName("http"), "id");
+		nosqlHelper.insertOrUpdate(http);
+//		sqliteUtils.use().insertOrUpdate(Entity.parse(http).setTableName("http"), "id");
 
 		return renderSuccess();
 
