@@ -29,7 +29,6 @@ public class HttpController extends BaseController {
 			http = new Http();
 			http.setGzip("on");
 			http.setClientMaxBodySize(512);
-//			sqliteUtils.use().insert(Entity.parse(http).setTableName("http"));
 			sqliteHelper.insertOrUpdate(http);
 		} 
 
@@ -49,7 +48,6 @@ public class HttpController extends BaseController {
 			http.setClientMaxBodySize(Integer.parseInt(value));
 		}
 		sqliteHelper.insertOrUpdate(http);
-//		sqliteUtils.use().insertOrUpdate(Entity.parse(http).setTableName("http"), "id");
 
 		return renderSuccess();
 

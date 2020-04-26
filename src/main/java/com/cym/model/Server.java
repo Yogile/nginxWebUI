@@ -6,7 +6,6 @@ import cn.craccd.sqlite.config.Table;
 
 @Table
 public class Server extends BaseModel{
-	String id;
 	
 	String serverName;
 	String listen;
@@ -28,13 +27,6 @@ public class Server extends BaseModel{
 		this.root = root;
 	}
 
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	public Integer getProxyPassPort() {
 		return proxyPassPort;

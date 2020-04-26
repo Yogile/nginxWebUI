@@ -5,7 +5,6 @@ import cn.craccd.sqlite.config.Table;
 
 @Table
 public class Http extends BaseModel{ 
-	String id;
 	String gzip;
 	Integer clientMaxBodySize;
 
@@ -25,13 +24,6 @@ public class Http extends BaseModel{
 		this.clientMaxBodySize = clientMaxBodySize;
 	}
 
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
 
 
 }

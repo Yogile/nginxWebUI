@@ -9,6 +9,7 @@ spring:
     name: nginx配置器
   session:
     store-type: jdbc
+    jdbc:      initialize-schema: always
   devtools:
     restart:
       enabled: false
@@ -16,21 +17,16 @@ spring:
     default-property-inclusion: NON_NULL
   jmx:
     enabled: true 
-  data:
-    sqlite:
-      package: com.cym.model
-      print: true
-
   datasource:
     url: jdbc:mysql://10.39.3.92:3306/test
     username: root
     password: 1qaz2wsx
+  database: 
+    type: mysql
     package: com.cym.model
-  database: mysql
-
 logging: 
   level: 
-    root: debug
+    root: info
 
 custom:
   nginx: E:/nginx-1.17.10/conf/nginx.conf
