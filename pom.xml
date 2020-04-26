@@ -49,7 +49,7 @@
 
 		<dependency>
 			<groupId>cn.craccd</groupId>
-			<artifactId>sqliteHepler</artifactId>
+			<artifactId>sqlHelper</artifactId>
 			<version>0.0.1</version>
 		</dependency>
 

@@ -1,16 +1,19 @@
 package com.cym.model;
 
-import cn.craccd.sqlite.bean.BaseModel;
-import cn.craccd.sqlite.config.InitValue;
-import cn.craccd.sqlite.config.Table;
+
+import cn.craccd.sqlHelper.bean.BaseModel;
+import cn.craccd.sqlHelper.config.Indexed;
+import cn.craccd.sqlHelper.config.InitValue;
+import cn.craccd.sqlHelper.config.Table;
 
 @Table
 public class Server extends BaseModel{
-	
+	@Indexed
 	String serverName;
 	String listen;
 	Integer ssl;
 	String pem;
+	@Indexed(unique = true)
 	String key;
 
 	String proxyPass;

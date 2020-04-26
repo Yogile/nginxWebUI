@@ -1,7 +1,7 @@
 package com.cym.model;
 
-import cn.craccd.sqlite.bean.BaseModel;
-import cn.craccd.sqlite.config.Table;
+import cn.craccd.sqlHelper.bean.BaseModel;
+import cn.craccd.sqlHelper.config.Table;
 
 @Table
 public class Http extends BaseModel{ 

@@ -17,8 +17,8 @@ import com.cym.service.ServerService;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
 
-import cn.craccd.sqlite.bean.Page;
-import cn.craccd.sqlite.bean.Sort;
+import cn.craccd.sqlHelper.bean.Page;
+import cn.craccd.sqlHelper.bean.Sort;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.db.Entity;
 

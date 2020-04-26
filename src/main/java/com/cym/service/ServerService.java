@@ -6,11 +6,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.cym.model.Server;
 
-import cn.craccd.sqlite.bean.Page;
-import cn.craccd.sqlite.bean.Sort;
-import cn.craccd.sqlite.utils.CriteriaAndWrapper;
-import cn.craccd.sqlite.utils.CriteriaOrWrapper;
-import cn.craccd.sqlite.utils.SqlHelper;
+import cn.craccd.sqlHelper.bean.Page;
+import cn.craccd.sqlHelper.bean.Sort;
+import cn.craccd.sqlHelper.utils.CriteriaAndWrapper;
+import cn.craccd.sqlHelper.utils.CriteriaOrWrapper;
+import cn.craccd.sqlHelper.utils.SqlHelper;
 import cn.hutool.core.util.StrUtil;
 
 @Service

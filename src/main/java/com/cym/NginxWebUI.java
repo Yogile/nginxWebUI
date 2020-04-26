@@ -9,9 +9,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @EnableJdbcHttpSession
 @SpringBootApplication
-public class MongoStudyClient {
+public class NginxWebUI {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MongoStudyClient.class, args);
+		SpringApplication.run(NginxWebUI.class, args);
 	}
 }
