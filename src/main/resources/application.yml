@@ -1,5 +1,5 @@
 server:
-  port: 20010
+  port: 800
   servlet: 
     session:
       timeout: 7200 
@@ -9,7 +9,8 @@ spring:
     name: nginx配置器
   session:
     store-type: jdbc
-    jdbc:      initialize-schema: always
+    jdbc:
+      initialize-schema: always
   devtools:
     restart:
       enabled: false
@@ -17,13 +18,14 @@ spring:
     default-property-inclusion: NON_NULL
   jmx:
     enabled: true 
+  database: 
+    type: mysql
+    package: com.cym.model
   datasource:
     url: jdbc:mysql://10.39.3.92:3306/test
     username: root
     password: 1qaz2wsx
-  database: 
-    type: mysql
-    package: com.cym.model
+    
 logging: 
   level: 
     root: info

@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<#include '/mobilePage/common/common.html'/>
+<link href="${ctx}/css/mobilePage/login.css" rel="stylesheet" />
+
+</head>
+<body>
+	<div class="main">
+		<div class="title">登录</div>
+		<div class="hold"></div>
+		<div class="layui-form" id="loginDiv" style="padding: 15px;">
+	
+			<div class="layui-form-item">
+				<label class="layui-form-label">电话</label>
+				<div class="layui-input-block">
+					<input type="text" name="phone" id="phone" class="layui-input">
+				</div>
+			</div>
+			
+			<div class="layui-form-item">
+				<label class="layui-form-label">密码</label>
+				<div class="layui-input-block">
+					<input type="text" name="pass" id="pass" class="layui-input">
+				</div>
+			</div>
+
+			<div class="layui-form-item" style="text-align: center;">
+				<button type="button" class="layui-btn layui-btn-normal" onclick="login()">登录</button>
+			</div>
+		</div>
+
+
+	</div>
+
+
+	<script src="${ctx}/js/mobilePage/login.js?v=${jsrandom}" type="text/javascript"></script>
+</body>
+</html>

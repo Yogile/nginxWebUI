@@ -1,7 +1,6 @@
 package com.cym.utils;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 
 import cn.craccd.sqlite.utils.SqlHelper;
 
@@ -10,13 +9,9 @@ import cn.craccd.sqlite.utils.SqlHelper;
  * Describe: 基础控制器
  */
 public class BaseController {
-//	@Autowired
-//	protected SqliteUtils sqliteUtils;
 	@Autowired
-	protected SqlHelper sqliteHelper;
+	protected SqlHelper sqlHelper;
 	
-	@Value("${custom.nginx}")
-	protected String nginx;
 	
 	protected JsonResult renderError() {
 		JsonResult result = new JsonResult();
@@ -45,10 +40,14 @@ public class BaseController {
 		return result;
 	}
 
+
 	protected JsonResult renderSuccess(Object obj) {
 		JsonResult result = renderSuccess();
 		result.setObj(obj);
 		return result;
 	}
 
+	
+
+	
 }

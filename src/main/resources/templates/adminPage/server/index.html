@@ -26,30 +26,32 @@
 				</fieldset>
 
 				<form action="${ctx}/adminPage/server" id="searchForm" method="post">
-					<div class="layui-inline">
-						<button type="button" class="layui-btn layui-btn-normal" onclick="add()">添加server</button>
-					</div>
+					<div class="layui-form">
+						<div class="layui-inline">
+							<button type="button" class="layui-btn layui-btn-normal" onclick="add()">添加server</button>
+						</div>
 
-					<div class="layui-inline">
-						<label class="layui-form-label">关键字</label>
-					</div>
-					<div class="layui-input-inline">
-						<input type="text" name="keywords" class="layui-input" value="${keywords}">
-					</div>
-					
-					<div class="layui-inline">
-						<label class="layui-form-label">开启ssl</label>
-					</div>
-					<div class="layui-input-inline">
-						<select name="ssl" id="ssl">
-							<option value="">--全部--</option>
-							<option value="1" ${(ssl==1)?string('selected','')}>开启</option>
-							<option value="0" ${(ssl==0)?string('selected','')}>关闭</option>
-						</select>
-					</div>
-					<button type="button" class="layui-btn" onclick="search()">搜索</button>
+						<div class="layui-inline">
+							<label class="layui-form-label">关键字</label>
+						</div>
+						<div class="layui-input-inline">
+							<input type="text" name="keywords" class="layui-input" value="${keywords}">
+						</div>
 
-					<input type="hidden" name="curr" value="${page.curr}">
+						<div class="layui-inline">
+							<label class="layui-form-label">开启ssl</label>
+						</div>
+						<div class="layui-input-inline">
+							<select name="ssl" id="ssl">
+								<option value="">--全部--</option>
+								<option value="1" ${(ssl==1)?string('selected','')}>开启</option>
+								<option value="0" ${(ssl==0)?string('selected','')}>关闭</option>
+							</select>
+						</div>
+						<button type="button" class="layui-btn" onclick="search()">搜索</button>
+
+						<input type="hidden" name="curr" value="${page.curr}">
+					</div>
 				</form>
 
 				<table class="layui-table">
@@ -153,7 +155,7 @@
 
 	</div>
 
-
+	<#include '/adminPage/script.html'/>
 	<script src="${ctx}/js/adminPage/server/index.js?v=${jsrandom}" type="text/javascript"></script>
 </body>
 

@@ -1,7 +1,6 @@
 var layer;
 var element;
 var form;
-var laypage;
 var laydate;
 
 // 使用layui内部jQuery
@@ -13,40 +12,22 @@ $(function() {
 	layer = layui.layer;
 	element = layui.element;
 	form = layui.form;
-	laypage = layui.laypage;
 
-	// 执行一个laypage实例
-	laypage.render({
-		elem : 'pageInfo', // 渲染节点
-		count : page.count, // 总记录数
-		curr : page.curr, // 起始页
-		limit : page.limit, // 每页记录数
-		layout : [ 'prev', 'page', 'next',  'skip' ],
-		jump : function(obj, first) {
-			// 首次不执行
-			if (!first) {
-				// do something
-				$("input[name='curr']").val(obj.curr);
-				$("#searchForm").submit();
-			}
-		}
-	});
-	
 	// 日期控件
 	layui.use('laydate', function() {
 		laydate = layui.laydate;
 
 		// 执行laydate实例
-		$(".laydate").each(function(){
+		$(".laydate").each(function() {
 			$(this).attr("id", "date_" + guid());
-			$(this).attr("readonly",true);
-			
+			$(this).attr("readonly", true);
+
 			laydate.render({
 				elem : "#" + $(this).attr("id"), // 指定元素
 				type : 'date',
-				trigger: 'click',
+				trigger : 'click',
 				format : 'yyyy-MM-dd' // 可任意组合
-			}); 
+			});
 		})
 	});
 
@@ -55,9 +36,6 @@ $(function() {
 	// 关闭input自动填充
 	$("input").attr("autocomplete", "off");
 	
-	// 菜单选中
-	var url = location.pathname + location.search;
-	$("a[href='" + ctx + url.substr(1) + "']").parent().addClass("layui-this");
 })
 
 // 关闭AJAX相应的缓存
@@ -65,16 +43,26 @@ $.ajaxSetup({
 	cache : false
 });
 
-
-function gohref(url) {
-	location.href = url;
-	
-}
-
 // 退出登录
 function loginOut() {
 	if (confirm("是否退出登录?")) {
-		location.href = ctx + "/adminPage/login/loginOut";
+		$.ajax({
+			type : 'POST',
+			url : ctx + 'mobilePage/main/loginOut',
+			dataType : 'json',
+			success : function(data) {
+				if (data.success) {
+					location.reload();
+				} else {
+					alert(data.msg);
+				}
+			},
+			error : function() {
+				alert("出错了,请联系技术人员!");
+			}
+		});
+		
+		
 	}
 }
 
@@ -128,7 +116,7 @@ function guid() {
 function strToTime(str) {
 	var str = str.replace(/-/g, '/');
 	var timestamp = new Date(str).getTime();
-	
+
 	return timestamp
 }
 
@@ -145,4 +133,14 @@ function getQueryString(name) {
 function downloadFile(url, name) {
 	window.open(ctx + "downloadFile?url=" + encodeURIComponent(url) + "&name="
 			+ encodeURIComponent(name));
+}
+
+function gohref(url) {
+	if(url.indexOf("?") > -1){
+		url += "&t=" + uuid();
+	}
+	if(url.indexOf("?") == 0){
+		url += "?t=" + uuid();
+	}
+	location.href = url;
 }

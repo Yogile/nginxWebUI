@@ -23,13 +23,13 @@ public class HttpController extends BaseController {
 
 	@RequestMapping("")
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView) throws SQLException {
-		Http http = sqliteHelper.findOneByQuery(null, null, Http.class);
+		Http http = sqlHelper.findOneByQuery(null, null, Http.class);
 
 		if (http == null) {
 			http = new Http();
 			http.setGzip("on");
 			http.setClientMaxBodySize(512);
-			sqliteHelper.insertOrUpdate(http);
+			sqlHelper.insertOrUpdate(http);
 		} 
 
 		modelAndView.addObject("http", http);
@@ -40,14 +40,14 @@ public class HttpController extends BaseController {
 	@RequestMapping(value = "addOver")
 	@ResponseBody
 	public JsonResult addOver(String name, String value) throws SQLException {
-		Http http = sqliteHelper.findOneByQuery(null, null, Http.class);
+		Http http = sqlHelper.findOneByQuery(null, null, Http.class);
 		
 		if (name.equals("gzip")) {
 			http.setGzip(value);
 		} else if (name.equals("clientMaxBodySize")) {
 			http.setClientMaxBodySize(Integer.parseInt(value));
 		}
-		sqliteHelper.insertOrUpdate(http);
+		sqlHelper.insertOrUpdate(http);
 
 		return renderSuccess();
 

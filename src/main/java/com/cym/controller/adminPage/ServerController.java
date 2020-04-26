@@ -42,12 +42,8 @@ public class ServerController extends BaseController {
 	@RequestMapping("addOver")
 	@ResponseBody
 	public JsonResult addOver(Server server) throws SQLException {
-//		if(StrUtil.isEmpty(server.getId())) {
-//			server.setId(null); 
-//		}
 
-//		sqliteUtils.use().insertOrUpdate(Entity.parse(server).setTableName("server"), "id");
-		sqliteHelper.insertOrUpdate(server);
+		sqlHelper.insertOrUpdate(server);
 
 		return renderSuccess();
 	}
@@ -55,20 +51,14 @@ public class ServerController extends BaseController {
 	@RequestMapping("detail")
 	@ResponseBody
 	public JsonResult detail(String id) throws SQLException {
-//		Entity where = new Entity("server");
-//		where.put("id", id);
-//		Entity entity = sqliteUtils.use().get(where);
-		return renderSuccess(sqliteHelper.findById(id, Server.class));
+		return renderSuccess(sqlHelper.findById(id, Server.class));
 	}
 
 	@RequestMapping("del")
 	@ResponseBody
 	public JsonResult del(String id) throws SQLException {
-//		Entity where = new Entity("server");
-//		where.put("id", id);
-//		sqliteUtils.use().del(where);
-
-		sqliteHelper.deleteById(id, Server.class);
+		serverService.deleteById(id);
+		
 		return renderSuccess();
 	}
 

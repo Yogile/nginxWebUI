@@ -11,13 +11,6 @@
 }
 
 
-.ck-editor {
-   width: 100% !important;
-}
-.ck-content {
-   height: 400px;
-}
-
-.img{
-	height: 80px;
+.layui-layout-admin .layui-body {
+	bottom: 0px;
 }

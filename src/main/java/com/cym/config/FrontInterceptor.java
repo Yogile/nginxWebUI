@@ -5,6 +5,7 @@ import java.net.URI;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -12,7 +13,8 @@ import org.springframework.web.servlet.ModelAndView;
 @Component
 public class FrontInterceptor implements HandlerInterceptor {
 
-
+	@Value("${spring.application.name}")
+	String projectName;
 	/*
 	 * 视图渲染之后的操作
 	 */
@@ -37,7 +39,7 @@ public class FrontInterceptor implements HandlerInterceptor {
 		String ctx = getIP(request.getRequestURL().toString() + "/");
 		request.setAttribute("ctx", ctx);
 		request.setAttribute("jsrandom", System.currentTimeMillis());
-
+		request.setAttribute("projectName", projectName);
 		return true;
 	}
 

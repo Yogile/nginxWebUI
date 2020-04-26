@@ -12,7 +12,6 @@ import org.springframework.web.servlet.ModelAndView;
 @Component
 public class AdminInterceptor implements HandlerInterceptor {
 
-	
 	/*
 	 * 视图渲染之后的操作
 	 */
@@ -45,6 +44,7 @@ public class AdminInterceptor implements HandlerInterceptor {
 			response.sendRedirect(ctx + "/adminPage/login");
 			return false;
 		}
+
 
 
 		return true;

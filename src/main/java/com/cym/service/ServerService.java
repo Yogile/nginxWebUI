@@ -2,6 +2,7 @@ package com.cym.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.cym.model.Server;
 
@@ -15,7 +16,7 @@ import cn.hutool.core.util.StrUtil;
 @Service
 public class ServerService {
 	@Autowired
-	SqlHelper sqliteHelper;
+	SqlHelper sqlHelper;
 
 	public Page search(Page page, String word, Integer ssl) {
 		CriteriaAndWrapper criteriaAndWrapper = new CriteriaAndWrapper();
@@ -28,9 +29,14 @@ public class ServerService {
 			criteriaAndWrapper.eq("ssl", ssl);
 		}
 
-		page = sqliteHelper.findPage(criteriaAndWrapper, new Sort("id", "desc"), page, Server.class);
+		page = sqlHelper.findPage(criteriaAndWrapper, new Sort("id", "desc"), page, Server.class);
 
 		return page;
+	}
+
+	@Transactional
+	public void deleteById(String id) {
+		sqlHelper.deleteById(id, Server.class);
 	}
 
 }
