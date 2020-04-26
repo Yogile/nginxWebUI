@@ -22,16 +22,15 @@ spring:
       print: true
 
   datasource:
-    type: mysql
     url: jdbc:mysql://10.39.3.92:3306/test
     username: root
     password: 1qaz2wsx
-#   type: sqlite
-#   package: com.cym.model
-	
+    package: com.cym.model
+  database: mysql
+
 logging: 
   level: 
-    root: info
+    root: debug
 
 custom:
   nginx: E:/nginx-1.17.10/conf/nginx.conf
