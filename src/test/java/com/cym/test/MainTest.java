@@ -15,7 +15,7 @@ import com.cym.NginxWebUI;
 import com.cym.model.Server;
 
 import cn.craccd.sqlite.utils.CriteriaAndWrapper;
-import cn.craccd.sqlite.utils.SqliteHelper;
+import cn.craccd.sqlite.utils.SqlHelper;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.db.Db;
 import cn.hutool.db.Entity;
@@ -25,7 +25,7 @@ import cn.hutool.db.Entity;
 @SpringBootTest(classes = NginxWebUI.class)
 public class MainTest {
 	@Autowired
-	SqliteHelper nosqlHelper;
+	SqlHelper nosqlHelper;
 
 	@Before
 	public void before() {

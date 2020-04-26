@@ -7,8 +7,8 @@ server:
 spring:
   application:
     name: nginx配置器
-#  session:
-#    store-type: mongodb
+  session:
+    store-type: jdbc
   devtools:
     restart:
       enabled: false
@@ -21,6 +21,14 @@ spring:
       package: com.cym.model
       print: true
 
+  datasource:
+    type: mysql
+    url: jdbc:mysql://10.39.3.92:3306/test
+    username: root
+    password: 1qaz2wsx
+#   type: sqlite
+#   package: com.cym.model
+	
 logging: 
   level: 
     root: info
