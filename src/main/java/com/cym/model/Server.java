@@ -2,18 +2,18 @@ package com.cym.model;
 
 
 import cn.craccd.sqlHelper.bean.BaseModel;
-import cn.craccd.sqlHelper.config.Indexed;
+import cn.craccd.sqlHelper.config.InitIndex;
 import cn.craccd.sqlHelper.config.InitValue;
 import cn.craccd.sqlHelper.config.Table;
 
 @Table
 public class Server extends BaseModel{
-	@Indexed
+	@InitIndex
 	String serverName;
 	String listen;
 	Integer ssl;
 	String pem;
-	@Indexed(unique = true)
+	@InitIndex(unique = true)
 	String key;
 
 	String proxyPass;
