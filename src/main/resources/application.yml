@@ -11,6 +11,7 @@ spring:
     store-type: jdbc
     jdbc:
       initialize-schema: always
+      
   devtools:
     restart:
       enabled: false
@@ -29,9 +30,5 @@ spring:
 logging: 
   level: 
     root: info
-
-custom:
-  nginx: E:/nginx-1.17.10/conf/nginx.conf
-  admin:
-    name: admin
-    pass: admin
+    org.springframework.jdbc.core.JdbcTemplate: debug
+    org.springframework.jdbc.core.StatementCreatorUtils: trace 

@@ -8,6 +8,7 @@ import com.cym.model.Server;
 
 import cn.craccd.sqlHelper.bean.Page;
 import cn.craccd.sqlHelper.bean.Sort;
+import cn.craccd.sqlHelper.bean.Sort.Direction;
 import cn.craccd.sqlHelper.utils.CriteriaAndWrapper;
 import cn.craccd.sqlHelper.utils.CriteriaOrWrapper;
 import cn.craccd.sqlHelper.utils.SqlHelper;
@@ -29,7 +30,7 @@ public class ServerService {
 			criteriaAndWrapper.eq("ssl", ssl);
 		}
 
-		page = sqlHelper.findPage(criteriaAndWrapper, new Sort("id", "desc"), page, Server.class);
+		page = sqlHelper.findPage(criteriaAndWrapper, new Sort("id", Direction.DESC), page, Server.class);
 
 		return page;
 	}
