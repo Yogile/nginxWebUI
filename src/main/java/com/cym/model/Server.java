@@ -11,7 +11,7 @@ public class Server extends BaseModel{
 	@InitIndex
 	String serverName;
 	String listen;
-	Integer ssl;
+	Integer ssl; // 0 http 1 https 2 html
 	String pem;
 	@InitIndex(unique = true)
 	String key;
@@ -19,7 +19,6 @@ public class Server extends BaseModel{
 	String proxyPass;
 	Integer proxyPassPort;
 	
-	@InitValue("/home/www")
 	String root;
 	
 	public String getRoot() {

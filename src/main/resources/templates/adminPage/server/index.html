@@ -39,13 +39,14 @@
 						</div>
 
 						<div class="layui-inline">
-							<label class="layui-form-label">开启ssl</label>
+							<label class="layui-form-label">类型</label>
 						</div>
 						<div class="layui-input-inline">
-							<select name="ssl" id="ssl">
+							<select name="ssl">
 								<option value="">--全部--</option>
-								<option value="1" ${(ssl==1)?string('selected','')}>开启</option>
-								<option value="0" ${(ssl==0)?string('selected','')}>关闭</option>
+								<option value="0" ${(ssl==0)?string('selected','')}>代理http</option>
+								<option value="1" ${(ssl==1)?string('selected','')}>代理https</option>
+								<option value="2" ${(ssl==2)?string('selected','')}>静态html</option>
 							</select>
 						</div>
 						<button type="button" class="layui-btn" onclick="search()">搜索</button>
@@ -62,7 +63,7 @@
 							<th>开启ssl</th>
 							<th>ssl文件路径</th>
 							<th>代理目标</th>
-
+							<th>静态根目录</th>
 							<th>操作</th>
 						</tr>
 					</thead>
@@ -72,13 +73,15 @@
 							<td>${server.serverName}</td>
 							<td>${server.listen}</td>
 							<td>
-								<#if server.ssl==1> 是 </#if>
-								<#if server.ssl==0> 否 </#if>
+								<#if server.ssl==0>代理http </#if>
+								<#if server.ssl==1>代理https </#if>
+								<#if server.ssl==2>静态html </#if>
 							<td>
 								<#if server.ssl==1> pem: ${server.pem} <br>
 								key: ${server.key} </#if>
 							</td>
 							<td>${server.proxyPass}:${server.proxyPassPort}</td>
+							<td>${server.root}</td>
 							<td>
 								<button class="layui-btn layui-btn-sm" onclick="edit('${server.id}')">编辑</button>
 								<button class="layui-btn layui-btn-danger layui-btn-sm" onclick="del('${server.id}')">删除</button>
@@ -87,7 +90,7 @@
 						</#list>
 					</tbody>
 				</table>
-				<input type="hidden" name="curr" value="${page.curr}">
+				<div id="pageInfo"></div>
 			</div>
 		</div>
 	</div>
@@ -113,42 +116,61 @@
 				</div>
 
 				<div class="layui-form-item">
-					<label class="layui-form-label">开启ssl</label>
+					<label class="layui-form-label">类型</label>
 					<div class="layui-input-block">
-						<select name="ssl" id="ssl">
-							<option value="1">是</option>
-							<option value="0">否</option>
+						<select name="ssl" id="ssl" lay-filter="ssl" >
+							<option value="0">代理http</option>
+							<option value="1">代理https</option>
+							<option value="2">静态html</option>
 						</select>
 					</div>
 				</div>
-
-				<div class="layui-form-item">
-					<label class="layui-form-label">pem文件路径</label>
-					<div class="layui-input-block">
-						<input type="text" name="pem" id="pem" class="layui-input">
+				
+				<div id="pemDiv" style="display: none;">
+					<div class="layui-form-item">
+						<label class="layui-form-label">pem文件路径</label>
+						<div class="layui-input-block">
+							<button type="button" class="layui-btn layui-btn-sm" id="pemBtn">上传pem文件</button>
+							<input type="hidden" name="pem" id="pem" class="layui-input">
+							<div class="layui-form-mid layui-word-aux" id="pemPath"></div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">key文件路径</label>
+						<div class="layui-input-block">
+							<button type="button" class="layui-btn layui-btn-sm" id="keyBtn">上传key文件</button>
+							<input type="hidden" name="key" id="key" class="layui-input">
+							<div class="layui-form-mid layui-word-aux" id="keyPath"></div>
+						</div>
 					</div>
 				</div>
-				<div class="layui-form-item">
-					<label class="layui-form-label">key文件路径</label>
-					<div class="layui-input-block">
-						<input type="text" name="key" id="key" class="layui-input">
+				
+				<div id="targetDiv">
+					<div class="layui-form-item">
+						<label class="layui-form-label">代理目标ip</label>
+						<div class="layui-input-block">
+							<input type="text" name="proxyPass" id="proxyPass" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">代理目标端口</label>
+						<div class="layui-input-block">
+							<input type="text" name="proxyPassPort" id="proxyPassPort" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<button type="button" class="layui-btn layui-btn-normal" onclick="addOver()">提交</button>
+						<button type="button" class="layui-btn" onclick="layer.closeAll()">关闭</button>
 					</div>
 				</div>
-				<div class="layui-form-item">
-					<label class="layui-form-label">代理目标ip</label>
-					<div class="layui-input-block">
-						<input type="text" name="proxyPass" id="proxyPass" class="layui-input">
+				
+				<div id="rootDiv" style="display: none;">
+					<div class="layui-form-item">
+						<label class="layui-form-label">静态根目录</label>
+						<div class="layui-input-block">
+							<input type="text" name="root" id="root" class="layui-input">
+						</div>
 					</div>
-				</div>
-				<div class="layui-form-item">
-					<label class="layui-form-label">代理目标端口</label>
-					<div class="layui-input-block">
-						<input type="text" name="proxyPassPort" id="proxyPassPort" class="layui-input">
-					</div>
-				</div>
-				<div class="layui-form-item">
-					<button type="button" class="layui-btn layui-btn-normal" onclick="addOver()">提交</button>
-					<button type="button" class="layui-btn" onclick="layer.closeAll()">关闭</button>
 				</div>
 			</form>
 		</div>
