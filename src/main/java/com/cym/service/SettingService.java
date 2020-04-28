@@ -22,7 +22,7 @@ public class SettingService {
 		setting.setKey(key);
 		setting.setValue(value);
 
-		sqlHelper.updateById(setting);
+		sqlHelper.insertOrUpdate(setting);
 	}
 
 	public String get(String key) {

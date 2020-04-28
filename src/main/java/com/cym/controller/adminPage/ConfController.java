@@ -50,7 +50,8 @@ public class ConfController extends BaseController {
 
 		String nginxPath = settingService.get("nginxPath");
 		if (StrUtil.isEmpty(nginxPath)) {
-			settingService.set("nginxPath", "/etc/nginx/nginx.conf");
+			nginxPath = "/etc/nginx/nginx.conf";
+			settingService.set("nginxPath", nginxPath);
 		}
 		modelAndView.addObject("nginxPath", nginxPath);
 
