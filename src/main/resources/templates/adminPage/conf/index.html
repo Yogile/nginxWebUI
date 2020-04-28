@@ -18,18 +18,30 @@
 				</fieldset>
 
 				<div class="layui-form">
-					<button type="button" class="layui-btn layui-btn-normal" onclick="add()">替换文件</button>
+					<div class="layui-input-inline">
+						<input type="text" id="nginxPath" class="layui-input" value="${nginxPath}">
+					</div>
+
+					<div class="layui-inline">
+						<button type="button" class="layui-btn layui-btn-normal" onclick="replace()">替换文件</button>
+					</div>
+					<div class="layui-inline">
+						<button type="button" class="layui-btn layui-btn-normal" onclick="check()">效验文件</button>
+					</div>
+					<div class="layui-inline">
+						<button type="button" class="layui-btn layui-btn-normal" onclick="reboot()">重启nginx</button>
+					</div>
 				</div>
 
 				<div class="layui-form" style="margin-top: 10px;">
-					<textarea class="layui-textarea" style="width: 100%;height: 700px;resize: none;" readonly="readonly">${confStr}</textarea> 
+					<textarea class="layui-textarea" style="width: 100%; height: 700px; resize: none;" readonly="readonly">${confStr}</textarea>
 				</div>
 			</div>
 		</div>
 	</div>
 
-<#include '/adminPage/script.html'/>
-<script src="${ctx}/js/adminPage/conf/index.js?v=${jsrandom}" type="text/javascript"></script>
+	<#include '/adminPage/script.html'/>
+	<script src="${ctx}/js/adminPage/conf/index.js?v=${jsrandom}" type="text/javascript"></script>
 </body>
 
 
