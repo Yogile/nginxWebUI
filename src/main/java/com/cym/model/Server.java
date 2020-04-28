@@ -11,9 +11,10 @@ public class Server extends BaseModel{
 	@InitIndex
 	String serverName;
 	String listen;
-	Integer ssl; // 0 http 1 https 2 html
+	Integer type; //0 http 1 root
+	Integer ssl; // 0 否 1是
+	Integer rewrite; // 0否 1是
 	String pem;
-	@InitIndex(unique = true)
 	String key;
 
 	String proxyPass;
@@ -21,6 +22,22 @@ public class Server extends BaseModel{
 	
 	String root;
 	
+	public Integer getRewrite() {
+		return rewrite;
+	}
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
+
+	public void setRewrite(Integer rewrite) {
+		this.rewrite = rewrite;
+	}
+
 	public String getRoot() {
 		return root;
 	}

@@ -20,6 +20,7 @@ import com.github.odiszapc.nginxparser.NgxConfig;
 import com.github.odiszapc.nginxparser.NgxDumper;
 import com.github.odiszapc.nginxparser.NgxParam;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.db.Entity;
 
 @Controller
@@ -30,7 +31,7 @@ public class ConfController extends BaseController {
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView) throws IOException, SQLException {
 		Http http = sqlHelper.findOneByQuery(null, null, Http.class);
 		modelAndView.addObject("http", http);
-		
+
 		List<Server> servers = sqlHelper.findAll(Server.class);
 		modelAndView.addObject("servers", servers);
 
@@ -62,10 +63,14 @@ public class ConfController extends BaseController {
 				NgxBlock ngxBlockServer = new NgxBlock();
 				ngxBlockServer.addValue("server");
 
-				ngxParam = new NgxParam();
-				ngxParam.addValue("server_name " + server.getServerName());
-				ngxBlockServer.addEntry(ngxParam);
+				// 监听域名
+				if (StrUtil.isNotEmpty(server.getServerName())) {
+					ngxParam = new NgxParam();
+					ngxParam.addValue("server_name " + server.getServerName());
+					ngxBlockServer.addEntry(ngxParam);
+				}
 
+				// 监听端口
 				ngxParam = new NgxParam();
 				String value = "listen " + server.getListen();
 				if (server.getSsl() == 1) {
@@ -74,6 +79,7 @@ public class ConfController extends BaseController {
 				ngxParam.addValue(value);
 				ngxBlockServer.addEntry(ngxParam);
 
+				// ssl配置
 				if (server.getSsl() == 1) {
 					ngxParam = new NgxParam();
 					ngxParam.addValue("ssl_certificate " + server.getPem());
@@ -84,33 +90,44 @@ public class ConfController extends BaseController {
 					ngxBlockServer.addEntry(ngxParam);
 				}
 
-				// 添加location
-				NgxBlock ngxBlockLocation = new NgxBlock();
-				ngxBlockLocation.addValue("location");
-				ngxBlockLocation.addValue("/");
+				// http转发配置
+				if (server.getType() == 0) {
+					// 添加location
+					NgxBlock ngxBlockLocation = new NgxBlock();
+					ngxBlockLocation.addValue("location");
+					ngxBlockLocation.addValue("/");
 
-				ngxParam = new NgxParam();
-				ngxParam.addValue("proxy_pass http://" + server.getProxyPass() + ":" + server.getProxyPassPort());
-				ngxBlockLocation.addEntry(ngxParam);
+					ngxParam = new NgxParam();
+					ngxParam.addValue("proxy_pass http://" + server.getProxyPass() + ":" + server.getProxyPassPort());
+					ngxBlockLocation.addEntry(ngxParam);
 
-				ngxParam = new NgxParam();
-				ngxParam.addValue("proxy_set_header Host $host");
-				ngxBlockLocation.addEntry(ngxParam);
+					ngxParam = new NgxParam();
+					ngxParam.addValue("proxy_set_header Host $host");
+					ngxBlockLocation.addEntry(ngxParam);
 
-				ngxParam = new NgxParam();
-				ngxParam.addValue("proxy_set_header X-Real-IP $remote_addr");
-				ngxBlockLocation.addEntry(ngxParam);
+					ngxParam = new NgxParam();
+					ngxParam.addValue("proxy_set_header X-Real-IP $remote_addr");
+					ngxBlockLocation.addEntry(ngxParam);
 
-				ngxParam = new NgxParam();
-				ngxParam.addValue("proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for");
-				ngxBlockLocation.addEntry(ngxParam);
+					ngxParam = new NgxParam();
+					ngxParam.addValue("proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for");
+					ngxBlockLocation.addEntry(ngxParam);
 
-				ngxBlockServer.addEntry(ngxBlockLocation);
+					ngxBlockServer.addEntry(ngxBlockLocation);
 
+				} else if (server.getType() == 1) { // 静态html
+					ngxParam = new NgxParam();
+					ngxParam.addValue("root " + server.getRoot());
+					ngxBlockServer.addEntry(ngxParam);
+
+					ngxParam = new NgxParam();
+					ngxParam.addValue("index index.html");
+					ngxBlockServer.addEntry(ngxParam);
+				}
 				ngxBlockHttp.addEntry(ngxBlockServer);
 
-				// ssl添加80端口转跳
-				if (server.getSsl() == 1) {
+				// https添加80端口重写
+				if (server.getSsl() == 1 && server.getRewrite() == 1) {
 					ngxBlockServer = new NgxBlock();
 					ngxBlockServer.addValue("server");
 
@@ -128,10 +145,13 @@ public class ConfController extends BaseController {
 
 					ngxBlockHttp.addEntry(ngxBlockServer);
 				}
+
 			}
 
 			return new NgxDumper(ngxConfig).dump();
-		} catch (Exception e) {
+		} catch (
+
+		Exception e) {
 			e.printStackTrace();
 		}
 

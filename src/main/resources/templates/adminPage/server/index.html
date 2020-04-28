@@ -42,11 +42,10 @@
 							<label class="layui-form-label">类型</label>
 						</div>
 						<div class="layui-input-inline">
-							<select name="ssl">
+							<select name="type">
 								<option value="">--全部--</option>
-								<option value="0" ${(ssl==0)?string('selected','')}>代理http</option>
-								<option value="1" ${(ssl==1)?string('selected','')}>代理https</option>
-								<option value="2" ${(ssl==2)?string('selected','')}>静态html</option>
+								<option value="0" ${(type==0)?string('selected','')}>代理http</option>
+								<option value="1" ${(type==1)?string('selected','')}>静态html</option>
 							</select>
 						</div>
 						<button type="button" class="layui-btn" onclick="search()">搜索</button>
@@ -60,10 +59,11 @@
 						<tr>
 							<th>监听端口</th>
 							<th>监听域名</th>
+							<th>类型</th>
 							<th>开启ssl</th>
 							<th>ssl文件路径</th>
 							<th>代理目标</th>
-							<th>静态根目录</th>
+							<th>80端口自动跳转</th>
 							<th>操作</th>
 						</tr>
 					</thead>
@@ -73,15 +73,29 @@
 							<td>${server.serverName}</td>
 							<td>${server.listen}</td>
 							<td>
-								<#if server.ssl==0>代理http </#if>
-								<#if server.ssl==1>代理https </#if>
-								<#if server.ssl==2>静态html </#if>
+								<#if server.type==0>代理http </#if>
+								<#if server.type==1>静态html </#if>
+							</td>
+							<td>
+								<#if server.ssl==0>否</#if>
+								<#if server.ssl==1>是</#if>
+							</td>
 							<td>
 								<#if server.ssl==1> pem: ${server.pem} <br>
 								key: ${server.key} </#if>
 							</td>
-							<td>${server.proxyPass}:${server.proxyPassPort}</td>
-							<td>${server.root}</td>
+							<td>
+								<#if server.type==0>
+									${server.proxyPass}:${server.proxyPassPort}
+								</#if>
+								<#if server.type==1>
+									${server.root}
+								</#if>
+							</td>
+							<td>
+								<#if server.rewrite==0>否</#if>
+								<#if server.rewrite==1>是</#if>
+							</td>
 							<td>
 								<button class="layui-btn layui-btn-sm" onclick="edit('${server.id}')">编辑</button>
 								<button class="layui-btn layui-btn-danger layui-btn-sm" onclick="del('${server.id}')">删除</button>
@@ -118,10 +132,18 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label">类型</label>
 					<div class="layui-input-block">
-						<select name="ssl" id="ssl" lay-filter="ssl" >
+						<select name="type" id="type" lay-filter="type">
 							<option value="0">代理http</option>
-							<option value="1">代理https</option>
-							<option value="2">静态html</option>
+							<option value="1">静态html</option>
+						</select>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">开启ssl</label>
+					<div class="layui-input-block">
+						<select name="ssl" id="ssl" lay-filter="ssl">
+							<option value="0">否</option>
+							<option value="1">是</option>
 						</select>
 					</div>
 				</div>
@@ -143,8 +165,19 @@
 							<div class="layui-form-mid layui-word-aux" id="keyPath"></div>
 						</div>
 					</div>
+					
+					<div class="layui-form-item">
+						<label class="layui-form-label">80端口自动跳转</label>
+						<div class="layui-input-block">
+							<select name="rewrite" id="rewrite">
+								<option value="1">是</option>
+								<option value="0">否</option>
+							</select>
+						</div>
+					</div>
+					
 				</div>
-				
+
 				<div id="targetDiv">
 					<div class="layui-form-item">
 						<label class="layui-form-label">代理目标ip</label>
@@ -158,12 +191,8 @@
 							<input type="text" name="proxyPassPort" id="proxyPassPort" class="layui-input">
 						</div>
 					</div>
-					<div class="layui-form-item">
-						<button type="button" class="layui-btn layui-btn-normal" onclick="addOver()">提交</button>
-						<button type="button" class="layui-btn" onclick="layer.closeAll()">关闭</button>
-					</div>
 				</div>
-				
+
 				<div id="rootDiv" style="display: none;">
 					<div class="layui-form-item">
 						<label class="layui-form-label">静态根目录</label>
@@ -171,6 +200,11 @@
 							<input type="text" name="root" id="root" class="layui-input">
 						</div>
 					</div>
+				</div>
+
+				<div class="layui-form-item">
+					<button type="button" class="layui-btn layui-btn-normal" onclick="addOver()">提交</button>
+					<button type="button" class="layui-btn" onclick="layer.closeAll()">关闭</button>
 				</div>
 			</form>
 		</div>

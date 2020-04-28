@@ -19,15 +19,15 @@ public class ServerService {
 	@Autowired
 	SqlHelper sqlHelper;
 
-	public Page search(Page page, String word, Integer ssl) {
+	public Page search(Page page, String word, Integer type) {
 		CriteriaAndWrapper criteriaAndWrapper = new CriteriaAndWrapper();
 
 		if (StrUtil.isNotEmpty(word)) {
-			criteriaAndWrapper.and(new CriteriaOrWrapper().like("serverName", word).like("listen", word));
+			criteriaAndWrapper.and(new CriteriaOrWrapper().like("serverName", word).like("proxyPass", word));
 		}
 
-		if (ssl != null) {
-			criteriaAndWrapper.eq("ssl", ssl);
+		if (type != null) {
+			criteriaAndWrapper.eq("type", type);
 		}
 
 		page = sqlHelper.findPage(criteriaAndWrapper, new Sort("id", Direction.DESC), page, Server.class);

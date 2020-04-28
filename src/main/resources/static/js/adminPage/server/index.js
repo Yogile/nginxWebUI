@@ -1,6 +1,9 @@
 $(function() {
+	form.on('select(type)', function(data) {
+		checkType(data.value);
+	});
 	form.on('select(ssl)', function(data) {
-		check(data.value);
+		checkSsl(data.value);
 	});
 	
 	layui.use('upload', function() {
@@ -40,24 +43,26 @@ $(function() {
 	});
 })
 
-function check(value){
+function checkType(value){
+	if (value == 0) {
+		$("#targetDiv").show();
+		$("#rootDiv").hide();
+	} 
+	if (value == 1) {
+		$("#targetDiv").hide();
+		$("#rootDiv").show();
+	} 
+}
+
+
+function checkSsl(value){
 	if (value == 0) {
 		$("#pemDiv").hide();
-		$("#targetDiv").show();
-		$("#root").hide();
 	} 
 	if (value == 1) {
 		$("#pemDiv").show();
-		$("#targetDiv").show();
-		$("#root").hide();
-	}
-	if (value == 2) {
-		$("#pemDiv").hide();
-		$("#targetDiv").hide();
-		$("#root").show();
-	}
+	} 
 }
-
 function search() {
 	$("#searchForm").submit();
 }
@@ -66,6 +71,7 @@ function add() {
 	$("#id").val("");
 	$("#listen").val("");
 	$("#serverName").val("");
+	$("#type option:first").prop("selected", true);
 	$("#ssl option:first").prop("selected", true);
 	$("#pem").val("");
 	$("#pemPath").html("");
@@ -74,7 +80,7 @@ function add() {
 	$("#proxyPass").val("");
 	$("#proxyPassPort").val("");
 	$("#root").val("");
-
+	$("#rewrite option:first").prop("selected", true);
 	showWindow("添加server");
 }
 
@@ -82,7 +88,7 @@ function showWindow(title) {
 	layer.open({
 		type : 1,
 		title : title,
-		area : [ '700px', '600px' ], // 宽高
+		area : [ '700px', '650px' ], // 宽高
 		content : $('#windowDiv')
 	});
 }
@@ -122,6 +128,7 @@ function edit(id) {
 				$("#id").val(server.id);
 				$("#listen").val(server.listen);
 				$("#serverName").val(server.serverName);
+				$("#type").val(server.type);
 				$("#ssl").val(server.ssl);
 				$("#pem").val(server.pem);
 				$("#key").val(server.key);
@@ -130,8 +137,11 @@ function edit(id) {
 				$("#proxyPass").val(server.proxyPass);
 				$("#proxyPassPort").val(server.proxyPassPort);
 				$("#root").val(server.root);
+				$("#rewrite").val(server.rewrite);
 				
-				check(server.ssl);
+				checkType(server.type);
+				checkSsl(server.ssl);
+				
 				form.render();
 				showWindow("编辑server");
 			} else {

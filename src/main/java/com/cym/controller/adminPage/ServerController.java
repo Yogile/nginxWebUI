@@ -27,13 +27,13 @@ import cn.hutool.db.Entity;
 public class ServerController extends BaseController {
 	@Autowired
 	ServerService serverService;
-	
+
 	@RequestMapping("")
-	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView, Page page, String keywords,Integer ssl) {
-		page = serverService.search(page, keywords, ssl);
+	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView, Page page, String keywords, Integer type) {
+		page = serverService.search(page, keywords, type);
 
 		modelAndView.addObject("page", page);
-		modelAndView.addObject("ssl", ssl);
+		modelAndView.addObject("type", type);
 		modelAndView.addObject("keywords", keywords);
 		modelAndView.setViewName("/adminPage/server/index");
 		return modelAndView;
@@ -43,7 +43,24 @@ public class ServerController extends BaseController {
 	@ResponseBody
 	public JsonResult addOver(Server server) throws SQLException {
 
-		sqlHelper.insertOrUpdate(server);
+		if (server.getType() == 0) { // http
+			server.setRoot(null);
+		} else if (server.getType() == 1) { // root
+			server.setProxyPass(null);
+			server.setProxyPassPort(null);
+		} 
+
+		if (server.getSsl() == 0) {
+			server.setPem(null);
+			server.setKey(null);
+			server.setRewrite(null);
+		}
+
+		if (StrUtil.isNotEmpty(server.getId())) {
+			sqlHelper.updateAllColumnById(server);
+		} else {
+			sqlHelper.insert(server);
+		}
 
 		return renderSuccess();
 	}
@@ -58,7 +75,7 @@ public class ServerController extends BaseController {
 	@ResponseBody
 	public JsonResult del(String id) throws SQLException {
 		serverService.deleteById(id);
-		
+
 		return renderSuccess();
 	}
 
