@@ -199,11 +199,10 @@ public class ConfController extends BaseController {
 	@RequestMapping(value = "check")
 	@ResponseBody
 	public JsonResult check(String nginxPath) throws SQLException {
-		settingService.set("nginxPath", nginxPath);
 
 		try {
 			String rs = RuntimeUtil.execForStr("nginx -t");
-			if (rs.toString().contains("successful")) {
+			if (rs.contains("successful")) {
 				return renderSuccess("效验成功");
 			} else {
 				return renderError("效验失败:" + rs);
@@ -217,10 +216,9 @@ public class ConfController extends BaseController {
 	@RequestMapping(value = "reboot")
 	@ResponseBody
 	public JsonResult reboot(String nginxPath) throws SQLException {
-		settingService.set("nginxPath", nginxPath);
 		try {
 			String rs = RuntimeUtil.execForStr("nginx -s reload");
-			if (rs.toString().contains("successful")) {
+			if (rs.trim().equals("")) {
 				return renderSuccess("重启成功");
 			} else {
 				return renderError("重启失败:" + rs);
