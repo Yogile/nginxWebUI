@@ -218,14 +218,17 @@ public class ConfController extends BaseController {
 	@ResponseBody
 	public JsonResult reboot(String nginxPath) throws SQLException {
 		settingService.set("nginxPath", nginxPath);
-
-		String rs = RuntimeUtil.execForStr("nginx -s reload");
-		if (rs.toString().contains("successful")) {
-			return renderSuccess("重启成功");
-		} else {
-			return renderError("重启失败:" + rs);
+		try {
+			String rs = RuntimeUtil.execForStr("nginx -s reload");
+			if (rs.toString().contains("successful")) {
+				return renderSuccess("重启成功");
+			} else {
+				return renderError("重启失败:" + rs);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return renderError("重启失败:" + e.getMessage());
 		}
-
 	}
 
 }
