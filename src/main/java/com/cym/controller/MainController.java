@@ -30,7 +30,7 @@ public class MainController extends BaseController{
 	@ResponseBody
 	@RequestMapping("/upload")
 	public JsonResult upload(@RequestParam("file") MultipartFile file) {
-		String path = FileUtil.getTmpDirPath() + File.separator + System.currentTimeMillis() + "." + file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
+		String path = FileUtil.getUserHomePath() + File.separator + System.currentTimeMillis() + "." + file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
 		
 		File dest = new File(path); 
 		// 保存文件
