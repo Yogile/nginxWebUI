@@ -8,7 +8,7 @@ function replace(){
 		type : 'POST',
 		url : ctx + '/adminPage/conf/replace',
 		data : {
-			nginxPath : nginxPath
+			nginxPath : $("#nginxPath").val()
 		},
 		dataType : 'json',
 		success : function(data) {
@@ -35,7 +35,7 @@ function check(){
 		type : 'POST',
 		url : ctx + '/adminPage/conf/check',
 		data : {
-			nginxPath : nginxPath
+			nginxPath : $("#nginxPath").val()
 		},
 		dataType : 'json',
 		success : function(data) {
