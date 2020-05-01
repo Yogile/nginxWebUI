@@ -47,7 +47,6 @@ public class ServerController extends BaseController {
 			server.setRoot(null);
 		} else if (server.getType() == 1) { // root
 			server.setProxyPass(null);
-			server.setProxyPassPort(null);
 		} 
 
 		if (server.getSsl() == 0) {

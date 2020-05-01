@@ -62,7 +62,7 @@
 							<th>类型</th>
 							<th>开启ssl</th>
 							<th>ssl文件路径</th>
-							<th>代理目标</th>
+							<th>代理目标url</th>
 							<th>80端口自动跳转</th>
 							<th>操作</th>
 						</tr>
@@ -86,7 +86,7 @@
 							</td>
 							<td>
 								<#if server.type==0>
-									${server.proxyPass}:${server.proxyPassPort}
+									${server.proxyPass}
 								</#if>
 								<#if server.type==1>
 									${server.root}
@@ -180,15 +180,9 @@
 
 				<div id="targetDiv">
 					<div class="layui-form-item">
-						<label class="layui-form-label">代理目标ip</label>
+						<label class="layui-form-label">代理目标url</label>
 						<div class="layui-input-block">
 							<input type="text" name="proxyPass" id="proxyPass" class="layui-input">
-						</div>
-					</div>
-					<div class="layui-form-item">
-						<label class="layui-form-label">代理目标端口</label>
-						<div class="layui-input-block">
-							<input type="text" name="proxyPassPort" id="proxyPassPort" class="layui-input">
 						</div>
 					</div>
 				</div>
