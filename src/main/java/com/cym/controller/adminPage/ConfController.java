@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -24,6 +25,7 @@ import com.github.odiszapc.nginxparser.NgxConfig;
 import com.github.odiszapc.nginxparser.NgxDumper;
 import com.github.odiszapc.nginxparser.NgxParam;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
@@ -126,7 +128,7 @@ public class ConfController extends BaseController {
 					ngxBlockServer.addEntry(ngxParam);
 
 					ngxParam = new NgxParam();
-					ngxParam.addValue("index index.html");
+					ngxParam.addValue("index index.html index.htm");
 					ngxBlockServer.addEntry(ngxParam);
 				}
 				ngxBlockHttp.addEntry(ngxBlockServer);
@@ -169,6 +171,8 @@ public class ConfController extends BaseController {
 		settingService.set("nginxPath", nginxPath);
 
 		try {
+			// 备份文件
+			FileUtil.copy(nginxPath, nginxPath + DateUtil.format(new Date(), "yyyy-MM-dd_HH-mm-ss") + ".bak", true); 
 			FileUtil.writeString(nginxContent, nginxPath, Charset.defaultCharset());
 			return renderSuccess("替换成功");
 		} catch (Exception e) {
