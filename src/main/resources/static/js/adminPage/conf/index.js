@@ -8,7 +8,9 @@ function replace(){
 		type : 'POST',
 		url : ctx + '/adminPage/conf/replace',
 		data : {
-			nginxPath : $("#nginxPath").val()
+			nginxPath : $("#nginxPath").val(),
+			nginxContent : $("#nginxContent").val()
+			
 		},
 		dataType : 'json',
 		success : function(data) {

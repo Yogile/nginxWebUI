@@ -178,15 +178,11 @@ public class ConfController extends BaseController {
 
 	@RequestMapping(value = "replace")
 	@ResponseBody
-	public JsonResult replace(String nginxPath) throws SQLException {
+	public JsonResult replace(String nginxPath,String nginxContent) throws SQLException {
 		settingService.set("nginxPath", nginxPath);
 
-		Http http = sqlHelper.findOneByQuery(null, null, Http.class);
-		List<Server> servers = sqlHelper.findAll(Server.class);
-		String confStr = buildConf(http, servers);
-
 		try {
-			FileUtil.writeString(confStr, nginxPath, Charset.defaultCharset());
+			FileUtil.writeString(nginxContent, nginxPath, Charset.defaultCharset());
 			return renderSuccess("替换成功");
 		} catch (Exception e) {
 			e.printStackTrace();
