@@ -1,1 +1,1 @@
-nohup mvn spring-boot:run > nginxWebUI.log &
+java KillProcess.java nginxWebUI
