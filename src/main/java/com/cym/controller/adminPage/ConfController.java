@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.cym.model.Http;
 import com.cym.model.Server;
 import com.cym.service.SettingService;
 import com.cym.utils.BaseController;
@@ -28,7 +27,6 @@ import com.github.odiszapc.nginxparser.NgxParam;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.db.Entity;
 
 @Controller
 @RequestMapping("/adminPage/conf")
@@ -39,13 +37,8 @@ public class ConfController extends BaseController {
 
 	@RequestMapping("")
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView) throws IOException, SQLException {
-		Http http = sqlHelper.findOneByQuery(null, null, Http.class);
-		modelAndView.addObject("http", http);
-
 		List<Server> servers = sqlHelper.findAll(Server.class);
-		modelAndView.addObject("servers", servers);
-
-		String confStr = buildConf(http, servers);
+		String confStr = buildConf(servers);
 		modelAndView.addObject("confStr", confStr);
 
 		String nginxPath = settingService.get("nginxPath");
@@ -59,22 +52,16 @@ public class ConfController extends BaseController {
 		return modelAndView;
 	}
 
-	private String buildConf(Http http, List<Server> servers) {
+	private String buildConf(List<Server> servers) {
 
 		try {
 			ClassPathResource resource = new ClassPathResource("nginx.conf");
 			InputStream inputStream = resource.getInputStream();
 
 			NgxConfig ngxConfig = NgxConfig.read(inputStream);
-			// 设置http
+			// 创建http
 			NgxBlock ngxBlockHttp = ngxConfig.findBlock("http");
-			NgxParam ngxParam = new NgxParam();
-			ngxParam.addValue("gzip " + http.getGzip());
-			ngxBlockHttp.addEntry(ngxParam);
-
-			ngxParam = new NgxParam();
-			ngxParam.addValue("client_max_body_size " + http.getClientMaxBodySize());
-			ngxBlockHttp.addEntry(ngxParam);
+			NgxParam ngxParam = null;
 
 			// 添加server
 			for (Server server : servers) {
