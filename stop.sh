@@ -1,1 +1,1 @@
-java KillProcess.java nginxWebUI
+java -jar kill-process.jar nginxWebUI
