@@ -1,27 +1,25 @@
 package com.cym.model;
 
-
 import cn.craccd.sqlHelper.bean.BaseModel;
 import cn.craccd.sqlHelper.config.InitIndex;
 import cn.craccd.sqlHelper.config.InitValue;
 import cn.craccd.sqlHelper.config.Table;
 
 @Table
-public class Server extends BaseModel{
+public class Server extends BaseModel {
 	@InitIndex
 	String serverName;
 	String listen;
-	Integer type; //0 http 1 root
+	Integer type; // 0 http 1 root
 	Integer ssl; // 0 否 1是
 	Integer rewrite; // 0否 1是
 	String pem;
 	String key;
 
 	String proxyPass;
-	Integer proxyPassPort;
-	
+
 	String root;
-	
+
 	public Integer getRewrite() {
 		return rewrite;
 	}
@@ -44,15 +42,6 @@ public class Server extends BaseModel{
 
 	public void setRoot(String root) {
 		this.root = root;
-	}
-
-
-	public Integer getProxyPassPort() {
-		return proxyPassPort;
-	}
-
-	public void setProxyPassPort(Integer proxyPassPort) {
-		this.proxyPassPort = proxyPassPort;
 	}
 
 	public String getProxyPass() {
@@ -78,7 +67,6 @@ public class Server extends BaseModel{
 	public void setListen(String listen) {
 		this.listen = listen;
 	}
-
 
 	public Integer getSsl() {
 		return ssl;

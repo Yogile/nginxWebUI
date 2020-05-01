@@ -78,7 +78,6 @@ function add() {
 	$("#key").val("");
 	$("#keyPath").html("");
 	$("#proxyPass").val("");
-	$("#proxyPassPort").val("");
 	$("#root").val("");
 	$("#rewrite option:first").prop("selected", true);
 	showWindow("添加server");
@@ -135,7 +134,6 @@ function edit(id) {
 				$("#pemPath").html(server.pem);
 				$("#keyPath").html(server.key);
 				$("#proxyPass").val(server.proxyPass);
-				$("#proxyPassPort").val(server.proxyPassPort);
 				$("#root").val(server.root);
 				$("#rewrite").val(server.rewrite);
 				

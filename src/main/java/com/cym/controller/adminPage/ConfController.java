@@ -103,7 +103,7 @@ public class ConfController extends BaseController {
 					ngxBlockLocation.addValue("/");
 
 					ngxParam = new NgxParam();
-					ngxParam.addValue("proxy_pass http://" + server.getProxyPass() + ":" + server.getProxyPassPort());
+					ngxParam.addValue("proxy_pass " + server.getProxyPass());
 					ngxBlockLocation.addEntry(ngxParam);
 
 					ngxParam = new NgxParam();
