@@ -15,10 +15,20 @@ public class Server extends BaseModel {
 	Integer rewrite; // 0否 1是
 	String pem;
 	String key;
-
+	
+	@InitValue("0")
+	Integer proxyPassType; //0 地址 1 负债均衡
 	String proxyPass;
 
 	String root;
+
+	public Integer getProxyPassType() {
+		return proxyPassType;
+	}
+
+	public void setProxyPassType(Integer proxyPassType) {
+		this.proxyPassType = proxyPassType;
+	}
 
 	public Integer getRewrite() {
 		return rewrite;
