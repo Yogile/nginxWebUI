@@ -162,7 +162,12 @@ function edit(id) {
 				$("#keyPath").html(server.key);
 				$("#proxyPass").val(server.proxyPass);
 				$("#root").val(server.root);
-				$("#rewrite").val(server.rewrite);
+				if(server.rewrite!=null){
+					$("#rewrite").val(server.rewrite);
+				} else{
+					$("#rewrite option:first").prop("selected", true);
+				}
+			
 				
 				$("#proxyPassType").val(server.proxyPassType);
 				$("#upstreamId").val(server.upstreamId);
