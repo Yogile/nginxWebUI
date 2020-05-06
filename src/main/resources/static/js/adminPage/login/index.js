@@ -21,7 +21,7 @@ function login() {
 			if (data.success) {
 				location.href = ctx + "adminPage/server";
 			} else {
-				alert(data.msg);
+				alert("登录失败,请检查输入");
 			}
 		},
 		error : function() {
