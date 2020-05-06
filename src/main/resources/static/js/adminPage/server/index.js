@@ -97,8 +97,11 @@ function add() {
 	$("#root").val("");
 	$("#rewrite option:first").prop("selected", true);
 	
-	$("#url").show();
-	$("#ups").hide();
+	checkType(0);
+	checkSsl(0);
+	checkProxyPassType(0);
+	
+	form.render();
 	showWindow("添加反向代理");
 }
 
@@ -112,6 +115,11 @@ function showWindow(title) {
 }
 
 function addOver() {
+	if($("#listen").val().trim() == ''){
+		layer.msg("端口未填写");
+		return;
+	}
+	
 	$.ajax({
 		type : 'POST',
 		url : ctx + '/adminPage/server/addOver',
