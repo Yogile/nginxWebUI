@@ -2,8 +2,8 @@ $(function() {
 	form.on('select(type)', function(data) {
 		checkType(data.value);
 	});
-	form.on('select(type)', function(data) {
-		checkType(data.value);
+	form.on('select(ssl)', function(data) {
+		checkSsl(data.value);
 	});
 	form.on('select(proxyPassType)', function(data) {
 		checkProxyPassType(data.value);
@@ -93,7 +93,7 @@ function add() {
 	$("#keyPath").html("");
 	$("#proxyPassType option:first").prop("selected", true);
 	$("#proxyPass").val("");
-	$("#upstream option:first").prop("selected", true);
+	$("#upstreamId option:first").prop("selected", true);
 	$("#root").val("");
 	$("#rewrite option:first").prop("selected", true);
 	
@@ -157,7 +157,7 @@ function edit(id) {
 				$("#rewrite").val(server.rewrite);
 				
 				$("#proxyPassType").val(server.proxyPassType);
-				$("#upstream").val(server.proxyPassType);
+				$("#upstreamId").val(server.upstreamId);
 				
 				checkType(server.type);
 				checkSsl(server.ssl);

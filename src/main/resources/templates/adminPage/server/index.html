@@ -62,43 +62,46 @@
 							<th>类型</th>
 							<th>开启ssl</th>
 							<th>ssl文件路径</th>
-							<th>代理目标url</th>
 							<th>http自动跳转https</th>
+							<th>代理目标url</th>
+							
 							<th>操作</th>
 						</tr>
 					</thead>
 					<tbody>
-						<#list page.records as server>
+						<#list page.records as ext>
 						<tr>
-							<td>${server.serverName}</td>
-							<td>${server.listen}</td>
+							<td>${ext.server.serverName}</td>
+							<td>${ext.server.listen}</td>
 							<td>
-								<#if server.type==0>代理http </#if>
-								<#if server.type==1>静态html </#if>
+								<#if ext.server.type==0>代理http </#if>
+								<#if ext.server.type==1>静态html </#if>
 							</td>
 							<td>
-								<#if server.ssl==0>否</#if>
-								<#if server.ssl==1>是</#if>
+								<#if ext.server.ssl==0>否</#if>
+								<#if ext.server.ssl==1>是</#if>
 							</td>
 							<td>
-								<#if server.ssl==1> pem: ${server.pem} <br>
-								key: ${server.key} </#if>
+								<#if ext.server.ssl==1> pem: ${server.pem} <br> key: ${server.key} </#if>
 							</td>
 							<td>
-								<#if server.type==0>
-									${server.proxyPass}
+								<#if ext.server.rewrite==0>否</#if>
+								<#if ext.server.rewrite==1>是</#if>
+							</td>
+							<td>
+								<#if ext.server.type==0>
+									<#if ext.server.proxyPassType == 0>
+										${ext.server.proxyPass}
+									</#if>
+									<#if ext.server.proxyPassType == 1>
+										${ext.upstream.name}
+									</#if>
 								</#if>
-								<#if server.type==1>
-									${server.root}
-								</#if>
+								<#if ext.server.type==1>${ext.server.root}</#if>
 							</td>
 							<td>
-								<#if server.rewrite==0>否</#if>
-								<#if server.rewrite==1>是</#if>
-							</td>
-							<td>
-								<button class="layui-btn layui-btn-sm" onclick="edit('${server.id}')">编辑</button>
-								<button class="layui-btn layui-btn-danger layui-btn-sm" onclick="del('${server.id}')">删除</button>
+								<button class="layui-btn layui-btn-sm" onclick="edit('${ext.server.id}')">编辑</button>
+								<button class="layui-btn layui-btn-danger layui-btn-sm" onclick="del('${ext.server.id}')">删除</button>
 							</td>
 						</tr>
 						</#list>
@@ -125,7 +128,7 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label">监听域名</label>
 					<div class="layui-input-block">
-						<input type="text" name="serverName" id="serverName" class="layui-input">
+						<input type="text" name="serverName" id="serverName" class="layui-input" placeholder="不填为监听所有域名">
 					</div>
 				</div>
 
@@ -182,7 +185,7 @@
 					<div class="layui-form-item">
 						<label class="layui-form-label">代理目标类型</label>
 						<div class="layui-input-block">
-							<select name="type" id="proxyPassType" lay-filter="proxyPassType">
+							<select name="proxyPassType" id="proxyPassType" lay-filter="proxyPassType">
 								<option value="0">url</option>
 								<option value="1">负债均衡</option>
 							</select>
@@ -193,14 +196,14 @@
 					<div class="layui-form-item" id="url">
 						<label class="layui-form-label">url</label>
 						<div class="layui-input-block">
-							<input type="text" name="proxyPass" id="proxyPass" class="layui-input">
+							<input type="text" name="proxyPass" id="proxyPass" class="layui-input" placeholder="例: http://127.0.0.1:8080">
 						</div>
 					</div>
 					
 					<div class="layui-form-item"  id="ups">
 						<label class="layui-form-label">负载均衡</label>
 						<div class="layui-input-block">
-							<select name="upstream" id="upstream">
+							<select name="upstreamId" id="upstreamId">
 								<#list upstreamList as upstream>
 									<option value="${upstream.id}">${upstream.name}</option>
 								</#list>

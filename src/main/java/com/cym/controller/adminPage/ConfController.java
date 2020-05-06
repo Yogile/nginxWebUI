@@ -133,7 +133,7 @@ public class ConfController extends BaseController {
 						ngxParam.addValue("proxy_pass " + server.getProxyPass());
 						ngxBlockLocation.addEntry(ngxParam);
 					} else if (server.getProxyPassType() == 1) {
-						Upstream upstream = sqlHelper.findById(server.getProxyPass(), Upstream.class);
+						Upstream upstream = sqlHelper.findById(server.getUpstreamId(), Upstream.class);
 						
 						ngxParam = new NgxParam();
 						ngxParam.addValue("proxy_pass http://" + upstream.getName());

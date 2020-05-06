@@ -1,6 +1,8 @@
 package com.cym.controller.adminPage;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cym.ext.ServerExt;
 import com.cym.model.Server;
 import com.cym.model.Upstream;
 import com.cym.service.ServerService;
@@ -29,6 +32,15 @@ public class ServerController extends BaseController {
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView, Page page, String keywords, Integer type) {
 		page = serverService.search(page, keywords, type);
 
+		List<ServerExt> exts = new ArrayList<ServerExt>(); 
+		for(Server server:page.getRecords(Server.class)) {
+			ServerExt serverExt = new ServerExt();
+			serverExt.setServer(server);
+			serverExt.setUpstream(sqlHelper.findById(server.getUpstreamId(), Upstream.class)); 
+			exts.add(serverExt);
+		}
+		page.setRecords(exts);
+		
 		modelAndView.addObject("page", page);
 		modelAndView.addObject("type", type);
 		
@@ -40,7 +52,7 @@ public class ServerController extends BaseController {
 
 	@RequestMapping("addOver")
 	@ResponseBody
-	public JsonResult addOver(Server server,String upstream) throws SQLException {
+	public JsonResult addOver(Server server) throws SQLException {
 
 		if (server.getType() == 0) { // http
 			server.setRoot(null);
@@ -54,10 +66,6 @@ public class ServerController extends BaseController {
 			server.setRewrite(null);
 		}
 		
-		if(server.getProxyPassType() == 1) {
-			server.setProxyPass(upstream);
-		}
-
 		if (StrUtil.isNotEmpty(server.getId())) {
 			sqlHelper.updateAllColumnById(server);
 		} else {
