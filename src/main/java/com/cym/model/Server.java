@@ -21,6 +21,16 @@ public class Server extends BaseModel {
 	String proxyPass;
 
 	String root;
+	String upstreamId;
+	
+	
+	public String getUpstreamId() {
+		return upstreamId;
+	}
+
+	public void setUpstreamId(String upstreamId) {
+		this.upstreamId = upstreamId;
+	}
 
 	public Integer getProxyPassType() {
 		return proxyPassType;
