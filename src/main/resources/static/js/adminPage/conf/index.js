@@ -1,3 +1,7 @@
+$(function(){
+	loadOrg();
+})
+
 function replace(){
 	if($("#nginxPath").val() == ''){
 		alert("nginx配置文件路径为空");
@@ -16,6 +20,9 @@ function replace(){
 		success : function(data) {
 			if (data.success) {
 				layer.msg(data.obj);
+				
+				loadOrg();
+				
 			} else {
 				layer.alert(data.msg);
 			}
@@ -26,6 +33,27 @@ function replace(){
 	});
 }
 
+function loadOrg(){
+	
+	$.ajax({
+		type : 'POST',
+		url : ctx + '/adminPage/conf/loadOrg',
+		data : {
+			nginxPath : $("#nginxPath").val()
+		},
+		dataType : 'json',
+		success : function(data) {
+			if (data.success) {
+				$("#org").val(data.obj)
+			} else {
+				layer.alert(data.msg);
+			}
+		},
+		error : function() {
+			alert("出错了,请联系技术人员!");
+		}
+	});
+}
 
 function check(){
 	if($("#nginxPath").val() == ''){

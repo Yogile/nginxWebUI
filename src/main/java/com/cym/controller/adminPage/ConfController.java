@@ -44,7 +44,7 @@ public class ConfController extends BaseController {
 
 	@RequestMapping("")
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView) throws IOException, SQLException {
-		
+
 		String confStr = buildConf();
 		modelAndView.addObject("confStr", confStr);
 
@@ -55,8 +55,6 @@ public class ConfController extends BaseController {
 		}
 		modelAndView.addObject("nginxPath", nginxPath);
 
-		String orgStr = FileUtil.readString(nginxPath, Charset.defaultCharset());
-		modelAndView.addObject("orgStr", orgStr);
 		modelAndView.setViewName("/adminPage/conf/index");
 		return modelAndView;
 	}
@@ -67,27 +65,27 @@ public class ConfController extends BaseController {
 			InputStream inputStream = resource.getInputStream();
 
 			NgxConfig ngxConfig = NgxConfig.read(inputStream);
-			
+
 			// 创建http
 			NgxBlock ngxBlockHttp = ngxConfig.findBlock("http");
 			NgxParam ngxParam = null;
-			
+
 			// 添加upstream
 			List<Upstream> upstreams = sqlHelper.findAll(Upstream.class);
-			for(Upstream upstream : upstreams) {
+			for (Upstream upstream : upstreams) {
 				NgxBlock ngxBlockServer = new NgxBlock();
 				ngxBlockServer.addValue("upstream " + upstream.getName());
-				
+
 				List<UpstreamServer> upstreamServers = upstreamService.getUpstreamServers(upstream.getId());
-				for(UpstreamServer upstreamServer:upstreamServers) {
+				for (UpstreamServer upstreamServer : upstreamServers) {
 					ngxParam = new NgxParam();
 					ngxParam.addValue("server " + upstreamServer.getServer() + ":" + upstreamServer.getPort() + " weight=" + upstreamServer.getWeight());
 					ngxBlockServer.addEntry(ngxParam);
 				}
-				
+
 				ngxBlockHttp.addEntry(ngxBlockServer);
 			}
-			
+
 			// 添加server
 			List<Server> servers = sqlHelper.findAll(Server.class);
 			for (Server server : servers) {
@@ -134,7 +132,7 @@ public class ConfController extends BaseController {
 						ngxBlockLocation.addEntry(ngxParam);
 					} else if (server.getProxyPassType() == 1) {
 						Upstream upstream = sqlHelper.findById(server.getUpstreamId(), Upstream.class);
-						
+
 						ngxParam = new NgxParam();
 						ngxParam.addValue("proxy_pass http://" + upstream.getName());
 						ngxBlockLocation.addEntry(ngxParam);
@@ -246,6 +244,13 @@ public class ConfController extends BaseController {
 			e.printStackTrace();
 			return renderError("重启失败:" + e.getMessage());
 		}
+	}
+
+	@RequestMapping(value = "loadOrg")
+	@ResponseBody
+	public JsonResult loadOrg(String nginxPath) throws SQLException {
+		String orgStr = FileUtil.readString(nginxPath, Charset.defaultCharset());
+		return renderSuccess(orgStr);
 	}
 
 }
