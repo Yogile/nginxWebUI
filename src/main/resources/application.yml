@@ -20,7 +20,7 @@ spring:
   jmx:
     enabled: true 
   database: 
-    type: sqlite
+    type: postgresql
     package: com.cym.model
     print: true
   datasource:

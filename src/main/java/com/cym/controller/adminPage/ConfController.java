@@ -249,8 +249,12 @@ public class ConfController extends BaseController {
 	@RequestMapping(value = "loadOrg")
 	@ResponseBody
 	public JsonResult loadOrg(String nginxPath) throws SQLException {
-		String orgStr = FileUtil.readString(nginxPath, Charset.defaultCharset());
-		return renderSuccess(orgStr);
+		if(FileUtil.exist(nginxPath)) {
+			String orgStr = FileUtil.readString(nginxPath, Charset.defaultCharset());
+			return renderSuccess(orgStr);
+		}
+		
+		return renderSuccess("");
 	}
 
 }
