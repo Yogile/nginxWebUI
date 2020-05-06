@@ -1,8 +1,6 @@
 package com.cym.controller.adminPage;
 
-import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -13,14 +11,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cym.model.Server;
+import com.cym.model.Upstream;
 import com.cym.service.ServerService;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
 
 import cn.craccd.sqlHelper.bean.Page;
-import cn.craccd.sqlHelper.bean.Sort;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.db.Entity;
 
 @Controller
 @RequestMapping("/adminPage/server")
@@ -34,6 +31,8 @@ public class ServerController extends BaseController {
 
 		modelAndView.addObject("page", page);
 		modelAndView.addObject("type", type);
+		
+		modelAndView.addObject("upstreamList", sqlHelper.findAll(Upstream.class));
 		modelAndView.addObject("keywords", keywords);
 		modelAndView.setViewName("/adminPage/server/index");
 		return modelAndView;
@@ -41,7 +40,7 @@ public class ServerController extends BaseController {
 
 	@RequestMapping("addOver")
 	@ResponseBody
-	public JsonResult addOver(Server server) throws SQLException {
+	public JsonResult addOver(Server server,String upstream) throws SQLException {
 
 		if (server.getType() == 0) { // http
 			server.setRoot(null);
@@ -53,6 +52,10 @@ public class ServerController extends BaseController {
 			server.setPem(null);
 			server.setKey(null);
 			server.setRewrite(null);
+		}
+		
+		if(server.getProxyPassType() == 1) {
+			server.setProxyPass(upstream);
 		}
 
 		if (StrUtil.isNotEmpty(server.getId())) {

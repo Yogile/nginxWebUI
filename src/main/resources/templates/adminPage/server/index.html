@@ -22,13 +22,13 @@
 			<!-- 内容主体区域 -->
 			<div style="padding: 15px">
 				<fieldset class="layui-elem-field layui-field-title">
-					<legend>server配置项</legend>
+					<legend>反向代理</legend>
 				</fieldset>
 
 				<form action="${ctx}/adminPage/server" id="searchForm" method="post">
 					<div class="layui-form">
 						<div class="layui-inline">
-							<button type="button" class="layui-btn layui-btn-normal" onclick="add()">添加server</button>
+							<button type="button" class="layui-btn layui-btn-normal" onclick="add()">添加代理</button>
 						</div>
 
 						<div class="layui-inline">
@@ -63,7 +63,7 @@
 							<th>开启ssl</th>
 							<th>ssl文件路径</th>
 							<th>代理目标url</th>
-							<th>80端口自动跳转</th>
+							<th>http自动跳转https</th>
 							<th>操作</th>
 						</tr>
 					</thead>
@@ -114,14 +114,14 @@
 		<div class="layui-form" id="windowDiv" style="padding: 15px; display: none">
 			<form id="addForm">
 				<input type="hidden" name="id" id="id">
-
+				
 				<div class="layui-form-item">
 					<label class="layui-form-label">监听端口</label>
 					<div class="layui-input-block">
 						<input type="text" name="listen" id="listen" class="layui-input">
 					</div>
 				</div>
-
+				
 				<div class="layui-form-item">
 					<label class="layui-form-label">监听域名</label>
 					<div class="layui-input-block">
@@ -130,7 +130,7 @@
 				</div>
 
 				<div class="layui-form-item">
-					<label class="layui-form-label">类型</label>
+					<label class="layui-form-label">代理类型</label>
 					<div class="layui-input-block">
 						<select name="type" id="type" lay-filter="type">
 							<option value="0">代理http</option>
@@ -167,7 +167,7 @@
 					</div>
 					
 					<div class="layui-form-item">
-						<label class="layui-form-label">80端口自动跳转</label>
+						<label class="layui-form-label">http自动跳转https</label>
 						<div class="layui-input-block">
 							<select name="rewrite" id="rewrite">
 								<option value="1">是</option>
@@ -175,16 +175,39 @@
 							</select>
 						</div>
 					</div>
-					
 				</div>
-
-				<div id="targetDiv">
+				
+					<div id="targetDiv">
+					
 					<div class="layui-form-item">
-						<label class="layui-form-label">代理目标url</label>
+						<label class="layui-form-label">代理目标类型</label>
+						<div class="layui-input-block">
+							<select name="type" id="proxyPassType" lay-filter="proxyPassType">
+								<option value="0">url</option>
+								<option value="1">负债均衡</option>
+							</select>
+						</div>
+					</div>
+				
+				
+					<div class="layui-form-item" id="url">
+						<label class="layui-form-label">url</label>
 						<div class="layui-input-block">
 							<input type="text" name="proxyPass" id="proxyPass" class="layui-input">
 						</div>
 					</div>
+					
+					<div class="layui-form-item"  id="ups">
+						<label class="layui-form-label">负载均衡</label>
+						<div class="layui-input-block">
+							<select name="upstream" id="upstream">
+								<#list upstreamList as upstream>
+									<option value="${upstream.id}">${upstream.name}</option>
+								</#list>
+							</select>
+						</div>
+					</div>
+					
 				</div>
 
 				<div id="rootDiv" style="display: none;">
