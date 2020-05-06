@@ -17,7 +17,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cym.model.Server;
+import com.cym.model.Upstream;
+import com.cym.model.UpstreamServer;
 import com.cym.service.SettingService;
+import com.cym.service.UpstreamService;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
 import com.github.odiszapc.nginxparser.NgxBlock;
@@ -35,15 +38,16 @@ import cn.hutool.core.util.StrUtil;
 public class ConfController extends BaseController {
 
 	@Autowired
+	UpstreamService upstreamService;
+	@Autowired
 	SettingService settingService;
 
 	@RequestMapping("")
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView) throws IOException, SQLException {
-		List<Server> servers = sqlHelper.findAll(Server.class);
-		String confStr = buildConf(servers);
+		
+		String confStr = buildConf();
 		modelAndView.addObject("confStr", confStr);
 
-		
 		String nginxPath = settingService.get("nginxPath");
 		if (StrUtil.isEmpty(nginxPath)) {
 			nginxPath = "/etc/nginx/nginx.conf";
@@ -51,25 +55,41 @@ public class ConfController extends BaseController {
 		}
 		modelAndView.addObject("nginxPath", nginxPath);
 
-		
 		String orgStr = FileUtil.readString(nginxPath, Charset.defaultCharset());
 		modelAndView.addObject("orgStr", orgStr);
 		modelAndView.setViewName("/adminPage/conf/index");
 		return modelAndView;
 	}
 
-	private String buildConf(List<Server> servers) {
-
+	private String buildConf() {
 		try {
 			ClassPathResource resource = new ClassPathResource("nginx.conf");
 			InputStream inputStream = resource.getInputStream();
 
 			NgxConfig ngxConfig = NgxConfig.read(inputStream);
+			
 			// 创建http
 			NgxBlock ngxBlockHttp = ngxConfig.findBlock("http");
 			NgxParam ngxParam = null;
-
+			
+			// 添加upstream
+			List<Upstream> upstreams = sqlHelper.findAll(Upstream.class);
+			for(Upstream upstream : upstreams) {
+				NgxBlock ngxBlockServer = new NgxBlock();
+				ngxBlockServer.addValue("upstream " + upstream.getName());
+				
+				List<UpstreamServer> upstreamServers = upstreamService.getUpstreamServers(upstream.getId());
+				for(UpstreamServer upstreamServer:upstreamServers) {
+					ngxParam = new NgxParam();
+					ngxParam.addValue("server " + upstreamServer.getServer() + ":" + upstreamServer.getPort() + " weight=" + upstreamServer.getWeight());
+					ngxBlockServer.addEntry(ngxParam);
+				}
+				
+				ngxBlockHttp.addEntry(ngxBlockServer);
+			}
+			
 			// 添加server
+			List<Server> servers = sqlHelper.findAll(Server.class);
 			for (Server server : servers) {
 				NgxBlock ngxBlockServer = new NgxBlock();
 				ngxBlockServer.addValue("server");
@@ -108,9 +128,17 @@ public class ConfController extends BaseController {
 					ngxBlockLocation.addValue("location");
 					ngxBlockLocation.addValue("/");
 
-					ngxParam = new NgxParam();
-					ngxParam.addValue("proxy_pass " + server.getProxyPass());
-					ngxBlockLocation.addEntry(ngxParam);
+					if (server.getProxyPassType() == 0) {
+						ngxParam = new NgxParam();
+						ngxParam.addValue("proxy_pass " + server.getProxyPass());
+						ngxBlockLocation.addEntry(ngxParam);
+					} else if (server.getProxyPassType() == 1) {
+						Upstream upstream = sqlHelper.findById(server.getProxyPass(), Upstream.class);
+						
+						ngxParam = new NgxParam();
+						ngxParam.addValue("proxy_pass http://" + upstream.getName());
+						ngxBlockLocation.addEntry(ngxParam);
+					}
 
 					ngxParam = new NgxParam();
 					ngxParam.addValue("proxy_set_header Host $host");
@@ -171,12 +199,12 @@ public class ConfController extends BaseController {
 
 	@RequestMapping(value = "replace")
 	@ResponseBody
-	public JsonResult replace(String nginxPath,String nginxContent) throws SQLException {
+	public JsonResult replace(String nginxPath, String nginxContent) throws SQLException {
 		settingService.set("nginxPath", nginxPath);
 
 		try {
 			// 备份文件
-			FileUtil.copy(nginxPath, nginxPath + DateUtil.format(new Date(), "yyyy-MM-dd_HH-mm-ss") + ".bak", true); 
+			FileUtil.copy(nginxPath, nginxPath + DateUtil.format(new Date(), "yyyy-MM-dd_HH-mm-ss") + ".bak", true);
 			FileUtil.writeString(nginxContent, nginxPath, Charset.defaultCharset());
 			return renderSuccess("替换成功");
 		} catch (Exception e) {

@@ -8,7 +8,7 @@ function add() {
 	$("#id").val(""); 
 	$("#itemList").html("");
 	form.render();
-	showWindow("添加uptream");
+	showWindow("添加负载均衡");
 }
 
 
@@ -24,6 +24,28 @@ function showWindow(title){
 function addOver() {
 	if ($("#name").val() == "") {
 		layer.msg("名称为空");
+		return;
+	}
+	
+	var over = true;
+	$("input[name='server']").each(function(){
+		if($(this).val().trim() == ''){
+			over = false;
+		}
+	})
+	$("input[name='port']").each(function(){
+		if($(this).val().trim() == ''){
+			over = false;
+		}
+	})
+	$("input[name='weight']").each(function(){
+		if($(this).val().trim() == ''){
+			over = false;
+		}
+	})
+	
+	if(!over){
+		layer.msg("填写不完整");
 		return;
 	}
 	
@@ -69,9 +91,9 @@ function edit(id) {
 					var uuid = guid();
 					html += `<tr id='${uuid}'>
 									<td><input type="text" name="server" class="layui-input" value="${upstream.server}"></td>
-									<td><input type="text" name="port" class="layui-input" value="${upstream.port}"></td>
+									<td><input type="number" name="port" class="layui-input" value="${upstream.port}"></td>
 									<td>
-										<input type="text" name="weight" class="layui-input" value="${upstream.weight}">
+										<input type="number" name="weight" class="layui-input" value="${upstream.weight}">
 									</td>
 									<td><button type="button" class="layui-btn layui-btn-sm layui-btn-danger" onclick="delTr('${uuid}')">删除</button></td>
 							</tr>`
@@ -79,7 +101,7 @@ function edit(id) {
 				$("#itemList").html(html);
 				
 				form.render();
-				showWindow("编辑upstream");
+				showWindow("编辑负载均衡");
 			}else{
 				layer.msg(data.msg);
 			}
@@ -119,9 +141,9 @@ function addItem(){
 	var uuid = guid();
 	var html = `<tr id='${uuid}'>
 						<td><input type="text" name="server" class="layui-input" value=""></td>
-						<td><input type="text" name="port" class="layui-input" value=""></td>
+						<td><input type="number" name="port" class="layui-input" value=""></td>
 						<td>
-							<input type="text" name="weight" class="layui-input" value="">
+							<input type="number" name="weight" class="layui-input" value="">
 						</td>
 						<td><button type="button" class="layui-btn layui-btn-sm layui-btn-danger" onclick="delTr('${uuid}')">删除</button></td>
 				</tr>`

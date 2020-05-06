@@ -2,8 +2,11 @@ $(function() {
 	form.on('select(type)', function(data) {
 		checkType(data.value);
 	});
-	form.on('select(ssl)', function(data) {
-		checkSsl(data.value);
+	form.on('select(type)', function(data) {
+		checkType(data.value);
+	});
+	form.on('select(proxyPassType)', function(data) {
+		checkProxyPassType(data.value);
 	});
 	
 	layui.use('upload', function() {
@@ -54,6 +57,17 @@ function checkType(value){
 	} 
 }
 
+function checkProxyPassType(value){
+	if (value == 0) {
+		$("#url").show();
+		$("#ups").hide();
+	} 
+	if (value == 1) {
+		$("#url").hide();
+		$("#ups").show();
+	} 
+}
+
 
 function checkSsl(value){
 	if (value == 0) {
@@ -77,10 +91,15 @@ function add() {
 	$("#pemPath").html("");
 	$("#key").val("");
 	$("#keyPath").html("");
+	$("#proxyPassType option:first").prop("selected", true);
 	$("#proxyPass").val("");
+	$("#upstream option:first").prop("selected", true);
 	$("#root").val("");
 	$("#rewrite option:first").prop("selected", true);
-	showWindow("添加server");
+	
+	$("#url").show();
+	$("#ups").hide();
+	showWindow("添加反向代理");
 }
 
 function showWindow(title) {
@@ -137,11 +156,15 @@ function edit(id) {
 				$("#root").val(server.root);
 				$("#rewrite").val(server.rewrite);
 				
+				$("#proxyPassType").val(server.proxyPassType);
+				$("#upstream").val(server.proxyPassType);
+				
 				checkType(server.type);
 				checkSsl(server.ssl);
+				checkProxyPassType(server.proxyPassType);
 				
 				form.render();
-				showWindow("编辑server");
+				showWindow("编辑反向代理");
 			} else {
 				layer.msg(data.msg);
 			}
