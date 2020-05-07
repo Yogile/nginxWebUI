@@ -20,16 +20,16 @@ spring:
   jmx:
     enabled: true 
   database: 
-    type: postgresql
+    type: sqlite
     package: com.cym.model
     print: true
   datasource:
-#    url: jdbc:mysql://10.39.3.92:3306/test
-#    username: root
-#    password: 1qaz2wsx
-    url: jdbc:postgresql://127.0.0.1:5432/test
-    username: postgres
+    url: jdbc:mysql://10.39.3.92:3306/test
+    username: root
     password: 1qaz2wsx
+#    url: jdbc:postgresql://127.0.0.1:5432/test
+#    username: postgres
+#    password: 1qaz2wsx
 
 logging: 
   level: 
