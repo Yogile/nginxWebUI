@@ -24,7 +24,10 @@
 					<div class="layui-input-inline">
 						<input type="text" id="nginxPath" class="layui-input" style="width: 400px;" value="${nginxPath}">
 					</div>
-
+					
+					<div class="layui-inline">
+						<button type="button" class="layui-btn layui-btn-normal" onclick="loadOrg()">读取文件</button>
+					</div>
 					<div class="layui-inline">
 						<button type="button" class="layui-btn layui-btn-normal" onclick="replace()">替换文件</button>
 					</div>
@@ -37,9 +40,14 @@
 				</div>
 
 				<div class="layui-form" style="margin-top: 10px;display: flex;">
-					<textarea class="layui-textarea" id="nginxContent" style="width: 47%; height: 700px; resize: none;"  spellcheck="false">${confStr}</textarea>
-					
-					<textarea class="layui-textarea" id="org" style="width: 47%; height: 700px; margin-left:10px; resize: none; background-color: #ededed;"  readonly="readonly" spellcheck="false"></textarea>
+					<div style="width: 47%; ">
+						<div style="padding: 10px;padding-left:0px;font-size: 16px;">生成配置文件(可手动修改)</div>
+						<textarea class="layui-textarea" id="nginxContent" style="height: 700px; resize: none;"  spellcheck="false">${confStr}</textarea>
+					</div>
+					<div style="width: 47%;">
+						<div style="padding: 10px;font-size: 16px;">目标配置文件</div>
+						<textarea class="layui-textarea" id="org" style=" height: 700px; margin-left:10px; resize: none; background-color: #ededed;"  readonly="readonly" spellcheck="false"></textarea>
+					</div>
 				</div>
 			</div>
 		</div>
