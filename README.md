@@ -32,9 +32,13 @@ git clone https://gitee.com/cym1102/sqlHelper.git
 
 4.启动,停止,重启
 在\nginxWebUI\目录下,赋予脚本文件可执行权限: chmod 777 *.sh
+
 执行脚本:
+
 ./start.sh 启动项目
+
 ./stop.sh 停止项目
+
 restart.sh 重启项目
 
 #### 使用说明
