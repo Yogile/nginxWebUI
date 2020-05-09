@@ -5,7 +5,7 @@ nginx网页配置工具
 
 
 #### 功能说明
-本项目是基于springBoot的web系统,数据库使用sqlite,因此服务器上不需要配置任何数据库
+本项目是基于springBoot的web系统,数据库使用sqlite,因此服务器上不需要安装任何数据库
 
 其中orm使用了本人自己开源的sqlHelper项目,可以像mongodb一样使用sql数据库,解放开发者对sql数据库表结构的维护工作,有兴趣的可以了解一下 
  https://gitee.com/cym1102/sqlHelper
@@ -28,10 +28,13 @@ git clone https://gitee.com/cym1102/sqlHelper.git
 ```
 
 3.配置端口
+
 可修改\nginxWebUI\src\main\resources\application.yml文件
+
 配置server.port: 8080项为需要的端口
 
 4.启动,停止,重启
+
 在\nginxWebUI\目录下,赋予脚本文件可执行权限: chmod 777 *.sh
 
 执行脚本:
