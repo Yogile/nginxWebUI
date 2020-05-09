@@ -46,11 +46,13 @@ git clone https://gitee.com/cym1102/sqlHelper.git
 打开http://xxx.xxx.xxx.xx:8080
 默认登录名密码为admin/admin
 
-![管理员管理](https://images.gitee.com/uploads/images/2020/0509/105416_831df2bb_1100382.jpeg "QQ截图20200509105343.jpg")
+![登录](https://images.gitee.com/uploads/images/2020/0509/105416_831df2bb_1100382.jpeg "QQ截图20200509105343.jpg")
+
+![管理员管理](https://images.gitee.com/uploads/images/2020/0509/105511_96cfe767_1100382.jpeg "QQ截图20200509105504.jpg")
 
 进入系统后,可在管理员管理里面添加修改管理员账号
 
-![反向代理](https://images.gitee.com/uploads/images/2020/0509/105511_96cfe767_1100382.jpeg "QQ截图20200509105504.jpg")
+![反向代理](https://images.gitee.com/uploads/images/2020/0509/110937_dcdb22d4_1100382.jpeg "QQ截图20200509105551.jpg")
 
 在反向代理中可配置nginx的反向代理即server项功能
 
