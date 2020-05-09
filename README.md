@@ -38,3 +38,16 @@ git clone https://gitee.com/cym1102/sqlHelper.git
 restart.sh 重启项目
 
 #### 使用说明
+
+打开http://xxx.xxx.xxx.xx:8080
+默认登录名密码为admin/admin
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0509/105416_831df2bb_1100382.jpeg "QQ截图20200509105343.jpg")
+进入系统后,可在管理员管理里面添加修改管理员账号
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0509/105511_96cfe767_1100382.jpeg "QQ截图20200509105504.jpg")
+在反向代理中可配置nginx的反向代理即server项功能
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0509/105713_e004761d_1100382.jpeg "QQ截图20200509105705.jpg")
+在负载均衡中可配置nginx的负载均衡即upstream项功能,在反向代理中可选择代理目标为负载均衡项
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0509/105839_8b336122_1100382.jpeg "QQ截图20200509105828.jpg")
+最终生成conf文件,可在此进行进一步手动修改,确认修改无误后,可覆盖本机conf文件,并进行效验和重启
+
+今后配置nginx再也不用上网各种搜索, 只需要在本项目中进行增删改查就可方便的配置nginx
