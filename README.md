@@ -39,7 +39,7 @@ git clone https://gitee.com/cym1102/sqlHelper.git
 
 ./stop.sh 停止项目
 
-restart.sh 重启项目
+./restart.sh 重启项目
 
 #### 使用说明
 
