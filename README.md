@@ -54,7 +54,7 @@ git clone https://gitee.com/cym1102/sqlHelper.git
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0509/111159_e73f8410_1100382.jpeg "QQ截图20200509105551_看图王.jpg")
 
-在反向代理中可配置nginx的反向代理即server项功能,可开启ssl功能,直接从网页上上传pem文件和key文件,直接放到系统用户文件夹下
+在反向代理中可配置nginx的反向代理即server项功能,可开启ssl功能,直接从网页上上传pem文件和key文件,直接放到系统用户文件夹下,还可以直接开启http转跳https功能,用户直接访问http会转跳到https
 
 ![负载均衡](https://images.gitee.com/uploads/images/2020/0509/105713_e004761d_1100382.jpeg "QQ截图20200509105705.jpg")
 
