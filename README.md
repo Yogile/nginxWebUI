@@ -64,7 +64,7 @@ git clone https://gitee.com/cym1102/sqlHelper.git
 
 在负载均衡中可配置nginx的负载均衡即upstream项功能,在反向代理中可选择代理目标为负载均衡项
 
-![生成conf](https://images.gitee.com/uploads/images/2020/0509/105839_8b336122_1100382.jpeg "QQ截图20200509105828.jpg")
+![生成conf](https://images.gitee.com/uploads/images/2020/0509/112059_b6305c53_1100382.jpeg "QQ截图20200509105828_看图王.jpg")
 
 最终生成conf文件,可在此进行进一步手动修改,确认修改无误后,可覆盖本机conf文件,并进行效验和重启
 
