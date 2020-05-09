@@ -7,7 +7,8 @@ nginx网页配置工具
 #### 功能说明
 本项目是基于springBoot的web系统,数据库使用sqlite,因此服务器上不需要配置任何数据库
 
-其中orm使用了本人自己开源的sqlHelper项目,可以像mongodb一样使用sql数据库,解放开发者对sql数据库表结构的维护工作,有兴趣的可以了解一下https://gitee.com/cym1102/sqlHelper
+其中orm使用了本人自己开源的sqlHelper项目,可以像mongodb一样使用sql数据库,解放开发者对sql数据库表结构的维护工作,有兴趣的可以了解一下 
+ https://gitee.com/cym1102/sqlHelper
 
 本项目可以使用WebUI配置nginx的各项功能,包括端口转发,反向代理,ssl证书配置,负载均衡等,最终生成nginx.conf配置文件并覆盖目标配置文件,完成nginx的功能配置. 
 
