@@ -9,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.cym.NginxWebUI;
-import com.cym.model.Admin;
 
 import cn.craccd.sqlHelper.utils.SqlHelper;
 
@@ -25,11 +24,7 @@ public class MainTest {
 
 	@Test
 	public void testStartUp()  {
-		Admin admin = new Admin();
 		
-		admin.setName("test");
-		admin.setPass("admin");
-		sqlHelper.insert(admin);
 	}
 
 	@After
