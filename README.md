@@ -25,7 +25,7 @@ apt install nginx maven git
 
 2.克隆仓库
 ```
-git clone https://gitee.com/cym1102/sqlHelper.git
+git clone https://gitee.com/cym1102/nginxWebUI.git
 ```
 
 3.配置端口

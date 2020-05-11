@@ -20,7 +20,7 @@ spring:
   jmx:
     enabled: true 
   database: 
-    type: postgresql
+    type: sqlite
     package: com.cym.model
     print: true
   datasource: #使用mysql和postgresql时才需要配置
