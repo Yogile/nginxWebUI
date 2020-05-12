@@ -1,12 +1,14 @@
 package com.cym.model;
 
 import cn.craccd.sqlHelper.bean.BaseModel;
-import cn.craccd.sqlHelper.config.InitIndex;
+import cn.craccd.sqlHelper.config.CompositeIndex;
+import cn.craccd.sqlHelper.config.SingleIndex;
 import cn.craccd.sqlHelper.config.Table;
 
 @Table
+@CompositeIndex(colums = { "key", "value" }, unique = true)
 public class Setting extends BaseModel{
-	@InitIndex
+	@SingleIndex(unique = true)
 	String key;
 	String value;
 	public String getKey() {
