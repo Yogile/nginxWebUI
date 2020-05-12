@@ -1,13 +1,11 @@
 package com.cym.model;
 
 import cn.craccd.sqlHelper.bean.BaseModel;
-import cn.craccd.sqlHelper.config.InitIndex;
 import cn.craccd.sqlHelper.config.InitValue;
 import cn.craccd.sqlHelper.config.Table;
 
 @Table
 public class Server extends BaseModel {
-	@InitIndex
 	String serverName;
 	String listen;
 	Integer type; // 0 http 1 root

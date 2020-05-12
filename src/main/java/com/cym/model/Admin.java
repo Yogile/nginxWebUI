@@ -1,6 +1,7 @@
 package com.cym.model;
 
 import cn.craccd.sqlHelper.bean.BaseModel;
+import cn.craccd.sqlHelper.config.CompositeIndex;
 import cn.craccd.sqlHelper.config.Table;
 
 @Table
