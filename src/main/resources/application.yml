@@ -23,10 +23,10 @@ spring:
     type: sqlite
     package: com.cym.model
     print: true
-  datasource: #使用mysql和postgresql时才需要配置
-    url: jdbc:postgresql://127.0.0.1:5432/test
-    username: postgres
-    password: 1qaz2wsx
+#  datasource: #使用mysql和postgresql时才需要配置
+#    url: jdbc:postgresql://127.0.0.1:5432/test
+#    username: postgres
+#    password: 1qaz2wsx
     
 logging: 
   level: 
