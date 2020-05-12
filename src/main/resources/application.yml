@@ -20,13 +20,13 @@ spring:
   jmx:
     enabled: true 
   database: 
-    type: mysql
+    type: sqlite
     package: com.cym.model
     print: true
-  datasource: #使用mysql和postgresql时才需要配置
-    url: jdbc:mysql://10.39.3.92:3306/test
-    username: root
-    password: 1qaz2wsx
+#  datasource: #使用mysql和postgresql时才需要配置
+#    url: jdbc:mysql://127.0.0.1:3306/test
+#    username: root
+#    password: 1qaz2wsx
     
 logging: 
   level: 
