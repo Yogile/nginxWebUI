@@ -49,7 +49,7 @@ git clone https://gitee.com/cym1102/nginxWebUI.git
 5.除了以上源码编译启动外,也可以直接下载编译好的jar进行启动,下载地址https://gitee.com/cym1102/nginxWebUI/releases
 
 启动方式
-nohup java -jar nginxWebUI-1.0.0.jar > nginxWebUI.log &
+nohup java -jar nginxWebUI-1.0.0.jar --server.port=8000 > nginxWebUI.log &
 
 
 #### 使用说明
