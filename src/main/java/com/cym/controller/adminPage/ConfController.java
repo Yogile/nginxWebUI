@@ -249,7 +249,7 @@ public class ConfController extends BaseController {
 	@RequestMapping(value = "check")
 	@ResponseBody
 	public JsonResult check(String nginxPath) throws SQLException {
-
+		settingService.set("nginxPath", nginxPath);
 		try {
 			String rs = RuntimeUtil.execForStr("nginx -t");
 			if (rs.contains("successful")) {
@@ -266,6 +266,7 @@ public class ConfController extends BaseController {
 	@RequestMapping(value = "reboot")
 	@ResponseBody
 	public JsonResult reboot(String nginxPath) throws SQLException {
+		settingService.set("nginxPath", nginxPath);
 		try {
 			String rs = RuntimeUtil.execForStr("nginx -s reload");
 			if (rs.trim().equals("")) {
@@ -282,6 +283,8 @@ public class ConfController extends BaseController {
 	@RequestMapping(value = "loadOrg")
 	@ResponseBody
 	public JsonResult loadOrg(String nginxPath) throws SQLException {
+		settingService.set("nginxPath", nginxPath);
+		
 		if (FileUtil.exist(nginxPath)) {
 			String orgStr = FileUtil.readString(nginxPath, Charset.defaultCharset());
 			return renderSuccess(orgStr);
