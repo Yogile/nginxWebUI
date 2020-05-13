@@ -18,7 +18,7 @@ function showWindow(title){
 	layer.open({
 		type : 1,
 		title : title,
-		area : [ '1000px', '600px' ], // 宽高
+		area : [ '1100px', '600px' ], // 宽高
 		content : $('#windowDiv')
 	});
 }
@@ -90,19 +90,18 @@ function edit(id) {
 				var html = ``;
 				for(let i=0;i<list.length;i++){
 					var upstreamServer = list[i];
-					
 					var uuid = guid();
 					html += `<tr id='${uuid}'>
 									<td><input type="text" name="server" class="layui-input" value="${upstreamServer.server}"></td>
-									<td><input type="number" name="port" class="layui-input short" value="${upstreamServer.port}"></td>
-									<td><input type="number" name="weight" class="layui-input short" value="${upstreamServer.weight}"></td>
-									<td><input type="number" name="maxFails" class="layui-input short" value="${upstreamServer.maxFails}"></td>
-									<td><input type="number" name="failTimeout" class="layui-input short" value="${upstreamServer.failTimeout}"></td>
+									<td><input type="number" name="port" class="layui-input" value="${upstreamServer.port}"></td>
+									<td><input type="number" name="weight" class="layui-input" value="${upstreamServer.weight}"></td>
+									<td><input type="number" name="maxFails" class="layui-input" value="${upstreamServer.maxFails}"></td>
+									<td><input type="number" name="failTimeout" class="layui-input" value="${upstreamServer.failTimeout}"></td>
 									<td>
 										<select name="status">
-											<option value="">无</option>
-											<option value="down">宕机(down)</option>
-											<option value="backup">备用(backup)</option>
+											<option ${upstreamServer.status==''?'selected':''} value="">无</option>
+											<option ${upstreamServer.status=='down'?'selected':''} value="down">宕机(down)</option>
+											<option ${upstreamServer.status=='backup'?'selected':''} value="backup">备用(backup)</option>
 										</select>
 									</td>
 									<td><button type="button" class="layui-btn layui-btn-sm layui-btn-danger" onclick="delTr('${uuid}')">删除</button></td>
@@ -110,7 +109,7 @@ function edit(id) {
 				}
 				$("#itemList").html(html);
 				
-				$("#" + uuid +" select[name='status']").val(upstreamServer.status);
+				//$("#" + uuid +" select[name='status']").val(upstreamServer.status);
 				form.render();
 				showWindow("编辑负载均衡");
 			}else{
@@ -152,10 +151,10 @@ function addItem(){
 	var uuid = guid();
 	var html = `<tr id='${uuid}'>
 						<td><input type="text" name="server" class="layui-input" value=""></td>
-						<td><input type="number" name="port" class="layui-input short" value=""></td>
-						<td><input type="number" name="weight" class="layui-input short" value="1"></td>
-						<td><input type="number" name="maxFails" class="layui-input short" value="1"></td>
-						<td><input type="number" name="failTimeout" class="layui-input short" value="10"></td>
+						<td><input type="number" name="port" class="layui-input" value=""></td>
+						<td><input type="number" name="weight" class="layui-input" value="1"></td>
+						<td><input type="number" name="maxFails" class="layui-input" value="1"></td>
+						<td><input type="number" name="failTimeout" class="layui-input" value="10"></td>
 						<td>
 							<select name="status">
 								<option value="">无</option>
