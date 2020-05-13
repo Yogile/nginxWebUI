@@ -99,8 +99,8 @@ function edit(id) {
 									<td><input type="number" name="failTimeout" class="layui-input" value="${upstreamServer.failTimeout}"></td>
 									<td>
 										<select name="status">
-											<option ${upstreamServer.status==''?'selected':''} value="">无</option>
-											<option ${upstreamServer.status=='down'?'selected':''} value="down">宕机(down)</option>
+											<option ${upstreamServer.status=='none'?'selected':''} value="none">无</option>
+											<option ${upstreamServer.status=='down'?'selected':''} value="down">停用(down)</option>
 											<option ${upstreamServer.status=='backup'?'selected':''} value="backup">备用(backup)</option>
 										</select>
 									</td>
@@ -109,7 +109,6 @@ function edit(id) {
 				}
 				$("#itemList").html(html);
 				
-				//$("#" + uuid +" select[name='status']").val(upstreamServer.status);
 				form.render();
 				showWindow("编辑负载均衡");
 			}else{
@@ -157,8 +156,8 @@ function addItem(){
 						<td><input type="number" name="failTimeout" class="layui-input" value="10"></td>
 						<td>
 							<select name="status">
-								<option value="">无</option>
-								<option value="down">宕机(down)</option>
+								<option value="none">无</option>
+								<option value="down">停用(down)</option>
 								<option value="backup">备用(backup)</option>
 							</select>
 						</td>

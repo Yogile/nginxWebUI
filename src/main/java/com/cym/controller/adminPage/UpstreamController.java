@@ -54,12 +54,17 @@ public class UpstreamController extends BaseController {
 		return modelAndView;
 	}
 
-	private String buildStr(UpstreamServer upstreamServer) {
+	public String buildStr(UpstreamServer upstreamServer) {
+		String status = "";
+		if (!"none".equals(upstreamServer.getStatus())) {
+			status = upstreamServer.getStatus();
+		}
+
 		return upstreamServer.getServer() + ":" + upstreamServer.getPort() //
 				+ " weight=" + upstreamServer.getWeight() //
 				+ " fail_timeout=" + upstreamServer.getFailTimeout() + "s"//
 				+ " max_fails=" + upstreamServer.getMaxFails() //
-				+ " " + upstreamServer.getStatus();
+				+ " " + status;
 	}
 
 	@RequestMapping("addOver")
