@@ -60,6 +60,7 @@ public class ServerController extends BaseController {
 				str.add("<span class='path'>" + location.getPath() +  "</span><span class='value'>" + location.getValue() + "</span>");
 			}else if(location.getType()==2) {
 				Upstream upstream = sqlHelper.findById(location.getUpstreamId(), Upstream.class);
+				if(upstream!=null)
 				str.add("<span class='path'>" + location.getPath() + "</span><span class='value'>http://" + upstream.getName() + "</span>");
 			}
 			

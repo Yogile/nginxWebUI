@@ -52,7 +52,7 @@ public class ServerService {
 
 				if (location.getType() == 0 || location.getType() == 1) {
 					location.setValue(value[i]);
-				} else if (location.getType() == 1) {
+				} else if (location.getType() == 2) {
 					location.setUpstreamId(upstreamId[i]);
 				}
 
