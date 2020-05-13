@@ -114,7 +114,7 @@ function addOver() {
 		}
 	})
 	$("select[name='upstreamId']").each(function(){
-		if(!$(this).parent().is(":hidden") && $(this).val() == ''){
+		if(!$(this).parent().is(":hidden") && ($(this).val() == '' || $(this).val() == null)){
 			over = false;
 		}
 	})
