@@ -102,6 +102,18 @@ function addOver() {
 		return;
 	}
 	
+	var over = true;
+	$("input[name='path']").each(function(){
+		if($(this).val().trim() == ''){
+			over = false;
+		}
+	})
+	
+	if(!over){
+		layer.msg("填写不完整");
+		return;
+	}
+	
 	$.ajax({
 		type : 'POST',
 		url : ctx + '/adminPage/server/addOver',
@@ -178,7 +190,6 @@ function edit(id) {
 								<td><button type="button" class="layui-btn layui-btn-sm layui-btn-danger" onclick="delTr('${uuid}')">删除</button></td>
 						</tr>`
 						
-					debugger;	
 					$("#itemList").append(html);
 					
 					if(location.type == 0 || location.type == 1){

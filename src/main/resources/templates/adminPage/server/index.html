@@ -10,6 +10,14 @@
 .layui-input-block {
 	margin-left: 180px;
 }
+
+.path{
+	display: inline-block;
+	width: 100px;
+}
+.value{
+	display: inline-block;
+}
 </style>
 </head>
 <body class="layui-layout-body">
@@ -59,10 +67,11 @@
 						<tr>
 							<th>监听端口</th>
 							<th>监听域名</th>
-
+							
 							<th>开启ssl</th>
-							<th>ssl文件路径</th>
+							
 							<th>http自动跳转https</th>
+							<th>ssl文件路径</th>
 							
 							<th>代理目标</th>
 							
@@ -82,15 +91,19 @@
 								<#if ext.server.ssl==1>是</#if>
 							</td>
 							<td>
+								<#if ext.server.ssl==1> 
+									<#if ext.server.rewrite==0>否</#if> 
+									<#if ext.server.rewrite==1>是</#if> 
+								</#if>
+							</td>
+							<td>
 								<#if ext.server.ssl==1> pem: ${ext.server.pem} <br>
 								key: ${ext.server.key} </#if>
 							</td>
-							<td>
-								<#if ext.server.ssl==1> <#if ext.server.rewrite==0>否</#if> <#if ext.server.rewrite==1>是</#if> </#if>
-							</td>
+						
 							
 							<td>
-								${ext.locationStr}
+								${ext.locationStr} 
 							</td>
 
 							<td>
