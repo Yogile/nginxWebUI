@@ -153,10 +153,11 @@ public class ConfController extends BaseController {
 							ngxBlockLocation.addEntry(ngxParam);
 						} else if (location.getType() == 2) {
 							Upstream upstream = sqlHelper.findById(location.getUpstreamId(), Upstream.class);
-
-							ngxParam = new NgxParam();
-							ngxParam.addValue("proxy_pass http://" + upstream.getName());
-							ngxBlockLocation.addEntry(ngxParam);
+							if(upstream != null) {
+								ngxParam = new NgxParam();
+								ngxParam.addValue("proxy_pass http://" + upstream.getName());
+								ngxBlockLocation.addEntry(ngxParam);
+							}
 						}
 
 						ngxParam = new NgxParam();

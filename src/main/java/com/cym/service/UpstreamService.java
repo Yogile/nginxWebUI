@@ -14,6 +14,7 @@ import cn.craccd.sqlHelper.bean.Sort;
 import cn.craccd.sqlHelper.bean.Sort.Direction;
 import cn.craccd.sqlHelper.utils.CriteriaAndWrapper;
 import cn.craccd.sqlHelper.utils.CriteriaOrWrapper;
+import cn.craccd.sqlHelper.utils.CriteriaWrapper;
 import cn.craccd.sqlHelper.utils.SqlHelper;
 import cn.hutool.core.util.StrUtil;
 
@@ -63,6 +64,13 @@ public class UpstreamService {
 
 	public List<UpstreamServer> getUpstreamServers(String id) {
 		return sqlHelper.findListByQuery(new CriteriaAndWrapper().eq("upstreamId", id), UpstreamServer.class);
+	}
+
+	@Transactional
+	public void del(String id) {
+		sqlHelper.deleteById(id, Upstream.class);
+		sqlHelper.deleteByQuery(new CriteriaAndWrapper().eq("upstreamId", id), UpstreamServer.class);
+		
 	}
 
 }
