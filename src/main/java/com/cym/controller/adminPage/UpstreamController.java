@@ -90,7 +90,9 @@ public class UpstreamController extends BaseController {
 	@RequestMapping("del")
 	@ResponseBody
 	public JsonResult del(String id) throws SQLException {
-		upstreamService.deleteById(id);
+		
+		
+		upstreamService.del(id);
 
 		return renderSuccess();
 	}

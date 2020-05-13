@@ -1,5 +1,9 @@
 $(function(){
 	loadOrg();
+	
+	$("#nginxContent").setTextareaCount();
+	
+	$("#org").setTextareaCount();
 })
 
 function replace(){

@@ -6,6 +6,7 @@ var laydate;
 
 // 使用layui内部jQuery
 var $ = layui.$;
+var jQuery = layui.$;
 
 $(function() {
 
