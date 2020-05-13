@@ -19,7 +19,7 @@ function login() {
 		dataType : 'json',
 		success : function(data) {
 			if (data.success) {
-				location.href = ctx + "adminPage/server";
+				location.href = ctx + "adminPage/http";
 			} else {
 				alert("登录失败,请检查输入");
 			}
