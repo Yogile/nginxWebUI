@@ -43,14 +43,14 @@ $(function() {
 	});
 })
 
-function checkType(value,id){
-	if (value == 0) {
+function checkType(type,id){
+	if (type == 0 || type == 1) {
 		$("#" + id + " input[name='value']").show();
-		$("#" + id + " select[name='upstreamId']").hide();
+		$("#" + id + " span[name='upstreamSelect']").hide();
 	} 
-	if (value == 1) {
+	if (type == 2) {
 		$("#" + id + " input[name='value']").hide();
-		$("#" + id + " select[name='upstreamId']").show();
+		$("#" + id + " span[name='upstreamSelect']").show();
 	} 
 }
 
@@ -91,7 +91,7 @@ function showWindow(title) {
 	layer.open({
 		type : 1,
 		title : title,
-		area : [ '900px', '600px' ], // 宽高
+		area : [ '1200px', '700px' ], // 宽高
 		content : $('#windowDiv')
 	});
 }
@@ -163,27 +163,31 @@ function edit(id) {
 								</td>
 								<td>
 									<select name="type" lang='${uuid}' lay-filter="type">
-										<option ${location.type=='0'?'selected':''} value="0">代理http</option>
+										<option ${location.type=='0'?'selected':''} value="0">代理动态http</option>
 										<option ${location.type=='1'?'selected':''} value="1">代理静态html</option>
 										<option ${location.type=='2'?'selected':''} value="2">负债均衡</option>
 									</select>
 								</td>
 								
 								<td>
-									<input type="text" name="value" class="layui-input" value="">
+									<input type="text" name="value" class="layui-input" value=""  placeholder="例：http://127.0.0.1:8080 或 /root/www">
+									<span name="upstreamSelect">
 									${upstreamSelect}
+									</span>
 								</td> 
 								<td><button type="button" class="layui-btn layui-btn-sm layui-btn-danger" onclick="delTr('${uuid}')">删除</button></td>
 						</tr>`
 						
+					debugger;	
 					$("#itemList").append(html);
+					
 					if(location.type == 0 || location.type == 1){
 						$("#" + uuid + " input[name='value']").val(location.value);
-					}else{
+					} else {
 						$("#" + uuid + " select[name='upstreamId']").val(location.upstreamId);
 					}
 					
-					checkType(location.value, uuid)
+					checkType(location.type, uuid)
 				}
 				
 				form.render();
@@ -234,21 +238,24 @@ function addItem(){
 						</td>
 						<td>
 							<select name="type" lang='${uuid}' lay-filter="type">
-								<option value="0">代理http</option>
+								<option value="0">代理动态http</option>
 								<option value="1">代理静态html</option>
 								<option value="2">负债均衡</option>
 							</select>
 						</td>
 						
 						<td>
-							<input type="text" name="value" class="layui-input" value="">
-							${upstreamSelect}
+							<input type="text" name="value" class="layui-input" value="" placeholder="例：http://127.0.0.1:8080 或 /root/www">
+							<span name="upstreamSelect">
+								${upstreamSelect}
+							</span>
 						</td> 
 						<td><button type="button" class="layui-btn layui-btn-sm layui-btn-danger" onclick="delTr('${uuid}')">删除</button></td>
 				</tr>`
 	$("#itemList").append(html);
-	
+	checkType(0, uuid);
 	form.render();
+	
 }
 
 

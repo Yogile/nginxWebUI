@@ -18,37 +18,16 @@ nginx本身功能复杂,本项目并不能涵盖nginx所有功能,只能配置�
 #### 安装说明
 以Ubuntu操作系统为例:
 
-1.安装nginx,maven,git
-```
-apt install nginx maven git
-```
+1.安装java运行环境
 
-2.克隆仓库
 ```
-git clone https://gitee.com/cym1102/nginxWebUI.git
+apt install openjdk-11-jdk
 ```
 
-3.配置端口
+2.下载编译好的jar,下载地址https://gitee.com/cym1102/nginxWebUI/releases
 
-可修改\nginxWebUI\src\main\resources\application.yml文件
+启动命令
 
-配置server.port: 8080项为需要的端口
-
-4.启动,停止,重启
-
-在\nginxWebUI\目录下,赋予脚本文件可执行权限: chmod 777 *.sh
-
-执行脚本:
-
-./start.sh 启动项目
-
-./stop.sh 停止项目
-
-./restart.sh 重启项目
-
-5.除了以上源码编译启动外,也可以直接下载编译好的jar进行启动,下载地址https://gitee.com/cym1102/nginxWebUI/releases
-
-启动方式
 nohup java -jar nginxWebUI-1.0.0.jar --server.port=8000 > nginxWebUI.log &
 
 

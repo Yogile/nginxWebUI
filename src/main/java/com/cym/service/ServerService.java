@@ -53,15 +53,17 @@ public class ServerService {
 		sqlHelper.insertOrUpdate(server);
 		sqlHelper.deleteByQuery(new CriteriaAndWrapper().eq("serverId", server.getId()), Location.class);
 
-		for (int i = 0; i < type.length; i++) {
-			Location location = new Location();
-			location.setServerId(server.getId());
-			location.setType(type[i]);
-			location.setPath(path[i]);
-			location.setValue(value[i]);
-			location.setUpstreamId(upstreamId[i]);
-			
-			sqlHelper.insert(location);
+		if (type != null) {
+			for (int i = 0; i < type.length; i++) {
+				Location location = new Location();
+				location.setServerId(server.getId());
+				location.setType(type[i]);
+				location.setPath(path[i]);
+				location.setValue(value[i]);
+				location.setUpstreamId(upstreamId[i]);
+
+				sqlHelper.insert(location);
+			}
 		}
 	}
 
