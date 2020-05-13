@@ -1,15 +1,23 @@
 package com.cym.model;
 
 import cn.craccd.sqlHelper.bean.BaseModel;
-import cn.craccd.sqlHelper.config.CompositeIndex;
 import cn.craccd.sqlHelper.config.SingleIndex;
 import cn.craccd.sqlHelper.config.Table;
 
 @Table
-public class Admin extends BaseModel {
+public class Http extends BaseModel {
 	@SingleIndex(unique = true)
 	String name;
-	String pass;
+	String value;
+
+	public Http() {
+		
+	}
+	
+	public Http(String name, String value) {
+		this.name = name;
+		this.value = value;
+	}
 
 	public String getName() {
 		return name;
@@ -19,12 +27,12 @@ public class Admin extends BaseModel {
 		this.name = name;
 	}
 
-	public String getPass() {
-		return pass;
+	public String getValue() {
+		return value;
 	}
 
-	public void setPass(String pass) {
-		this.pass = pass;
+	public void setValue(String value) {
+		this.value = value;
 	}
 
 }
