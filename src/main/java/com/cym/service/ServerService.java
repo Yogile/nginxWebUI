@@ -1,9 +1,12 @@
 package com.cym.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cym.model.Location;
 import com.cym.model.Server;
 
 import cn.craccd.sqlHelper.bean.Page;
@@ -38,6 +41,11 @@ public class ServerService {
 	@Transactional
 	public void deleteById(String id) {
 		sqlHelper.deleteById(id, Server.class);
+		sqlHelper.deleteByQuery(new CriteriaAndWrapper().eq("serverId", id), Location.class);
+	}
+
+	public List<Location> getLocationByServerId(String serverId) {
+		return sqlHelper.findListByQuery(new CriteriaAndWrapper().eq("serverId", serverId), Location.class);
 	}
 
 }
