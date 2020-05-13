@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cym.ext.ServerExt;
+import com.cym.model.Location;
 import com.cym.model.Server;
 import com.cym.model.Upstream;
+import com.cym.model.UpstreamServer;
 import com.cym.service.ServerService;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
@@ -36,6 +38,7 @@ public class ServerController extends BaseController {
 		for (Server server : page.getRecords(Server.class)) {
 			ServerExt serverExt = new ServerExt();
 			serverExt.setServer(server);
+			serverExt.setLocationStr(buildLocationStr(server.getId()));
 			exts.add(serverExt);
 		}
 		page.setRecords(exts);
@@ -47,6 +50,21 @@ public class ServerController extends BaseController {
 		modelAndView.addObject("keywords", keywords);
 		modelAndView.setViewName("/adminPage/server/index");
 		return modelAndView;
+	}
+
+	private String buildLocationStr(String id) {
+		List<String> str = new ArrayList<String>();
+		List<Location> locations = serverService.getLocationByServerId(id);
+		for (Location location : locations) {
+			if(location.getType() == 0 || location.getType() ==1) {
+				str.add("<span class='path'>" + location.getPath() +  "</span><span class='value'>" + location.getValue() + "</span>");
+			}else if(location.getType()==2) {
+				Upstream upstream = sqlHelper.findById(location.getUpstreamId(), Upstream.class);
+				str.add("<span class='path'>" + location.getPath() + "</span><span class='value'>http://" + upstream.getName() + "</span>");
+			}
+			
+		}
+		return StrUtil.join("<br>", str);
 	}
 
 	@RequestMapping("addOver")
