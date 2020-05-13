@@ -31,8 +31,8 @@ public class ServerController extends BaseController {
 	ServerService serverService;
 
 	@RequestMapping("")
-	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView, Page page, String keywords, Integer type) {
-		page = serverService.search(page, keywords, type);
+	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView, Page page) {
+		page = serverService.search(page);
 
 		List<ServerExt> exts = new ArrayList<ServerExt>();
 		for (Server server : page.getRecords(Server.class)) {
@@ -44,10 +44,10 @@ public class ServerController extends BaseController {
 		page.setRecords(exts);
 
 		modelAndView.addObject("page", page);
-		modelAndView.addObject("type", type);
 
-		modelAndView.addObject("upstreamList", sqlHelper.findAll(Upstream.class));
-		modelAndView.addObject("keywords", keywords);
+		List<Upstream> upstreamList = sqlHelper.findAll(Upstream.class);
+		modelAndView.addObject("upstreamList", upstreamList);
+		modelAndView.addObject("upstreamSize", upstreamList.size());
 		modelAndView.setViewName("/adminPage/server/index");
 		return modelAndView;
 	}

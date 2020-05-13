@@ -39,25 +39,6 @@
 							<button type="button" class="layui-btn layui-btn-normal" onclick="add()">添加反向代理</button>
 						</div>
 
-						<div class="layui-inline">
-							<label class="layui-form-label">关键字</label>
-						</div>
-						<div class="layui-input-inline">
-							<input type="text" name="keywords" class="layui-input" value="${keywords}">
-						</div>
-
-						<div class="layui-inline">
-							<label class="layui-form-label">类型</label>
-						</div>
-						<div class="layui-input-inline">
-							<select name="type">
-								<option value="">--全部--</option>
-								<option value="0" ${(type==0)?string('selected','')}>代理http</option>
-								<option value="1" ${(type==1)?string('selected','')}>静态html</option>
-							</select>
-						</div>
-						<button type="button" class="layui-btn" onclick="search()">搜索</button>
-
 						<input type="hidden" name="curr" value="${page.curr}">
 					</div>
 				</form>
@@ -214,11 +195,16 @@
 			</form>
 		</div>
 
-		<div id="upstreamSelect">
+		<div id="upstreamSelect" style="display: none;"> 
 			<select name="upstreamId">
+				
 				<#list upstreamList as upstream>
 				<option value="${upstream.id}">${upstream.name}</option>
 				</#list>
+				
+				<#if upstreamSize == 0>
+				<option value="">--无可用负债均衡--</option>
+				</#if>
 			</select>
 		</div>
 	</div>
