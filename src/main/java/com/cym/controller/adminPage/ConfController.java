@@ -39,7 +39,8 @@ import cn.hutool.core.util.StrUtil;
 @Controller
 @RequestMapping("/adminPage/conf")
 public class ConfController extends BaseController {
-
+	@Autowired
+	UpstreamController upstreamController;
 	@Autowired
 	UpstreamService upstreamService;
 	@Autowired
@@ -90,11 +91,7 @@ public class ConfController extends BaseController {
 				List<UpstreamServer> upstreamServers = upstreamService.getUpstreamServers(upstream.getId());
 				for (UpstreamServer upstreamServer : upstreamServers) {
 					ngxParam = new NgxParam();
-					ngxParam.addValue("server " + upstreamServer.getServer() + ":" + upstreamServer.getPort() //
-							+ " weight=" + upstreamServer.getWeight() //
-							+ " fail_timeout=" + upstreamServer.getFailTimeout() + "s"//
-							+ " max_fails=" + upstreamServer.getMaxFails() //
-							+ " " + upstreamServer.getStatus());
+					ngxParam.addValue("server " + upstreamController.buildStr(upstreamServer));
 					ngxBlockServer.addEntry(ngxParam);
 				}
 
@@ -171,17 +168,29 @@ public class ConfController extends BaseController {
 						ngxBlockServer.addEntry(ngxBlockLocation);
 
 					} else if (location.getType() == 1) { // 静态html
+						NgxBlock ngxBlockLocation = new NgxBlock();
+						ngxBlockLocation.addValue("location");
+						ngxBlockLocation.addValue(location.getPath());
+						
+						if(location.getPath().equals("/")) {
+							ngxParam = new NgxParam();
+							ngxParam.addValue("root " + location.getValue());
+							ngxBlockLocation.addEntry(ngxParam);
+						} else {
+							ngxParam = new NgxParam();
+							ngxParam.addValue("alias " + location.getValue());
+							ngxBlockLocation.addEntry(ngxParam);
+						}
+						
 						ngxParam = new NgxParam();
-						ngxParam.addValue("root " + location.getValue());
-						ngxBlockServer.addEntry(ngxParam);
-
-						ngxParam = new NgxParam();
-						ngxParam.addValue("index index.html index.htm");
-						ngxBlockServer.addEntry(ngxParam);
+						ngxParam.addValue("index index.html");
+						ngxBlockLocation.addEntry(ngxParam);
+						
+						ngxBlockServer.addEntry(ngxBlockLocation);
 					}
-					ngxBlockHttp.addEntry(ngxBlockServer);
 				}
-
+				ngxBlockHttp.addEntry(ngxBlockServer);
+				
 				// https添加80端口重写
 				if (server.getSsl() == 1 && server.getRewrite() == 1) {
 					ngxBlockServer = new NgxBlock();

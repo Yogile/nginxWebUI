@@ -108,7 +108,11 @@ function addOver() {
 			over = false;
 		}
 	})
-	
+	$("input[name='value']").each(function(){
+		if(!$(this).is(":hidden") && $(this).val().trim() == ''){
+			over = false;
+		}
+	})
 	if(!over){
 		layer.msg("填写不完整");
 		return;
