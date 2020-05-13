@@ -49,6 +49,7 @@ function loadOrg(){
 		success : function(data) {
 			if (data.success) {
 				$("#org").val(data.obj)
+				$("#org").setTextareaCount();
 			} else {
 				layer.alert(data.msg);
 			}
