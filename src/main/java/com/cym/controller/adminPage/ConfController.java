@@ -88,6 +88,12 @@ public class ConfController extends BaseController {
 				NgxBlock ngxBlockServer = new NgxBlock();
 				ngxBlockServer.addValue("upstream " + upstream.getName());
 
+				if(StrUtil.isNotEmpty(upstream.getTactics())) {
+					ngxParam = new NgxParam();
+					ngxParam.addValue(upstream.getTactics());
+					ngxBlockServer.addEntry(ngxParam);
+				}
+				
 				List<UpstreamServer> upstreamServers = upstreamService.getUpstreamServers(upstream.getId());
 				for (UpstreamServer upstreamServer : upstreamServers) {
 					ngxParam = new NgxParam();
