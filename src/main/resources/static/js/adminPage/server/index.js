@@ -1,12 +1,9 @@
 $(function() {
 	form.on('select(type)', function(data) {
-		checkType(data.value);
+		checkType(data.value, $(data.elem).attr("lang"));
 	});
 	form.on('select(ssl)', function(data) {
 		checkSsl(data.value);
-	});
-	form.on('select(proxyPassType)', function(data) {
-		checkProxyPassType(data.value);
 	});
 	
 	layui.use('upload', function() {
@@ -46,25 +43,14 @@ $(function() {
 	});
 })
 
-function checkType(value){
+function checkType(value,id){
 	if (value == 0) {
-		$("#targetDiv").show();
-		$("#rootDiv").hide();
+		$("#" + id + " input[name='value']").show();
+		$("#" + id + " select[name='upstreamId']").hide();
 	} 
 	if (value == 1) {
-		$("#targetDiv").hide();
-		$("#rootDiv").show();
-	} 
-}
-
-function checkProxyPassType(value){
-	if (value == 0) {
-		$("#url").show();
-		$("#ups").hide();
-	} 
-	if (value == 1) {
-		$("#url").hide();
-		$("#ups").show();
+		$("#" + id + " input[name='value']").hide();
+		$("#" + id + " select[name='upstreamId']").show();
 	} 
 }
 
@@ -77,6 +63,7 @@ function checkSsl(value){
 		$("#pemDiv").show();
 	} 
 }
+
 function search() {
 	$("#searchForm").submit();
 }
@@ -85,21 +72,16 @@ function add() {
 	$("#id").val("");
 	$("#listen").val("");
 	$("#serverName").val("");
-	$("#type option:first").prop("selected", true);
 	$("#ssl option:first").prop("selected", true);
+	$("#rewrite option:first").prop("selected", true);
+	
 	$("#pem").val("");
 	$("#pemPath").html("");
 	$("#key").val("");
 	$("#keyPath").html("");
-	$("#proxyPassType option:first").prop("selected", true);
-	$("#proxyPass").val("");
-	$("#upstreamId option:first").prop("selected", true);
-	$("#root").val("");
-	$("#rewrite option:first").prop("selected", true);
+	$("#itemList").html("");
 	
-	checkType(0);
 	checkSsl(0);
-	checkProxyPassType(0);
 	
 	form.render();
 	showWindow("添加反向代理");
@@ -109,7 +91,7 @@ function showWindow(title) {
 	layer.open({
 		type : 1,
 		title : title,
-		area : [ '700px', '650px' ], // 宽高
+		area : [ '900px', '600px' ], // 宽高
 		content : $('#windowDiv')
 	});
 }
@@ -150,31 +132,59 @@ function edit(id) {
 		},
 		success : function(data) {
 			if (data.success) {
-				var server = data.obj;
+				var server = data.obj.server;
 				$("#id").val(server.id);
 				$("#listen").val(server.listen);
 				$("#serverName").val(server.serverName);
-				$("#type").val(server.type);
 				$("#ssl").val(server.ssl);
 				$("#pem").val(server.pem);
 				$("#key").val(server.key);
 				$("#pemPath").html(server.pem);
 				$("#keyPath").html(server.key);
-				$("#proxyPass").val(server.proxyPass);
-				$("#root").val(server.root);
-				if(server.rewrite!=null){
+				
+				if(server.rewrite != null){
 					$("#rewrite").val(server.rewrite);
 				} else{
 					$("#rewrite option:first").prop("selected", true);
 				}
-			
 				
-				$("#proxyPassType").val(server.proxyPassType);
-				$("#upstreamId").val(server.upstreamId);
-				
-				checkType(server.type);
 				checkSsl(server.ssl);
-				checkProxyPassType(server.proxyPassType);
+				
+				var list = data.obj.locationList;
+				
+				var upstreamSelect = $("#upstreamSelect").html();
+				$("#itemList").html("");
+				for(let i=0;i<list.length;i++){
+					var location = list[i];
+					var uuid = guid();
+					var html = `<tr id='${uuid}'>
+								<td>
+									<input type="text" name="path" class="layui-input" value="${location.path}">
+								</td>
+								<td>
+									<select name="type" lang='${uuid}' lay-filter="type">
+										<option ${location.type=='0'?'selected':''} value="0">代理http</option>
+										<option ${location.type=='1'?'selected':''} value="1">代理静态html</option>
+										<option ${location.type=='2'?'selected':''} value="2">负债均衡</option>
+									</select>
+								</td>
+								
+								<td>
+									<input type="text" name="value" class="layui-input" value="">
+									${upstreamSelect}
+								</td> 
+								<td><button type="button" class="layui-btn layui-btn-sm layui-btn-danger" onclick="delTr('${uuid}')">删除</button></td>
+						</tr>`
+						
+					$("#itemList").append(html);
+					if(location.type == 0 || location.type == 1){
+						$("#" + uuid + " input[name='value']").val(location.value);
+					}else{
+						$("#" + uuid + " select[name='upstreamId']").val(location.upstreamId);
+					}
+					
+					checkType(location.value, uuid)
+				}
 				
 				form.render();
 				showWindow("编辑反向代理");
@@ -209,4 +219,39 @@ function del(id) {
 			}
 		});
 	}
+}
+
+
+
+function addItem(){
+	var uuid = guid();
+	
+	var upstreamSelect = $("#upstreamSelect").html();
+	
+	var html = `<tr id='${uuid}'>
+						<td>
+							<input type="text" name="path" class="layui-input" value="/">
+						</td>
+						<td>
+							<select name="type" lang='${uuid}' lay-filter="type">
+								<option value="0">代理http</option>
+								<option value="1">代理静态html</option>
+								<option value="2">负债均衡</option>
+							</select>
+						</td>
+						
+						<td>
+							<input type="text" name="value" class="layui-input" value="">
+							${upstreamSelect}
+						</td> 
+						<td><button type="button" class="layui-btn layui-btn-sm layui-btn-danger" onclick="delTr('${uuid}')">删除</button></td>
+				</tr>`
+	$("#itemList").append(html);
+	
+	form.render();
+}
+
+
+function delTr(id){
+	$("#" + id).remove();
 }

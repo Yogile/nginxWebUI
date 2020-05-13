@@ -32,17 +32,17 @@ public class ServerController extends BaseController {
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView, Page page, String keywords, Integer type) {
 		page = serverService.search(page, keywords, type);
 
-		List<ServerExt> exts = new ArrayList<ServerExt>(); 
-		for(Server server:page.getRecords(Server.class)) {
+		List<ServerExt> exts = new ArrayList<ServerExt>();
+		for (Server server : page.getRecords(Server.class)) {
 			ServerExt serverExt = new ServerExt();
 			serverExt.setServer(server);
 			exts.add(serverExt);
 		}
 		page.setRecords(exts);
-		
+
 		modelAndView.addObject("page", page);
 		modelAndView.addObject("type", type);
-		
+
 		modelAndView.addObject("upstreamList", sqlHelper.findAll(Upstream.class));
 		modelAndView.addObject("keywords", keywords);
 		modelAndView.setViewName("/adminPage/server/index");
@@ -51,35 +51,23 @@ public class ServerController extends BaseController {
 
 	@RequestMapping("addOver")
 	@ResponseBody
-	public JsonResult addOver(Server server) throws SQLException {
+	public JsonResult addOver(Server server, Integer type[], String[] path, String[] value, String[] upstreamId) throws SQLException {
 
-//		if (server.getType() == 0) { // http
-//			server.setRoot(null);
-//		} else if (server.getType() == 1) { // root
-//			server.setProxyPass(null);
-//		} 
-//
-//		if (server.getSsl() == 0) {
-//			server.setPem(null);
-//			server.setKey(null);
-//			server.setRewrite(null);
-//		}
-//		
-//		if (StrUtil.isNotEmpty(server.getId())) {
-//			sqlHelper.updateAllColumnById(server);
-//		} else {
-//			sqlHelper.insert(server);
-//		}
-		
-		sqlHelper.insertOrUpdate(server);
-		
+		serverService.addOver(server, type,  path,  value,  upstreamId);
+
 		return renderSuccess();
 	}
 
 	@RequestMapping("detail")
 	@ResponseBody
 	public JsonResult detail(String id) throws SQLException {
-		return renderSuccess(sqlHelper.findById(id, Server.class));
+		Server server = sqlHelper.findById(id, Server.class);
+
+		ServerExt serverExt = new ServerExt();
+		serverExt.setServer(server);
+		serverExt.setLocationList(serverService.getLocationByServerId(id));
+
+		return renderSuccess(serverExt);
 	}
 
 	@RequestMapping("del")
