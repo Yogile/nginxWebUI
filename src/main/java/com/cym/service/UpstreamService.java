@@ -41,9 +41,8 @@ public class UpstreamService {
 	}
 
 	@Transactional
-	public void addOver(Upstream upstream, String[] servers, Integer[] ports, Integer[] weights) {
+	public void addOver(Upstream upstream, String[] servers, Integer[] ports, Integer[] weights, Integer[] maxFails, Integer[] failTimeout, String[] status) {
 		sqlHelper.insertOrUpdate(upstream);
-
 		sqlHelper.deleteByQuery(new CriteriaAndWrapper().eq("upstreamId", upstream.getId()), UpstreamServer.class);
 
 		for (int i = 0; i < servers.length; i++) {
@@ -53,6 +52,10 @@ public class UpstreamService {
 			upstreamServer.setPort(ports[i]);
 			upstreamServer.setWeight(weights[i]);
 
+			upstreamServer.setMaxFails(maxFails[i]);
+			upstreamServer.setFailTimeout(failTimeout[i]);
+			upstreamServer.setStatus(status[i]);
+			
 			sqlHelper.insert(upstreamServer);
 		}
 

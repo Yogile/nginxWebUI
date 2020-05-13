@@ -40,7 +40,7 @@ public class UpstreamController extends BaseController {
 			List<String> str = new ArrayList<String>();
 			List<UpstreamServer> servers = upstreamService.getUpstreamServers(upstream.getId());
 			for (UpstreamServer upstreamServer : servers) {
-				str.add(upstreamServer.getServer() + ":" + upstreamServer.getPort() + " 权重:" + upstreamServer.getWeight());
+				str.add(buildStr(upstreamServer));
 			}
 
 			upstreamExt.setServerStr(StrUtil.join("<br>", str));
@@ -54,11 +54,19 @@ public class UpstreamController extends BaseController {
 		return modelAndView;
 	}
 
+	private String buildStr(UpstreamServer upstreamServer) {
+		return upstreamServer.getServer() + ":" + upstreamServer.getPort() //
+				+ " weight=" + upstreamServer.getWeight() //
+				+ " fail_timeout=" + upstreamServer.getFailTimeout() + "s"//
+				+ " max_fails=" + upstreamServer.getMaxFails() //
+				+ " " + upstreamServer.getStatus();
+	}
+
 	@RequestMapping("addOver")
 	@ResponseBody
-	public JsonResult addOver(Upstream upstream, String[] server, Integer[] port, Integer[] weight) throws SQLException {
+	public JsonResult addOver(Upstream upstream, String[] server, Integer[] port, Integer[] weight, Integer[] maxFails, Integer[] failTimeout, String[] status) throws SQLException {
 
-		upstreamService.addOver(upstream, server, port, weight);
+		upstreamService.addOver(upstream, server, port, weight, maxFails, failTimeout, status);
 
 		return renderSuccess();
 	}

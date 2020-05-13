@@ -10,6 +10,10 @@
 .layui-input-block {
 	margin-left: 130px;
 }
+
+.short{
+	width: 120px;
+}
 </style>
 </head>
 <body class="layui-layout-body">
@@ -48,7 +52,8 @@
 					<thead>
 						<tr>
 							<th>名称</th>
-							<th>负债</th>
+							<th>策略</th>
+							<th>负载</th>
 							<th>操作</th>
 						</tr>
 					</thead>
@@ -56,6 +61,20 @@
 						<#list page.records as ext>
 						<tr>
 							<td>${ext.upstream.name}</td>
+							<td>
+								<#if ext.upstream.tactics=="">
+									默认
+								</#if>
+								<#if ext.upstream.tactics=="ip_hash">
+									ip绑定(ip_hash)
+								</#if>
+								<#if ext.upstream.tactics=="least_conn">
+									最少连接(least_conn)
+								</#if>
+								<#if ext.upstream.tactics=="least_time">
+									最短时间(least_time)
+								</#if>
+							</td>
 							<td>${ext.serverStr}</td>
 							<td>
 								<button class="layui-btn layui-btn-sm" onclick="edit('${ext.upstream.id}')">编辑</button>
@@ -81,6 +100,16 @@
 					<div class="layui-input-inline">
 						<input type="text" name="name" id="name" class="layui-input">
 					</div>
+					
+					<label class="layui-form-label">负载策略</label>
+					<div class="layui-input-inline">
+						<select name="tactics" id="tactics">
+							<option value="">默认</option>
+							<option value="ip_hash">ip绑定(ip_hash)</option>
+							<option value="least_conn">最少连接(least_conn)</option>
+							<option value="least_time">最短时间(least_time)</option>
+						</select>
+					</div>
 				</div>
 
 				<div class="layui-form-item">
@@ -95,6 +124,9 @@
 								<th>ip</th>
 								<th>端口</th>
 								<th>权重</th>
+								<th>最大失败次数</th>
+								<th>失败等待时间(s)</th>
+								<th>状态</th>
 								<th>操作</th>
 							</tr>
 						</thead>
