@@ -8,9 +8,17 @@ import com.cym.model.Upstream;
 
 public class ServerExt {
 	Server server;
-
 	List<Location> locationList;
+	String locationStr;
 
+	
+	public String getLocationStr() {
+		return locationStr;
+	}
+
+	public void setLocationStr(String locationStr) {
+		this.locationStr = locationStr;
+	}
 
 	public Server getServer() {
 		return server;
