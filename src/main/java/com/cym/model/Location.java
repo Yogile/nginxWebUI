@@ -9,16 +9,20 @@ public class Location extends BaseModel {
 	String serverId;
 	
 	String path;
-	Integer type; // 0 http 1 root
-
-	@InitValue("0")
-	Integer proxyPassType; // 0 地址 1 负债均衡
-	String proxyPass;
-
-	String root;
-	String upstreamId;
-
+	Integer type; // 0 http 1 root 2 负债均衡
 	
+	String value;
+	String upstreamId;
+	
+	
+	public String getUpstreamId() {
+		return upstreamId;
+	}
+
+	public void setUpstreamId(String upstreamId) {
+		this.upstreamId = upstreamId;
+	}
+
 	public String getPath() {
 		return path;
 	}
@@ -43,37 +47,14 @@ public class Location extends BaseModel {
 		this.type = type;
 	}
 
-
-	public Integer getProxyPassType() {
-		return proxyPassType;
+	public String getValue() {
+		return value;
 	}
 
-	public void setProxyPassType(Integer proxyPassType) {
-		this.proxyPassType = proxyPassType;
+	public void setValue(String value) {
+		this.value = value;
 	}
 
-	public String getProxyPass() {
-		return proxyPass;
-	}
 
-	public void setProxyPass(String proxyPass) {
-		this.proxyPass = proxyPass;
-	}
-
-	public String getRoot() {
-		return root;
-	}
-
-	public void setRoot(String root) {
-		this.root = root;
-	}
-
-	public String getUpstreamId() {
-		return upstreamId;
-	}
-
-	public void setUpstreamId(String upstreamId) {
-		this.upstreamId = upstreamId;
-	}
 
 }

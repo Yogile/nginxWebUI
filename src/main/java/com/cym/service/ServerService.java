@@ -48,4 +48,21 @@ public class ServerService {
 		return sqlHelper.findListByQuery(new CriteriaAndWrapper().eq("serverId", serverId), Location.class);
 	}
 
+	@Transactional
+	public void addOver(Server server, Integer[] type, String[] path, String[] value, String[] upstreamId) {
+		sqlHelper.insertOrUpdate(server);
+		sqlHelper.deleteByQuery(new CriteriaAndWrapper().eq("serverId", server.getId()), Location.class);
+
+		for (int i = 0; i < type.length; i++) {
+			Location location = new Location();
+			location.setServerId(server.getId());
+			location.setType(type[i]);
+			location.setPath(path[i]);
+			location.setValue(value[i]);
+			location.setUpstreamId(upstreamId[i]);
+			
+			sqlHelper.insert(location);
+		}
+	}
+
 }

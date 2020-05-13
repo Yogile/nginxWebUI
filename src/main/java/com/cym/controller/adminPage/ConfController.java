@@ -90,7 +90,11 @@ public class ConfController extends BaseController {
 				List<UpstreamServer> upstreamServers = upstreamService.getUpstreamServers(upstream.getId());
 				for (UpstreamServer upstreamServer : upstreamServers) {
 					ngxParam = new NgxParam();
-					ngxParam.addValue("server " + upstreamServer.getServer() + ":" + upstreamServer.getPort() + " weight=" + upstreamServer.getWeight());
+					ngxParam.addValue("server " + upstreamServer.getServer() + ":" + upstreamServer.getPort() //
+							+ " weight=" + upstreamServer.getWeight() //
+							+ " fail_timeout=" + upstreamServer.getFailTimeout() + "s"//
+							+ " max_fails=" + upstreamServer.getMaxFails() //
+							+ " " + upstreamServer.getStatus());
 					ngxBlockServer.addEntry(ngxParam);
 				}
 
@@ -134,17 +138,17 @@ public class ConfController extends BaseController {
 
 				// http转发配置
 				for (Location location : locationList) {
-					if (location.getType() == 0) {
+					if (location.getType() == 0 || location.getType() == 2) { // http或负载均衡
 						// 添加location
 						NgxBlock ngxBlockLocation = new NgxBlock();
 						ngxBlockLocation.addValue("location");
 						ngxBlockLocation.addValue(location.getPath());
 
-						if (location.getProxyPassType() == 0) {
+						if (location.getType() == 0) {
 							ngxParam = new NgxParam();
-							ngxParam.addValue("proxy_pass " + location.getProxyPass());
+							ngxParam.addValue("proxy_pass " + location.getValue());
 							ngxBlockLocation.addEntry(ngxParam);
-						} else if (location.getProxyPassType() == 1) {
+						} else if (location.getType() == 2) {
 							Upstream upstream = sqlHelper.findById(location.getUpstreamId(), Upstream.class);
 
 							ngxParam = new NgxParam();
@@ -168,7 +172,7 @@ public class ConfController extends BaseController {
 
 					} else if (location.getType() == 1) { // 静态html
 						ngxParam = new NgxParam();
-						ngxParam.addValue("root " + location.getRoot());
+						ngxParam.addValue("root " + location.getValue());
 						ngxBlockServer.addEntry(ngxParam);
 
 						ngxParam = new NgxParam();
@@ -266,10 +270,9 @@ public class ConfController extends BaseController {
 			String orgStr = FileUtil.readString(nginxPath, Charset.defaultCharset());
 			return renderSuccess(orgStr);
 		} else {
-			return  renderError("文件不存在");
+			return renderError("文件不存在");
 		}
 
-		
 	}
 
 }

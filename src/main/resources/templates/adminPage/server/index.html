@@ -162,21 +162,10 @@
 					</div>
 				</div>
 				
-
 				<div class="layui-form-item">
-					<button type="button" class="layui-btn layui-btn-normal" onclick="addOver()">提交</button>
-					<button type="button" class="layui-btn" onclick="layer.closeAll()">关闭</button>
-				</div>
-			</form>
-		</div>
-		
-		
-		<div class="layui-form" id="locationDiv" style="padding: 15px; display: none">
-			<form id="addForm">
-				<div class="layui-form-item">
-					<button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="addLocation()">添加目标</button>
-				</div>
-
+					<button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="addItem()">添加代理目标</button>
+				</div>		
+				
 				<div class="layui-form-item">
 					<table class="layui-table">
 						<thead>
@@ -186,105 +175,26 @@
 							</tr>
 						</thead>
 						<tbody id="itemList">
-							<tr>
-								<td>
-									<#if ext.server.type==0>代理http </#if>
-									<#if ext.server.type==1>静态html </#if>
-								</td>
-								
-								<td>
-									<#if ext.server.type==0>
-										<#if ext.server.proxyPassType == 0>
-											${ext.server.proxyPass}
-										</#if>
-										<#if ext.server.proxyPassType == 1>
-											http://${ext.upstream.name}
-										</#if>
-									</#if>
-									<#if ext.server.type==1>${ext.server.root}</#if>
-								</td>
-							</tr>
+							
 						</tbody>
 					</table>
 				</div>
-
+				
+				
 				<div class="layui-form-item">
-					<button type="button" class="layui-btn layui-btn-normal" onclick="addLocationOver()">提交</button>
+					<button type="button" class="layui-btn layui-btn-normal" onclick="addOver()">提交</button>
 					<button type="button" class="layui-btn" onclick="layer.closeAll()">关闭</button>
 				</div>
 			</form>
 		</div>
 		
-		
-		
-		<div class="layui-form" id="locationAddDiv" style="padding: 15px; display: none">
-			<form id="addForm">
-				<input type="hidden" name="id">
-				
-				<div class="layui-form-item">
-					<label class="layui-form-label">路径</label>
-					<div class="layui-input-block">
-						<input type="hidden" name="path" id="path" class="layui-input">
-					</div>
-				</div>
-				<div class="layui-form-item">
-					<label class="layui-form-label">代理类型</label>
-					<div class="layui-input-block">
-						<select name="type" id="type" lay-filter="type">
-							<option value="0">代理http</option>
-							<option value="1">静态html</option>
-						</select>
-					</div>
-				</div>
-				
-				<div id="targetDiv">
-					<div class="layui-form-item">
-						<label class="layui-form-label">代理目标类型</label>
-						<div class="layui-input-block">
-							<select name="proxyPassType" id="proxyPassType" lay-filter="proxyPassType">
-								<option value="0">url</option>
-								<option value="1">负债均衡</option>
-							</select>
-						</div>
-					</div>
-				
-				
-					<div class="layui-form-item" id="url">
-						<label class="layui-form-label">url</label>
-						<div class="layui-input-block">
-							<input type="text" name="proxyPass" id="proxyPass" class="layui-input" placeholder="例: http://127.0.0.1:8080">
-						</div>
-					</div>
-					
-					<div class="layui-form-item"  id="ups">
-						<label class="layui-form-label">负载均衡</label>
-						<div class="layui-input-block">
-							<select name="upstreamId" id="upstreamId">
-								<#list upstreamList as upstream>
-									<option value="${upstream.id}">${upstream.name}</option>
-								</#list>
-							</select>
-						</div>
-					</div>
-					
-				</div>
-
-				<div id="rootDiv" style="display: none;">
-					<div class="layui-form-item">
-						<label class="layui-form-label">静态根目录</label>
-						<div class="layui-input-block">
-							<input type="text" name="root" id="root" class="layui-input" placeholder="例: /home/www">
-						</div>
-					</div>
-				</div>
-
-				<div class="layui-form-item">
-					<button type="button" class="layui-btn layui-btn-normal" onclick="addLocationOver()">提交</button>
-					<button type="button" class="layui-btn" onclick="layer.closeAll()">关闭</button>
-				</div>
-			</form>
+		<div id="upstreamSelect">
+			<select name="upstreamId" style="display: none;">
+				<#list upstreamList as upstream>
+					<option value="${upstream.id}">${upstream.name}</option>
+				</#list>
+			</select>
 		</div>
-
 	</div>
 
 	<#include '/adminPage/script.html'/>

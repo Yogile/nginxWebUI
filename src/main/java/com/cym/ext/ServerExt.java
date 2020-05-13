@@ -9,7 +9,7 @@ import com.cym.model.Upstream;
 public class ServerExt {
 	Server server;
 
-	List<LocationExt> locationExtList;
+	List<Location> locationList;
 
 
 	public Server getServer() {
@@ -20,13 +20,14 @@ public class ServerExt {
 		this.server = server;
 	}
 
-	public List<LocationExt> getLocationExtList() {
-		return locationExtList;
+	public List<Location> getLocationList() {
+		return locationList;
 	}
 
-	public void setLocationExtList(List<LocationExt> locationExtList) {
-		this.locationExtList = locationExtList;
+	public void setLocationList(List<Location> locationList) {
+		this.locationList = locationList;
 	}
+
 
 
 }
