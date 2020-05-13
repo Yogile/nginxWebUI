@@ -10,7 +10,31 @@ public class UpstreamServer extends BaseModel {
 	Integer port;
 	Integer weight;
 	
+	Integer failTimeout; // 失败超时
+	Integer maxFails; // 失败次数
 	
+	String status; // 状态
+	
+	
+	
+	public Integer getFailTimeout() {
+		return failTimeout;
+	}
+	public void setFailTimeout(Integer failTimeout) {
+		this.failTimeout = failTimeout;
+	}
+	public Integer getMaxFails() {
+		return maxFails;
+	}
+	public void setMaxFails(Integer maxFails) {
+		this.maxFails = maxFails;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
 	public Integer getPort() {
 		return port;
 	}
