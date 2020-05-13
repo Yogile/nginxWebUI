@@ -59,11 +59,10 @@
 						<tr>
 							<th>监听端口</th>
 							<th>监听域名</th>
-							<th>类型</th>
+							
 							<th>开启ssl</th>
 							<th>ssl文件路径</th>
 							<th>http自动跳转https</th>
-							<th>代理目标url</th>
 							
 							<th>操作</th>
 						</tr>
@@ -72,11 +71,9 @@
 						<#list page.records as ext>
 						<tr>
 							<td>${ext.server.listen}</td>
-							<td>${ext.server.serverName}</td>
-						
 							<td>
-								<#if ext.server.type==0>代理http </#if>
-								<#if ext.server.type==1>静态html </#if>
+								<#if ext.server.serverName==''>全部</#if>
+								<#if ext.server.serverName!=''>${ext.server.serverName}</#if>
 							</td>
 							<td>
 								<#if ext.server.ssl==0>否</#if>
@@ -91,19 +88,10 @@
 									<#if ext.server.rewrite==1>是</#if>
 								</#if>
 							</td>
-							<td>
-								<#if ext.server.type==0>
-									<#if ext.server.proxyPassType == 0>
-										${ext.server.proxyPass}
-									</#if>
-									<#if ext.server.proxyPassType == 1>
-										负载均衡: ${ext.upstream.name}
-									</#if>
-								</#if>
-								<#if ext.server.type==1>${ext.server.root}</#if>
-							</td>
+							
 							<td>
 								<button class="layui-btn layui-btn-sm" onclick="edit('${ext.server.id}')">编辑</button>
+								<button class="layui-btn layui-btn-sm" onclick="editLocation('${ext.server.id}')">编辑目标</button>
 								<button class="layui-btn layui-btn-danger layui-btn-sm" onclick="del('${ext.server.id}')">删除</button>
 							</td>
 						</tr>
@@ -119,7 +107,7 @@
 		<!-- 弹出框 -->
 		<div class="layui-form" id="windowDiv" style="padding: 15px; display: none">
 			<form id="addForm">
-				<input type="hidden" name="id" id="id">
+				<input type="hidden" name="id">
 				
 				<div class="layui-form-item">
 					<label class="layui-form-label">监听端口</label>
@@ -131,19 +119,10 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label">监听域名</label>
 					<div class="layui-input-block">
-						<input type="text" name="serverName" id="serverName" class="layui-input" placeholder="例: www.sina.com 不填为监听所有域名">
+						<input type="text" name="serverName" id="serverName" class="layui-input" placeholder="例: www.baidu.com 不填为监听所有域名">
 					</div>
 				</div>
-
-				<div class="layui-form-item">
-					<label class="layui-form-label">代理类型</label>
-					<div class="layui-input-block">
-						<select name="type" id="type" lay-filter="type">
-							<option value="0">代理http</option>
-							<option value="1">静态html</option>
-						</select>
-					</div>
-				</div>
+				
 				<div class="layui-form-item">
 					<label class="layui-form-label">开启ssl</label>
 					<div class="layui-input-block">
@@ -183,8 +162,82 @@
 					</div>
 				</div>
 				
+
+				<div class="layui-form-item">
+					<button type="button" class="layui-btn layui-btn-normal" onclick="addOver()">提交</button>
+					<button type="button" class="layui-btn" onclick="layer.closeAll()">关闭</button>
+				</div>
+			</form>
+		</div>
+		
+		
+		<div class="layui-form" id="locationDiv" style="padding: 15px; display: none">
+			<form id="addForm">
+				<div class="layui-form-item">
+					<button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="addLocation()">添加目标</button>
+				</div>
+
+				<div class="layui-form-item">
+					<table class="layui-table">
+						<thead>
+							<tr>
+								<th>代理类型</th>
+								<th>代理目标url</th>
+							</tr>
+						</thead>
+						<tbody id="itemList">
+							<tr>
+								<td>
+									<#if ext.server.type==0>代理http </#if>
+									<#if ext.server.type==1>静态html </#if>
+								</td>
+								
+								<td>
+									<#if ext.server.type==0>
+										<#if ext.server.proxyPassType == 0>
+											${ext.server.proxyPass}
+										</#if>
+										<#if ext.server.proxyPassType == 1>
+											http://${ext.upstream.name}
+										</#if>
+									</#if>
+									<#if ext.server.type==1>${ext.server.root}</#if>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="layui-form-item">
+					<button type="button" class="layui-btn layui-btn-normal" onclick="addLocationOver()">提交</button>
+					<button type="button" class="layui-btn" onclick="layer.closeAll()">关闭</button>
+				</div>
+			</form>
+		</div>
+		
+		
+		
+		<div class="layui-form" id="locationAddDiv" style="padding: 15px; display: none">
+			<form id="addForm">
+				<input type="hidden" name="id">
+				
+				<div class="layui-form-item">
+					<label class="layui-form-label">路径</label>
+					<div class="layui-input-block">
+						<input type="hidden" name="path" id="path" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">代理类型</label>
+					<div class="layui-input-block">
+						<select name="type" id="type" lay-filter="type">
+							<option value="0">代理http</option>
+							<option value="1">静态html</option>
+						</select>
+					</div>
+				</div>
+				
 				<div id="targetDiv">
-					
 					<div class="layui-form-item">
 						<label class="layui-form-label">代理目标类型</label>
 						<div class="layui-input-block">
@@ -226,7 +279,7 @@
 				</div>
 
 				<div class="layui-form-item">
-					<button type="button" class="layui-btn layui-btn-normal" onclick="addOver()">提交</button>
+					<button type="button" class="layui-btn layui-btn-normal" onclick="addLocationOver()">提交</button>
 					<button type="button" class="layui-btn" onclick="layer.closeAll()">关闭</button>
 				</div>
 			</form>

@@ -36,7 +36,6 @@ public class ServerController extends BaseController {
 		for(Server server:page.getRecords(Server.class)) {
 			ServerExt serverExt = new ServerExt();
 			serverExt.setServer(server);
-			serverExt.setUpstream(sqlHelper.findById(server.getUpstreamId(), Upstream.class)); 
 			exts.add(serverExt);
 		}
 		page.setRecords(exts);
@@ -54,24 +53,26 @@ public class ServerController extends BaseController {
 	@ResponseBody
 	public JsonResult addOver(Server server) throws SQLException {
 
-		if (server.getType() == 0) { // http
-			server.setRoot(null);
-		} else if (server.getType() == 1) { // root
-			server.setProxyPass(null);
-		} 
-
-		if (server.getSsl() == 0) {
-			server.setPem(null);
-			server.setKey(null);
-			server.setRewrite(null);
-		}
+//		if (server.getType() == 0) { // http
+//			server.setRoot(null);
+//		} else if (server.getType() == 1) { // root
+//			server.setProxyPass(null);
+//		} 
+//
+//		if (server.getSsl() == 0) {
+//			server.setPem(null);
+//			server.setKey(null);
+//			server.setRewrite(null);
+//		}
+//		
+//		if (StrUtil.isNotEmpty(server.getId())) {
+//			sqlHelper.updateAllColumnById(server);
+//		} else {
+//			sqlHelper.insert(server);
+//		}
 		
-		if (StrUtil.isNotEmpty(server.getId())) {
-			sqlHelper.updateAllColumnById(server);
-		} else {
-			sqlHelper.insert(server);
-		}
-
+		sqlHelper.insertOrUpdate(server);
+		
 		return renderSuccess();
 	}
 

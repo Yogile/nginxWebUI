@@ -16,9 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cym.model.Http;
+import com.cym.model.Location;
 import com.cym.model.Server;
 import com.cym.model.Upstream;
 import com.cym.model.UpstreamServer;
+import com.cym.service.ServerService;
 import com.cym.service.SettingService;
 import com.cym.service.UpstreamService;
 import com.cym.utils.BaseController;
@@ -41,6 +44,8 @@ public class ConfController extends BaseController {
 	UpstreamService upstreamService;
 	@Autowired
 	SettingService settingService;
+	@Autowired
+	ServerService serverService;
 
 	@RequestMapping("")
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView) throws IOException, SQLException {
@@ -67,10 +72,16 @@ public class ConfController extends BaseController {
 			NgxConfig ngxConfig = NgxConfig.read(inputStream);
 
 			// 创建http
+			List<Http> httpList = sqlHelper.findAll(Http.class);
 			NgxBlock ngxBlockHttp = ngxConfig.findBlock("http");
-			NgxParam ngxParam = null;
+			for (Http http : httpList) {
+				NgxParam ngxParam = new NgxParam();
+				ngxParam.addValue(http.getName() + " " + http.getValue());
+				ngxBlockHttp.addEntry(ngxParam);
+			}
 
 			// 添加upstream
+			NgxParam ngxParam = null;
 			List<Upstream> upstreams = sqlHelper.findAll(Upstream.class);
 			for (Upstream upstream : upstreams) {
 				NgxBlock ngxBlockServer = new NgxBlock();
@@ -119,49 +130,53 @@ public class ConfController extends BaseController {
 					ngxBlockServer.addEntry(ngxParam);
 				}
 
+				List<Location> locationList = serverService.getLocationByServerId(server.getId());
+
 				// http转发配置
-				if (server.getType() == 0) {
-					// 添加location
-					NgxBlock ngxBlockLocation = new NgxBlock();
-					ngxBlockLocation.addValue("location");
-					ngxBlockLocation.addValue("/");
+				for (Location location : locationList) {
+					if (location.getType() == 0) {
+						// 添加location
+						NgxBlock ngxBlockLocation = new NgxBlock();
+						ngxBlockLocation.addValue("location");
+						ngxBlockLocation.addValue(location.getPath());
 
-					if (server.getProxyPassType() == 0) {
-						ngxParam = new NgxParam();
-						ngxParam.addValue("proxy_pass " + server.getProxyPass());
-						ngxBlockLocation.addEntry(ngxParam);
-					} else if (server.getProxyPassType() == 1) {
-						Upstream upstream = sqlHelper.findById(server.getUpstreamId(), Upstream.class);
+						if (location.getProxyPassType() == 0) {
+							ngxParam = new NgxParam();
+							ngxParam.addValue("proxy_pass " + location.getProxyPass());
+							ngxBlockLocation.addEntry(ngxParam);
+						} else if (location.getProxyPassType() == 1) {
+							Upstream upstream = sqlHelper.findById(location.getUpstreamId(), Upstream.class);
+
+							ngxParam = new NgxParam();
+							ngxParam.addValue("proxy_pass http://" + upstream.getName());
+							ngxBlockLocation.addEntry(ngxParam);
+						}
 
 						ngxParam = new NgxParam();
-						ngxParam.addValue("proxy_pass http://" + upstream.getName());
+						ngxParam.addValue("proxy_set_header Host $host");
 						ngxBlockLocation.addEntry(ngxParam);
+
+						ngxParam = new NgxParam();
+						ngxParam.addValue("proxy_set_header X-Real-IP $remote_addr");
+						ngxBlockLocation.addEntry(ngxParam);
+
+						ngxParam = new NgxParam();
+						ngxParam.addValue("proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for");
+						ngxBlockLocation.addEntry(ngxParam);
+
+						ngxBlockServer.addEntry(ngxBlockLocation);
+
+					} else if (location.getType() == 1) { // 静态html
+						ngxParam = new NgxParam();
+						ngxParam.addValue("root " + location.getRoot());
+						ngxBlockServer.addEntry(ngxParam);
+
+						ngxParam = new NgxParam();
+						ngxParam.addValue("index index.html index.htm");
+						ngxBlockServer.addEntry(ngxParam);
 					}
-
-					ngxParam = new NgxParam();
-					ngxParam.addValue("proxy_set_header Host $host");
-					ngxBlockLocation.addEntry(ngxParam);
-
-					ngxParam = new NgxParam();
-					ngxParam.addValue("proxy_set_header X-Real-IP $remote_addr");
-					ngxBlockLocation.addEntry(ngxParam);
-
-					ngxParam = new NgxParam();
-					ngxParam.addValue("proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for");
-					ngxBlockLocation.addEntry(ngxParam);
-
-					ngxBlockServer.addEntry(ngxBlockLocation);
-
-				} else if (server.getType() == 1) { // 静态html
-					ngxParam = new NgxParam();
-					ngxParam.addValue("root " + server.getRoot());
-					ngxBlockServer.addEntry(ngxParam);
-
-					ngxParam = new NgxParam();
-					ngxParam.addValue("index index.html index.htm");
-					ngxBlockServer.addEntry(ngxParam);
+					ngxBlockHttp.addEntry(ngxBlockServer);
 				}
-				ngxBlockHttp.addEntry(ngxBlockServer);
 
 				// https添加80端口重写
 				if (server.getSsl() == 1 && server.getRewrite() == 1) {
@@ -186,9 +201,7 @@ public class ConfController extends BaseController {
 			}
 
 			return new NgxDumper(ngxConfig).dump();
-		} catch (
-
-		Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -204,7 +217,7 @@ public class ConfController extends BaseController {
 			// 备份文件
 			FileUtil.copy(nginxPath, nginxPath + DateUtil.format(new Date(), "yyyy-MM-dd_HH-mm-ss") + ".bak", true);
 			FileUtil.writeString(nginxContent, nginxPath, Charset.defaultCharset());
-			return renderSuccess("替换成功");
+			return renderSuccess("替换成功，原文件已备份");
 		} catch (Exception e) {
 			e.printStackTrace();
 
@@ -249,12 +262,14 @@ public class ConfController extends BaseController {
 	@RequestMapping(value = "loadOrg")
 	@ResponseBody
 	public JsonResult loadOrg(String nginxPath) throws SQLException {
-		if(FileUtil.exist(nginxPath)) {
+		if (FileUtil.exist(nginxPath)) {
 			String orgStr = FileUtil.readString(nginxPath, Charset.defaultCharset());
 			return renderSuccess(orgStr);
+		} else {
+			return  renderError("文件不存在");
 		}
+
 		
-		return renderSuccess("");
 	}
 
 }
