@@ -22,18 +22,8 @@ public class ServerService {
 	@Autowired
 	SqlHelper sqlHelper;
 
-	public Page search(Page page, String word, Integer type) {
-		CriteriaAndWrapper criteriaAndWrapper = new CriteriaAndWrapper();
-
-		if (StrUtil.isNotEmpty(word)) {
-			criteriaAndWrapper.and(new CriteriaOrWrapper().like("serverName", word).like("proxyPass", word));
-		}
-
-		if (type != null) {
-			criteriaAndWrapper.eq("type", type);
-		}
-
-		page = sqlHelper.findPage(criteriaAndWrapper, new Sort("id", Direction.DESC), page, Server.class);
+	public Page search(Page page) {
+		page = sqlHelper.findPage(page, Server.class);
 
 		return page;
 	}
@@ -59,8 +49,12 @@ public class ServerService {
 				location.setServerId(server.getId());
 				location.setType(type[i]);
 				location.setPath(path[i]);
-				location.setValue(value[i]);
-				location.setUpstreamId(upstreamId[i]);
+
+				if (location.getType() == 0 || location.getType() == 1) {
+					location.setValue(value[i]);
+				} else if (location.getType() == 1) {
+					location.setUpstreamId(upstreamId[i]);
+				}
 
 				sqlHelper.insert(location);
 			}

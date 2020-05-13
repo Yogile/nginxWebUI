@@ -113,6 +113,11 @@ function addOver() {
 			over = false;
 		}
 	})
+	$("select[name='upstreamId']").each(function(){
+		if(!$(this).parent().is(":hidden") && $(this).val() == ''){
+			over = false;
+		}
+	})
 	if(!over){
 		layer.msg("填写不完整");
 		return;
