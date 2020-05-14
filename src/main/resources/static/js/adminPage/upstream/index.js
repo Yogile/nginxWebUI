@@ -1,6 +1,23 @@
+$(function(){
+	form.on('select(proxyType)', function(data) {
+		checkProxyType(data.value);
+	});
+})
+
+
 function search() {
 	$("input[name='curr']").val(1);
 	$("#searchForm").submit();
+}
+
+
+function checkProxyType(value){
+	if (value == 0) {
+		$(".proxyHttp").show();
+	} 
+	if (value == 1) {
+		$(".proxyHttp").hide();
+	} 
 	
 }
 
@@ -9,6 +26,9 @@ function add() {
 	$("#name").val(""); 
 	$("#tactics option:first").prop("checked",true); 
 	$("#itemList").html("");
+	$("#proxyType option:first").prop("selected", true);
+	
+	checkProxyType(0);
 	form.render();
 	showWindow("添加负载均衡");
 }
@@ -86,6 +106,8 @@ function edit(id) {
 				$("#id").val(ext.upstream.id);
 				$("#name").val(ext.upstream.name);
 				$("#tactics").val(ext.upstream.tactics);
+				$("#proxyType").val(ext.upstream.proxyType);
+				
 				
 				var html = ``;
 				for(let i=0;i<list.length;i++){
@@ -94,10 +116,10 @@ function edit(id) {
 					html += `<tr id='${uuid}'>
 									<td><input type="text" name="server" class="layui-input" value="${upstreamServer.server}"></td>
 									<td><input type="number" name="port" class="layui-input" value="${upstreamServer.port}"></td>
-									<td><input type="number" name="weight" class="layui-input" value="${upstreamServer.weight}"></td>
-									<td><input type="number" name="maxFails" class="layui-input" value="${upstreamServer.maxFails}"></td>
-									<td><input type="number" name="failTimeout" class="layui-input" value="${upstreamServer.failTimeout}"></td>
-									<td>
+									<td class="proxyHttp"><input type="number" name="weight" class="layui-input" value="${upstreamServer.weight}"></td>
+									<td class="proxyHttp"><input type="number" name="maxFails" class="layui-input" value="${upstreamServer.maxFails}"></td>
+									<td class="proxyHttp"><input type="number" name="failTimeout" class="layui-input" value="${upstreamServer.failTimeout}"></td>
+									<td class="proxyHttp">
 										<select name="status">
 											<option ${upstreamServer.status=='none'?'selected':''} value="none">无</option>
 											<option ${upstreamServer.status=='down'?'selected':''} value="down">停用(down)</option>
@@ -108,6 +130,8 @@ function edit(id) {
 							</tr>`
 				}
 				$("#itemList").html(html);
+				
+				checkProxyType(ext.upstream.proxyType);
 				
 				form.render();
 				showWindow("编辑负载均衡");
@@ -151,10 +175,10 @@ function addItem(){
 	var html = `<tr id='${uuid}'>
 						<td><input type="text" name="server" class="layui-input" value=""></td>
 						<td><input type="number" name="port" class="layui-input" value=""></td>
-						<td><input type="number" name="weight" class="layui-input" value="1"></td>
-						<td><input type="number" name="maxFails" class="layui-input" value="1"></td>
-						<td><input type="number" name="failTimeout" class="layui-input" value="10"></td>
-						<td>
+						<td class="proxyHttp"><input type="number" name="weight" class="layui-input" value="1"></td>
+						<td class="proxyHttp"><input type="number" name="maxFails" class="layui-input" value="1"></td>
+						<td class="proxyHttp"><input type="number" name="failTimeout" class="layui-input" value="10"></td>
+						<td class="proxyHttp">
 							<select name="status">
 								<option value="none">无</option>
 								<option value="down">停用(down)</option>
@@ -164,6 +188,8 @@ function addItem(){
 						<td><button type="button" class="layui-btn layui-btn-sm layui-btn-danger" onclick="delTr('${uuid}')">删除</button></td>
 				</tr>`
 	$("#itemList").append(html);
+	
+	checkProxyType($("#proxyType").val());
 	
 	form.render();
 }

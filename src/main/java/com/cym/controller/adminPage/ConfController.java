@@ -99,7 +99,7 @@ public class ConfController extends BaseController {
 				List<UpstreamServer> upstreamServers = upstreamService.getUpstreamServers(upstream.getId());
 				for (UpstreamServer upstreamServer : upstreamServers) {
 					ngxParam = new NgxParam();
-					ngxParam.addValue("server " + upstreamController.buildStr(upstreamServer));
+					ngxParam.addValue("server " + upstreamController.buildStr(upstreamServer,upstream.getProxyType()));
 					ngxBlockServer.addEntry(ngxParam);
 				}
 

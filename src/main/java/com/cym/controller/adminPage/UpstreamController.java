@@ -40,7 +40,7 @@ public class UpstreamController extends BaseController {
 			List<String> str = new ArrayList<String>();
 			List<UpstreamServer> servers = upstreamService.getUpstreamServers(upstream.getId());
 			for (UpstreamServer upstreamServer : servers) {
-				str.add(buildStr(upstreamServer));
+				str.add(buildStr(upstreamServer, upstream.getProxyType()));
 			}
 
 			upstreamExt.setServerStr(StrUtil.join("<br>", str));
@@ -54,17 +54,22 @@ public class UpstreamController extends BaseController {
 		return modelAndView;
 	}
 
-	public String buildStr(UpstreamServer upstreamServer) {
+	public String buildStr(UpstreamServer upstreamServer, Integer proxyType) {
 		String status = "";
 		if (!"none".equals(upstreamServer.getStatus())) {
 			status = upstreamServer.getStatus();
 		}
 
-		return upstreamServer.getServer() + ":" + upstreamServer.getPort() //
-				+ " weight=" + upstreamServer.getWeight() //
-				+ " fail_timeout=" + upstreamServer.getFailTimeout() + "s"//
-				+ " max_fails=" + upstreamServer.getMaxFails() //
-				+ " " + status;
+		if (proxyType == 0) {
+			return upstreamServer.getServer() + ":" + upstreamServer.getPort() //
+					+ " weight=" + upstreamServer.getWeight() //
+					+ " fail_timeout=" + upstreamServer.getFailTimeout() + "s"//
+					+ " max_fails=" + upstreamServer.getMaxFails() //
+					+ " " + status;
+		} else {
+			return upstreamServer.getServer() + ":" + upstreamServer.getPort();
+		}
+
 	}
 
 	@RequestMapping("addOver")
@@ -90,8 +95,7 @@ public class UpstreamController extends BaseController {
 	@RequestMapping("del")
 	@ResponseBody
 	public JsonResult del(String id) throws SQLException {
-		
-		
+
 		upstreamService.del(id);
 
 		return renderSuccess();
