@@ -1,6 +1,7 @@
 package com.cym.model;
 
 import cn.craccd.sqlHelper.bean.BaseModel;
+import cn.craccd.sqlHelper.config.InitValue;
 import cn.craccd.sqlHelper.config.Table;
 
 @Table
@@ -8,6 +9,16 @@ public class Upstream extends BaseModel {
 	String name;
 	String tactics; // 负载策略
 	
+	// 代理类型
+	@InitValue("0")
+	Integer proxyType; //  0 http 1 tcp
+	
+	public Integer getProxyType() {
+		return proxyType;
+	}
+	public void setProxyType(Integer proxyType) {
+		this.proxyType = proxyType;
+	}
 	
 	public String getTactics() {
 		return tactics;

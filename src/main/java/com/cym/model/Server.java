@@ -12,7 +12,16 @@ public class Server extends BaseModel {
 	Integer ssl; // 0 否 1是
 	String pem;
 	String key;
+	// 代理类型
+	@InitValue("0")
+	Integer proxyType; //  0 http 1 tcp
 	
+	public Integer getProxyType() {
+		return proxyType;
+	}
+	public void setProxyType(Integer proxyType) {
+		this.proxyType = proxyType;
+	}
 	public Integer getSsl() {
 		return ssl;
 	}

@@ -1,5 +1,6 @@
 package com.cym.controller.adminPage;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
@@ -35,6 +36,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.system.SystemUtil;
 
 @Controller
 @RequestMapping("/adminPage/conf")
@@ -88,12 +90,12 @@ public class ConfController extends BaseController {
 				NgxBlock ngxBlockServer = new NgxBlock();
 				ngxBlockServer.addValue("upstream " + upstream.getName());
 
-				if(StrUtil.isNotEmpty(upstream.getTactics())) {
+				if (StrUtil.isNotEmpty(upstream.getTactics())) {
 					ngxParam = new NgxParam();
 					ngxParam.addValue(upstream.getTactics());
 					ngxBlockServer.addEntry(ngxParam);
 				}
-				
+
 				List<UpstreamServer> upstreamServers = upstreamService.getUpstreamServers(upstream.getId());
 				for (UpstreamServer upstreamServer : upstreamServers) {
 					ngxParam = new NgxParam();
@@ -153,7 +155,7 @@ public class ConfController extends BaseController {
 							ngxBlockLocation.addEntry(ngxParam);
 						} else if (location.getType() == 2) {
 							Upstream upstream = sqlHelper.findById(location.getUpstreamId(), Upstream.class);
-							if(upstream != null) {
+							if (upstream != null) {
 								ngxParam = new NgxParam();
 								ngxParam.addValue("proxy_pass http://" + upstream.getName());
 								ngxBlockLocation.addEntry(ngxParam);
@@ -178,8 +180,8 @@ public class ConfController extends BaseController {
 						NgxBlock ngxBlockLocation = new NgxBlock();
 						ngxBlockLocation.addValue("location");
 						ngxBlockLocation.addValue(location.getPath());
-						
-						if(location.getPath().equals("/")) {
+
+						if (location.getPath().equals("/")) {
 							ngxParam = new NgxParam();
 							ngxParam.addValue("root " + location.getValue());
 							ngxBlockLocation.addEntry(ngxParam);
@@ -188,16 +190,16 @@ public class ConfController extends BaseController {
 							ngxParam.addValue("alias " + location.getValue());
 							ngxBlockLocation.addEntry(ngxParam);
 						}
-						
+
 						ngxParam = new NgxParam();
 						ngxParam.addValue("index index.html");
 						ngxBlockLocation.addEntry(ngxParam);
-						
+
 						ngxBlockServer.addEntry(ngxBlockLocation);
 					}
 				}
 				ngxBlockHttp.addEntry(ngxBlockServer);
-				
+
 				// https添加80端口重写
 				if (server.getSsl() == 1 && server.getRewrite() == 1) {
 					ngxBlockServer = new NgxBlock();
@@ -250,8 +252,21 @@ public class ConfController extends BaseController {
 	@ResponseBody
 	public JsonResult check(String nginxPath) throws SQLException {
 		settingService.set("nginxPath", nginxPath);
+
 		try {
-			String rs = RuntimeUtil.execForStr("nginx -t");
+			String rs = null;
+			if (SystemUtil.get(SystemUtil.OS_NAME).toLowerCase().contains("win")) {
+				File file = new File(nginxPath);
+				if (file.exists() && file.getParentFile().getParentFile().exists()) {
+					File nginxDir = file.getParentFile().getParentFile();
+					rs = RuntimeUtil.execForStr("cmd /c powershell cd " + nginxDir.getPath() + "; ./nginx.exe -t;");
+				} else {
+					return renderError("nginx目录不存在");
+				}
+			} else {
+				rs = RuntimeUtil.execForStr("nginx -t");
+			}
+
 			if (rs.contains("successful")) {
 				return renderSuccess("效验成功");
 			} else {
@@ -268,7 +283,19 @@ public class ConfController extends BaseController {
 	public JsonResult reboot(String nginxPath) throws SQLException {
 		settingService.set("nginxPath", nginxPath);
 		try {
-			String rs = RuntimeUtil.execForStr("nginx -s reload");
+			String rs = null;
+			if (SystemUtil.get(SystemUtil.OS_NAME).toLowerCase().contains("win")) {
+				File file = new File(nginxPath);
+				if (file.exists() && file.getParentFile().getParentFile().exists()) {
+					File nginxDir = file.getParentFile().getParentFile();
+					rs = RuntimeUtil.execForStr("cmd /c powershell cd " + nginxDir.getPath() + "; ./nginx.exe -s reload;");
+				} else {
+					return renderError("nginx目录不存在");
+				}
+			} else {
+				rs = RuntimeUtil.execForStr("nginx -s reload");
+			}
+
 			if (rs.trim().equals("")) {
 				return renderSuccess("重启成功");
 			} else {
@@ -280,11 +307,12 @@ public class ConfController extends BaseController {
 		}
 	}
 
+
 	@RequestMapping(value = "loadOrg")
 	@ResponseBody
 	public JsonResult loadOrg(String nginxPath) throws SQLException {
 		settingService.set("nginxPath", nginxPath);
-		
+
 		if (FileUtil.exist(nginxPath)) {
 			String orgStr = FileUtil.readString(nginxPath, Charset.defaultCharset());
 			return renderSuccess(orgStr);
