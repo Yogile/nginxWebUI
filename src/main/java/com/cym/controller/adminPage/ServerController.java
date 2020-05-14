@@ -38,7 +38,13 @@ public class ServerController extends BaseController {
 		for (Server server : page.getRecords(Server.class)) {
 			ServerExt serverExt = new ServerExt();
 			serverExt.setServer(server);
-			serverExt.setLocationStr(buildLocationStr(server.getId()));
+			if (server.getProxyType() == 0) {
+				serverExt.setLocationStr(buildLocationStr(server.getId()));
+			} else {
+				Upstream upstream = sqlHelper.findById(server.getProxyUpstreamId(), Upstream.class);
+				serverExt.setLocationStr("负载均衡: " + (upstream != null ? upstream.getName() : ""));
+			}
+
 			exts.add(serverExt);
 		}
 		page.setRecords(exts);
@@ -56,15 +62,15 @@ public class ServerController extends BaseController {
 		List<String> str = new ArrayList<String>();
 		List<Location> locations = serverService.getLocationByServerId(id);
 		for (Location location : locations) {
-			if(location.getType() == 0 || location.getType() ==1) {
-				str.add("<span class='path'>" + location.getPath() +  "</span><span class='value'>" + location.getValue() + "</span>");
-			}else if(location.getType()==2) {
+			if (location.getType() == 0 || location.getType() == 1) {
+				str.add("<span class='path'>" + location.getPath() + "</span><span class='value'>" + location.getValue() + "</span>");
+			} else if (location.getType() == 2) {
 				Upstream upstream = sqlHelper.findById(location.getUpstreamId(), Upstream.class);
-				if(upstream != null) {
+				if (upstream != null) {
 					str.add("<span class='path'>" + location.getPath() + "</span><span class='value'>http://" + upstream.getName() + "</span>");
 				}
 			}
-			
+
 		}
 		return StrUtil.join("<br>", str);
 	}
@@ -73,7 +79,11 @@ public class ServerController extends BaseController {
 	@ResponseBody
 	public JsonResult addOver(Server server, Integer type[], String[] path, String[] value, String[] upstreamId) throws SQLException {
 
-		serverService.addOver(server, type,  path,  value,  upstreamId);
+		if (server.getProxyType() == 0) {
+			serverService.addOver(server, type, path, value, upstreamId);
+		} else {
+			serverService.addOverTcp(server);
+		}
 
 		return renderSuccess();
 	}

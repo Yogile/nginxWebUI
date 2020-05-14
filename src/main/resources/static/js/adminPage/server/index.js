@@ -5,6 +5,9 @@ $(function() {
 	form.on('select(ssl)', function(data) {
 		checkSsl(data.value);
 	});
+	form.on('select(proxyType)', function(data) {
+		checkProxyType(data.value);
+	});
 	
 	layui.use('upload', function() {
 		var upload = layui.upload;
@@ -54,7 +57,6 @@ function checkType(type,id){
 	} 
 }
 
-
 function checkSsl(value){
 	if (value == 0) {
 		$("#pemDiv").hide();
@@ -62,6 +64,19 @@ function checkSsl(value){
 	if (value == 1) {
 		$("#pemDiv").show();
 	} 
+}
+
+function checkProxyType(value){
+	if (value == 0) {
+		$(".proxyHttp").show();
+		$(".proxyTcp").hide();
+		
+	} 
+	if (value == 1) {
+		$(".proxyHttp").hide();
+		$(".proxyTcp").show();
+	} 
+	
 }
 
 function search() {
@@ -74,6 +89,7 @@ function add() {
 	$("#serverName").val("");
 	$("#ssl option:first").prop("selected", true);
 	$("#rewrite option:first").prop("selected", true);
+	$("#proxyUpstreamId option:first").prop("selected", true);
 	
 	$("#pem").val("");
 	$("#pemPath").html("");
@@ -82,6 +98,7 @@ function add() {
 	$("#itemList").html("");
 	
 	checkSsl(0);
+	checkProxyType(0);
 	
 	form.render();
 	showWindow("添加反向代理");
@@ -115,6 +132,11 @@ function addOver() {
 	})
 	$("select[name='upstreamId']").each(function(){
 		if(!$(this).parent().is(":hidden") && ($(this).val() == '' || $(this).val() == null)){
+			over = false;
+		}
+	})
+	$("select[name='proxyUpstreamId']").each(function(){
+		if(($(this).val() == '' || $(this).val() == null)){
 			over = false;
 		}
 	})
@@ -162,6 +184,8 @@ function edit(id) {
 				$("#key").val(server.key);
 				$("#pemPath").html(server.pem);
 				$("#keyPath").html(server.key);
+				$("#proxyType").val(server.proxyType);
+				$("#proxyUpstreamId").val(server.proxyUpstreamId);
 				
 				if(server.rewrite != null){
 					$("#rewrite").val(server.rewrite);
@@ -170,7 +194,7 @@ function edit(id) {
 				}
 				
 				checkSsl(server.ssl);
-				
+				checkProxyType(server.proxyType);
 				var list = data.obj.locationList;
 				
 				var upstreamSelect = $("#upstreamSelect").html();

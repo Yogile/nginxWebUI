@@ -46,22 +46,23 @@
 				<table class="layui-table">
 					<thead>
 						<tr>
+							<th>转发类型</th>
 							<th>监听端口</th>
 							<th>监听域名</th>
-							
 							<th>开启ssl</th>
-							
 							<th>http自动跳转https</th>
 							<th>ssl文件路径</th>
-							
 							<th>代理目标</th>
-							
 							<th>操作</th>
 						</tr>
 					</thead>
 					<tbody>
 						<#list page.records as ext>
 						<tr>
+							<td>
+								<#if ext.server.proxyType==0>http</#if>
+								<#if ext.server.proxyType==1>TCP</#if>
+							</td>
 							<td>${ext.server.listen}</td>
 							<td>
 								<#if ext.server.serverName==''>全部</#if>
@@ -105,7 +106,32 @@
 		<div class="layui-form" id="windowDiv" style="padding: 15px; display: none">
 			<form id="addForm">
 				<input type="hidden" id="id" name="id">
-
+				
+				<div class="layui-form-item" style="padding: 0 15px;">
+					<label class="layui-form-label">转发类型</label>
+					<div class="layui-input-inline">
+						<select name="proxyType" id="proxyType" lay-filter="proxyType">
+							<option value="0">http</option>
+							<option value="1">TCP</option>
+						</select>
+					</div>
+					
+					<div class="proxyTcp">
+						<label class="layui-form-label">指向负载均衡</label>
+						<div class="layui-input-inline">
+							<select name="proxyUpstreamId">
+								<#list upstreamList as upstream>
+								<option value="${upstream.id}">${upstream.name}</option>
+								</#list>
+								
+								<#if upstreamSize == 0>
+								<option value="">--无可用负债均衡--</option>
+								</#if>
+							</select>
+						</div>
+					</div>
+				</div>
+							
 				<div class="layui-container" >
 					<div class="layui-row">
 						<div class="layui-col-md6">
@@ -115,26 +141,28 @@
 									<input type="number" name="listen" id="listen" class="layui-input" placeholder="例: 80">
 								</div>
 							</div>
-
-							<div class="layui-form-item">
-								<label class="layui-form-label">监听域名</label>
-								<div class="layui-input-block">
-									<input type="text" name="serverName" id="serverName" class="layui-input" placeholder="例: www.baidu.com 不填为监听所有域名">
+							
+							<div class="proxyHttp">
+								<div class="layui-form-item">
+									<label class="layui-form-label">监听域名</label>
+									<div class="layui-input-block">
+										<input type="text" name="serverName" id="serverName" class="layui-input" placeholder="例: www.baidu.com 不填为监听所有域名">
+									</div>
 								</div>
-							</div>
-
-							<div class="layui-form-item">
-								<label class="layui-form-label">开启ssl</label>
-								<div class="layui-input-inline">
-									<select name="ssl" id="ssl" lay-filter="ssl">
-										<option value="0">否</option>
-										<option value="1">是</option>
-									</select>
+	
+								<div class="layui-form-item">
+									<label class="layui-form-label">开启ssl</label>
+									<div class="layui-input-inline">
+										<select name="ssl" id="ssl" lay-filter="ssl">
+											<option value="0">否</option>
+											<option value="1">是</option>
+										</select>
+									</div>
 								</div>
 							</div>
 						</div>
-						<div class="layui-col-md6">
-							<div id="pemDiv" style="display: none;">
+						<div class="layui-col-md6 proxyHttp">
+							<div id="pemDiv"  style="display: none;">
 								<div class="layui-form-item">
 									<label class="layui-form-label">pem文件路径</label>
 									<div class="layui-input-block">
@@ -167,11 +195,11 @@
 				</div>
 
 
-				<div class="layui-form-item">
+				<div class="layui-form-item proxyHttp">
 					<button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="addItem()">添加代理目标</button>
 				</div>
 
-				<div class="layui-form-item">
+				<div class="layui-form-item proxyHttp">
 					<table class="layui-table">
 						<thead>
 							<tr>
