@@ -225,11 +225,14 @@ public class ConfController extends BaseController {
 
 			// 创建stream
 			List<Stream> streamList = sqlHelper.findAll(Stream.class);
+			boolean hasStream = false;
 			NgxBlock ngxBlockStream = ngxConfig.findBlock("stream");
 			for (Stream stream : streamList) {
 				ngxParam = new NgxParam();
 				ngxParam.addValue(stream.getName() + " " + stream.getValue());
 				ngxBlockStream.addEntry(ngxParam);
+				
+				hasStream = true;
 			}
 
 			// 添加upstream
@@ -252,6 +255,8 @@ public class ConfController extends BaseController {
 				}
 
 				ngxBlockStream.addEntry(ngxBlockServer);
+				
+				hasStream = true;
 			}
 
 			// 添加server
@@ -284,6 +289,12 @@ public class ConfController extends BaseController {
 				ngxBlockServer.addEntry(ngxParam);
 				
 				ngxBlockStream.addEntry(ngxBlockServer);
+				
+				hasStream = true;
+			}
+			
+			if(!hasStream) {
+				ngxConfig.remove(ngxBlockStream);
 			}
 
 			return new NgxDumper(ngxConfig).dump();
