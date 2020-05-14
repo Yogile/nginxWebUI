@@ -89,6 +89,7 @@ function add() {
 	$("#serverName").val("");
 	$("#ssl option:first").prop("selected", true);
 	$("#rewrite option:first").prop("selected", true);
+	$("#proxyType option:first").prop("selected", true);
 	$("#proxyUpstreamId option:first").prop("selected", true);
 	
 	$("#pem").val("");

@@ -120,11 +120,11 @@
 						<label class="layui-form-label">指向负载均衡</label>
 						<div class="layui-input-inline">
 							<select name="proxyUpstreamId">
-								<#list upstreamList as upstream>
+								<#list upstreamTcpList as upstream>
 								<option value="${upstream.id}">${upstream.name}</option>
 								</#list>
 								
-								<#if upstreamSize == 0>
+								<#if upstreamTcpSize == 0>
 								<option value="">--无可用负债均衡--</option>
 								</#if>
 							</select>

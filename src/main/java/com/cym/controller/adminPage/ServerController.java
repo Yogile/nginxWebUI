@@ -16,8 +16,8 @@ import com.cym.ext.ServerExt;
 import com.cym.model.Location;
 import com.cym.model.Server;
 import com.cym.model.Upstream;
-import com.cym.model.UpstreamServer;
 import com.cym.service.ServerService;
+import com.cym.service.UpstreamService;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
 
@@ -29,7 +29,8 @@ import cn.hutool.core.util.StrUtil;
 public class ServerController extends BaseController {
 	@Autowired
 	ServerService serverService;
-
+	@Autowired
+	UpstreamService upstreamService;
 	@RequestMapping("")
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView, Page page) {
 		page = serverService.search(page);
@@ -51,9 +52,15 @@ public class ServerController extends BaseController {
 
 		modelAndView.addObject("page", page);
 
-		List<Upstream> upstreamList = sqlHelper.findAll(Upstream.class);
+		List<Upstream> upstreamList = upstreamService.getListByProxyType(0);
 		modelAndView.addObject("upstreamList", upstreamList);
 		modelAndView.addObject("upstreamSize", upstreamList.size());
+		
+		List<Upstream> upstreamTcpList = upstreamService.getListByProxyType(1);
+		modelAndView.addObject("upstreamTcpList", upstreamTcpList);
+		modelAndView.addObject("upstreamTcpSize", upstreamTcpList.size());
+		
+		
 		modelAndView.setViewName("/adminPage/server/index");
 		return modelAndView;
 	}
