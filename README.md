@@ -38,19 +38,23 @@ nohup java -jar nginxWebUI-1.0.0.jar --server.port=8000 > nginxWebUI.log &
 
 ![登录](https://images.gitee.com/uploads/images/2020/0509/105416_831df2bb_1100382.jpeg "QQ截图20200509105343.jpg")
 
-![管理员管理](https://images.gitee.com/uploads/images/2020/0509/105511_96cfe767_1100382.jpeg "QQ截图20200509105504.jpg")
+![管理员管理](https://images.gitee.com/uploads/images/2020/0514/090146_596746a4_1100382.jpeg "QQ截图20200514090059.jpg")
 
 进入系统后,可在管理员管理里面添加修改管理员账号
 
-![输入图片说明](https://images.gitee.com/uploads/images/2020/0509/111159_e73f8410_1100382.jpeg "QQ截图20200509105551_看图王.jpg")
+![基础配置](https://images.gitee.com/uploads/images/2020/0514/090302_ce1086d4_1100382.jpeg "QQ截图20200514090002.jpg")
+
+在基础配置中可以配置nginx的http项目基础配置,默认会给出几个常用配置,其他需要的配置可自由增删改查
+
+![反向代理](https://images.gitee.com/uploads/images/2020/0514/090331_a91e02bc_1100382.jpeg "QQ截图20200514090019.jpg")
 
 在反向代理中可配置nginx的反向代理即server项功能,可开启ssl功能,直接从网页上上传pem文件和key文件,直接放到系统用户文件夹下,还可以直接开启http转跳https功能,用户直接访问http会转跳到https
 
-![负载均衡](https://images.gitee.com/uploads/images/2020/0509/105713_e004761d_1100382.jpeg "QQ截图20200509105705.jpg")
+![负载均衡](https://images.gitee.com/uploads/images/2020/0514/090358_5328b7d6_1100382.jpeg "QQ截图20200514090045.jpg")
 
 在负载均衡中可配置nginx的负载均衡即upstream项功能,在反向代理中可选择代理目标为负载均衡项
 
-![生成conf](https://images.gitee.com/uploads/images/2020/0509/112059_b6305c53_1100382.jpeg "QQ截图20200509105828_看图王.jpg")
+![生成conf](https://images.gitee.com/uploads/images/2020/0514/090412_c3d57fa8_1100382.jpeg "QQ截图20200514090053.jpg")
 
 最终生成conf文件,可在此进行进一步手动修改,确认修改无误后,可覆盖本机conf文件,并进行效验和重启
 
