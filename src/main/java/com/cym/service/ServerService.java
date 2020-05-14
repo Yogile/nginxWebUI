@@ -15,6 +15,7 @@ import cn.craccd.sqlHelper.bean.Sort.Direction;
 import cn.craccd.sqlHelper.utils.CriteriaAndWrapper;
 import cn.craccd.sqlHelper.utils.CriteriaOrWrapper;
 import cn.craccd.sqlHelper.utils.SqlHelper;
+import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 
 @Service
@@ -59,6 +60,24 @@ public class ServerService {
 				sqlHelper.insert(location);
 			}
 		}
+	}
+
+	@Transactional
+	public void addOverTcp(Server server) {
+		server.setSsl(null);
+		server.setPem(null);
+		server.setKey(null);
+		server.setRewrite(null);
+		server.setServerName(null);
+		
+		if (StrUtil.isEmpty(server.getId())) {
+			sqlHelper.insert(server);
+		}else {
+			sqlHelper.updateAllColumnById(server);
+		}
+		
+		sqlHelper.deleteByQuery(new CriteriaAndWrapper().eq("serverId", server.getId()), Location.class);
+
 	}
 
 }

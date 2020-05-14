@@ -15,7 +15,15 @@ public class Server extends BaseModel {
 	// 代理类型
 	@InitValue("0")
 	Integer proxyType; //  0 http 1 tcp
+	String proxyUpstreamId;
 	
+	
+	public String getProxyUpstreamId() {
+		return proxyUpstreamId;
+	}
+	public void setProxyUpstreamId(String proxyUpstreamId) {
+		this.proxyUpstreamId = proxyUpstreamId;
+	}
 	public Integer getProxyType() {
 		return proxyType;
 	}
