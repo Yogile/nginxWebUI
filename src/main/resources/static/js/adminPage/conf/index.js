@@ -65,7 +65,7 @@ function check(){
 		alert("nginx配置文件路径为空");
 		return;
 	}
-
+	layer.load();
 	$.ajax({
 		type : 'POST',
 		url : ctx + '/adminPage/conf/check',
@@ -74,6 +74,7 @@ function check(){
 		},
 		dataType : 'json',
 		success : function(data) {
+			layer.closeAll();
 			if (data.success) {
 				layer.msg(data.obj);
 			} else {
@@ -81,6 +82,7 @@ function check(){
 			}
 		},
 		error : function() {
+			layer.closeAll();
 			alert("出错了,请联系技术人员!");
 		}
 	});
@@ -88,15 +90,16 @@ function check(){
 
 
 function reboot(){
-	
+	layer.load();
 	$.ajax({
 		type : 'POST',
 		url : ctx + '/adminPage/conf/reboot',
 		data : {
-			
+			nginxPath : $("#nginxPath").val()
 		},
 		dataType : 'json',
 		success : function(data) {
+			layer.closeAll();
 			if (data.success) {
 				layer.msg(data.obj);
 			} else {
@@ -104,6 +107,7 @@ function reboot(){
 			}
 		},
 		error : function() {
+			layer.closeAll();
 			alert("出错了,请联系技术人员!");
 		}
 	});
