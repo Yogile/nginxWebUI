@@ -8,7 +8,7 @@ function add() {
 	$("#name").val(""); 
 	$("#value").val(""); 
 	
-	showWindow("添加http转发配置");
+	showWindow("添加TCP转发配置");
 }
 
 
@@ -31,9 +31,10 @@ function addOver() {
 		return;
 	}
 	
+	
 	$.ajax({
 		type : 'POST',
-		url : ctx + '/adminPage/http/addOver',
+		url : ctx + '/adminPage/stream/addOver',
 		data : $('#addForm').serialize(),
 		dataType : 'json',
 		success : function(data) {
@@ -54,7 +55,7 @@ function edit(id) {
 	
 	$.ajax({
 		type : 'GET',
-		url : ctx + '/adminPage/http/detail',
+		url : ctx + '/adminPage/stream/detail',
 		dataType : 'json',
 		data : {
 			id : id
@@ -67,7 +68,7 @@ function edit(id) {
 				$("#name").val(http.name);
 				
 				form.render();
-				showWindow("编辑http转发配置");
+				showWindow("编辑TCP转发配置");
 			}else{
 				layer.msg(data.msg);
 			}
@@ -82,7 +83,7 @@ function del(id){
 	if(confirm("确认删除?")){
 		$.ajax({
 			type : 'POST',
-			url : ctx + '/adminPage/http/del',
+			url : ctx + '/adminPage/stream/del',
 			data : {
 				id : id
 			},

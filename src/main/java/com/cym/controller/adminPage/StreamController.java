@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cym.model.Http;
-import com.cym.service.HttpService;
+import com.cym.model.Stream;
+import com.cym.service.StreamService;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
 
@@ -21,27 +22,27 @@ import cn.craccd.sqlHelper.bean.Sort;
 import cn.craccd.sqlHelper.bean.Sort.Direction;
 
 @Controller
-@RequestMapping("/adminPage/http")
-public class HttpController extends BaseController {
+@RequestMapping("/adminPage/stream")
+public class StreamController extends BaseController {
 	@Autowired
-	HttpService httpService;
+	StreamService streamService;
 	
 	@RequestMapping("")
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView) {
-		List<Http> httpList = sqlHelper.findAll(new Sort("name", Direction.ASC), Http.class);
+		List<Stream> streamList = sqlHelper.findAll(new Sort("name", Direction.ASC), Stream.class);
 
-		modelAndView.addObject("httpList", httpList);
-		modelAndView.setViewName("/adminPage/http/index");
+		modelAndView.addObject("streamList", streamList);
+		modelAndView.setViewName("/adminPage/stream/index");
 		return modelAndView;
 	}
 
 	@RequestMapping("addOver")
 	@ResponseBody
-	public JsonResult addOver(Http http) throws SQLException {
-		if(httpService.hasName(http.getName())) {
+	public JsonResult addOver(Stream stream) throws SQLException {
+		if(streamService.hasName(stream.getName())) {
 			return renderError("名称已存在");
 		}
-		sqlHelper.insertOrUpdate(http);
+		sqlHelper.insertOrUpdate(stream);
 
 		return renderSuccess();
 	}
@@ -49,13 +50,13 @@ public class HttpController extends BaseController {
 	@RequestMapping("detail")
 	@ResponseBody
 	public JsonResult detail(String id) throws SQLException {
-		return renderSuccess(sqlHelper.findById(id, Http.class));
+		return renderSuccess(sqlHelper.findById(id, Stream.class));
 	}
 
 	@RequestMapping("del")
 	@ResponseBody
 	public JsonResult del(String id) throws SQLException {
-		sqlHelper.deleteById(id, Http.class);
+		sqlHelper.deleteById(id, Stream.class);
 		
 		return renderSuccess();
 	}

@@ -14,15 +14,14 @@
 			<!-- 内容主体区域 -->
 			<div style="padding: 15px">
 				<fieldset class="layui-elem-field layui-field-title">
-					<legend>http转发配置</legend>
+					<legend>TCP转发配置</legend>
 				</fieldset>
 
-				<form action="${ctx}/adminPage/http" id="searchForm" method="post">
+				<form action="${ctx}/adminPage/stream" id="searchForm" method="post">
 					<div class="layui-form">
 						<div class="layui-inline">
-							<button type="button" class="layui-btn layui-btn-normal" onclick="add()">添加http转发配置</button>
+							<button type="button" class="layui-btn layui-btn-normal" onclick="add()">添加TCP转发配置</button> 
 						</div>
-
 					</div>
 				</form>
 
@@ -35,13 +34,13 @@
 						</tr>
 					</thead>
 					<tbody>
-						<#list httpList as http>
+						<#list streamList as stream>
 						<tr>
-							<td>${http.name}</td>
-							<td>${http.value}</td>
+							<td>${stream.name}</td>
+							<td>${stream.value}</td>
 							<td>
-								<button class="layui-btn layui-btn-sm" onclick="edit('${http.id}')">编辑</button>
-								<button class="layui-btn layui-btn-danger layui-btn-sm" onclick="del('${http.id}')">删除</button>
+								<button class="layui-btn layui-btn-sm" onclick="edit('${stream.id}')">编辑</button>
+								<button class="layui-btn layui-btn-danger layui-btn-sm" onclick="del('${stream.id}')">删除</button>
 							</td>
 						</tr>
 						</#list>
@@ -81,7 +80,7 @@
 	</div>
 
 	<#include '/adminPage/script.html'/>
-	<script src="${ctx}/js/adminPage/http/index.js?v=${jsrandom}" type="text/javascript"></script>
+	<script src="${ctx}/js/adminPage/stream/index.js?v=${jsrandom}" type="text/javascript"></script>
 </body>
 
 
