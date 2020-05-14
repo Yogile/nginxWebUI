@@ -137,7 +137,7 @@ function addOver() {
 		}
 	})
 	$("select[name='proxyUpstreamId']").each(function(){
-		if(($(this).val() == '' || $(this).val() == null)){
+		if($("#proxyType").val() == 1 &&  ($(this).val() == '' || $(this).val() == null)){
 			over = false;
 		}
 	})
