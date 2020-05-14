@@ -1,32 +1,32 @@
-$(function(){
+$(function() {
 	loadOrg();
-	
+
 	$("#nginxContent").setTextareaCount();
-	
+
 	$("#org").setTextareaCount();
 })
 
-function replace(){
-	if($("#nginxPath").val() == ''){
+function replace() {
+	if ($("#nginxPath").val() == '') {
 		alert("nginx配置文件路径为空");
 		return;
 	}
-	
+
 	$.ajax({
 		type : 'POST',
 		url : ctx + '/adminPage/conf/replace',
 		data : {
 			nginxPath : $("#nginxPath").val(),
 			nginxContent : $("#nginxContent").val()
-			
+
 		},
 		dataType : 'json',
 		success : function(data) {
 			if (data.success) {
 				layer.msg(data.obj);
-				
+
 				loadOrg();
-				
+
 			} else {
 				layer.alert(data.msg);
 			}
@@ -37,8 +37,8 @@ function replace(){
 	});
 }
 
-function loadOrg(){
-	
+function loadOrg() {
+
 	$.ajax({
 		type : 'POST',
 		url : ctx + '/adminPage/conf/loadOrg',
@@ -60,8 +60,8 @@ function loadOrg(){
 	});
 }
 
-function check(){
-	if($("#nginxPath").val() == ''){
+function check() {
+	if ($("#nginxPath").val() == '') {
 		alert("nginx配置文件路径为空");
 		return;
 	}
@@ -78,7 +78,11 @@ function check(){
 			if (data.success) {
 				layer.msg(data.obj);
 			} else {
-				layer.alert(data.msg);
+				layer.open({
+					  type: 0, 
+					  area : [ '800px', '400px' ],
+					  content: data.msg
+				});
 			}
 		},
 		error : function() {
@@ -88,8 +92,7 @@ function check(){
 	});
 }
 
-
-function reboot(){
+function reboot() {
 	layer.load();
 	$.ajax({
 		type : 'POST',
@@ -103,7 +106,11 @@ function reboot(){
 			if (data.success) {
 				layer.msg(data.obj);
 			} else {
-				layer.alert(data.msg);
+				layer.open({
+					  type: 0, 
+					  area : [ '800px', '400px' ],
+					  content: data.msg
+				});
 			}
 		},
 		error : function() {
@@ -111,5 +118,5 @@ function reboot(){
 			alert("出错了,请联系技术人员!");
 		}
 	});
-	
+
 }
