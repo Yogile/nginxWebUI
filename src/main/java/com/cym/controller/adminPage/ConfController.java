@@ -345,11 +345,11 @@ public class ConfController extends BaseController {
 			if (rs.contains("successful")) {
 				return renderSuccess("效验成功");
 			} else {
-				return renderError("效验失败:" + rs);
+				return renderError("效验失败:<br>" + rs.replace("\n", "<br>"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return renderError("效验失败:" + e.getMessage());
+			return renderError("效验失败:<br>" + e.getMessage().replace("\n", "<br>"));
 		}
 	}
 
@@ -374,11 +374,11 @@ public class ConfController extends BaseController {
 			if (rs.trim().equals("")) {
 				return renderSuccess("重启成功");
 			} else {
-				return renderError("重启失败:" + rs);
+				return renderError("重启失败:<br>" + rs.replace("\n", "<br>"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return renderError("重启失败:" + e.getMessage());
+			return renderError("重启失败:<br>" + e.getMessage().replace("\n", "<br>"));
 		}
 	}
 
