@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.cym.model.Http;
 import com.cym.model.Location;
 import com.cym.model.Server;
+import com.cym.model.Stream;
 import com.cym.model.Upstream;
 import com.cym.model.UpstreamServer;
 import com.cym.service.ServerService;
@@ -85,7 +86,7 @@ public class ConfController extends BaseController {
 
 			// 添加upstream
 			NgxParam ngxParam = null;
-			List<Upstream> upstreams = sqlHelper.findAll(Upstream.class);
+			List<Upstream> upstreams = upstreamService.getListByProxyType(0);
 			for (Upstream upstream : upstreams) {
 				NgxBlock ngxBlockServer = new NgxBlock();
 				ngxBlockServer.addValue("upstream " + upstream.getName());
@@ -99,7 +100,7 @@ public class ConfController extends BaseController {
 				List<UpstreamServer> upstreamServers = upstreamService.getUpstreamServers(upstream.getId());
 				for (UpstreamServer upstreamServer : upstreamServers) {
 					ngxParam = new NgxParam();
-					ngxParam.addValue("server " + upstreamController.buildStr(upstreamServer,upstream.getProxyType()));
+					ngxParam.addValue("server " + upstreamController.buildStr(upstreamServer, upstream.getProxyType()));
 					ngxBlockServer.addEntry(ngxParam);
 				}
 
@@ -107,7 +108,7 @@ public class ConfController extends BaseController {
 			}
 
 			// 添加server
-			List<Server> servers = sqlHelper.findAll(Server.class);
+			List<Server> servers = serverService.getListByProxyType(0);
 			for (Server server : servers) {
 				NgxBlock ngxBlockServer = new NgxBlock();
 				ngxBlockServer.addValue("server");
@@ -222,6 +223,69 @@ public class ConfController extends BaseController {
 
 			}
 
+			// 创建stream
+			List<Stream> streamList = sqlHelper.findAll(Stream.class);
+			NgxBlock ngxBlockStream = ngxConfig.findBlock("stream");
+			for (Stream stream : streamList) {
+				ngxParam = new NgxParam();
+				ngxParam.addValue(stream.getName() + " " + stream.getValue());
+				ngxBlockStream.addEntry(ngxParam);
+			}
+
+			// 添加upstream
+			upstreams = upstreamService.getListByProxyType(1);
+			for (Upstream upstream : upstreams) {
+				NgxBlock ngxBlockServer = new NgxBlock();
+				ngxBlockServer.addValue("upstream " + upstream.getName());
+
+				if (StrUtil.isNotEmpty(upstream.getTactics())) {
+					ngxParam = new NgxParam();
+					ngxParam.addValue(upstream.getTactics());
+					ngxBlockServer.addEntry(ngxParam);
+				}
+
+				List<UpstreamServer> upstreamServers = upstreamService.getUpstreamServers(upstream.getId());
+				for (UpstreamServer upstreamServer : upstreamServers) {
+					ngxParam = new NgxParam();
+					ngxParam.addValue("server " + upstreamController.buildStr(upstreamServer, upstream.getProxyType()));
+					ngxBlockServer.addEntry(ngxParam);
+				}
+
+				ngxBlockStream.addEntry(ngxBlockServer);
+			}
+
+			// 添加server
+			servers = serverService.getListByProxyType(1);
+			for (Server server : servers) {
+
+				NgxBlock ngxBlockServer = new NgxBlock();
+				ngxBlockServer.addValue("server");
+
+				// 监听端口
+				ngxParam = new NgxParam();
+				ngxParam.addValue("listen " + server.getListen());
+				ngxBlockServer.addEntry(ngxParam);
+
+				// 指向负载均衡
+				Upstream upstream = sqlHelper.findById(server.getProxyUpstreamId(), Upstream.class);
+				if (upstream != null) {
+					ngxParam = new NgxParam();
+					ngxParam.addValue("proxy_pass " + upstream.getName());
+					ngxBlockServer.addEntry(ngxParam);
+				}
+
+				// 其他一些参数
+				ngxParam = new NgxParam();
+				ngxParam.addValue("proxy_connect_timeout 1s");
+				ngxBlockServer.addEntry(ngxParam);
+				
+				ngxParam = new NgxParam();
+				ngxParam.addValue("proxy_timeout 3s");
+				ngxBlockServer.addEntry(ngxParam);
+				
+				ngxBlockStream.addEntry(ngxBlockServer);
+			}
+
 			return new NgxDumper(ngxConfig).dump();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -306,7 +370,6 @@ public class ConfController extends BaseController {
 			return renderError("重启失败:" + e.getMessage());
 		}
 	}
-
 
 	@RequestMapping(value = "loadOrg")
 	@ResponseBody
