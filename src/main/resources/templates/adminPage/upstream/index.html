@@ -91,7 +91,7 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label">转发类型</label>
 					<div class="layui-input-inline">
-						<select name="proxyType" id="proxyType" lay-filter="proxyType">
+						<select name="proxyType" id="proxyType">
 							<option value="0">http</option>
 							<option value="1">TCP</option>
 						</select>
@@ -104,8 +104,8 @@
 						<input type="text" name="name" id="name" class="layui-input">
 					</div>
 
-					<label class="layui-form-label proxyHttp">负载策略</label>
-					<div class="layui-input-inline proxyHttp">
+					<label class="layui-form-label">负载策略</label>
+					<div class="layui-input-inline">
 						<select name="tactics" id="tactics">
 							<option value="">默认</option>
 							<option value="ip_hash">ip绑定(ip_hash)</option>
@@ -128,10 +128,10 @@
 							<tr>
 								<th>ip</th>
 								<th>端口</th>
-								<th class="proxyHttp">权重</th>
-								<th class="proxyHttp">最大失败次数</th>
-								<th class="proxyHttp">失败等待时间(s)</th>
-								<th class="proxyHttp">状态</th>
+								<th>权重</th>
+								<th>最大失败次数</th>
+								<th>失败等待时间(s)</th>
+								<th>状态</th>
 								<th>操作</th>
 							</tr>
 						</thead>

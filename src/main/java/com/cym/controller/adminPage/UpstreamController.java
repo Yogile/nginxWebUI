@@ -60,15 +60,15 @@ public class UpstreamController extends BaseController {
 			status = upstreamServer.getStatus();
 		}
 
-		if (proxyType == 0) {
+//		if (proxyType == 0) {
 			return upstreamServer.getServer() + ":" + upstreamServer.getPort() //
 					+ " weight=" + upstreamServer.getWeight() //
 					+ " fail_timeout=" + upstreamServer.getFailTimeout() + "s"//
 					+ " max_fails=" + upstreamServer.getMaxFails() //
 					+ " " + status;
-		} else {
-			return upstreamServer.getServer() + ":" + upstreamServer.getPort();
-		}
+//		} else {
+//			return upstreamServer.getServer() + ":" + upstreamServer.getPort();
+//		}
 
 	}
 

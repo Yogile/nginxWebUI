@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.cym.model.Location;
 import com.cym.model.Server;
+import com.cym.model.Upstream;
 
 import cn.craccd.sqlHelper.bean.Page;
 import cn.craccd.sqlHelper.bean.Sort;
@@ -79,5 +80,9 @@ public class ServerService {
 		sqlHelper.deleteByQuery(new CriteriaAndWrapper().eq("serverId", server.getId()), Location.class);
 
 	}
+
+	public List<Server> getListByProxyType(Integer proxyType) {
+		return sqlHelper.findListByQuery(new CriteriaAndWrapper().eq("proxyType", proxyType), Server.class);
+		}
 
 }
