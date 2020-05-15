@@ -54,8 +54,7 @@ public class CertController extends BaseController {
 		sqlHelper.updateById(cert);
 		return renderSuccess();
 	}
-	
-	
+
 	@RequestMapping("detail")
 	@ResponseBody
 	public JsonResult detail(String id) {
@@ -78,13 +77,13 @@ public class CertController extends BaseController {
 		}
 
 		String nginxPath = settingService.get("nginxPath");
-		if(!FileUtil.exist(nginxPath)) {
-			return renderError("未找到nginx配置文件:" + nginxPath+", 请先在【生成conf】模块中设置并读取.");
+		if (!FileUtil.exist(nginxPath)) {
+			return renderError("未找到nginx配置文件:" + nginxPath + ", 请先在【生成conf】模块中设置并读取.");
 		}
-		
+
 		Cert cert = sqlHelper.findById(id, Cert.class);
 		// 替换nginx.conf并重启
-		replaceStartNginx(nginxPath);
+		replaceStartNginx(nginxPath, cert.getDomain());
 
 		if (cert.getMakeTime() == null) {
 			// 申请
@@ -105,29 +104,28 @@ public class CertController extends BaseController {
 			String rs = RuntimeUtil.execForStr(cmd);
 			System.err.println(rs);
 		}
-		
+
 		cert.setMakeTime(System.currentTimeMillis());
 		sqlHelper.updateById(cert);
-		
-		
+
 		// 还原nginx.conf并重启
 		backupStartNginx(nginxPath);
 
 		return renderSuccess();
 	}
 
-	String nginxContent = "worker_processes  1; \n" //
-			+ "events {worker_connections  1024;} \n" //
-			+ "http { \n" //
-			+ "   server { \n" //
-			+ "	  listen 80; \n" //
-			+ "	  root /tmp/acme/; \n" //
-			+ "   } \n" //
-			+ "}" //
-	;
-
 	// 替换nginx.conf并重启
-	private void replaceStartNginx(String nginxPath) {
+	private void replaceStartNginx(String nginxPath, String domain) {
+		String nginxContent = "worker_processes  1; \n" //
+				+ "events {worker_connections  1024;} \n" //
+				+ "http { \n" //
+				+ "   server { \n" //
+				+ "	  server_name " + domain + "; \n" //
+				+ "	  listen 80; \n" //
+				+ "	  root /tmp/acme/; \n" //
+				+ "   } \n" //
+				+ "}" //
+		;
 
 		// 替换备份文件
 		FileUtil.copy(nginxPath, nginxPath + ".org", true);
