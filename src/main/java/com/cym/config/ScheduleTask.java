@@ -33,7 +33,7 @@ public class ScheduleTask {
 		System.out.println("检查需要续签的证书");
 		long time = System.currentTimeMillis();
 		for (Cert cert : certList) {
-			if (cert.getMakeTime() != null && cert.getAutoRenew() == 1 && time - cert.getMakeTime() > 60 * 24 * 60 * 60 * 1000) {
+			if (cert.getMakeTime() != null && cert.getAutoRenew() == 1 && time - cert.getMakeTime() > 59 * 24 * 60 * 60 * 1000) {
 				System.out.println(DateUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss") + " 开始续签证书:" + cert.getDomain());
 				// 大于60天的续签
 				certController.renew(cert.getId());
