@@ -91,7 +91,6 @@ public class CertController extends BaseController {
 			System.err.println(rs);
 
 			String certDir = FileUtil.getUserHomePath() + File.separator + ".acme.sh" + File.separator + cert.getDomain() + File.separator;
-
 			cert.setPem(certDir + cert.getDomain() + ".csr");
 			cert.setKey(certDir + cert.getDomain() + ".key");
 
