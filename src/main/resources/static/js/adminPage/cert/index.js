@@ -1,3 +1,34 @@
+$(function(){
+	form.on('switch(autoRenew)', function(data){
+		  //console.log(data.elem); //得到checkbox原始DOM对象
+		  //console.log(data.elem.checked); //是否被选中，true或者false
+		  //console.log(data.value); //复选框value值，也可以通过data.elem.value得到
+		  //console.log(data.othis); //得到美化后的DOM对象
+		  
+		  $.ajax({
+				type : 'POST',
+				url : ctx + '/adminPage/cert/setAutoRenew',
+				data : {
+					id : data.value,
+					autoRenew : data.elem.checked?1:0
+				},
+				dataType : 'json',
+				success : function(data) {
+				
+					if (data.success) {
+						location.reload();
+					} else {
+						layer.msg(data.msg);
+					}
+				},
+				error : function() {
+					alert("出错了,请联系技术人员!");
+				}
+		});
+	});        
+	
+})
+
 
 function add() {
 	$("#id").val(""); 

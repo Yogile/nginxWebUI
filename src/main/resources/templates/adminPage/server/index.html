@@ -167,8 +167,12 @@
 									<label class="layui-form-label">pem文件路径</label>
 									<div class="layui-input-block">
 										<button type="button" class="layui-btn layui-btn-sm" id="pemBtn">上传pem文件</button>
+										<button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="selectCert()">选择内置证书</button>
+										
 										<input type="hidden" name="pem" id="pem" class="layui-input">
 										<div class="layui-form-mid layui-word-aux" id="pemPath"></div>
+										
+										
 									</div>
 								</div>
 								<div class="layui-form-item">
@@ -234,6 +238,26 @@
 				<option value="">--无可用负债均衡--</option>
 				</#if>
 			</select>
+		</div>
+		
+		<div id="certDiv"  style="padding: 15px; display: none"> 
+			<div class="layui-form">
+				<div class="layui-form-item">
+					<label class="layui-form-label">内置证书</label>
+					<div class="layui-input-inline">
+						<select name="certId" id="certId">
+							<#list certList as cert>
+								<option value="${cert.id}">${cert.domain}</option>
+							</#list>
+						</select>
+					</div>
+				</div>
+
+				<div class="layui-form-item">
+					<button type="button" class="layui-btn layui-btn-normal" onclick="selectCertOver()">提交</button>
+					<button type="button" class="layui-btn" onclick="layer.closeAll()">关闭</button>
+				</div>
+			</div>
 		</div>
 	</div>
 

@@ -44,12 +44,18 @@ public class CertController extends BaseController {
 	@RequestMapping("addOver")
 	@ResponseBody
 	public JsonResult addOver(Cert cert) {
-
 		sqlHelper.insertOrUpdate(cert);
-
 		return renderSuccess();
 	}
 
+	@RequestMapping("setAutoRenew")
+	@ResponseBody
+	public JsonResult setAutoRenew(Cert cert) {
+		sqlHelper.updateById(cert);
+		return renderSuccess();
+	}
+	
+	
 	@RequestMapping("detail")
 	@ResponseBody
 	public JsonResult detail(String id) {

@@ -307,3 +307,43 @@ function addItem(){
 function delTr(id){
 	$("#" + id).remove();
 }
+
+var certIndex;
+function selectCert(){
+	certIndex = layer.open({
+		type : 1,
+		title : "选择内置证书",
+		area : [ '500px', '300px' ], // 宽高
+		content : $('#certDiv')
+	});
+	
+}
+
+function selectCertOver(){
+	var id = $("#certId").val();
+	
+	$.ajax({
+		type : 'POST',
+		url : ctx + '/adminPage/cert/detail',
+		data : {
+			id : id
+		},
+		dataType : 'json',
+		success : function(data) {
+			if (data.success) {
+				var cert = data.obj;
+				$("#pem").val(cert.pem);
+				$("#pemPath").html(cert.pem);
+				$("#key").val(cert.key);
+				$("#keyPath").html(cert.pem);
+				
+				layer.close(certIndex);
+			} else {
+				layer.msg(data.msg)
+			}
+		},
+		error : function() {
+			alert("出错了,请联系技术人员!");
+		}
+	});
+}
