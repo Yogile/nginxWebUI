@@ -1,5 +1,6 @@
 package com.cym.controller.adminPage;
 
+import java.io.File;
 import java.nio.charset.Charset;
 import java.util.Date;
 import java.util.List;
@@ -30,7 +31,7 @@ public class CertController extends BaseController {
 	CertConfig certConfig;
 	@Autowired
 	SettingService settingService;
-	
+
 	@RequestMapping("")
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView) {
 		List<Cert> certs = sqlHelper.findAll(Cert.class);
@@ -59,27 +60,35 @@ public class CertController extends BaseController {
 	@ResponseBody
 	public JsonResult del(String id) {
 		sqlHelper.deleteById(id, Cert.class);
-		
+
 		return renderSuccess();
 	}
 
 	@RequestMapping("renew")
 	@ResponseBody
-	public JsonResult renew(String id)  {
-		if(SystemUtil.get(SystemUtil.OS_NAME).toLowerCase().contains("win")) {
+	public JsonResult renew(String id) {
+		if (SystemUtil.get(SystemUtil.OS_NAME).toLowerCase().contains("win")) {
 			return renderError("证书操作只能在linux下进行");
 		}
-		
+
 		Cert cert = sqlHelper.findById(id, Cert.class);
 		// 替换nginx.conf并重启
 		replaceStartNginx();
-		
+
 		if (cert.getMakeTime() == null) {
 			// 申请
 			String cmd = certConfig.acmeSh + " --issue --nginx -d " + cert.getDomain();
 			System.out.println(cmd);
 			String rs = RuntimeUtil.execForStr(cmd);
 			System.err.println(rs);
+
+			String certDir = FileUtil.getUserHomePath() + File.separator + ".acme.sh" + File.separator + cert.getDomain() + File.separator;
+
+			cert.setPem(certDir + cert.getDomain() + ".csr");
+			cert.setKey(certDir + cert.getDomain() + ".key");
+
+			sqlHelper.updateById(cert);
+
 		} else {
 			// 续签
 			String cmd = certConfig.acmeSh + "--renew --force -d " + cert.getDomain();
@@ -89,11 +98,10 @@ public class CertController extends BaseController {
 		}
 		// 还原nginx.conf并重启
 		backupStartNginx();
-		
+
 		return renderSuccess();
 	}
 
-	
 	String nginxContent = "worker_processes  1; \n" //
 			+ "events {worker_connections  1024;} \n" //
 			+ "http { \n" //
@@ -102,16 +110,16 @@ public class CertController extends BaseController {
 			+ "	  root /tmp/acme/; \n" //
 			+ "   } \n" //
 			+ "}" //
-			;
-	
+	;
+
 	// 替换nginx.conf并重启
-	private void replaceStartNginx () {
+	private void replaceStartNginx() {
 		String nginxPath = settingService.get("nginxPath");
-		
+
 		// 替换备份文件
-		FileUtil.copy(nginxPath, nginxPath  + ".org", true);
+		FileUtil.copy(nginxPath, nginxPath + ".org", true);
 		FileUtil.writeString(nginxContent, nginxPath, Charset.defaultCharset());
-		
+
 		// 重启nginx
 		RuntimeUtil.execForStr("nginx -s reload");
 	}
@@ -119,15 +127,14 @@ public class CertController extends BaseController {
 	// 还原nginx.conf并重启
 	private void backupStartNginx() {
 		String nginxPath = settingService.get("nginxPath");
-		
+
 		// 还原备份文件
-		FileUtil.copy(nginxPath  + ".org", nginxPath, true);
-		FileUtil.del(nginxPath  + ".org");
-		
+		FileUtil.copy(nginxPath + ".org", nginxPath, true);
+		FileUtil.del(nginxPath + ".org");
+
 		// 重启nginx
 		RuntimeUtil.execForStr("nginx -s reload");
-		
+
 	}
 
-	
 }
