@@ -123,6 +123,7 @@ public class CertController extends BaseController {
 				+ "	  server_name " + domain + "; \n" //
 				+ "	  listen 80; \n" //
 				+ "	  root /tmp/acme/; \n" //
+				+ "	  return 301 https://" + domain + "$request_uri; \n"//
 				+ "   } \n" //
 				+ "}" //
 		;
