@@ -147,7 +147,6 @@ public class CertController extends BaseController {
 			return renderError(rs.replace("\n", "<br>"));
 		}
 		
-
 		return renderSuccess();
 	}
 
@@ -159,7 +158,7 @@ public class CertController extends BaseController {
 				+ "   server { \n" //
 				+ "	  server_name " + domain + "; \n" //
 				+ "	  listen 80; \n" //
-				+ "	  root /tmp/acme/; \n" //
+				+ "	  root /tmp/www/; \n" //
 				+ "   } \n" //
 				+ "}" //
 		;
