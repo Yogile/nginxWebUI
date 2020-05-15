@@ -2,7 +2,6 @@ package com.cym.controller.adminPage;
 
 import java.io.File;
 import java.nio.charset.Charset;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -19,7 +18,6 @@ import com.cym.service.SettingService;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
 
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.system.SystemUtil;
@@ -76,18 +74,18 @@ public class CertController extends BaseController {
 			return renderError("证书操作只能在linux下进行");
 		}
 
-//		String nginxPath = settingService.get("nginxPath");
-//		if (!FileUtil.exist(nginxPath)) {
-//			return renderError("未找到nginx配置文件:" + nginxPath + ", 请先在【生成conf】模块中设置并读取.");
-//		}
+		String nginxPath = settingService.get("nginxPath");
+		if (!FileUtil.exist(nginxPath)) {
+			return renderError("未找到nginx配置文件:" + nginxPath + ", 请先在【生成conf】模块中设置并读取.");
+		}
 
 		Cert cert = sqlHelper.findById(id, Cert.class);
 		// 替换nginx.conf并重启
-		replaceStartNginx();
+		replaceStartNginx(nginxPath, cert.getDomain());
 
 		if (cert.getMakeTime() == null) {
 			// 申请
-			String cmd = certConfig.acmeSh + " --issue --standalone -d " + cert.getDomain();
+			String cmd = certConfig.acmeSh + " --issue --nginx -d " + cert.getDomain();
 			System.out.println(cmd);
 			String rs = RuntimeUtil.execForStr(cmd);
 			System.err.println(rs);
@@ -109,42 +107,41 @@ public class CertController extends BaseController {
 		sqlHelper.updateById(cert);
 
 		// 还原nginx.conf并重启
-		backupStartNginx();
+		backupStartNginx(nginxPath);
 
 		return renderSuccess();
 	}
 
 	// 替换nginx.conf并重启
-	private void replaceStartNginx() {
-//		String nginxContent = "worker_processes  1; \n" //
-//				+ "events {worker_connections  1024;} \n" //
-//				+ "http { \n" //
-//				+ "   server { \n" //
-//				+ "	  server_name " + domain + "; \n" //
-//				+ "	  listen 80; \n" //
-//				+ "	  root /tmp/acme/; \n" //
-//				+ "	  return 301 https://" + domain + "$request_uri; \n"//
-//				+ "   } \n" //
-//				+ "}" //
-//		;
+	private void replaceStartNginx(String nginxPath, String domain) {
+		String nginxContent = "worker_processes  1; \n" //
+				+ "events {worker_connections  1024;} \n" //
+				+ "http { \n" //
+				+ "   server { \n" //
+				+ "	  server_name " + domain + "; \n" //
+				+ "	  listen 80; \n" //
+				+ "	  root /tmp/acme/; \n" //
+				+ "   } \n" //
+				+ "}" //
+		;
 
 		// 替换备份文件
-//		FileUtil.copy(nginxPath, nginxPath + ".org", true);
-//		FileUtil.writeString(nginxContent, nginxPath, Charset.defaultCharset());
+		FileUtil.copy(nginxPath, nginxPath + ".org", true);
+		FileUtil.writeString(nginxContent, nginxPath, Charset.defaultCharset());
 
-		// 杀掉nginx
-		RuntimeUtil.execForStr("killall nginx");
+		// 重启nginx
+		RuntimeUtil.execForStr("nginx -s reload");
 	}
 
 	// 还原nginx.conf并重启
-	private void backupStartNginx() {
+	private void backupStartNginx(String nginxPath) {
 
-//		// 还原备份文件
-//		FileUtil.copy(nginxPath + ".org", nginxPath, true);
-//		FileUtil.del(nginxPath + ".org");
+		// 还原备份文件
+		FileUtil.copy(nginxPath + ".org", nginxPath, true);
+		FileUtil.del(nginxPath + ".org");
 
 		// 重启nginx
-		RuntimeUtil.execForStr("nginx");
+		RuntimeUtil.execForStr("nginx -s reload");
 
 	}
 
