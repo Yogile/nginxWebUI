@@ -122,6 +122,7 @@ public class CertController extends BaseController {
 		
 		// 还原备份文件
 		FileUtil.copy(nginxPath  + ".org", nginxPath, true);
+		FileUtil.del(nginxPath  + ".org");
 		
 		// 重启nginx
 		RuntimeUtil.execForStr("nginx -s reload");
