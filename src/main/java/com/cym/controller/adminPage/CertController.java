@@ -87,8 +87,6 @@ public class CertController extends BaseController {
 			cert.setPem(certDir + cert.getDomain() + ".csr");
 			cert.setKey(certDir + cert.getDomain() + ".key");
 
-			sqlHelper.updateById(cert);
-
 		} else {
 			// 续签
 			String cmd = certConfig.acmeSh + "--renew --force -d " + cert.getDomain();
@@ -96,6 +94,11 @@ public class CertController extends BaseController {
 			String rs = RuntimeUtil.execForStr(cmd);
 			System.err.println(rs);
 		}
+		
+		cert.setMakeTime(System.currentTimeMillis());
+		sqlHelper.updateById(cert);
+		
+		
 		// 还原nginx.conf并重启
 		backupStartNginx();
 
