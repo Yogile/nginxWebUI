@@ -93,9 +93,40 @@ function del(id){
 }
 
 
+function apply(id){
+	
+	if(confirm("确认申请? 过程中nginx将被短暂关闭.")){
+		layer.load();
+		$.ajax({
+			type : 'POST',
+			url : ctx + '/adminPage/cert/apply',
+			data : {
+				id : id
+			},
+			dataType : 'json',
+			success : function(data) {
+				layer.closeAll();
+				if (data.success) {
+					location.reload();
+				}else{
+					layer.open({
+						  type: 0, 
+						  area : [ '800px', '400px' ],
+						  content: data.msg
+					});
+				}
+			},
+			error : function() {
+				alert("出错了,请联系技术人员!");
+			}
+		});
+	}
+}
+
+
 function renew(id){
 	
-	if(confirm("确认申请或续签?过程中nginx将被短暂关闭.")){
+	if(confirm("确认续签? 过程中nginx将被短暂关闭.")){
 		layer.load();
 		$.ajax({
 			type : 'POST',
@@ -109,7 +140,11 @@ function renew(id){
 				if (data.success) {
 					location.reload();
 				}else{
-					layer.msg(data.msg)
+					layer.open({
+						  type: 0, 
+						  area : [ '800px', '400px' ],
+						  content: data.msg
+					});
 				}
 			},
 			error : function() {

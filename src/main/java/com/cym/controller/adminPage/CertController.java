@@ -67,6 +67,50 @@ public class CertController extends BaseController {
 		return renderSuccess();
 	}
 
+	@RequestMapping("apply")
+	@ResponseBody
+	public JsonResult apply(String id) {
+		if (SystemUtil.get(SystemUtil.OS_NAME).toLowerCase().contains("win")) {
+			return renderError("证书操作只能在linux下进行");
+		}
+
+		String nginxPath = settingService.get("nginxPath");
+		if (!FileUtil.exist(nginxPath)) {
+			return renderError("未找到nginx配置文件:" + nginxPath + ", 请先在【生成conf】模块中设置并读取.");
+		}
+
+		Cert cert = sqlHelper.findById(id, Cert.class);
+		if (cert.getMakeTime() != null) {
+			return renderError("该证书已申请");
+		}
+
+		// 替换nginx.conf并重启
+		replaceStartNginx(nginxPath, cert.getDomain());
+
+		// 申请
+		String cmd = certConfig.acmeSh + " --issue --nginx -d " + cert.getDomain();
+		System.out.println(cmd);
+		String rs = RuntimeUtil.execForStr(cmd);
+		System.err.println(rs);
+
+		// 还原nginx.conf并重启
+		backupStartNginx(nginxPath);
+
+		if (rs.contains("Cert success")) {
+			String certDir = FileUtil.getUserHomePath() + File.separator + ".acme.sh" + File.separator + cert.getDomain() + File.separator;
+			cert.setPem(certDir + cert.getDomain() + ".cer");
+			cert.setKey(certDir + cert.getDomain() + ".key");
+
+			cert.setMakeTime(System.currentTimeMillis());
+			sqlHelper.updateById(cert);
+
+			return renderSuccess();
+		} else {
+			return renderError(rs.replace("\n", "<br>"));
+		}
+
+	}
+
 	@RequestMapping("renew")
 	@ResponseBody
 	public JsonResult renew(String id) {
@@ -80,33 +124,29 @@ public class CertController extends BaseController {
 		}
 
 		Cert cert = sqlHelper.findById(id, Cert.class);
+		if (cert.getMakeTime() == null) {
+			return renderError("该证书还未申请");
+		}
+
 		// 替换nginx.conf并重启
 		replaceStartNginx(nginxPath, cert.getDomain());
 
-		if (cert.getMakeTime() == null) {
-			// 申请
-			String cmd = certConfig.acmeSh + " --issue --nginx -d " + cert.getDomain();
-			System.out.println(cmd);
-			String rs = RuntimeUtil.execForStr(cmd);
-			System.err.println(rs);
-
-			String certDir = FileUtil.getUserHomePath() + File.separator + ".acme.sh" + File.separator + cert.getDomain() + File.separator;
-			cert.setPem(certDir + cert.getDomain() + ".csr");
-			cert.setKey(certDir + cert.getDomain() + ".key");
-
-		} else {
-			// 续签
-			String cmd = certConfig.acmeSh + " --renew --force -d " + cert.getDomain();
-			System.out.println(cmd);
-			String rs = RuntimeUtil.execForStr(cmd);
-			System.err.println(rs);
-		}
-
-		cert.setMakeTime(System.currentTimeMillis());
-		sqlHelper.updateById(cert);
+		// 续签
+		String cmd = certConfig.acmeSh + " --renew --force -d " + cert.getDomain();
+		System.out.println(cmd);
+		String rs = RuntimeUtil.execForStr(cmd);
+		System.err.println(rs);
 
 		// 还原nginx.conf并重启
 		backupStartNginx(nginxPath);
+				
+		if (rs.contains("Cert success")) {
+			cert.setMakeTime(System.currentTimeMillis());
+			sqlHelper.updateById(cert);
+		} else {
+			return renderError(rs.replace("\n", "<br>"));
+		}
+		
 
 		return renderSuccess();
 	}

@@ -54,7 +54,10 @@
 								 <input type="checkbox" name="switch" lay-filter="autoRenew" value="${cert.id}" lay-text="开启|关闭" lay-skin="switch" ${(cert.autoRenew==1)?string('checked','')}>
 							</td>
 							<td>
-								<button class="layui-btn layui-btn-sm" onclick="renew('${cert.id}')">申请或续签</button>
+								<button class="layui-btn layui-btn-sm" onclick="apply('${cert.id}')">申请</button>
+								
+								<button class="layui-btn layui-btn-sm" onclick="renew('${cert.id}')">续签</button>
+								
 								<button class="layui-btn layui-btn-danger layui-btn-sm" onclick="del('${cert.id}')">删除</button>
 							</td>
 						</tr>
