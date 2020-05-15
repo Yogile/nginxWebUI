@@ -95,7 +95,7 @@ function del(id){
 
 function apply(id){
 	
-	if(confirm("确认申请? 过程中nginx将被短暂关闭.")){
+	if(confirm("确认申请? 过程中nginx将被暂时关闭.")){
 		layer.load();
 		$.ajax({
 			type : 'POST',
@@ -126,7 +126,7 @@ function apply(id){
 
 function renew(id){
 	
-	if(confirm("确认续签? 过程中nginx将被短暂关闭.")){
+	if(confirm("确认续签? 过程中nginx将被暂时关闭.")){
 		layer.load();
 		$.ajax({
 			type : 'POST',
