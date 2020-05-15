@@ -134,6 +134,11 @@ public class ConfController extends BaseController {
 					ngxParam = new NgxParam();
 					ngxParam.addValue("ssl_certificate_key " + server.getKey());
 					ngxBlockServer.addEntry(ngxParam);
+					
+					ngxParam = new NgxParam();
+					ngxParam.addValue("ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3");
+					ngxBlockServer.addEntry(ngxParam);
+					
 				}
 
 				List<Location> locationList = serverService.getLocationByServerId(server.getId());

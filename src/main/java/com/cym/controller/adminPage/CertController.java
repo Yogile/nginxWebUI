@@ -91,7 +91,7 @@ public class CertController extends BaseController {
 		String cmd = certConfig.acmeSh + " --issue --nginx -d " + cert.getDomain();
 		System.out.println(cmd);
 		String rs = RuntimeUtil.execForStr(cmd);
-		System.err.println(rs);
+		System.out.println(rs);
 
 		// 还原nginx.conf并重启
 		backupStartNginx(nginxPath);
@@ -135,7 +135,7 @@ public class CertController extends BaseController {
 		String cmd = certConfig.acmeSh + " --renew --force -d " + cert.getDomain();
 		System.out.println(cmd);
 		String rs = RuntimeUtil.execForStr(cmd);
-		System.err.println(rs);
+		System.out.println(rs);
 
 		// 还原nginx.conf并重启
 		backupStartNginx(nginxPath);
