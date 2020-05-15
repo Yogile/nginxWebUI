@@ -33,6 +33,7 @@ public class CertConfig {
 		
 		acmeSh = userDir + File.separator + ".acme.sh" + File.separator + "acme.sh";
 		
+		RuntimeUtil.execForStr("chmod 777 " + acmeSh);
 		System.err.println(acmeSh);
 	}
 	
