@@ -84,7 +84,7 @@ public class ServerController extends BaseController {
 
 	@RequestMapping("addOver")
 	@ResponseBody
-	public JsonResult addOver(Server server, Integer type[], String[] path, String[] value, String[] upstreamId) throws SQLException {
+	public JsonResult addOver(Server server, Integer type[], String[] path, String[] value, String[] upstreamId)  {
 
 		if (server.getProxyType() == 0) {
 			serverService.addOver(server, type, path, value, upstreamId);
@@ -97,7 +97,7 @@ public class ServerController extends BaseController {
 
 	@RequestMapping("detail")
 	@ResponseBody
-	public JsonResult detail(String id) throws SQLException {
+	public JsonResult detail(String id)  {
 		Server server = sqlHelper.findById(id, Server.class);
 
 		ServerExt serverExt = new ServerExt();
@@ -109,7 +109,7 @@ public class ServerController extends BaseController {
 
 	@RequestMapping("del")
 	@ResponseBody
-	public JsonResult del(String id) throws SQLException {
+	public JsonResult del(String id)  {
 		serverService.deleteById(id);
 
 		return renderSuccess();

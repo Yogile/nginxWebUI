@@ -38,7 +38,7 @@ public class StreamController extends BaseController {
 
 	@RequestMapping("addOver")
 	@ResponseBody
-	public JsonResult addOver(Stream stream) throws SQLException {
+	public JsonResult addOver(Stream stream)  {
 		if(streamService.hasName(stream.getName())) {
 			return renderError("名称已存在");
 		}
@@ -49,13 +49,13 @@ public class StreamController extends BaseController {
 
 	@RequestMapping("detail")
 	@ResponseBody
-	public JsonResult detail(String id) throws SQLException {
+	public JsonResult detail(String id)  {
 		return renderSuccess(sqlHelper.findById(id, Stream.class));
 	}
 
 	@RequestMapping("del")
 	@ResponseBody
-	public JsonResult del(String id) throws SQLException {
+	public JsonResult del(String id)  {
 		sqlHelper.deleteById(id, Stream.class);
 		
 		return renderSuccess();

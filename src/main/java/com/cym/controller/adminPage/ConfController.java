@@ -307,7 +307,7 @@ public class ConfController extends BaseController {
 
 	@RequestMapping(value = "replace")
 	@ResponseBody
-	public JsonResult replace(String nginxPath, String nginxContent) throws SQLException {
+	public JsonResult replace(String nginxPath, String nginxContent)  {
 		settingService.set("nginxPath", nginxPath);
 
 		try {
@@ -325,7 +325,7 @@ public class ConfController extends BaseController {
 
 	@RequestMapping(value = "check")
 	@ResponseBody
-	public JsonResult check(String nginxPath) throws SQLException {
+	public JsonResult check(String nginxPath)  {
 		settingService.set("nginxPath", nginxPath);
 
 		try {
@@ -355,7 +355,7 @@ public class ConfController extends BaseController {
 
 	@RequestMapping(value = "reboot")
 	@ResponseBody
-	public JsonResult reboot(String nginxPath) throws SQLException {
+	public JsonResult reboot(String nginxPath)  {
 		settingService.set("nginxPath", nginxPath);
 		try {
 			String rs = null;
@@ -384,7 +384,7 @@ public class ConfController extends BaseController {
 
 	@RequestMapping(value = "loadOrg")
 	@ResponseBody
-	public JsonResult loadOrg(String nginxPath) throws SQLException {
+	public JsonResult loadOrg(String nginxPath)  {
 		settingService.set("nginxPath", nginxPath);
 
 		if (FileUtil.exist(nginxPath)) {
