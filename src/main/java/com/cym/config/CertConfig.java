@@ -6,21 +6,26 @@ import java.io.InputStream;
 
 import javax.annotation.PostConstruct;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
+import com.cym.service.SettingService;
+
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.RuntimeUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.ZipUtil;
 
 @Component
 public class CertConfig {
 	
 	public String acmeSh;
-	
+	@Autowired
+	SettingService settingService;
 	@PostConstruct
 	public void init() throws IOException {
-		
+		// 初始化acme.sh
 		String userDir = FileUtil.getUserHomePath();
 		
 		ClassPathResource resource = new ClassPathResource("acme.zip");
@@ -35,6 +40,14 @@ public class CertConfig {
 		
 		RuntimeUtil.execForStr("chmod 777 " + acmeSh);
 		System.err.println(acmeSh);
+		
+		
+		// 初始化nginx配置文件
+		String nginxPath = settingService.get("nginxPath");
+		if (StrUtil.isEmpty(nginxPath)) {
+			nginxPath = "/etc/nginx/nginx.conf";
+			settingService.set("nginxPath", nginxPath);
+		}
 	}
 	
 	

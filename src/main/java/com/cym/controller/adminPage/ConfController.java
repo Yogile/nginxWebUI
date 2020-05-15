@@ -58,10 +58,6 @@ public class ConfController extends BaseController {
 		modelAndView.addObject("confStr", confStr);
 
 		String nginxPath = settingService.get("nginxPath");
-		if (StrUtil.isEmpty(nginxPath)) {
-			nginxPath = "/etc/nginx/nginx.conf";
-			settingService.set("nginxPath", nginxPath);
-		}
 		modelAndView.addObject("nginxPath", nginxPath);
 
 		modelAndView.setViewName("/adminPage/conf/index");

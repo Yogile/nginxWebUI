@@ -1,6 +1,7 @@
 package com.cym.model;
 
 import cn.craccd.sqlHelper.bean.BaseModel;
+import cn.craccd.sqlHelper.config.InitValue;
 import cn.craccd.sqlHelper.config.SingleIndex;
 import cn.craccd.sqlHelper.config.Table;
 
@@ -14,7 +15,17 @@ public class Cert extends BaseModel{
 	
 	Long makeTime; // 生成时间 
 	
+	@InitValue("0")
+	Integer autoRenew; // 自动续签
+
 	
+	
+	public Integer getAutoRenew() {
+		return autoRenew;
+	}
+	public void setAutoRenew(Integer autoRenew) {
+		this.autoRenew = autoRenew;
+	}
 	public Long getMakeTime() {
 		return makeTime;
 	}

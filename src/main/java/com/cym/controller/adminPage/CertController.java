@@ -71,9 +71,14 @@ public class CertController extends BaseController {
 			return renderError("证书操作只能在linux下进行");
 		}
 
+		String nginxPath = settingService.get("nginxPath");
+		if(!FileUtil.exist(nginxPath)) {
+			return renderError("未找到nginx配置文件:" + nginxPath+", 请先在【生成conf】模块中设置并读取.");
+		}
+		
 		Cert cert = sqlHelper.findById(id, Cert.class);
 		// 替换nginx.conf并重启
-		replaceStartNginx();
+		replaceStartNginx(nginxPath);
 
 		if (cert.getMakeTime() == null) {
 			// 申请
@@ -100,7 +105,7 @@ public class CertController extends BaseController {
 		
 		
 		// 还原nginx.conf并重启
-		backupStartNginx();
+		backupStartNginx(nginxPath);
 
 		return renderSuccess();
 	}
@@ -116,8 +121,7 @@ public class CertController extends BaseController {
 	;
 
 	// 替换nginx.conf并重启
-	private void replaceStartNginx() {
-		String nginxPath = settingService.get("nginxPath");
+	private void replaceStartNginx(String nginxPath) {
 
 		// 替换备份文件
 		FileUtil.copy(nginxPath, nginxPath + ".org", true);
@@ -128,8 +132,7 @@ public class CertController extends BaseController {
 	}
 
 	// 还原nginx.conf并重启
-	private void backupStartNginx() {
-		String nginxPath = settingService.get("nginxPath");
+	private void backupStartNginx(String nginxPath) {
 
 		// 还原备份文件
 		FileUtil.copy(nginxPath + ".org", nginxPath, true);
