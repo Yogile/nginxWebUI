@@ -41,7 +41,7 @@
 							<td>${cert.domain}</td>
 							<td>
 								<#if cert.makeTime!=null>
-								${cert.makeTime?number_to_datetime}
+								${cert.makeTime?number_to_datetime?string('yyyy-MM-dd HH:mm:ss')}
 								</#if>
 							</td>
 							<td>pem: ${cert.pem} <br>
