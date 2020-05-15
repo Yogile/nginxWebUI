@@ -27,13 +27,12 @@ public class CertConfig {
 		InputStream inputStream = resource.getInputStream();
 		
 		FileUtil.writeFromStream(inputStream, userDir + File.separator + "acme.zip");
-		FileUtil.mkdir(userDir + File.separator + "acme");
-		ZipUtil.unzip(userDir + File.separator + "acme.zip", userDir + File.separator + "acme");
+		FileUtil.mkdir(userDir + File.separator + ".acme.sh");
+		ZipUtil.unzip(userDir + File.separator + "acme.zip", userDir + File.separator + ".acme.sh");
 		FileUtil.del(userDir + File.separator + "acme.zip");
 		
-		acmeSh = userDir + File.separator + "acme" + File.separator + "acme.sh";
+		acmeSh = userDir + File.separator + ".acme.sh" + File.separator + "acme.sh";
 		
-		RuntimeUtil.execForStr("chmod 777 " + acmeSh);
 		System.err.println(acmeSh);
 	}
 	

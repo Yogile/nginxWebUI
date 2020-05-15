@@ -63,7 +63,7 @@ function del(id){
 
 
 function renew(id){
-	if(confirm("确认申请或续签?")){
+	if(confirm("确认申请或续签?过程中nginx将被短暂关闭.")){
 		$.ajax({
 			type : 'POST',
 			url : ctx + '/adminPage/cert/renew',

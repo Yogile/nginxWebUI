@@ -14,13 +14,14 @@
 			<!-- 内容主体区域 -->
 			<div style="padding: 15px">
 				<fieldset class="layui-elem-field layui-field-title">
-					<legend>管理员管理</legend>
+					<legend>证书管理</legend>
 				</fieldset>
 
 				<form action="${ctx}/adminPage/cert" id="searchForm" method="post">
 					<div class="layui-form">
 						<div class="layui-inline">
-							<button type="button" class="layui-btn layui-btn-normal" onclick="add()">生成证书</button>
+							<button type="button" class="layui-btn layui-btn-normal" onclick="add()">添加证书</button>
+							<div class="layui-form-mid layui-word-aux proxyHttp">请确认已经把需要生成证书的域名指向本服务器</div>
 						</div>
 					</div>
 				</form>
