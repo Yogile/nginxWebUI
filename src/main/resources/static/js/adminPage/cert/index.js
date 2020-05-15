@@ -17,14 +17,14 @@ function showWindow(title){
 }
 
 function addOver() {
-	layer.load();
+
 	$.ajax({
 		type : 'POST',
 		url : ctx + '/adminPage/cert/addOver',
 		data : $('#addForm').serialize(),
 		dataType : 'json',
 		success : function(data) {
-			layer.closeAll();
+		
 			if (data.success) {
 				location.reload();
 			} else {
@@ -63,7 +63,9 @@ function del(id){
 
 
 function renew(id){
+	
 	if(confirm("确认申请或续签?过程中nginx将被短暂关闭.")){
+		layer.load();
 		$.ajax({
 			type : 'POST',
 			url : ctx + '/adminPage/cert/renew',
@@ -72,6 +74,7 @@ function renew(id){
 			},
 			dataType : 'json',
 			success : function(data) {
+				layer.closeAll();
 				if (data.success) {
 					location.reload();
 				}else{
