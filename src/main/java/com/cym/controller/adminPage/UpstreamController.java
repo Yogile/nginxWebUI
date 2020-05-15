@@ -74,7 +74,7 @@ public class UpstreamController extends BaseController {
 
 	@RequestMapping("addOver")
 	@ResponseBody
-	public JsonResult addOver(Upstream upstream, String[] server, Integer[] port, Integer[] weight, Integer[] maxFails, Integer[] failTimeout, String[] status) throws SQLException {
+	public JsonResult addOver(Upstream upstream, String[] server, Integer[] port, Integer[] weight, Integer[] maxFails, Integer[] failTimeout, String[] status)  {
 
 		upstreamService.addOver(upstream, server, port, weight, maxFails, failTimeout, status);
 
@@ -83,7 +83,7 @@ public class UpstreamController extends BaseController {
 
 	@RequestMapping("detail")
 	@ResponseBody
-	public JsonResult detail(String id) throws SQLException {
+	public JsonResult detail(String id)  {
 
 		UpstreamExt upstreamExt = new UpstreamExt();
 		upstreamExt.setUpstream(sqlHelper.findById(id, Upstream.class));
@@ -94,7 +94,7 @@ public class UpstreamController extends BaseController {
 
 	@RequestMapping("del")
 	@ResponseBody
-	public JsonResult del(String id) throws SQLException {
+	public JsonResult del(String id)  {
 
 		upstreamService.del(id);
 

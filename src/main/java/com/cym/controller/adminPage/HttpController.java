@@ -37,7 +37,7 @@ public class HttpController extends BaseController {
 
 	@RequestMapping("addOver")
 	@ResponseBody
-	public JsonResult addOver(Http http) throws SQLException {
+	public JsonResult addOver(Http http)  {
 		if(httpService.hasName(http.getName())) {
 			return renderError("名称已存在");
 		}
@@ -48,13 +48,13 @@ public class HttpController extends BaseController {
 
 	@RequestMapping("detail")
 	@ResponseBody
-	public JsonResult detail(String id) throws SQLException {
+	public JsonResult detail(String id)  {
 		return renderSuccess(sqlHelper.findById(id, Http.class));
 	}
 
 	@RequestMapping("del")
 	@ResponseBody
-	public JsonResult del(String id) throws SQLException {
+	public JsonResult del(String id)  {
 		sqlHelper.deleteById(id, Http.class);
 		
 		return renderSuccess();

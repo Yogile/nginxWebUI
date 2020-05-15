@@ -35,7 +35,7 @@ public class AdminController extends BaseController {
 
 	@RequestMapping("addOver")
 	@ResponseBody
-	public JsonResult addOver(Admin admin) throws SQLException {
+	public JsonResult addOver(Admin admin)  {
 
 		sqlHelper.insertOrUpdate(admin);
 
@@ -44,13 +44,13 @@ public class AdminController extends BaseController {
 
 	@RequestMapping("detail")
 	@ResponseBody
-	public JsonResult detail(String id) throws SQLException {
+	public JsonResult detail(String id)  {
 		return renderSuccess(sqlHelper.findById(id, Admin.class));
 	}
 
 	@RequestMapping("del")
 	@ResponseBody
-	public JsonResult del(String id) throws SQLException {
+	public JsonResult del(String id)  {
 		sqlHelper.deleteById(id, Admin.class);
 		
 		return renderSuccess();
