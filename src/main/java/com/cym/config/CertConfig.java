@@ -26,10 +26,12 @@ public class CertConfig {
 		InputStream inputStream = resource.getInputStream();
 		
 		FileUtil.writeFromStream(inputStream, userDir + File.separator + "acme.zip");
-		ZipUtil.unzip(userDir + File.separator + "acme.zip", userDir);
+		FileUtil.mkdir(userDir + File.separator + "acme");
+		ZipUtil.unzip(userDir + File.separator + "acme.zip", userDir + File.separator + "acme");
 		FileUtil.del(userDir + File.separator + "acme.zip");
 		
 		acmeSh = userDir + File.separator + "acme" + File.separator + "acme.sh";
+		System.err.println(acmeSh);
 	}
 	
 	
