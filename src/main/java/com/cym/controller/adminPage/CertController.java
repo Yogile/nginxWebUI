@@ -94,7 +94,7 @@ public class CertController extends BaseController {
 
 		} else {
 			// 续签
-			String cmd = certConfig.acmeSh + "--renew --force -d " + cert.getDomain();
+			String cmd = certConfig.acmeSh + " --renew --force -d " + cert.getDomain();
 			System.out.println(cmd);
 			String rs = RuntimeUtil.execForStr(cmd);
 			System.err.println(rs);
