@@ -10,6 +10,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.ZipUtil;
 
 @Component
@@ -31,6 +32,8 @@ public class CertConfig {
 		FileUtil.del(userDir + File.separator + "acme.zip");
 		
 		acmeSh = userDir + File.separator + "acme" + File.separator + "acme.sh";
+		
+		RuntimeUtil.execForStr("chmod 777 " + acmeSh);
 		System.err.println(acmeSh);
 	}
 	
