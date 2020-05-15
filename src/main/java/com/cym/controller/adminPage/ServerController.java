@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cym.ext.ServerExt;
+import com.cym.model.Cert;
 import com.cym.model.Location;
 import com.cym.model.Server;
 import com.cym.model.Upstream;
@@ -60,6 +61,7 @@ public class ServerController extends BaseController {
 		modelAndView.addObject("upstreamTcpList", upstreamTcpList);
 		modelAndView.addObject("upstreamTcpSize", upstreamTcpList.size());
 		
+		modelAndView.addObject("certList", sqlHelper.findAll(Cert.class));
 		
 		modelAndView.setViewName("/adminPage/server/index");
 		return modelAndView;

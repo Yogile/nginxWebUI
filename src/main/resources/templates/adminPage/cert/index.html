@@ -28,12 +28,14 @@
 					</div>
 				</form>
 
-				<table class="layui-table">
+				<table class="layui-table layui-form">
 					<thead>
 						<tr>
 							<th>域名</th>
-							<th>制作时间</th>
+							<th>签发时间</th>
 							<th>证书路径</th>
+							<th>是否自动续签</th>
+							
 							<th>操作</th>
 						</tr>
 					</thead>
@@ -48,6 +50,9 @@
 							</td>
 							<td>pem: ${cert.pem} <br>
 								key: ${cert.key}</td>
+							<td>
+								 <input type="checkbox" name="switch" lay-filter="autoRenew" value="${cert.id}" lay-text="开启|关闭" lay-skin="switch" ${(cert.autoRenew==1)?string('checked','')}>
+							</td>
 							<td>
 								<button class="layui-btn layui-btn-sm" onclick="renew('${cert.id}')">申请或续签</button>
 								<button class="layui-btn layui-btn-danger layui-btn-sm" onclick="del('${cert.id}')">删除</button>
