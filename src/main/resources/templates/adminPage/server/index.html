@@ -134,9 +134,9 @@
 							
 				<div class="layui-container" >
 					<div class="layui-row">
-						<div class="layui-col-md6">
+						<div class="layui-col-md4">
 							<div class="layui-form-item">
-								<label class="layui-form-label">监听端口</label>
+								<label class="layui-form-label">监听端口<span class="red">*</span></label>
 								<div class="layui-input-inline">
 									<input type="number" name="listen" id="listen" class="layui-input" placeholder="例: 80">
 								</div>
@@ -145,8 +145,8 @@
 							<div class="proxyHttp">
 								<div class="layui-form-item">
 									<label class="layui-form-label">监听域名</label>
-									<div class="layui-input-block">
-										<input type="text" name="serverName" id="serverName" class="layui-input" placeholder="例: www.baidu.com 不填为监听所有域名">
+									<div class="layui-input-inline">
+										<input type="text" name="serverName" id="serverName" class="layui-input" placeholder="例: www.baidu.com">
 									</div>
 								</div>
 	
@@ -161,7 +161,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="layui-col-md6 proxyHttp">
+						<div class="layui-col-md8 proxyHttp">
 							<div id="pemDiv"  style="display: none;">
 								<div class="layui-form-item">
 									<label class="layui-form-label">pem文件路径</label>
@@ -171,7 +171,6 @@
 										
 										<input type="hidden" name="pem" id="pem" class="layui-input">
 										<div class="layui-form-mid layui-word-aux" id="pemPath"></div>
-										
 										
 									</div>
 								</div>

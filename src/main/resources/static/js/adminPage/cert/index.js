@@ -48,7 +48,11 @@ function showWindow(title){
 }
 
 function addOver() {
-
+	if ($("#domain").val() == "") {
+		layer.msg("域名为空");
+		return;
+	}
+	
 	$.ajax({
 		type : 'POST',
 		url : ctx + '/adminPage/cert/addOver',
