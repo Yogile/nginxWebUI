@@ -22,6 +22,8 @@ nginx本身功能复杂, 本项目并不能涵盖nginx所有功能, 只能配置
 
 本系统通过Let's encrypt申请证书, 使用acme.sh脚本进行自动化申请, 开启续签的证书将在每天凌晨2点进行续签, 只有超过60天的证书才会进行续签.
 
+因为申请证书必须要使用80端口, 因此在申请和续签的时候nginx将会短暂关闭，请注意。
+
 #### 安装说明
 以Ubuntu操作系统为例, 以下命令请使用root账户权限执行
 
@@ -69,8 +71,6 @@ nohup java -jar nginxWebUI-1.0.0.jar --server.port=8080 > nginxWebUI.log &
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0515/165543_71e210e2_1100382.jpeg "ca.jpg")
 
 在证书管理中可添加证书, 并进行签发和续签. 
-
-因为申请证书必须要使用80端口, 因此在申请和续签的时候nginx将会短暂关闭，请注意。
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0515/170135_30539807_1100382.jpeg "conf.jpg")
 
