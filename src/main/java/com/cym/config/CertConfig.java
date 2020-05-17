@@ -48,8 +48,11 @@ public class CertConfig {
 		// 初始化nginx配置文件
 		String nginxPath = settingService.get("nginxPath");
 		if (StrUtil.isEmpty(nginxPath)) {
-			nginxPath = "/etc/nginx/nginx.conf";
-			settingService.set("nginxPath", nginxPath);
+			nginxPath = RuntimeUtil.execForStr("find / -name nginx.conf").trim();
+
+			if (StrUtil.isNotEmpty(nginxPath)) {
+				settingService.set("nginxPath", nginxPath);
+			}
 		}
 	}
 
