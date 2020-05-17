@@ -80,7 +80,7 @@ function check() {
 			} else {
 				layer.open({
 					  type: 0, 
-					  area : [ '800px', '400px' ],
+					  area : [ '810px', '400px' ],
 					  content: data.msg
 				});
 			}
@@ -108,7 +108,7 @@ function reboot() {
 			} else {
 				layer.open({
 					  type: 0, 
-					  area : [ '800px', '400px' ],
+					  area : [ '810px', '400px' ],
 					  content: data.msg
 				});
 			}
