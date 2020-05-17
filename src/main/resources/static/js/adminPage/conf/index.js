@@ -50,6 +50,8 @@ function loadOrg() {
 			if (data.success) {
 				$("#org").val(data.obj)
 				$("#org").setTextareaCount();
+				
+				layer.msg("读取成功");
 			} else {
 				layer.alert(data.msg);
 			}
