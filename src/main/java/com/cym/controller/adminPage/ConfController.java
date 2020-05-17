@@ -66,7 +66,7 @@ public class ConfController extends BaseController {
 
 	private String buildConf() {
 		try {
-			ClassPathResource resource = new ClassPathResource("nginx.conf");
+			ClassPathResource resource = new ClassPathResource("nginxOrg.conf");
 			InputStream inputStream = resource.getInputStream();
 
 			NgxConfig ngxConfig = NgxConfig.read(inputStream);
