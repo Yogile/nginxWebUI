@@ -71,7 +71,7 @@ public class ConfController extends BaseController {
 
 			NgxConfig ngxConfig = NgxConfig.read(inputStream);
 
-			// 创建http
+			// 获取http
 			List<Http> httpList = sqlHelper.findAll(Http.class);
 			NgxBlock ngxBlockHttp = ngxConfig.findBlock("http");
 			for (Http http : httpList) {
@@ -80,6 +80,7 @@ public class ConfController extends BaseController {
 				ngxBlockHttp.addEntry(ngxParam);
 			}
 
+			boolean hasHttp = false;
 			// 添加upstream
 			NgxParam ngxParam = null;
 			List<Upstream> upstreams = upstreamService.getListByProxyType(0);
@@ -99,7 +100,7 @@ public class ConfController extends BaseController {
 					ngxParam.addValue("server " + upstreamController.buildStr(upstreamServer, upstream.getProxyType()));
 					ngxBlockServer.addEntry(ngxParam);
 				}
-
+				hasHttp = true;
 				ngxBlockHttp.addEntry(ngxBlockServer);
 			}
 
@@ -200,6 +201,7 @@ public class ConfController extends BaseController {
 						ngxBlockServer.addEntry(ngxBlockLocation);
 					}
 				}
+				hasHttp = true;
 				ngxBlockHttp.addEntry(ngxBlockServer);
 
 				// https添加80端口重写
@@ -218,11 +220,16 @@ public class ConfController extends BaseController {
 					ngxParam = new NgxParam();
 					ngxParam.addValue("rewrite ^(.*)$ https://${server_name}$1 permanent");
 					ngxBlockServer.addEntry(ngxParam);
-
+					
+					hasHttp = true;
 					ngxBlockHttp.addEntry(ngxBlockServer);
 				}
 
 			}
+			if (!hasHttp) {
+				ngxConfig.remove(ngxBlockHttp);
+			}
+			
 
 			// 创建stream
 			List<Stream> streamList = sqlHelper.findAll(Stream.class);
@@ -300,8 +307,8 @@ public class ConfController extends BaseController {
 
 			String conf = new NgxDumper(ngxConfig).dump();
 
+			// 装载ngx_stream_module模块
 			if (hasStream && !SystemUtil.get(SystemUtil.OS_NAME).toLowerCase().contains("win")) {
-				// 找寻ngx_stream_module模块
 				String module = settingService.get("ngx_stream_module");
 				if(StrUtil.isEmpty(module)) {
 					module = RuntimeUtil.execForStr("find / -name ngx_stream_module.so").trim();
