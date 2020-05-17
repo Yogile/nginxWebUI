@@ -296,9 +296,14 @@ public class ConfController extends BaseController {
 			
 			if(!hasStream) {
 				ngxConfig.remove(ngxBlockStream);
-			}
+			} 
 
-			return new NgxDumper(ngxConfig).dump();
+			String conf = new NgxDumper(ngxConfig).dump();
+			if(hasStream) {
+				conf = "load_module /usr/lib/nginx/modules/ngx_stream_module.so;\n" + conf;
+			}
+			
+			return conf;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -311,6 +316,9 @@ public class ConfController extends BaseController {
 	public JsonResult replace(String nginxPath, String nginxContent)  {
 		settingService.set("nginxPath", nginxPath);
 
+		if(!FileUtil.exist(nginxPath)) {
+			return renderError("目标文件不存在");
+		}
 		try {
 			// 备份文件
 			FileUtil.copy(nginxPath, nginxPath + DateUtil.format(new Date(), "yyyy-MM-dd_HH-mm-ss") + ".bak", true);
