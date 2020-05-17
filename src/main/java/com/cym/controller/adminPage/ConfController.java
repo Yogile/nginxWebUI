@@ -302,10 +302,14 @@ public class ConfController extends BaseController {
 
 			if (hasStream && !SystemUtil.get(SystemUtil.OS_NAME).toLowerCase().contains("win")) {
 				// 找寻ngx_stream_module模块
-				String rs = RuntimeUtil.execForStr("find / -name ngx_stream_module.so").trim();
+				String module = settingService.get("ngx_stream_module");
+				if(StrUtil.isEmpty(module)) {
+					module = RuntimeUtil.execForStr("find / -name ngx_stream_module.so").trim();
+				}
 
-				if (StrUtil.isNotEmpty(rs)) {
-					conf = "load_module " + rs + ";\n" + conf;
+				if (StrUtil.isNotEmpty(module)) {
+					settingService.set("ngx_stream_module", module);
+					conf = "load_module " + module + ";\n" + conf;
 				}
 
 			}
