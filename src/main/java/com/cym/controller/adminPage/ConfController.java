@@ -134,11 +134,11 @@ public class ConfController extends BaseController {
 					ngxParam = new NgxParam();
 					ngxParam.addValue("ssl_certificate_key " + server.getKey());
 					ngxBlockServer.addEntry(ngxParam);
-					
+
 					ngxParam = new NgxParam();
 					ngxParam.addValue("ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3");
 					ngxBlockServer.addEntry(ngxParam);
-					
+
 				}
 
 				List<Location> locationList = serverService.getLocationByServerId(server.getId());
@@ -232,7 +232,7 @@ public class ConfController extends BaseController {
 				ngxParam = new NgxParam();
 				ngxParam.addValue(stream.getName() + " " + stream.getValue());
 				ngxBlockStream.addEntry(ngxParam);
-				
+
 				hasStream = true;
 			}
 
@@ -256,7 +256,7 @@ public class ConfController extends BaseController {
 				}
 
 				ngxBlockStream.addEntry(ngxBlockServer);
-				
+
 				hasStream = true;
 			}
 
@@ -284,25 +284,32 @@ public class ConfController extends BaseController {
 				ngxParam = new NgxParam();
 				ngxParam.addValue("proxy_connect_timeout 1s");
 				ngxBlockServer.addEntry(ngxParam);
-				
+
 				ngxParam = new NgxParam();
 				ngxParam.addValue("proxy_timeout 3s");
 				ngxBlockServer.addEntry(ngxParam);
-				
+
 				ngxBlockStream.addEntry(ngxBlockServer);
-				
+
 				hasStream = true;
 			}
-			
-			if(!hasStream) {
+
+			if (!hasStream) {
 				ngxConfig.remove(ngxBlockStream);
-			} 
+			}
 
 			String conf = new NgxDumper(ngxConfig).dump();
-			if(hasStream) {
-				conf = "load_module /usr/lib/nginx/modules/ngx_stream_module.so;\n" + conf;
+
+			if (hasStream && !SystemUtil.get(SystemUtil.OS_NAME).toLowerCase().contains("win")) {
+				// 找寻ngx_stream_module模块
+				String rs = RuntimeUtil.execForStr("find / -name ngx_stream_module.so").trim();
+
+				if (StrUtil.isNotEmpty(rs)) {
+					conf = "load_module " + rs + ";\n" + conf;
+				}
+
 			}
-			
+
 			return conf;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -313,10 +320,10 @@ public class ConfController extends BaseController {
 
 	@RequestMapping(value = "replace")
 	@ResponseBody
-	public JsonResult replace(String nginxPath, String nginxContent)  {
+	public JsonResult replace(String nginxPath, String nginxContent) {
 		settingService.set("nginxPath", nginxPath);
 
-		if(!FileUtil.exist(nginxPath)) {
+		if (!FileUtil.exist(nginxPath)) {
 			return renderError("目标文件不存在");
 		}
 		try {
@@ -334,7 +341,7 @@ public class ConfController extends BaseController {
 
 	@RequestMapping(value = "check")
 	@ResponseBody
-	public JsonResult check(String nginxPath)  {
+	public JsonResult check(String nginxPath) {
 		settingService.set("nginxPath", nginxPath);
 
 		try {
@@ -364,7 +371,7 @@ public class ConfController extends BaseController {
 
 	@RequestMapping(value = "reboot")
 	@ResponseBody
-	public JsonResult reboot(String nginxPath)  {
+	public JsonResult reboot(String nginxPath) {
 		settingService.set("nginxPath", nginxPath);
 		try {
 			String rs = null;
@@ -393,7 +400,7 @@ public class ConfController extends BaseController {
 
 	@RequestMapping(value = "loadOrg")
 	@ResponseBody
-	public JsonResult loadOrg(String nginxPath)  {
+	public JsonResult loadOrg(String nginxPath) {
 		settingService.set("nginxPath", nginxPath);
 
 		if (FileUtil.exist(nginxPath)) {
