@@ -10,7 +10,7 @@ public class Remote extends BaseModel{
 	Integer port;
 	@InitValue("0")
 	Integer status; // 0 掉线 1在线
-	String credit;
+	String creditKey;
 	String name;
 	String pass;
 	
@@ -57,12 +57,13 @@ public class Remote extends BaseModel{
 		this.ip = ip;
 	}
 
-	public String getCredit() {
-		return credit;
+	public String getCreditKey() {
+		return creditKey;
 	}
 
-	public void setCredit(String credit) {
-		this.credit = credit;
+	public void setCreditKey(String creditKey) {
+		this.creditKey = creditKey;
 	}
+
 
 }

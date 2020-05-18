@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cym.model.Credit;
 import com.cym.service.AdminService;
+import com.cym.service.CreditService;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
 
@@ -25,20 +27,22 @@ import com.cym.utils.JsonResult;
 public class LoginController extends BaseController {
 	@Autowired
 	AdminService adminService;
-	
+	@Autowired
+	CreditService creditService;
+
 	@RequestMapping("login")
 	public ModelAndView admin(ModelAndView modelAndView) {
 		modelAndView.setViewName("/adminPage/login/index");
 		return modelAndView;
 	}
 
-	@RequestMapping(value = "login/login")
+	@RequestMapping("login/login")
 	@ResponseBody
 	public JsonResult submitLogin(String name, String pass, HttpSession httpSession) {
 
-		if (adminService.login(name,pass)) {
-			
-			httpSession.setAttribute("localType", "本地"); 
+		if (adminService.login(name, pass)) {
+
+			httpSession.setAttribute("localType", "本地");
 			httpSession.removeAttribute("remote");
 			httpSession.setAttribute("isLogin", true);
 			return renderSuccess();
@@ -51,6 +55,17 @@ public class LoginController extends BaseController {
 	public String loginOut(HttpSession httpSession) {
 		httpSession.removeAttribute("isLogin");
 		return "redirect:/adminPage/login";
+	}
+
+	@RequestMapping("login/getCredit")
+	public JsonResult getCredit(String name, String pass) {
+		if (adminService.login(name, pass)) {
+			String key = creditService.make();
+			return renderSuccess(key);
+		} else {
+			return renderError("授权失败");
+		}
+
 	}
 
 }
