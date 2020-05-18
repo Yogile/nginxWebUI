@@ -40,20 +40,21 @@ public class CertConfig {
 			FileUtil.del(userDir + File.separator + "acme.zip");
 
 			acmeSh = userDir + File.separator + ".acme.sh" + File.separator + "acme.sh";
-
 			RuntimeUtil.execForStr("chmod 777 " + acmeSh);
-			System.err.println(acmeSh);
-		}
+			
+			
+			// 找寻nginx配置文件
+			String nginxPath = settingService.get("nginxPath");
+			if (StrUtil.isEmpty(nginxPath)) {
+				nginxPath = RuntimeUtil.execForStr("find / -name nginx.conf").trim();
 
-		// 初始化nginx配置文件
-		String nginxPath = settingService.get("nginxPath");
-		if (StrUtil.isEmpty(nginxPath)) {
-			nginxPath = RuntimeUtil.execForStr("find / -name nginx.conf").trim();
-
-			if (StrUtil.isNotEmpty(nginxPath)) {
-				settingService.set("nginxPath", nginxPath);
+				if (StrUtil.isNotEmpty(nginxPath)) {
+					settingService.set("nginxPath", nginxPath);
+				}
 			}
 		}
+
+		
 	}
 
 }
