@@ -4,18 +4,25 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cym.model.Remote;
+import com.cym.service.RemoteService;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
+
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.http.HttpUtil;
 
 @Controller
 @RequestMapping("/adminPage/remote")
 public class RemoteController extends BaseController {
+	@Autowired
+	RemoteService remoteService;
 
 	@RequestMapping("")
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView) {
@@ -33,9 +40,18 @@ public class RemoteController extends BaseController {
 	@RequestMapping("addOver")
 	@ResponseBody
 	public JsonResult addOver(Remote remote) {
-		sqlHelper.insertOrUpdate(remote);
 
-		return renderSuccess();
+		String key = remoteService.getCreditKey(remote);
+
+		if (StrUtil.isNotEmpty(key)) {
+			remote.setCreditKey(key);
+
+			sqlHelper.insertOrUpdate(remote);
+			return renderSuccess();
+		} else {
+			return renderError("远程授权未通过,请检查");
+		}
+
 	}
 
 	@RequestMapping("detail")

@@ -57,20 +57,30 @@ function content(path) {
 	});
 }
 
+var load;
 function addOver() {
+	if($("#ip").val().trim() == '' || $("#port").val().trim() == '' || $("#name").val().trim() == '' || $("#pass").val().trim() == ''){
+		layer.msg("未填写完成");
+		return;
+	}
+	
+	load = layer.load();
 	$.ajax({
 		type : 'POST',
 		url : ctx + '/adminPage/remote/addOver',
 		data : $('#addForm').serialize(),
 		dataType : 'json',
 		success : function(data) {
+			layer.close(load);
 			if (data.success) {
 				location.reload();
 			} else {
+				
 				layer.msg(data.msg);
 			}
 		},
 		error : function() {
+			layer.close(load);
 			alert("出错了,请联系技术人员!");
 		}
 	});
