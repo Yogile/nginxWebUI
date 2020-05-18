@@ -42,8 +42,8 @@
 							<td>${remote.ip}</td>
 							<td>${remote.port}</td>
 							<td>
-								<#if remote.status==0>掉线</#if>
-								<#if remote.status==1>在线</#if>
+								<#if remote.status==0><span class="red">掉线</span></#if>
+								<#if remote.status==1><span class="green">在线</span></#if>
 							</td>
 							<td>
 								<button class="layui-btn layui-btn-sm layui-btn-normal" onclick="change('${remote.id}')">切换到此服务器</button>
