@@ -34,10 +34,13 @@ public class LoginController extends BaseController {
 
 	@RequestMapping(value = "login/login")
 	@ResponseBody
-	public JsonResult submitLogin(String name, String pass, HttpServletRequest request) {
+	public JsonResult submitLogin(String name, String pass, HttpSession httpSession) {
 
 		if (adminService.login(name,pass)) {
-			request.getSession().setAttribute("isLogin", true);
+			
+			httpSession.setAttribute("localType", "本地"); 
+			httpSession.removeAttribute("remote");
+			httpSession.setAttribute("isLogin", true);
 			return renderSuccess();
 		} else {
 			return renderError();

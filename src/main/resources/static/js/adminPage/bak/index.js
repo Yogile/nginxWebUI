@@ -22,6 +22,9 @@ function content(path) {
 		success : function(data) {
 			if (data.success) {
 				$("#content").val(data.obj);
+
+				$("#content").setTextareaCount();
+				
 				form.render();
 				
 				showWindow("内容");
