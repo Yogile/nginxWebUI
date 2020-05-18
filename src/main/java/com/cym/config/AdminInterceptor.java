@@ -74,14 +74,21 @@ public class AdminInterceptor implements HandlerInterceptor {
 
 			String url = buildUrl(ctx, request, remote);
 			String body = buldBody(request.getParameterMap(), remote);
-			String rs = HttpUtil.post(url, body);
+			try {
+				String rs = HttpUtil.post(url, body);
 
-			rs = rs.replace(remote.getIp(), request.getServerName()).replace(":" + remote.getPort().toString(), ":" + request.getServerPort());
+				rs = rs.replace(remote.getIp(), request.getServerName()).replace(":" + remote.getPort().toString(), ":" + request.getServerPort());
 
-			response.setCharacterEncoding("utf-8");
-			response.setContentType("text/html;charset=utf-8");
-			PrintWriter out = response.getWriter();
-			out.append(rs);
+				response.setCharacterEncoding("utf-8");
+				response.setContentType("text/html;charset=utf-8");
+				PrintWriter out = response.getWriter();
+				out.append(rs);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				
+				response.sendRedirect(ctx + "/adminPage/login/noServer");
+			}
 
 			return false;
 		}

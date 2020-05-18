@@ -58,6 +58,13 @@ public class LoginController extends BaseController {
 		httpSession.removeAttribute("isLogin");
 		return "redirect:/adminPage/login";
 	}
+	
+	@RequestMapping("noServer")
+	public ModelAndView noServer(ModelAndView modelAndView) {
+		modelAndView.setViewName("/adminPage/login/noServer");
+		return modelAndView;
+	}
+	
 
 	@ResponseBody
 	@RequestMapping("getCredit")
