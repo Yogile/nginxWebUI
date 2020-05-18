@@ -6,6 +6,7 @@ import cn.craccd.sqlHelper.config.Table;
 
 @Table
 public class Remote extends BaseModel{
+	String protocol;
 	String ip;
 	Integer port;
 	@InitValue("0")
@@ -16,6 +17,14 @@ public class Remote extends BaseModel{
 	
 	
 	
+	public String getProtocol() {
+		return protocol;
+	}
+
+	public void setProtocol(String protocol) {
+		this.protocol = protocol;
+	}
+
 	public String getName() {
 		return name;
 	}

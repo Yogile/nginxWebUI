@@ -36,7 +36,7 @@ public class RemoteController extends BaseController {
 		for (Remote remote : remoteList) {
 			remote.setStatus(0);
 			try {
-				String rs = HttpUtil.get("http://" + remote.getIp() + ":" + remote.getPort() + "/adminPage/remote/alive?creditKey=" + remote.getCreditKey(), 500);
+				String rs = HttpUtil.get(remote.getProtocol() + "://" + remote.getIp() + ":" + remote.getPort() + "/adminPage/remote/alive?creditKey=" + remote.getCreditKey(), 500);
 				if (rs.equals("true")) {
 					remote.setStatus(1);
 				}
@@ -91,7 +91,7 @@ public class RemoteController extends BaseController {
 
 		Remote remote = sqlHelper.findById(id, Remote.class);
 
-		String rs = HttpUtil.get("http://" + remote.getIp() + ":" + remote.getPort() + "/adminPage/remote/readContent?creditKey=" + remote.getCreditKey());
+		String rs = HttpUtil.get(remote.getProtocol() + "://" + remote.getIp() + ":" + remote.getPort() + "/adminPage/remote/readContent?creditKey=" + remote.getCreditKey());
 
 		return renderSuccess(rs);
 	}

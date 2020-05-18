@@ -30,6 +30,7 @@
 				<table class="layui-table">
 					<thead>
 						<tr>
+							<th>协议</th>
 							<th>ip</th>
 							<th>端口</th>
 							<th>状态</th>
@@ -39,6 +40,7 @@
 					<tbody>
 						<#list remoteList as remote>
 						<tr>
+							<td>${remote.protocol}</td>
 							<td>${remote.ip}</td>
 							<td>${remote.port}</td>
 							<td>
@@ -71,7 +73,18 @@
 		<div class="layui-form" id="windowDiv" style="padding: 15px; display: none">
 			<form id="addForm">
 				<input type="hidden" name="id" id="id">
-
+				
+				<div class="layui-form-item">
+					<label class="layui-form-label">protocol</label>
+					<div class="layui-input-block">
+						<select id="protocol" name="protocol">
+							<option>http</option>
+							<option>https</option>
+						</select>
+					</div>
+				</div>
+				
+				
 				<div class="layui-form-item">
 					<label class="layui-form-label">ip</label>
 					<div class="layui-input-block">
