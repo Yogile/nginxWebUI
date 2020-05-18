@@ -24,13 +24,17 @@ public class RemoteService {
 		paramMap.put("name", remote.getName());
 		paramMap.put("pass", remote.getPass());
 
-		String rs = HttpUtil.post("http://" + remote.getIp() + ":" + remote.getPort() + "/login/getCredit", paramMap);
+		try {
+			String rs = HttpUtil.post("http://" + remote.getIp() + ":" + remote.getPort() + "/adminPage/login/getCredit", paramMap, 2000);
 
-		if (StrUtil.isNotEmpty(rs)) {
-			JSONObject jsonObject = new JSONObject(rs);
-			if (jsonObject.getBool("success")) {
-				return jsonObject.getStr("obj");
+			if (StrUtil.isNotEmpty(rs)) {
+				JSONObject jsonObject = new JSONObject(rs);
+				if (jsonObject.getBool("success")) {
+					return jsonObject.getStr("obj");
+				}
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		return null;

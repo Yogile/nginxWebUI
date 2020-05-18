@@ -8,6 +8,7 @@ import com.cym.model.Credit;
 import cn.craccd.sqlHelper.utils.CriteriaAndWrapper;
 import cn.craccd.sqlHelper.utils.SqlHelper;
 import cn.hutool.core.lang.UUID;
+import cn.hutool.core.util.StrUtil;
 
 @Service
 public class CreditService {
@@ -25,6 +26,10 @@ public class CreditService {
 	}
 
 	public boolean check(String key) {
+		if(StrUtil.isEmpty(key)) {
+			return false;
+		}
+		
 		Credit credit = sqlHelper.findOneByQuery(new CriteriaAndWrapper().eq("key", key), Credit.class);
 
 		if (credit == null) {
