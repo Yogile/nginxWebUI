@@ -46,6 +46,14 @@ public class AdminInterceptor implements HandlerInterceptor {
 		}
 
 
+		String localType = (String) request.getSession().getAttribute("localType");
+		
+		if(localType.equals("远程")) {
+			// 转发到远程服务器
+			// TODO
+			
+		}
+		
 
 		return true;
 	}

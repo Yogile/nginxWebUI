@@ -177,6 +177,10 @@ public class ConfController extends BaseController {
 						ngxParam.addValue("proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for");
 						ngxBlockLocation.addEntry(ngxParam);
 
+						ngxParam = new NgxParam();
+						ngxParam.addValue("proxy_set_header X-Forwarded-Proto $scheme");
+						ngxBlockLocation.addEntry(ngxParam);
+
 						ngxBlockServer.addEntry(ngxBlockLocation);
 
 					} else if (location.getType() == 1) { // 静态html
