@@ -26,13 +26,13 @@ function showWindow(title){
 
 
 
-function content(path) {
+function content(id) {
 	$.ajax({
 		type : 'GET',
 		url : ctx + '/adminPage/remote/content',
 		dataType : 'json',
 		data : {
-			path : path
+			id : id
 		},
 		success : function(data) {
 			if (data.success) {

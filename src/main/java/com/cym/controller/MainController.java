@@ -2,6 +2,7 @@ package com.cym.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
@@ -62,4 +63,8 @@ public class MainController extends BaseController {
 
 		return renderError();
 	}
+	
+	
+
+	
 }
