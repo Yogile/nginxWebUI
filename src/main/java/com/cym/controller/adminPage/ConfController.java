@@ -361,7 +361,10 @@ public class ConfController extends BaseController {
 				File file = new File(nginxPath);
 				if (file.exists() && file.getParentFile().getParentFile().exists()) {
 					File nginxDir = file.getParentFile().getParentFile();
-					rs = RuntimeUtil.execForStr("cmd /c powershell cd " + nginxDir.getPath() + "; ./nginx.exe -t;");
+//					rs = RuntimeUtil.execForStr("cmd /c powershell cd " + nginxDir.getPath() + "; ./nginx.exe -t;");
+					
+					Process process = RuntimeUtil.exec(null, nginxDir, "nginx.exe -t");
+					rs = RuntimeUtil.getResult(process);
 				} else {
 					return renderError("nginx目录不存在");
 				}
