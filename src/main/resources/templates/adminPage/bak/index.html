@@ -36,7 +36,7 @@
 							<td>${bak.path}</td>
 							<td>${bak.time}</td>
 							<td>
-								<button class="layui-btn layui-btn-sm" onclick="content('${bak.path}')">内容</button>
+								<button class="layui-btn layui-btn-sm" onclick="content('${bak.path}')">查看内容</button>
 								<button class="layui-btn layui-btn-sm layui-btn-normal" onclick="replace('${bak.path}')">还原</button>
 								<button class="layui-btn layui-btn-sm layui-btn-danger" onclick="del('${bak.path}')">删除</button>
 							</td>
@@ -53,7 +53,7 @@
 		<div class="layui-form" id="windowDiv" style=" display: none">
 			<input type="hidden" id="path" value="path">
 			
-			<textarea class="layui-textarea" id="content" style=" height: 700px; resize: none; background-color: #ededed;"  readonly="readonly" spellcheck="false"></textarea>
+			<textarea class="layui-textarea" id="content" style=" height: 700px; width:1200px;resize: none; background-color: #ededed;"  readonly="readonly" spellcheck="false"></textarea>
 
 		</div>
 
