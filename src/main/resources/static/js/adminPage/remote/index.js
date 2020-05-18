@@ -7,7 +7,7 @@ function add() {
 	$("#id").val(""); 
 	$("#ip").val(""); 
 	$("#port").val(""); 
-	
+	$("#protocol").val("http"); 
 	$("#name").val(""); 
 	$("#pass").val(""); 
 	
@@ -104,6 +104,7 @@ function edit(id) {
 				$("#name").val(remote.name);
 				$("#ip").val(remote.ip); 
 				$("#port").val(remote.port); 
+				$("#protocol").val(remote.protocol); 
 				
 				form.render();
 				showWindow("编辑远程服务器");

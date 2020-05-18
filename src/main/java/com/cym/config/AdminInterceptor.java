@@ -114,7 +114,7 @@ public class AdminInterceptor implements HandlerInterceptor {
 	}
 
 	private String buildUrl(String ctx, HttpServletRequest request, Remote remote) {
-		String url = request.getRequestURL().toString().replace(ctx, "http://" + remote.getIp() + ":" + remote.getPort() + "/");
+		String url = request.getRequestURL().toString().replace(ctx, remote.getProtocol() + "://" + remote.getIp() + ":" + remote.getPort() + "/");
 
 //		url += "?creditKey=" + remote.getCreditKey();
 //		if (StrUtil.isNotEmpty(request.getQueryString())) {

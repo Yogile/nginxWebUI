@@ -50,7 +50,7 @@ public class MainController extends BaseController {
 				HashMap<String, Object> paramMap = new HashMap<>();
 				paramMap.put("file", dest);
 
-				String rs = HttpUtil.post("http://" + remote.getIp() + ":" + remote.getPort() + "/upload", paramMap);
+				String rs = HttpUtil.post(remote.getProtocol() + "://" + remote.getIp() + ":" + remote.getPort() + "/upload", paramMap);
 				JsonResult jsonResult = JSONUtil.toBean(rs, JsonResult.class);
 				FileUtil.del(dest);
 				return jsonResult;

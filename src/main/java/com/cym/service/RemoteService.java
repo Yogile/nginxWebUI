@@ -25,7 +25,7 @@ public class RemoteService {
 		paramMap.put("pass", remote.getPass());
 
 		try {
-			String rs = HttpUtil.post("http://" + remote.getIp() + ":" + remote.getPort() + "/adminPage/login/getCredit", paramMap, 2000);
+			String rs = HttpUtil.post(remote.getProtocol() + "://" + remote.getIp() + ":" + remote.getPort() + "/adminPage/login/getCredit", paramMap, 2000);
 
 			if (StrUtil.isNotEmpty(rs)) {
 				JSONObject jsonObject = new JSONObject(rs);
