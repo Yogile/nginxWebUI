@@ -36,7 +36,7 @@ public class RemoteController extends BaseController {
 		for (Remote remote : remoteList) {
 			remote.setStatus(0);
 			try {
-				String rs = HttpUtil.get("http://" + remote.getIp() + ":" + remote.getPort() + "/adminPage/remote/alive?creditKey=" + remote.getCreditKey(), 100);
+				String rs = HttpUtil.get("http://" + remote.getIp() + ":" + remote.getPort() + "/adminPage/remote/alive?creditKey=" + remote.getCreditKey(), 500);
 				if (rs.equals("true")) {
 					remote.setStatus(1);
 				}
