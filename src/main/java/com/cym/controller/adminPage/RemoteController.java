@@ -33,6 +33,18 @@ public class RemoteController extends BaseController {
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView) {
 		List<Remote> remoteList = sqlHelper.findAll(Remote.class);
 
+		for (Remote remote : remoteList) {
+			remote.setStatus(0);
+			try {
+				String rs = HttpUtil.get("http://" + remote.getIp() + ":" + remote.getPort() + "/adminPage/remote/alive?creditKey=" + remote.getCreditKey(), 100);
+				if (rs.equals("true")) {
+					remote.setStatus(1);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
 		Remote remote = new Remote();
 		remote.setIp("本地");
 		remoteList.add(0, remote);
@@ -82,6 +94,13 @@ public class RemoteController extends BaseController {
 		String rs = HttpUtil.get("http://" + remote.getIp() + ":" + remote.getPort() + "/adminPage/remote/readContent?creditKey=" + remote.getCreditKey());
 
 		return renderSuccess(rs);
+	}
+
+	@RequestMapping("alive")
+	@ResponseBody
+	public String alive() {
+
+		return "true";
 	}
 
 	@RequestMapping("readContent")
