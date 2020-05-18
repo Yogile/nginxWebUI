@@ -51,7 +51,7 @@ public class MainController extends BaseController {
 
 				String rs = HttpUtil.post("http://" + remote.getIp() + ":" + remote.getPort() + "/upload", paramMap);
 				JsonResult jsonResult = JSONUtil.toBean(rs, JsonResult.class);
-				
+				FileUtil.del(dest);
 				return jsonResult;
 			}
 
