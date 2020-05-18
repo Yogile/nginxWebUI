@@ -1,5 +1,6 @@
 package com.cym.controller.adminPage;
 
+import java.nio.charset.Charset;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -12,9 +13,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.cym.model.Remote;
 import com.cym.service.RemoteService;
+import com.cym.service.SettingService;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
 
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
 
@@ -23,6 +26,8 @@ import cn.hutool.http.HttpUtil;
 public class RemoteController extends BaseController {
 	@Autowired
 	RemoteService remoteService;
+	@Autowired
+	SettingService settingService;
 
 	@RequestMapping("")
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView) {
@@ -72,7 +77,26 @@ public class RemoteController extends BaseController {
 	@ResponseBody
 	public JsonResult content(String id) {
 
-		return renderSuccess("");
+		Remote remote = sqlHelper.findById(id, Remote.class);
+
+		String rs = HttpUtil.get("http://" + remote.getIp() + ":" + remote.getPort() + "/adminPage/remote/readContent?creditKey=" + remote.getCreditKey());
+
+		return renderSuccess(rs);
+	}
+
+	@RequestMapping("readContent")
+	@ResponseBody
+	public String readContent() {
+
+		String nginxPath = settingService.get("nginxPath");
+
+		if (FileUtil.exist(nginxPath)) {
+			String orgStr = FileUtil.readString(nginxPath, Charset.defaultCharset());
+			return orgStr;
+		} else {
+			return "文件不存在";
+		}
+
 	}
 
 	@RequestMapping("change")

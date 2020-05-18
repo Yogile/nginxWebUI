@@ -77,8 +77,7 @@ public class AdminInterceptor implements HandlerInterceptor {
 			String rs = HttpUtil.post(url, body);
 
 			rs = rs.replace(remote.getIp(), request.getServerName()).replace(":" + remote.getPort().toString(), ":" + request.getServerPort());
-			rs = rs.replace("<span style=\"display: none\">#local#</span>", remote.getIp() + ":" + remote.getPort());
-			
+
 			response.setCharacterEncoding("utf-8");
 			response.setContentType("text/html;charset=utf-8");
 			PrintWriter out = response.getWriter();

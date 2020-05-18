@@ -49,8 +49,9 @@
 								<button class="layui-btn layui-btn-sm layui-btn-normal" onclick="change('${remote.id}')">切换到此服务器</button>
 									
 								<#if remote.ip != '本地'>
+									
+									<button class="layui-btn layui-btn-sm" onclick="content('${remote.id}')">查看conf</button>
 									<button class="layui-btn layui-btn-sm" onclick="edit('${remote.id}')">编辑</button>
-									<button class="layui-btn layui-btn-sm" onclick="content('${remote.id}')">查看配置文件</button>
 									<button class="layui-btn layui-btn-danger layui-btn-sm" onclick="del('${remote.id}')">删除</button>
 								</#if>
 								
@@ -110,7 +111,7 @@
 		<div class="layui-form" id="contentDiv" style=" display: none">
 			<input type="hidden" id="path" value="path">
 			
-			<textarea class="layui-textarea" id="content" style=" height: 700px; resize: none; background-color: #ededed;"  readonly="readonly" spellcheck="false"></textarea>
+			<textarea class="layui-textarea" id="content" style=" height: 700px;width:1200px; resize: none; background-color: #ededed;"  readonly="readonly" spellcheck="false"></textarea>
 
 		</div>
 	</div>
