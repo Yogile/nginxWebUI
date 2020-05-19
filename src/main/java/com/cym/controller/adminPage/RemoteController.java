@@ -116,48 +116,19 @@ public class RemoteController extends BaseController {
 	@RequestMapping("getAsycPack")
 	@ResponseBody
 	public String getAsycPack() {
-		AsycPack asycPack = new AsycPack();
-		
-		asycPack.setCertList(sqlHelper.findAll(Cert.class));
-		asycPack.setHttpList(sqlHelper.findAll(Http.class));
-		asycPack.setServerList(sqlHelper.findAll(Server.class));
-		asycPack.setLocationList(sqlHelper.findAll(Location.class));
-		asycPack.setUpstreamList(sqlHelper.findAll(Upstream.class));
-		asycPack.setUpstreamServerList(sqlHelper.findAll(UpstreamServer.class));
-		asycPack.setSettingList(sqlHelper.findAll(Setting.class));
-		asycPack.setStreamList(sqlHelper.findAll(Stream.class));
-		
-		String nginxPath = settingService.get("nginxPath");
-		String decompose = settingService.get("decompose");
-		
-		ConfExt confExt = confService.buildConf(StrUtil.isNotEmpty(decompose) && decompose.equals("true"));
-
-		if (FileUtil.exist(nginxPath)) {
-			String orgStr = FileUtil.readString(nginxPath, Charset.defaultCharset());
-			confExt.setConf(orgStr);
-
-			for (ConfFile confFile : confExt.getFileList()) {
-				confFile.setConf("");
-
-				String filePath = nginxPath.replace("nginx.conf", "conf.d/" + confFile.getName());
-				if (FileUtil.exist(filePath)) {
-					confFile.setConf(FileUtil.readString(filePath, Charset.defaultCharset()));
-				}
-			}
-		} 
-		
-		asycPack.setDecompose(decompose);
-		asycPack.setConfExt(confExt);
+		AsycPack asycPack = confService.getAsycPack();
 		
 		return JSONUtil.toJsonStr(asycPack); 
 	}
 	
 	@RequestMapping("setAsycPack")
 	@ResponseBody
-	public String setAsycPack(String json) {
+	public JsonResult setAsycPack(String json) {
 		AsycPack asycPack = JSONUtil.toBean(json, AsycPack.class); 
 		
-		return "";
+		confService.setAsycPack(asycPack);
+		
+		return renderSuccess();
 	}
 	
 
