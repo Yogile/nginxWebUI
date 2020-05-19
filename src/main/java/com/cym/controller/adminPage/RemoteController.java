@@ -1,17 +1,32 @@
 package com.cym.controller.adminPage;
 
 import java.nio.charset.Charset;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cym.ext.AsycPack;
+import com.cym.ext.ConfExt;
+import com.cym.ext.ConfFile;
+import com.cym.model.Cert;
+import com.cym.model.Http;
+import com.cym.model.Location;
 import com.cym.model.Remote;
+import com.cym.model.Server;
+import com.cym.model.Setting;
+import com.cym.model.Stream;
+import com.cym.model.Upstream;
+import com.cym.model.UpstreamServer;
+import com.cym.service.ConfService;
 import com.cym.service.RemoteService;
 import com.cym.service.SettingService;
 import com.cym.utils.BaseController;
@@ -20,6 +35,7 @@ import com.cym.utils.JsonResult;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
+import cn.hutool.json.JSONUtil;
 
 @Controller
 @RequestMapping("/adminPage/remote")
@@ -28,6 +44,12 @@ public class RemoteController extends BaseController {
 	RemoteService remoteService;
 	@Autowired
 	SettingService settingService;
+	@Autowired
+	ConfService confService;
+	@Value("${project.version}")
+	String version;
+	@Value("${server.port}")
+	Integer port;
 
 	@RequestMapping("")
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView) {
@@ -36,9 +58,10 @@ public class RemoteController extends BaseController {
 		for (Remote remote : remoteList) {
 			remote.setStatus(0);
 			try {
-				String rs = HttpUtil.get(remote.getProtocol() + "://" + remote.getIp() + ":" + remote.getPort() + "/adminPage/remote/alive?creditKey=" + remote.getCreditKey(), 500);
-				if (rs.equals("true")) {
+				String version = HttpUtil.get(remote.getProtocol() + "://" + remote.getIp() + ":" + remote.getPort() + "/adminPage/remote/version?creditKey=" + remote.getCreditKey(), 500);
+				if (StrUtil.isNotEmpty(version)) {
 					remote.setStatus(1);
+					remote.setVersion(version);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -47,12 +70,96 @@ public class RemoteController extends BaseController {
 
 		Remote remote = new Remote();
 		remote.setIp("本地");
+		remote.setVersion(version);
+		remote.setPort(port);
+
 		remoteList.add(0, remote);
 
 		modelAndView.addObject("remoteList", remoteList);
 		modelAndView.setViewName("/adminPage/remote/index");
+
+		System.out.println(version);
 		return modelAndView;
 	}
+
+	@RequestMapping("asyc")
+	@ResponseBody
+	public JsonResult asyc(String id) {
+		Remote remoteFrom = sqlHelper.findById(id, Remote.class);
+		String json = null;
+		if (StrUtil.isEmpty(id)) {
+			// 本地
+			json = getAsycPack();
+		} else {
+			// 远程
+			json = HttpUtil.get(remoteFrom.getProtocol() + "://" + remoteFrom.getIp() + ":" + remoteFrom.getPort() + "/adminPage/remote/getAsycPack?creditKey=" + remoteFrom.getCreditKey(), 500);
+		}
+
+		List<Remote> remoteList = sqlHelper.findAll(Remote.class);
+		for (Remote remoteTo : remoteList) {
+			try {
+				String version = HttpUtil.get(remoteTo.getProtocol() + "://" + remoteTo.getIp() + ":" + remoteTo.getPort() + "/adminPage/remote/version?creditKey=" + remoteTo.getCreditKey(), 500);
+				if (StrUtil.isNotEmpty(version)) {
+					// 在线
+					Map<String,Object> map = new HashMap<String,Object>();
+					map.put("json", json);
+					HttpUtil.post(remoteTo.getProtocol() + "://" + remoteTo.getIp() + ":" + remoteTo.getPort() + "/adminPage/remote/setAsycPack?creditKey=" + remoteTo.getCreditKey(), map);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return renderSuccess();
+	}
+
+	@RequestMapping("getAsycPack")
+	@ResponseBody
+	public String getAsycPack() {
+		AsycPack asycPack = new AsycPack();
+		
+		asycPack.setCertList(sqlHelper.findAll(Cert.class));
+		asycPack.setHttpList(sqlHelper.findAll(Http.class));
+		asycPack.setServerList(sqlHelper.findAll(Server.class));
+		asycPack.setLocationList(sqlHelper.findAll(Location.class));
+		asycPack.setUpstreamList(sqlHelper.findAll(Upstream.class));
+		asycPack.setUpstreamServerList(sqlHelper.findAll(UpstreamServer.class));
+		asycPack.setSettingList(sqlHelper.findAll(Setting.class));
+		asycPack.setStreamList(sqlHelper.findAll(Stream.class));
+		
+		String nginxPath = settingService.get("nginxPath");
+		String decompose = settingService.get("decompose");
+		
+		ConfExt confExt = confService.buildConf(StrUtil.isNotEmpty(decompose) && decompose.equals("true"));
+
+		if (FileUtil.exist(nginxPath)) {
+			String orgStr = FileUtil.readString(nginxPath, Charset.defaultCharset());
+			confExt.setConf(orgStr);
+
+			for (ConfFile confFile : confExt.getFileList()) {
+				confFile.setConf("");
+
+				String filePath = nginxPath.replace("nginx.conf", "conf.d/" + confFile.getName());
+				if (FileUtil.exist(filePath)) {
+					confFile.setConf(FileUtil.readString(filePath, Charset.defaultCharset()));
+				}
+			}
+		} 
+		
+		asycPack.setDecompose(decompose);
+		asycPack.setConfExt(confExt);
+		
+		return JSONUtil.toJsonStr(asycPack); 
+	}
+	
+	@RequestMapping("setAsycPack")
+	@ResponseBody
+	public String setAsycPack(String json) {
+		AsycPack asycPack = JSONUtil.toBean(json, AsycPack.class); 
+		
+		return "";
+	}
+	
 
 	@RequestMapping("addOver")
 	@ResponseBody
@@ -101,6 +208,13 @@ public class RemoteController extends BaseController {
 	public String alive() {
 
 		return "true";
+	}
+
+	@RequestMapping("version")
+	@ResponseBody
+	public String version() {
+
+		return version;
 	}
 
 	@RequestMapping("readContent")

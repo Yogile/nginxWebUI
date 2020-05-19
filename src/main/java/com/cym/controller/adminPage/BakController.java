@@ -107,7 +107,7 @@ public class BakController extends BaseController {
 	@ResponseBody
 	public JsonResult del(String path) {
 		FileUtil.del(path);
-
+		FileUtil.del(path.replace(".bak", ".zip"));
 		return renderSuccess();
 	}
 

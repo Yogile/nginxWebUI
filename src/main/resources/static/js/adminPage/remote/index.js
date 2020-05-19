@@ -24,7 +24,32 @@ function showWindow(title){
 	});
 }
 
-
+function contentLocal(){
+	$.ajax({
+		type : 'GET',
+		url : ctx + '/adminPage/remote/readContent',
+		success : function(data) {
+			if (data) {
+				$("#content").val(data);
+				$("#content").setTextareaCount();
+				
+				form.render();
+				
+				layer.open({
+					type : 1,
+					title : "内容",
+					area : [ '1200px', '745px' ], // 宽高
+					content : $('#contentDiv')
+				});
+			}else{
+				layer.msg(data.msg);
+			}
+		},
+		error : function() {
+			alert("出错了,请联系技术人员!");
+		}
+	});
+}
 
 function content(id) {
 	$.ajax({
@@ -155,6 +180,31 @@ function change(id){
 			success : function(data) {
 				if (data.success) {
 					location.reload();
+				}else{
+					layer.msg(data.msg)
+				}
+			},
+			error : function() {
+				alert("出错了,请联系技术人员!");
+			}
+		});
+	}
+}
+
+function asyc(id){
+	if(confirm("是否同步此服务器配置文件到其他服务器？")){
+		layer.load();
+		$.ajax({
+			type : 'POST',
+			url : ctx + '/adminPage/remote/asyc',
+			data : {
+				id : id
+			},
+			dataType : 'json',
+			success : function(data) {
+				if (data.success) {
+					layer.closeAll();
+					layer.msg("同步成功")
 				}else{
 					layer.msg(data.msg)
 				}
