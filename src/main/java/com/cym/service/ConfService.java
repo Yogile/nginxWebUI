@@ -440,6 +440,11 @@ public class ConfService {
 			FileUtil.writeString(cert.getKeyStr(), cert.getKey(), Charset.defaultCharset());
 		}
 
+		for (Server server : asycPack.getServerList()) {
+			FileUtil.writeString(server.getPemStr(), server.getPem(), Charset.defaultCharset());
+			FileUtil.writeString(server.getKeyStr(), server.getKey(), Charset.defaultCharset());
+		}
+		
 		settingService.set("decompose", asycPack.getDecompose());
 
 		ConfExt confExt = asycPack.getConfExt();
@@ -499,7 +504,14 @@ public class ConfService {
 
 		asycPack.setCertList(certList);
 		asycPack.setHttpList(sqlHelper.findAll(Http.class));
-		asycPack.setServerList(sqlHelper.findAll(Server.class));
+		List<Server> serverList = sqlHelper.findAll(Server.class);
+		for (Server server : serverList) {
+			server.setPemStr(FileUtil.readString(server.getPem(), Charset.defaultCharset()));
+			server.setKeyStr(FileUtil.readString(server.getKey(), Charset.defaultCharset()));
+		}
+		asycPack.setServerList(serverList);
+		
+		
 		asycPack.setLocationList(sqlHelper.findAll(Location.class));
 		asycPack.setUpstreamList(sqlHelper.findAll(Upstream.class));
 		asycPack.setUpstreamServerList(sqlHelper.findAll(UpstreamServer.class));
