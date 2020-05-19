@@ -51,7 +51,7 @@ public class AdminInterceptor implements HandlerInterceptor {
 	 */
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object obj) throws Exception {
-		System.err.println(request.getRequestURL());
+//		System.err.println(request.getRequestURL());
 		String ctx = getCtx(request.getRequestURL().toString() + "/");
 
 		if (request.getRequestURL().toString().contains("adminPage/login")) {

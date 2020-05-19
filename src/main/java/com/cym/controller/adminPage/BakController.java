@@ -3,6 +3,7 @@ package com.cym.controller.adminPage;
 import java.io.File;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -18,6 +19,7 @@ import com.cym.service.SettingService;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
@@ -32,6 +34,14 @@ public class BakController extends BaseController {
 	@RequestMapping("")
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView) {
 		List<Bak> bakList = getBakList();
+
+		CollectionUtil.sort(bakList, new Comparator<Bak>() {
+
+			@Override
+			public int compare(Bak o1, Bak o2) {
+				return StrUtil.compare(o2.getTime(), o1.getTime(), true);
+			}
+		});
 
 		modelAndView.addObject("bakList", bakList);
 		modelAndView.setViewName("/adminPage/bak/index");
@@ -49,7 +59,7 @@ public class BakController extends BaseController {
 			for (File file : fileList) {
 				if (file.getName().contains("nginx.conf") && file.getName().endsWith(".bak")) {
 					Bak bak = new Bak();
-					bak.setPath(file.getPath().replace("\\", "/")); 
+					bak.setPath(file.getPath().replace("\\", "/"));
 					DateTime date = DateUtil.parse(file.getName().replace("nginx.conf", "").replace(".bak", ""), "yyyy-MM-dd_HH-mm-ss");
 					bak.setTime(DateUtil.format(date, "yyyy-MM-dd HH:mm:ss"));
 
@@ -67,22 +77,20 @@ public class BakController extends BaseController {
 		String str = FileUtil.readString(path, Charset.defaultCharset());
 		return renderSuccess(str);
 	}
-	
 
 	@RequestMapping("replace")
 	@ResponseBody
 	public JsonResult replace(String path) {
 		String str = FileUtil.readString(path, Charset.defaultCharset());
-		
+
 		String nginxPath = settingService.get("nginxPath");
 		if (StrUtil.isNotEmpty(nginxPath)) {
-			FileUtil.writeString(str, nginxPath, Charset.defaultCharset());	
+			FileUtil.writeString(str, nginxPath, Charset.defaultCharset());
 			return renderSuccess();
 		} else {
 			return renderError("conf文件路径未配置");
 		}
-		
-		
+
 	}
 
 	@RequestMapping("del")
