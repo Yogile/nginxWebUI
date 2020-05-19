@@ -24,6 +24,7 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.ZipUtil;
 
 @Controller
 @RequestMapping("/adminPage/bak")
@@ -81,11 +82,20 @@ public class BakController extends BaseController {
 	@RequestMapping("replace")
 	@ResponseBody
 	public JsonResult replace(String path) {
-		String str = FileUtil.readString(path, Charset.defaultCharset());
-
 		String nginxPath = settingService.get("nginxPath");
+
+		String str = FileUtil.readString(path, Charset.defaultCharset());
+		
 		if (StrUtil.isNotEmpty(nginxPath)) {
 			FileUtil.writeString(str, nginxPath, Charset.defaultCharset());
+
+			if (FileUtil.exist(path.replace(".bak", ".zip"))) {
+				String confd = nginxPath.replace("nginx.conf", "conf.d/");
+				FileUtil.del(confd);
+				ZipUtil.unzip(path.replace(".bak", ".zip"));
+				FileUtil.rename(new File(path.replace(".bak", "")), confd, false, true);
+			}
+
 			return renderSuccess();
 		} else {
 			return renderError("conf文件路径未配置");

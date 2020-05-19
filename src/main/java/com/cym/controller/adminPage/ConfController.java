@@ -106,8 +106,9 @@ public class ConfController extends BaseController {
 			}
 
 			if (!"true".equals(decompose)) {
-				// 删除conf.d下文件
+				// 删除conf.d下全部文件
 				FileUtil.del(confd);
+				FileUtil.mkdir(confd);
 			}
 
 			return renderSuccess("替换成功，原文件已备份");
