@@ -49,7 +49,7 @@ public class CertConfig {
 				nginxPath = RuntimeUtil.execForStr("find / -name nginx.conf").trim();
 
 				if (StrUtil.isNotEmpty(nginxPath)) {
-					settingService.set("nginxPath", nginxPath);
+					settingService.set("nginxPath", nginxPath.replace("\\", "/"));
 				}
 			}
 		}

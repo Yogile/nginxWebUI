@@ -1,19 +1,26 @@
 package com.cym.service;
 
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.cym.controller.adminPage.UpstreamController;
+import com.cym.ext.AsycPack;
 import com.cym.ext.ConfExt;
 import com.cym.ext.ConfFile;
+import com.cym.model.Cert;
 import com.cym.model.Http;
 import com.cym.model.Location;
 import com.cym.model.Server;
+import com.cym.model.Setting;
 import com.cym.model.Stream;
 import com.cym.model.Upstream;
 import com.cym.model.UpstreamServer;
@@ -22,9 +29,13 @@ import com.github.odiszapc.nginxparser.NgxConfig;
 import com.github.odiszapc.nginxparser.NgxDumper;
 import com.github.odiszapc.nginxparser.NgxParam;
 
+import cn.craccd.sqlHelper.utils.CriteriaAndWrapper;
 import cn.craccd.sqlHelper.utils.SqlHelper;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.ZipUtil;
 import cn.hutool.system.SystemUtil;
 
 @Service
@@ -201,10 +212,15 @@ public class ConfService {
 
 				// 是否需要分解
 				if (decompose) {
-					addConfFile(confExt, server.getServerName() + ".conf", ngxBlockServer);
-					
+					String name = "all";
+					if (StrUtil.isNotEmpty(server.getServerName())) {
+						name = server.getServerName();
+					}
+
+					addConfFile(confExt, name + ".conf", ngxBlockServer);
+
 					ngxParam = new NgxParam();
-					ngxParam.addValue("include " + nginxPath.replace("nginx.conf", "conf.d/" + server.getServerName() + ".conf"));
+					ngxParam.addValue("include " + nginxPath.replace("nginx.conf", "conf.d/" + name + ".conf"));
 					ngxBlockHttp.addEntry(ngxParam);
 
 				} else {
@@ -233,7 +249,7 @@ public class ConfService {
 					// 是否需要分解
 					if (decompose) {
 						addConfFile(confExt, server.getServerName() + ".conf", ngxBlockServer);
-						
+
 					} else {
 						ngxBlockHttp.addEntry(ngxBlockServer);
 					}
@@ -278,7 +294,7 @@ public class ConfService {
 
 				if (decompose) {
 					addConfFile(confExt, "upstreams." + upstream.getName() + ".conf", ngxBlockServer);
-					
+
 					ngxParam = new NgxParam();
 					ngxParam.addValue("include " + nginxPath.replace("nginx.conf", "conf.d/upstreams." + upstream.getName() + ".conf"));
 					ngxBlockStream.addEntry(ngxParam);
@@ -320,7 +336,7 @@ public class ConfService {
 
 				if (decompose) {
 					addConfFile(confExt, "stream." + server.getListen() + ".conf", ngxBlockServer);
-					
+
 					ngxParam = new NgxParam();
 					ngxParam.addValue("include " + nginxPath.replace("nginx.conf", "conf.d/stream." + server.getListen() + ".conf"));
 					ngxBlockStream.addEntry(ngxParam);
@@ -384,6 +400,120 @@ public class ConfService {
 		ngxConfig.addEntry(ngxBlockServer);
 
 		return new NgxDumper(ngxConfig).dump();
+	}
+
+	@Transactional
+	public void setAsycPack(AsycPack asycPack) {
+
+		sqlHelper.deleteByQuery(new CriteriaAndWrapper(), Cert.class);
+		sqlHelper.deleteByQuery(new CriteriaAndWrapper(), Http.class);
+		sqlHelper.deleteByQuery(new CriteriaAndWrapper(), Server.class);
+		sqlHelper.deleteByQuery(new CriteriaAndWrapper(), Location.class);
+		sqlHelper.deleteByQuery(new CriteriaAndWrapper(), Upstream.class);
+		sqlHelper.deleteByQuery(new CriteriaAndWrapper(), UpstreamServer.class);
+		sqlHelper.deleteByQuery(new CriteriaAndWrapper(), Stream.class);
+
+		sqlHelper.insertAll(asycPack.getCertList());
+		sqlHelper.insertAll(asycPack.getHttpList());
+		sqlHelper.insertAll(asycPack.getServerList());
+		sqlHelper.insertAll(asycPack.getLocationList());
+		sqlHelper.insertAll(asycPack.getUpstreamList());
+		sqlHelper.insertAll(asycPack.getUpstreamServerList());
+		sqlHelper.insertAll(asycPack.getStreamList());
+
+		for (Cert cert : asycPack.getCertList()) {
+			FileUtil.writeString(cert.getPemStr(), cert.getPem(), Charset.defaultCharset());
+			FileUtil.writeString(cert.getKeyStr(), cert.getKey(), Charset.defaultCharset());
+		}
+		
+		
+		settingService.set("decompose", asycPack.getDecompose());
+
+		ConfExt confExt = asycPack.getConfExt();
+
+		String nginxPath = settingService.get("nginxPath");
+
+		if (FileUtil.exist(nginxPath)) {
+
+			List<String> subContent = new ArrayList<String>();
+			List<String> subName = new ArrayList<String>();
+
+			for (ConfFile confFile : confExt.getFileList()) {
+				subContent.add(confFile.getConf());
+				subName.add(confFile.getName());
+			}
+
+			replace(nginxPath, confExt.getConf(), subContent.toArray(new String[0]), subName.toArray(new String[0]));
+		}
+	}
+
+	public void replace(String nginxPath, String nginxContent, String[] subContent, String[] subName) {
+		String date = DateUtil.format(new Date(), "yyyy-MM-dd_HH-mm-ss");
+		// 备份主文件
+		FileUtil.copy(nginxPath, nginxPath + date + ".bak", true);
+		// 备份conf.d文件夹
+		String confd = nginxPath.replace("nginx.conf", "conf.d/");
+		if (!FileUtil.exist(confd)) {
+			FileUtil.mkdir(confd);
+		}
+		ZipUtil.zip(confd, nginxPath + date + ".zip");
+
+		// 写入主文件
+		FileUtil.writeString(nginxContent, nginxPath, Charset.defaultCharset());
+		String decompose = settingService.get("decompose");
+
+		if ("true".equals(decompose)) {
+			// 写入conf.d文件
+			for (int i = 0; i < subContent.length; i++) {
+				String tagert = nginxPath.replace("nginx.conf", "conf.d/" + subName[i]);
+				FileUtil.writeString(subContent[i], tagert, Charset.defaultCharset()); // 清空
+			}
+		} else {
+			// 删除conf.d下全部文件
+			FileUtil.del(confd);
+			FileUtil.mkdir(confd);
+		}
+
+	}
+
+	public AsycPack getAsycPack() {
+		AsycPack asycPack = new AsycPack();
+		List<Cert> certList = sqlHelper.findAll(Cert.class);
+		for (Cert cert : certList) {
+			cert.setPemStr(FileUtil.readString(cert.getPem(), Charset.defaultCharset()));
+			cert.setKeyStr(FileUtil.readString(cert.getKey(), Charset.defaultCharset()));
+		}
+
+		asycPack.setCertList(certList);
+		asycPack.setHttpList(sqlHelper.findAll(Http.class));
+		asycPack.setServerList(sqlHelper.findAll(Server.class));
+		asycPack.setLocationList(sqlHelper.findAll(Location.class));
+		asycPack.setUpstreamList(sqlHelper.findAll(Upstream.class));
+		asycPack.setUpstreamServerList(sqlHelper.findAll(UpstreamServer.class));
+		asycPack.setStreamList(sqlHelper.findAll(Stream.class));
+
+		String nginxPath = settingService.get("nginxPath");
+		String decompose = settingService.get("decompose");
+
+		ConfExt confExt = buildConf(StrUtil.isNotEmpty(decompose) && decompose.equals("true"));
+
+		if (FileUtil.exist(nginxPath)) {
+			String orgStr = FileUtil.readString(nginxPath, Charset.defaultCharset());
+			confExt.setConf(orgStr);
+
+			for (ConfFile confFile : confExt.getFileList()) {
+				confFile.setConf("");
+
+				String filePath = nginxPath.replace("nginx.conf", "conf.d/" + confFile.getName());
+				if (FileUtil.exist(filePath)) {
+					confFile.setConf(FileUtil.readString(filePath, Charset.defaultCharset()));
+				}
+			}
+		}
+
+		asycPack.setDecompose(decompose);
+		asycPack.setConfExt(confExt);
+		return asycPack;
 	}
 
 }

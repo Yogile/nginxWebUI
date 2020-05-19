@@ -18,7 +18,6 @@ public class AsycPack {
 	List<Location> locationList;
 	List<Upstream> upstreamList;
 	List<UpstreamServer> upstreamServerList;
-	List<Setting> settingList;
 	List<Stream> streamList;
 
 	ConfExt confExt;
@@ -98,12 +97,5 @@ public class AsycPack {
 		this.upstreamServerList = upstreamServerList;
 	}
 
-	public List<Setting> getSettingList() {
-		return settingList;
-	}
-
-	public void setSettingList(List<Setting> settingList) {
-		this.settingList = settingList;
-	}
 
 }
