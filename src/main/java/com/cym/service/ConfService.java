@@ -413,20 +413,33 @@ public class ConfService {
 		sqlHelper.deleteByQuery(new CriteriaAndWrapper(), UpstreamServer.class);
 		sqlHelper.deleteByQuery(new CriteriaAndWrapper(), Stream.class);
 
-		sqlHelper.insertAll(asycPack.getCertList());
-		sqlHelper.insertAll(asycPack.getHttpList());
-		sqlHelper.insertAll(asycPack.getServerList());
-		sqlHelper.insertAll(asycPack.getLocationList());
-		sqlHelper.insertAll(asycPack.getUpstreamList());
-		sqlHelper.insertAll(asycPack.getUpstreamServerList());
-		sqlHelper.insertAll(asycPack.getStreamList());
+		if (asycPack.getCertList().size() > 0) {
+			sqlHelper.insertAll(asycPack.getCertList());
+		}
+		if (asycPack.getHttpList().size() > 0) {
+			sqlHelper.insertAll(asycPack.getHttpList());
+		}
+		if (asycPack.getServerList().size() > 0) {
+			sqlHelper.insertAll(asycPack.getServerList());
+		}
+		if (asycPack.getLocationList().size() > 0) {
+			sqlHelper.insertAll(asycPack.getLocationList());
+		}
+		if (asycPack.getUpstreamList().size() > 0) {
+			sqlHelper.insertAll(asycPack.getUpstreamList());
+		}
+		if (asycPack.getUpstreamServerList().size() > 0) {
+			sqlHelper.insertAll(asycPack.getUpstreamServerList());
+		}
+		if (asycPack.getStreamList().size() > 0) {
+			sqlHelper.insertAll(asycPack.getStreamList());
+		}
 
 		for (Cert cert : asycPack.getCertList()) {
 			FileUtil.writeString(cert.getPemStr(), cert.getPem(), Charset.defaultCharset());
 			FileUtil.writeString(cert.getKeyStr(), cert.getKey(), Charset.defaultCharset());
 		}
-		
-		
+
 		settingService.set("decompose", asycPack.getDecompose());
 
 		ConfExt confExt = asycPack.getConfExt();
