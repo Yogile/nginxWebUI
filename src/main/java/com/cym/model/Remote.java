@@ -14,9 +14,18 @@ public class Remote extends BaseModel{
 	String creditKey;
 	String name;
 	String pass;
+	String version;
 	
 	
 	
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
 	public String getProtocol() {
 		return protocol;
 	}
