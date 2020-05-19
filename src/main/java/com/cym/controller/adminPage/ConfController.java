@@ -81,6 +81,7 @@ public class ConfController extends BaseController {
 		if (!FileUtil.exist(nginxPath)) {
 			return renderError("目标文件不存在");
 		}
+
 		try {
 			String date = DateUtil.format(new Date(), "yyyy-MM-dd_HH-mm-ss");
 			// 备份主文件
@@ -94,10 +95,19 @@ public class ConfController extends BaseController {
 
 			// 写入主文件
 			FileUtil.writeString(nginxContent, nginxPath, Charset.defaultCharset());
-			// 写入conf.d文件
-			for (int i = 0; i < subContent.length; i++) {
-				String tagert = nginxPath.replace("nginx.conf", "conf.d/" + subName[i]);
-				FileUtil.writeString(subContent[i], tagert, Charset.defaultCharset()); // 清空
+			String decompose = settingService.get("decompose");
+			
+			if ("true".equals(decompose)) {
+				// 写入conf.d文件
+				for (int i = 0; i < subContent.length; i++) {
+					String tagert = nginxPath.replace("nginx.conf", "conf.d/" + subName[i]);
+					FileUtil.writeString(subContent[i], tagert, Charset.defaultCharset()); // 清空
+				}
+			}
+
+			if (!"true".equals(decompose)) {
+				// 删除conf.d下文件
+				FileUtil.del(confd);
 			}
 
 			return renderSuccess("替换成功，原文件已备份");
