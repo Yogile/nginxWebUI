@@ -17,12 +17,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cym.ext.ConfExt;
+import com.cym.ext.ConfFile;
 import com.cym.model.Http;
 import com.cym.model.Location;
 import com.cym.model.Server;
 import com.cym.model.Stream;
 import com.cym.model.Upstream;
 import com.cym.model.UpstreamServer;
+import com.cym.service.ConfService;
 import com.cym.service.ServerService;
 import com.cym.service.SettingService;
 import com.cym.service.UpstreamService;
@@ -37,6 +40,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.ZipUtil;
 import cn.hutool.system.SystemUtil;
 
 @Controller
@@ -50,301 +54,52 @@ public class ConfController extends BaseController {
 	SettingService settingService;
 	@Autowired
 	ServerService serverService;
+	@Autowired
+	ConfService confService;
 
 	@RequestMapping("")
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView) throws IOException, SQLException {
 
-		String confStr = buildConf();
-		modelAndView.addObject("confStr", confStr);
+//		String confStr = buildConf();
+//		modelAndView.addObject("confStr", confStr);
 
 		String nginxPath = settingService.get("nginxPath");
 		modelAndView.addObject("nginxPath", nginxPath);
+
+		String decompose = settingService.get("decompose");
+		modelAndView.addObject("decompose", decompose);
 
 		modelAndView.setViewName("/adminPage/conf/index");
 		return modelAndView;
 	}
 
-	private String buildConf() {
-		try {
-			ClassPathResource resource = new ClassPathResource("nginxOrg.conf");
-			InputStream inputStream = resource.getInputStream();
-
-			NgxConfig ngxConfig = NgxConfig.read(inputStream);
-
-			// 获取http
-			List<Http> httpList = sqlHelper.findAll(Http.class);
-			NgxBlock ngxBlockHttp = ngxConfig.findBlock("http");
-			for (Http http : httpList) {
-				NgxParam ngxParam = new NgxParam();
-				ngxParam.addValue(http.getName() + " " + http.getValue());
-				ngxBlockHttp.addEntry(ngxParam);
-			}
-
-			boolean hasHttp = false;
-			// 添加upstream
-			NgxParam ngxParam = null;
-			List<Upstream> upstreams = upstreamService.getListByProxyType(0);
-			for (Upstream upstream : upstreams) {
-				NgxBlock ngxBlockServer = new NgxBlock();
-				ngxBlockServer.addValue("upstream " + upstream.getName());
-
-				if (StrUtil.isNotEmpty(upstream.getTactics())) {
-					ngxParam = new NgxParam();
-					ngxParam.addValue(upstream.getTactics());
-					ngxBlockServer.addEntry(ngxParam);
-				}
-
-				List<UpstreamServer> upstreamServers = upstreamService.getUpstreamServers(upstream.getId());
-				for (UpstreamServer upstreamServer : upstreamServers) {
-					ngxParam = new NgxParam();
-					ngxParam.addValue("server " + upstreamController.buildStr(upstreamServer, upstream.getProxyType()));
-					ngxBlockServer.addEntry(ngxParam);
-				}
-				hasHttp = true;
-				ngxBlockHttp.addEntry(ngxBlockServer);
-			}
-
-			// 添加server
-			List<Server> servers = serverService.getListByProxyType(0);
-			for (Server server : servers) {
-				NgxBlock ngxBlockServer = new NgxBlock();
-				ngxBlockServer.addValue("server");
-
-				// 监听域名
-				if (StrUtil.isNotEmpty(server.getServerName())) {
-					ngxParam = new NgxParam();
-					ngxParam.addValue("server_name " + server.getServerName());
-					ngxBlockServer.addEntry(ngxParam);
-				}
-
-				// 监听端口
-				ngxParam = new NgxParam();
-				String value = "listen " + server.getListen();
-				if (server.getSsl() == 1) {
-					value += " ssl";
-				}
-				ngxParam.addValue(value);
-				ngxBlockServer.addEntry(ngxParam);
-
-				// ssl配置
-				if (server.getSsl() == 1) {
-					ngxParam = new NgxParam();
-					ngxParam.addValue("ssl_certificate " + server.getPem());
-					ngxBlockServer.addEntry(ngxParam);
-
-					ngxParam = new NgxParam();
-					ngxParam.addValue("ssl_certificate_key " + server.getKey());
-					ngxBlockServer.addEntry(ngxParam);
-
-					ngxParam = new NgxParam();
-					ngxParam.addValue("ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3");
-					ngxBlockServer.addEntry(ngxParam);
-
-				}
-
-				List<Location> locationList = serverService.getLocationByServerId(server.getId());
-
-				// http转发配置
-				for (Location location : locationList) {
-					if (location.getType() == 0 || location.getType() == 2) { // http或负载均衡
-						// 添加location
-						NgxBlock ngxBlockLocation = new NgxBlock();
-						ngxBlockLocation.addValue("location");
-						ngxBlockLocation.addValue(location.getPath());
-
-						if (location.getType() == 0) {
-							ngxParam = new NgxParam();
-							ngxParam.addValue("proxy_pass " + location.getValue());
-							ngxBlockLocation.addEntry(ngxParam);
-						} else if (location.getType() == 2) {
-							Upstream upstream = sqlHelper.findById(location.getUpstreamId(), Upstream.class);
-							if (upstream != null) {
-								ngxParam = new NgxParam();
-								ngxParam.addValue("proxy_pass http://" + upstream.getName());
-								ngxBlockLocation.addEntry(ngxParam);
-							}
-						}
-
-						ngxParam = new NgxParam();
-						ngxParam.addValue("proxy_set_header Host $host");
-						ngxBlockLocation.addEntry(ngxParam);
-
-						ngxParam = new NgxParam();
-						ngxParam.addValue("proxy_set_header X-Real-IP $remote_addr");
-						ngxBlockLocation.addEntry(ngxParam);
-
-						ngxParam = new NgxParam();
-						ngxParam.addValue("proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for");
-						ngxBlockLocation.addEntry(ngxParam);
-
-						ngxParam = new NgxParam();
-						ngxParam.addValue("proxy_set_header X-Forwarded-Proto $scheme");
-						ngxBlockLocation.addEntry(ngxParam);
-
-						ngxBlockServer.addEntry(ngxBlockLocation);
-
-					} else if (location.getType() == 1) { // 静态html
-						NgxBlock ngxBlockLocation = new NgxBlock();
-						ngxBlockLocation.addValue("location");
-						ngxBlockLocation.addValue(location.getPath());
-
-						if (location.getPath().equals("/")) {
-							ngxParam = new NgxParam();
-							ngxParam.addValue("root " + location.getValue());
-							ngxBlockLocation.addEntry(ngxParam);
-						} else {
-							ngxParam = new NgxParam();
-							ngxParam.addValue("alias " + location.getValue());
-							ngxBlockLocation.addEntry(ngxParam);
-						}
-
-						ngxParam = new NgxParam();
-						ngxParam.addValue("index index.html");
-						ngxBlockLocation.addEntry(ngxParam);
-
-						ngxBlockServer.addEntry(ngxBlockLocation);
-					}
-				}
-				hasHttp = true;
-				ngxBlockHttp.addEntry(ngxBlockServer);
-
-				// https添加80端口重写
-				if (server.getSsl() == 1 && server.getRewrite() == 1) {
-					ngxBlockServer = new NgxBlock();
-					ngxBlockServer.addValue("server");
-
-					ngxParam = new NgxParam();
-					ngxParam.addValue("server_name " + server.getServerName());
-					ngxBlockServer.addEntry(ngxParam);
-
-					ngxParam = new NgxParam();
-					ngxParam.addValue("listen 80");
-					ngxBlockServer.addEntry(ngxParam);
-
-					ngxParam = new NgxParam();
-					ngxParam.addValue("rewrite ^(.*)$ https://${server_name}$1 permanent");
-					ngxBlockServer.addEntry(ngxParam);
-					
-					hasHttp = true;
-					ngxBlockHttp.addEntry(ngxBlockServer);
-				}
-
-			}
-			if (!hasHttp) {
-				ngxConfig.remove(ngxBlockHttp);
-			}
-			
-
-			// 创建stream
-			List<Stream> streamList = sqlHelper.findAll(Stream.class);
-			boolean hasStream = false;
-			NgxBlock ngxBlockStream = ngxConfig.findBlock("stream");
-			for (Stream stream : streamList) {
-				ngxParam = new NgxParam();
-				ngxParam.addValue(stream.getName() + " " + stream.getValue());
-				ngxBlockStream.addEntry(ngxParam);
-
-				hasStream = true;
-			}
-
-			// 添加upstream
-			upstreams = upstreamService.getListByProxyType(1);
-			for (Upstream upstream : upstreams) {
-				NgxBlock ngxBlockServer = new NgxBlock();
-				ngxBlockServer.addValue("upstream " + upstream.getName());
-
-				if (StrUtil.isNotEmpty(upstream.getTactics())) {
-					ngxParam = new NgxParam();
-					ngxParam.addValue(upstream.getTactics());
-					ngxBlockServer.addEntry(ngxParam);
-				}
-
-				List<UpstreamServer> upstreamServers = upstreamService.getUpstreamServers(upstream.getId());
-				for (UpstreamServer upstreamServer : upstreamServers) {
-					ngxParam = new NgxParam();
-					ngxParam.addValue("server " + upstreamController.buildStr(upstreamServer, upstream.getProxyType()));
-					ngxBlockServer.addEntry(ngxParam);
-				}
-
-				ngxBlockStream.addEntry(ngxBlockServer);
-
-				hasStream = true;
-			}
-
-			// 添加server
-			servers = serverService.getListByProxyType(1);
-			for (Server server : servers) {
-
-				NgxBlock ngxBlockServer = new NgxBlock();
-				ngxBlockServer.addValue("server");
-
-				// 监听端口
-				ngxParam = new NgxParam();
-				ngxParam.addValue("listen " + server.getListen());
-				ngxBlockServer.addEntry(ngxParam);
-
-				// 指向负载均衡
-				Upstream upstream = sqlHelper.findById(server.getProxyUpstreamId(), Upstream.class);
-				if (upstream != null) {
-					ngxParam = new NgxParam();
-					ngxParam.addValue("proxy_pass " + upstream.getName());
-					ngxBlockServer.addEntry(ngxParam);
-				}
-
-				// 其他一些参数
-				ngxParam = new NgxParam();
-				ngxParam.addValue("proxy_connect_timeout 1s");
-				ngxBlockServer.addEntry(ngxParam);
-
-				ngxParam = new NgxParam();
-				ngxParam.addValue("proxy_timeout 3s");
-				ngxBlockServer.addEntry(ngxParam);
-
-				ngxBlockStream.addEntry(ngxBlockServer);
-
-				hasStream = true;
-			}
-
-			if (!hasStream) {
-				ngxConfig.remove(ngxBlockStream);
-			}
-
-			String conf = new NgxDumper(ngxConfig).dump();
-
-			// 装载ngx_stream_module模块
-			if (hasStream && !SystemUtil.get(SystemUtil.OS_NAME).toLowerCase().contains("win")) {
-				String module = settingService.get("ngx_stream_module");
-				if(StrUtil.isEmpty(module)) {
-					module = RuntimeUtil.execForStr("find / -name ngx_stream_module.so").trim();
-				}
-
-				if (StrUtil.isNotEmpty(module)) {
-					settingService.set("ngx_stream_module", module);
-					conf = "load_module " + module + ";\n" + conf;
-				}
-
-			}
-
-			return conf;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return null;
-	}
-
 	@RequestMapping(value = "replace")
 	@ResponseBody
-	public JsonResult replace(String nginxPath, String nginxContent) {
+	public JsonResult replace(String nginxPath, String nginxContent, String[] subContent, String[] subName) {
 		settingService.set("nginxPath", nginxPath);
 
 		if (!FileUtil.exist(nginxPath)) {
 			return renderError("目标文件不存在");
 		}
 		try {
-			// 备份文件
-			FileUtil.copy(nginxPath, nginxPath + DateUtil.format(new Date(), "yyyy-MM-dd_HH-mm-ss") + ".bak", true);
+			String date = DateUtil.format(new Date(), "yyyy-MM-dd_HH-mm-ss");
+			// 备份主文件
+			FileUtil.copy(nginxPath, nginxPath + date + ".bak", true);
+			// 备份conf.d文件夹
+			String confd = nginxPath.replace("nginx.conf", "conf.d/");
+			if (!FileUtil.exist(confd)) {
+				FileUtil.mkdir(confd);
+			}
+			ZipUtil.zip(confd, nginxPath + date + ".zip");
+
+			// 写入主文件
 			FileUtil.writeString(nginxContent, nginxPath, Charset.defaultCharset());
+			// 写入conf.d文件
+			for (int i = 0; i < subContent.length; i++) {
+				String tagert = nginxPath.replace("nginx.conf", "conf.d/" + subName[i]);
+				FileUtil.writeString(subContent[i], tagert, Charset.defaultCharset()); // 清空
+			}
+
 			return renderSuccess("替换成功，原文件已备份");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -366,7 +121,7 @@ public class ConfController extends BaseController {
 				if (file.exists() && file.getParentFile().getParentFile().exists()) {
 					File nginxDir = file.getParentFile().getParentFile();
 					rs = RuntimeUtil.execForStr("cmd /c powershell cd " + nginxDir.getPath() + "; ./nginx.exe -t;");
-					
+
 				} else {
 					return renderError("nginx目录不存在");
 				}
@@ -414,18 +169,47 @@ public class ConfController extends BaseController {
 		}
 	}
 
+	@RequestMapping(value = "loadConf")
+	@ResponseBody
+	public JsonResult loadConf() {
+		String decompose = settingService.get("decompose");
+
+		ConfExt confExt = confService.buildConf(StrUtil.isNotEmpty(decompose) && decompose.equals("true"));
+		return renderSuccess(confExt);
+	}
+
 	@RequestMapping(value = "loadOrg")
 	@ResponseBody
 	public JsonResult loadOrg(String nginxPath) {
 		settingService.set("nginxPath", nginxPath);
 
+		String decompose = settingService.get("decompose");
+		ConfExt confExt = confService.buildConf(StrUtil.isNotEmpty(decompose) && decompose.equals("true"));
+
 		if (FileUtil.exist(nginxPath)) {
 			String orgStr = FileUtil.readString(nginxPath, Charset.defaultCharset());
-			return renderSuccess(orgStr);
+			confExt.setConf(orgStr);
+
+			for (ConfFile confFile : confExt.getFileList()) {
+				confFile.setConf("");
+
+				String filePath = nginxPath.replace("nginx.conf", "conf.d/" + confFile.getName());
+				if (FileUtil.exist(filePath)) {
+					confFile.setConf(FileUtil.readString(filePath, Charset.defaultCharset()));
+				}
+			}
+
+			return renderSuccess(confExt);
 		} else {
 			return renderError("文件不存在");
 		}
 
 	}
 
+	@RequestMapping(value = "decompose")
+	@ResponseBody
+	public JsonResult decompose(String decompose) {
+		settingService.set("decompose", decompose);
+		return renderSuccess();
+	}
 }
