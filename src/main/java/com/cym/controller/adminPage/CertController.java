@@ -62,8 +62,14 @@ public class CertController extends BaseController {
 	@RequestMapping("del")
 	@ResponseBody
 	public JsonResult del(String id) {
-		sqlHelper.deleteById(id, Cert.class);
+		Cert cert = sqlHelper.findById(id, Cert.class);
+		if (cert.getKey() != null) {
+			File file = new File(cert.getKey());
+			
+			FileUtil.del(file.getParent());
+		}
 
+		sqlHelper.deleteById(id, Cert.class);
 		return renderSuccess();
 	}
 
@@ -139,14 +145,14 @@ public class CertController extends BaseController {
 
 		// 还原nginx.conf并重启
 		backupStartNginx(nginxPath);
-				
+
 		if (rs.contains("Cert success")) {
 			cert.setMakeTime(System.currentTimeMillis());
 			sqlHelper.updateById(cert);
 		} else {
 			return renderError(rs.replace("\n", "<br>"));
 		}
-		
+
 		return renderSuccess();
 	}
 
