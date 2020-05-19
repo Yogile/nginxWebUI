@@ -41,8 +41,7 @@ public class CertConfig {
 
 			acmeSh = userDir + File.separator + ".acme.sh" + File.separator + "acme.sh";
 			RuntimeUtil.execForStr("chmod 777 " + acmeSh);
-			
-			
+
 			// 找寻nginx配置文件
 			String nginxPath = settingService.get("nginxPath");
 			if (StrUtil.isEmpty(nginxPath)) {
@@ -52,9 +51,22 @@ public class CertConfig {
 					settingService.set("nginxPath", nginxPath.replace("\\", "/"));
 				}
 			}
+
+			// 寻找nginx执行文件
+			if (!SystemUtil.get(SystemUtil.OS_NAME).toLowerCase().contains("win")) {
+				String rs = RuntimeUtil.execForStr("which nginx");
+				if (StrUtil.isEmpty(rs.trim())) {
+					// 没有安装，查找是否有编译版
+					String nginxCmd = RuntimeUtil.execForStr("find / -name nginx").trim();
+					if (StrUtil.isNotEmpty(nginxCmd)) {
+						// 有，做软连接
+						RuntimeUtil.execForStr("ln -s " + nginxCmd + " /usr/bin");
+
+					}
+				}
+			}
 		}
 
-		
 	}
 
 }
