@@ -1,9 +1,29 @@
 $(function() {
 	loadOrg();
-
-	$("#nginxContent").setTextareaCount();
-
-	$("#org").setTextareaCount();
+	loadConf();
+	
+	form.on('switch(decompose)', function(data){
+		  
+		  $.ajax({
+				type : 'POST',
+				url : ctx + '/adminPage/conf/decompose',
+				data : {
+					decompose : data.elem.checked
+				},
+				dataType : 'json',
+				success : function(data) {			
+					if (data.success) {
+						loadConf();
+						loadOrg();
+					} else {
+						layer.msg(data.msg);
+					}
+				},
+				error : function() {
+					alert("出错了,请联系技术人员!");
+				}
+		});
+	});       
 })
 
 function replace() {
@@ -15,18 +35,52 @@ function replace() {
 	$.ajax({
 		type : 'POST',
 		url : ctx + '/adminPage/conf/replace',
-		data : {
-			nginxPath : $("#nginxPath").val(),
-			nginxContent : $("#nginxContent").val()
-
-		},
+		data :$("#addForm").serialize(),
 		dataType : 'json',
 		success : function(data) {
 			if (data.success) {
 				layer.msg(data.obj);
-
+				loadConf();
 				loadOrg();
 
+			} else {
+				layer.alert(data.msg);
+			}
+		},
+		error : function() {
+			alert("出错了,请联系技术人员!");
+		}
+	});
+}
+
+
+function loadConf() {
+
+	$.ajax({
+		type : 'POST',
+		url : ctx + '/adminPage/conf/loadConf',
+		data : {
+		
+		},
+		dataType : 'json',
+		success : function(data) {
+			if (data.success) {
+				var confExt = data.obj
+				$("#nginxContent").val(confExt.conf)
+				
+				var html = "";
+				for(var i=0;i<confExt.fileList.length;i++){
+					var confFile = confExt.fileList[i];
+					
+					html += `<div class="title">${confFile.name}</div>
+							<textarea class="layui-textarea" name="subContent" style="height: 200px; resize: none;"  spellcheck="false">${confFile.conf}</textarea>
+							<input type="hidden" name="subName" value="${confFile.name}">
+					`;
+				}
+				
+				$("#nginxContentOther").html(html);
+			
+				$("textarea").setTextareaCount();
 			} else {
 				layer.alert(data.msg);
 			}
@@ -48,8 +102,19 @@ function loadOrg() {
 		dataType : 'json',
 		success : function(data) {
 			if (data.success) {
-				$("#org").val(data.obj)
-				$("#org").setTextareaCount();
+				var confExt = data.obj
+				$("#org").val(confExt.conf);
+				
+				var html = "";
+				for(var i=0;i<confExt.fileList.length;i++){
+					var confFile = confExt.fileList[i];
+					
+					html += `<div class="title">${confFile.name}</div>
+					<textarea class="layui-textarea" style="height: 200px; resize: none; background-color: #ededed;" readonly="readonly" spellcheck="false">${confFile.conf}</textarea>`;
+				}
+				$("#orgOther").html(html);
+				
+				$("textarea").setTextareaCount();
 			} else {
 				layer.alert(data.msg);
 			}
