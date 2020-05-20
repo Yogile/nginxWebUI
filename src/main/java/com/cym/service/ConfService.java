@@ -24,6 +24,7 @@ import com.cym.model.Setting;
 import com.cym.model.Stream;
 import com.cym.model.Upstream;
 import com.cym.model.UpstreamServer;
+import com.cym.utils.RuntimeTool;
 import com.cym.utils.SystemTool;
 import com.github.odiszapc.nginxparser.NgxBlock;
 import com.github.odiszapc.nginxparser.NgxConfig;
@@ -358,14 +359,13 @@ public class ConfService {
 			if (hasStream && SystemTool.isLinux()) {
 				String module = settingService.get("ngx_stream_module");
 				if (StrUtil.isEmpty(module)) {
-					module = RuntimeUtil.execForStr("find / -name ngx_stream_module.so").trim();
+					module = RuntimeTool.execForOne("find / -name ngx_stream_module.so").trim();
 				}
 
 				if (StrUtil.isNotEmpty(module)) {
 					settingService.set("ngx_stream_module", module);
 					conf = "load_module " + module + ";\n" + conf;
 				}
-
 			}
 
 			confExt.setConf(conf);

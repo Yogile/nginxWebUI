@@ -11,6 +11,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import com.cym.service.SettingService;
+import com.cym.utils.RuntimeTool;
 import com.cym.utils.SystemTool;
 
 import cn.hutool.core.io.FileUtil;
@@ -41,12 +42,12 @@ public class CertConfig {
 			FileUtil.del(userDir + File.separator + "acme.zip");
 
 			acmeSh = userDir + File.separator + ".acme.sh" + File.separator + "acme.sh";
-			RuntimeUtil.execForStr("chmod 777 " + acmeSh);
+			RuntimeUtil.exec("chmod 777 " + acmeSh);
 
 			// 找寻nginx配置文件
 			String nginxPath = settingService.get("nginxPath");
 			if (StrUtil.isEmpty(nginxPath)) {
-				nginxPath = RuntimeUtil.execForStr("find / -name nginx.conf").trim();
+				nginxPath = RuntimeTool.execForOne("find / -name nginx.conf");
 
 				if (StrUtil.isNotEmpty(nginxPath)) {
 					settingService.set("nginxPath", nginxPath.replace("\\", "/"));
@@ -56,12 +57,12 @@ public class CertConfig {
 			// 寻找nginx执行文件
 			if (SystemTool.isLinux()) {
 				String rs = RuntimeUtil.execForStr("which nginx");
-				if (StrUtil.isEmpty(rs.trim())) {
+				if (StrUtil.isEmpty(rs)) {
 					// 没有安装，查找是否有编译版
-					String nginxCmd = RuntimeUtil.execForStr("find / -name nginx").trim();
+					String nginxCmd = RuntimeTool.execForOne("find / -name nginx").trim();
 					if (StrUtil.isNotEmpty(nginxCmd)) {
 						// 有，做软连接
-						RuntimeUtil.execForStr("ln -s " + nginxCmd + " /usr/bin");
+						RuntimeUtil.exec("ln -s " + nginxCmd + " /usr/bin");
 
 					}
 				}

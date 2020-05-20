@@ -174,7 +174,7 @@ public class CertController extends BaseController {
 		FileUtil.writeString(nginxContent, nginxPath, Charset.defaultCharset());
 
 		// 重启nginx
-		RuntimeUtil.execForStr("nginx -s reload");
+		RuntimeUtil.exec("nginx -s reload");
 	}
 
 	// 还原nginx.conf并重启
