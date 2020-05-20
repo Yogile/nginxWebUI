@@ -216,12 +216,6 @@ public class RemoteController extends BaseController {
 		return renderSuccess(rs);
 	}
 
-	@RequestMapping("alive")
-	@ResponseBody
-	public String alive() {
-
-		return "true";
-	}
 
 	@RequestMapping("version")
 	@ResponseBody
