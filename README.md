@@ -30,10 +30,11 @@ nginx本身功能复杂, 本项目并不能涵盖nginx所有功能, 只能配置
 #### 安装说明
 以Ubuntu操作系统为例, 以下命令请使用root账户权限执行
 
-1.安装java运行环境
+1.安装java运行环境和nginx
 
 ```
 apt install openjdk-11-jdk
+apt install nginx
 ```
 
 2.下载最新版发行包jar,下载地址https://gitee.com/cym1102/nginxWebUI/releases
