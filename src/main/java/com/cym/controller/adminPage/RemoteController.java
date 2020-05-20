@@ -51,6 +51,7 @@ public class RemoteController extends BaseController {
 			try {
 				String version = HttpUtil.get(remote.getProtocol() + "://" + remote.getIp() + ":" + remote.getPort() + "/adminPage/remote/version?creditKey=" + remote.getCreditKey(), 500);
 				if (StrUtil.isNotEmpty(version)) {
+					remote.setStatus(1);
 					remote.setVersion(version);
 				}
 
