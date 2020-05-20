@@ -414,27 +414,13 @@ public class ConfService {
 		sqlHelper.deleteByQuery(new CriteriaAndWrapper(), UpstreamServer.class);
 		sqlHelper.deleteByQuery(new CriteriaAndWrapper(), Stream.class);
 
-		if (asycPack.getCertList().size() > 0) {
-			sqlHelper.insertAll(asycPack.getCertList());
-		}
-		if (asycPack.getHttpList().size() > 0) {
-			sqlHelper.insertAll(asycPack.getHttpList());
-		}
-		if (asycPack.getServerList().size() > 0) {
-			sqlHelper.insertAll(asycPack.getServerList());
-		}
-		if (asycPack.getLocationList().size() > 0) {
-			sqlHelper.insertAll(asycPack.getLocationList());
-		}
-		if (asycPack.getUpstreamList().size() > 0) {
-			sqlHelper.insertAll(asycPack.getUpstreamList());
-		}
-		if (asycPack.getUpstreamServerList().size() > 0) {
-			sqlHelper.insertAll(asycPack.getUpstreamServerList());
-		}
-		if (asycPack.getStreamList().size() > 0) {
-			sqlHelper.insertAll(asycPack.getStreamList());
-		}
+		sqlHelper.insertAll(asycPack.getCertList());
+		sqlHelper.insertAll(asycPack.getHttpList());
+		sqlHelper.insertAll(asycPack.getServerList());
+		sqlHelper.insertAll(asycPack.getLocationList());
+		sqlHelper.insertAll(asycPack.getUpstreamList());
+		sqlHelper.insertAll(asycPack.getUpstreamServerList());
+		sqlHelper.insertAll(asycPack.getStreamList());
 
 		for (Cert cert : asycPack.getCertList()) {
 			FileUtil.writeString(cert.getPemStr(), cert.getPem(), Charset.defaultCharset());
@@ -445,7 +431,7 @@ public class ConfService {
 			FileUtil.writeString(server.getPemStr(), server.getPem(), Charset.defaultCharset());
 			FileUtil.writeString(server.getKeyStr(), server.getKey(), Charset.defaultCharset());
 		}
-		
+
 		settingService.set("decompose", asycPack.getDecompose());
 
 		ConfExt confExt = asycPack.getConfExt();
@@ -511,8 +497,7 @@ public class ConfService {
 			server.setKeyStr(FileUtil.readString(server.getKey(), Charset.defaultCharset()));
 		}
 		asycPack.setServerList(serverList);
-		
-		
+
 		asycPack.setLocationList(sqlHelper.findAll(Location.class));
 		asycPack.setUpstreamList(sqlHelper.findAll(Upstream.class));
 		asycPack.setUpstreamServerList(sqlHelper.findAll(UpstreamServer.class));
