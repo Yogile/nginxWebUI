@@ -209,7 +209,7 @@ function asyc(id){
 				var html = ``;
 				for(let i=0;i<list.length;i++){
 					var remote = list[i];
-					html += `<input type="checkbox" name="remoteId" title="${remote.ip} ${remote.descr}" lay-skin="primary" value="${remote.id}"><br>`
+					html += `<input type="checkbox" name="remoteId" title="${remote.ip}  ${remote.descr}" lay-skin="primary" value="${remote.id}"><br>`
 				}
 				$("#checkboxDiv").html(html);
 				

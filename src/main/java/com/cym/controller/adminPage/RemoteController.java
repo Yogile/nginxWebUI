@@ -106,7 +106,7 @@ public class RemoteController extends BaseController {
 				remote.setPort(port);
 				remote.setSystem(SystemTool.getSystem());
 				remote.setDescr("");
-				
+
 				remotes.add(0, remote);
 			}
 		}
@@ -120,20 +120,18 @@ public class RemoteController extends BaseController {
 
 		Remote remoteFrom = sqlHelper.findById(fromId, Remote.class);
 		String json = null;
-		String system = null;
 		if (remoteFrom == null) {
 			// 本地
 			json = getAsycPack();
-			system = SystemTool.getSystem();
 		} else {
 			// 远程
 			json = HttpUtil.get(remoteFrom.getProtocol() + "://" + remoteFrom.getIp() + ":" + remoteFrom.getPort() + "/adminPage/remote/getAsycPack?creditKey=" + remoteFrom.getCreditKey(), 500);
-			system = remoteFrom.getSystem();
 		}
 
-		List<Remote> remoteList = sqlHelper.findListByIds(Arrays.asList(remoteId), Remote.class);
-		for (Remote remoteTo : remoteList) {
-			if (remoteTo.getSystem().equals(system)) {
+		if (remoteId != null) {
+			List<Remote> remoteList = sqlHelper.findListByIds(Arrays.asList(remoteId), Remote.class);
+			for (Remote remoteTo : remoteList) {
+				System.out.println("同步到" + remoteTo.getIp());
 				try {
 					String version = HttpUtil.get(remoteTo.getProtocol() + "://" + remoteTo.getIp() + ":" + remoteTo.getPort() + "/adminPage/remote/version?creditKey=" + remoteTo.getCreditKey(), 500);
 					if (StrUtil.isNotEmpty(version)) {
@@ -147,7 +145,6 @@ public class RemoteController extends BaseController {
 				}
 			}
 		}
-
 		return renderSuccess();
 	}
 
@@ -162,6 +159,7 @@ public class RemoteController extends BaseController {
 	@RequestMapping("setAsycPack")
 	@ResponseBody
 	public JsonResult setAsycPack(String json) {
+		System.out.println("收到同步信息:" + json);
 		AsycPack asycPack = JSONUtil.toBean(json, AsycPack.class);
 
 		confService.setAsycPack(asycPack);
