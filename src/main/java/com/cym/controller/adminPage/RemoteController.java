@@ -105,7 +105,8 @@ public class RemoteController extends BaseController {
 				remote.setVersion(version);
 				remote.setPort(port);
 				remote.setSystem(SystemTool.getSystem());
-
+				remote.setDescr("");
+				
 				remotes.add(0, remote);
 			}
 		}

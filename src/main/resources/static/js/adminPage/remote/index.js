@@ -217,7 +217,7 @@ function asyc(id){
 				
 				layer.open({
 					type : 1,
-					title : "同步到...",
+					title : "同步到",
 					area : [ '400px', '500px' ], // 宽高
 					content : $('#selectDiv')
 				});
