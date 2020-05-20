@@ -211,7 +211,7 @@ function edit(id) {
 									<select name="type" lang='${uuid}' lay-filter="type">
 										<option ${location.type=='0'?'selected':''} value="0">代理动态http</option>
 										<option ${location.type=='1'?'selected':''} value="1">代理静态html</option>
-										<option ${location.type=='2'?'selected':''} value="2">负债均衡</option>
+										<option ${location.type=='2'?'selected':''} value="2">负载均衡</option>
 									</select>
 								</td>
 								
@@ -285,7 +285,7 @@ function addItem(){
 							<select name="type" lang='${uuid}' lay-filter="type">
 								<option value="0">代理动态http</option>
 								<option value="1">代理静态html</option>
-								<option value="2">负债均衡</option>
+								<option value="2">负载均衡</option>
 							</select>
 						</td>
 						
