@@ -202,14 +202,15 @@ function asyc(id){
 			},
 			dataType : 'json',
 			success : function(data) {
+				layer.closeAll();
 				if (data.success) {
-					layer.closeAll();
 					layer.msg("同步成功")
 				}else{
 					layer.msg(data.msg)
 				}
 			},
 			error : function() {
+				layer.closeAll();
 				alert("出错了,请联系技术人员!");
 			}
 		});
