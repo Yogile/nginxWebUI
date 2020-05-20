@@ -15,9 +15,17 @@ public class Remote extends BaseModel{
 	String name;
 	String pass;
 	String version;
+	String system;
 	
 	
-	
+	public String getSystem() {
+		return system;
+	}
+
+	public void setSystem(String system) {
+		this.system = system;
+	}
+
 	public String getVersion() {
 		return version;
 	}

@@ -1,21 +1,22 @@
 package com.cym.controller.adminPage;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.cym.model.Credit;
 import com.cym.model.Remote;
 import com.cym.service.AdminService;
 import com.cym.service.CreditService;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
+import com.cym.utils.SystemTool;
 
 import cn.hutool.core.util.StrUtil;
 
@@ -70,8 +71,10 @@ public class LoginController extends BaseController {
 	@RequestMapping("getCredit")
 	public JsonResult getCredit(String name, String pass) {
 		if (adminService.login(name, pass)) {
-			String key = creditService.make();
-			return renderSuccess(key);
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("creditKey", creditService.make());
+			map.put("system", SystemTool.getSystem());
+			return renderSuccess(map);
 		} else {
 			return renderError("授权失败");
 		}

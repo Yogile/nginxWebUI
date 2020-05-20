@@ -15,22 +15,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cym.ext.AsycPack;
-import com.cym.ext.ConfExt;
-import com.cym.ext.ConfFile;
-import com.cym.model.Cert;
-import com.cym.model.Http;
-import com.cym.model.Location;
 import com.cym.model.Remote;
-import com.cym.model.Server;
-import com.cym.model.Setting;
-import com.cym.model.Stream;
-import com.cym.model.Upstream;
-import com.cym.model.UpstreamServer;
 import com.cym.service.ConfService;
 import com.cym.service.RemoteService;
 import com.cym.service.SettingService;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
+import com.cym.utils.SystemTool;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
@@ -60,9 +51,9 @@ public class RemoteController extends BaseController {
 			try {
 				String version = HttpUtil.get(remote.getProtocol() + "://" + remote.getIp() + ":" + remote.getPort() + "/adminPage/remote/version?creditKey=" + remote.getCreditKey(), 500);
 				if (StrUtil.isNotEmpty(version)) {
-					remote.setStatus(1);
 					remote.setVersion(version);
 				}
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -72,13 +63,13 @@ public class RemoteController extends BaseController {
 		remote.setIp("本地");
 		remote.setVersion(version);
 		remote.setPort(port);
+		remote.setSystem(SystemTool.getSystem());
 
 		remoteList.add(0, remote);
 
 		modelAndView.addObject("remoteList", remoteList);
 		modelAndView.setViewName("/adminPage/remote/index");
 
-		System.out.println(version);
 		return modelAndView;
 	}
 
@@ -87,29 +78,34 @@ public class RemoteController extends BaseController {
 	public JsonResult asyc(String id) {
 		Remote remoteFrom = sqlHelper.findById(id, Remote.class);
 		String json = null;
+		String system = null;
 		if (StrUtil.isEmpty(id)) {
 			// 本地
 			json = getAsycPack();
+			system = SystemTool.getSystem();
 		} else {
 			// 远程
 			json = HttpUtil.get(remoteFrom.getProtocol() + "://" + remoteFrom.getIp() + ":" + remoteFrom.getPort() + "/adminPage/remote/getAsycPack?creditKey=" + remoteFrom.getCreditKey(), 500);
+			system = remoteFrom.getSystem();
 		}
 
 		List<Remote> remoteList = sqlHelper.findAll(Remote.class);
 		for (Remote remoteTo : remoteList) {
-			try {
-				String version = HttpUtil.get(remoteTo.getProtocol() + "://" + remoteTo.getIp() + ":" + remoteTo.getPort() + "/adminPage/remote/version?creditKey=" + remoteTo.getCreditKey(), 500);
-				if (StrUtil.isNotEmpty(version)) {
-					// 在线
-					Map<String,Object> map = new HashMap<String,Object>();
-					map.put("json", json);
-					HttpUtil.post(remoteTo.getProtocol() + "://" + remoteTo.getIp() + ":" + remoteTo.getPort() + "/adminPage/remote/setAsycPack?creditKey=" + remoteTo.getCreditKey(), map);
+			if (remoteTo.getSystem().equals(system)) {
+				try {
+					String version = HttpUtil.get(remoteTo.getProtocol() + "://" + remoteTo.getIp() + ":" + remoteTo.getPort() + "/adminPage/remote/version?creditKey=" + remoteTo.getCreditKey(), 500);
+					if (StrUtil.isNotEmpty(version)) {
+						// 在线
+						Map<String, Object> map = new HashMap<String, Object>();
+						map.put("json", json);
+						HttpUtil.post(remoteTo.getProtocol() + "://" + remoteTo.getIp() + ":" + remoteTo.getPort() + "/adminPage/remote/setAsycPack?creditKey=" + remoteTo.getCreditKey(), map);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
 			}
 		}
-		
+
 		return renderSuccess();
 	}
 
@@ -117,30 +113,27 @@ public class RemoteController extends BaseController {
 	@ResponseBody
 	public String getAsycPack() {
 		AsycPack asycPack = confService.getAsycPack();
-		
-		return JSONUtil.toJsonStr(asycPack); 
+
+		return JSONUtil.toJsonStr(asycPack);
 	}
-	
+
 	@RequestMapping("setAsycPack")
 	@ResponseBody
 	public JsonResult setAsycPack(String json) {
-		AsycPack asycPack = JSONUtil.toBean(json, AsycPack.class); 
-		
+		AsycPack asycPack = JSONUtil.toBean(json, AsycPack.class);
+
 		confService.setAsycPack(asycPack);
-		
+
 		return renderSuccess();
 	}
-	
 
 	@RequestMapping("addOver")
 	@ResponseBody
 	public JsonResult addOver(Remote remote) {
 
-		String key = remoteService.getCreditKey(remote);
+		remoteService.getCreditKey(remote);
 
-		if (StrUtil.isNotEmpty(key)) {
-			remote.setCreditKey(key);
-
+		if (StrUtil.isNotEmpty(remote.getCreditKey())) {
 			sqlHelper.insertOrUpdate(remote);
 			return renderSuccess();
 		} else {
@@ -184,7 +177,6 @@ public class RemoteController extends BaseController {
 	@RequestMapping("version")
 	@ResponseBody
 	public String version() {
-
 		return version;
 	}
 

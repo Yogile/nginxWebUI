@@ -192,7 +192,7 @@ function change(id){
 }
 
 function asyc(id){
-	if(confirm("是否同步此服务器配置文件到其他服务器？")){
+	if(confirm("是否同步此服务器所有数据到其他服务器？注意同步只能在相同操作系统之间同步.")){
 		layer.load();
 		$.ajax({
 			type : 'POST',

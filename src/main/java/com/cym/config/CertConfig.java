@@ -11,6 +11,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import com.cym.service.SettingService;
+import com.cym.utils.SystemTool;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.RuntimeUtil;
@@ -53,7 +54,7 @@ public class CertConfig {
 			}
 
 			// 寻找nginx执行文件
-			if (!SystemUtil.get(SystemUtil.OS_NAME).toLowerCase().contains("win")) {
+			if (SystemTool.isLinux()) {
 				String rs = RuntimeUtil.execForStr("which nginx");
 				if (StrUtil.isEmpty(rs.trim())) {
 					// 没有安装，查找是否有编译版

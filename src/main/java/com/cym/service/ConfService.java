@@ -24,6 +24,7 @@ import com.cym.model.Setting;
 import com.cym.model.Stream;
 import com.cym.model.Upstream;
 import com.cym.model.UpstreamServer;
+import com.cym.utils.SystemTool;
 import com.github.odiszapc.nginxparser.NgxBlock;
 import com.github.odiszapc.nginxparser.NgxConfig;
 import com.github.odiszapc.nginxparser.NgxDumper;
@@ -354,7 +355,7 @@ public class ConfService {
 			String conf = new NgxDumper(ngxConfig).dump();
 
 			// 装载ngx_stream_module模块
-			if (hasStream && !SystemUtil.get(SystemUtil.OS_NAME).toLowerCase().contains("win")) {
+			if (hasStream && SystemTool.isLinux()) {
 				String module = settingService.get("ngx_stream_module");
 				if (StrUtil.isEmpty(module)) {
 					module = RuntimeUtil.execForStr("find / -name ngx_stream_module.so").trim();
