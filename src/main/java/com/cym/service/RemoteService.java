@@ -1,6 +1,7 @@
 package com.cym.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.cym.model.Remote;
 
+import cn.craccd.sqlHelper.utils.CriteriaAndWrapper;
 import cn.craccd.sqlHelper.utils.SqlHelper;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
@@ -38,6 +40,10 @@ public class RemoteService {
 			e.printStackTrace();
 		}
 
+	}
+
+	public List<Remote> getBySystem(String system) {
+		return sqlHelper.findListByQuery(new CriteriaAndWrapper().eq("system", system), Remote.class);
 	}
 
 }

@@ -130,6 +130,7 @@ function edit(id) {
 				$("#ip").val(remote.ip); 
 				$("#port").val(remote.port); 
 				$("#protocol").val(remote.protocol); 
+				$("#descr").val(remote.descr); 
 				
 				form.render();
 				showWindow("编辑远程服务器");
@@ -192,27 +193,66 @@ function change(id){
 }
 
 function asyc(id){
-	if(confirm("是否同步此服务器所有数据到其他服务器？注意同步只能在相同操作系统之间同步.")){
-		layer.load();
-		$.ajax({
-			type : 'POST',
-			url : ctx + '/adminPage/remote/asyc',
-			data : {
-				id : id
-			},
-			dataType : 'json',
-			success : function(data) {
-				layer.closeAll();
-				if (data.success) {
-					layer.msg("同步成功")
-				}else{
-					layer.msg(data.msg)
+	
+	$("#fromId").val(id);
+	$.ajax({
+		type : 'POST',
+		url : ctx + '/adminPage/remote/getAllowRemote',
+		data : {
+			id : id
+		},
+		dataType : 'json',
+		success : function(data) {
+			layer.closeAll();
+			if (data.success) {
+				var list = data.obj;
+				var html = ``;
+				for(let i=0;i<list.length;i++){
+					var remote = list[i];
+					html += `<input type="checkbox" name="remoteId" title="${remote.ip} ${remote.descr}" lay-skin="primary" value="${remote.id}"><br>`
 				}
-			},
-			error : function() {
-				layer.closeAll();
-				alert("出错了,请联系技术人员!");
+				$("#checkboxDiv").html(html);
+				
+				form.render();
+				
+				layer.open({
+					type : 1,
+					title : "同步到...",
+					area : [ '400px', '500px' ], // 宽高
+					content : $('#selectDiv')
+				});
+			} else {
+				layer.msg(data.msg)
 			}
-		});
-	}
+		},
+		error : function() {
+			layer.closeAll();
+			alert("出错了,请联系技术人员!");
+		}
+	});
+	
+}
+
+
+function asycOver(){
+	
+	layer.load();
+	$.ajax({
+		type : 'POST',
+		url : ctx + '/adminPage/remote/asyc',
+		data : $("#asycForm").serialize(),
+		dataType : 'json',
+		success : function(data) {
+			layer.closeAll();
+			if (data.success) {
+				layer.msg("同步成功")
+			}else{
+				layer.msg(data.msg)
+			}
+		},
+		error : function() {
+			layer.closeAll();
+			alert("出错了,请联系技术人员!");
+		}
+	});
 }

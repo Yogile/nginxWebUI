@@ -1,6 +1,7 @@
 package com.cym.controller.adminPage;
 
 import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,13 +75,52 @@ public class RemoteController extends BaseController {
 		return modelAndView;
 	}
 
+	@RequestMapping("getAllowRemote")
+	@ResponseBody
+	public JsonResult getAllowRemote(String id) {
+		Remote remoteFrom = sqlHelper.findById(id, Remote.class);
+		String system = null;
+		List<Remote> remotes = null;
+		if (StrUtil.isEmpty(id)) {
+			// 本地
+			system = SystemTool.getSystem();
+			remotes = remoteService.getBySystem(system);
+		} else {
+			// 远程
+			system = remoteFrom.getSystem();
+			remotes = remoteService.getBySystem(system);
+
+			// 去掉自己
+			for (Remote remote : remotes) {
+				if (remote.getId().equals(remoteFrom.getId())) {
+					remotes.remove(remote);
+					break;
+				}
+			}
+
+			// 系统相同,加上本地
+			if (system.equals(SystemTool.getSystem())) {
+				Remote remote = new Remote();
+				remote.setIp("本地");
+				remote.setVersion(version);
+				remote.setPort(port);
+				remote.setSystem(SystemTool.getSystem());
+
+				remotes.add(0, remote);
+			}
+		}
+
+		return renderSuccess(remotes);
+	}
+
 	@RequestMapping("asyc")
 	@ResponseBody
-	public JsonResult asyc(String id) {
-		Remote remoteFrom = sqlHelper.findById(id, Remote.class);
+	public JsonResult asyc(String fromId, String[] remoteId) {
+
+		Remote remoteFrom = sqlHelper.findById(fromId, Remote.class);
 		String json = null;
 		String system = null;
-		if (StrUtil.isEmpty(id)) {
+		if (remoteFrom == null) {
 			// 本地
 			json = getAsycPack();
 			system = SystemTool.getSystem();
@@ -90,7 +130,7 @@ public class RemoteController extends BaseController {
 			system = remoteFrom.getSystem();
 		}
 
-		List<Remote> remoteList = sqlHelper.findAll(Remote.class);
+		List<Remote> remoteList = sqlHelper.findListByIds(Arrays.asList(remoteId), Remote.class);
 		for (Remote remoteTo : remoteList) {
 			if (remoteTo.getSystem().equals(system)) {
 				try {
