@@ -3,6 +3,7 @@ package com.cym.config;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 
@@ -55,18 +56,21 @@ public class CertConfig {
 			}
 
 			// 寻找nginx执行文件
-			if (SystemTool.isLinux()) {
-				String rs = RuntimeUtil.execForStr("which nginx");
-				if (StrUtil.isEmpty(rs)) {
-					// 没有安装，查找是否有编译版
-					String nginxCmd = RuntimeTool.execForOne("find / -name nginx").trim();
-					if (StrUtil.isNotEmpty(nginxCmd)) {
-						// 有，做软连接
-						RuntimeUtil.exec("ln -s " + nginxCmd + " /usr/bin");
-
-					}
-				}
-			}
+//			if (SystemTool.isLinux()) {
+//				String rs = RuntimeUtil.execForStr("which nginx");
+//				if (StrUtil.isEmpty(rs)) {
+//					// 没有安装，查找是否有编译版
+//					List<String> nginxCmd = RuntimeUtil.execForLines("find / -name nginx");
+//					for(String cmd:nginxCmd) {
+//						if (cmd.contains("nginx")) {
+//							// 有，做软连接
+//							RuntimeUtil.exec("ln -s " + cmd + " /usr/bin");
+//							break;
+//						}
+//					}
+//					
+//				}
+//			}
 		}
 
 	}
