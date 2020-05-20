@@ -61,8 +61,6 @@ public class ConfController extends BaseController {
 	@RequestMapping("")
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView) throws IOException, SQLException {
 
-//		String confStr = buildConf();
-//		modelAndView.addObject("confStr", confStr);
 
 		String nginxPath = settingService.get("nginxPath");
 		modelAndView.addObject("nginxPath", nginxPath);
