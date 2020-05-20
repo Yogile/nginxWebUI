@@ -72,7 +72,7 @@ public class UpstreamController extends BaseController {
 	@ResponseBody
 	public JsonResult addOver(Upstream upstream, String[] server, Integer[] port, Integer[] weight, Integer[] maxFails, Integer[] failTimeout, String[] status) {
 
-		if (upstream.getId() == null) {
+		if (StrUtil.isEmpty( upstream.getId())) {
 			Long count = upstreamService.getCountByName(upstream.getName());
 			if (count > 0) {
 				return renderError("与已有负载均衡重名");
