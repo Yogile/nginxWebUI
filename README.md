@@ -79,11 +79,12 @@ nohup java -jar nginxWebUI-1.0.0.jar --server.port=8080 > nginxWebUI.log &
 
 备份文件管理, 这里可以看到nginx.cnf的备份历史版本, nginx出现错误时可以选择回滚到某一个历史版本
 
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0520/150807_6a923034_1100382.jpeg "QQ截图20200520150750.jpg")
 
-![输入图片说明](https://images.gitee.com/uploads/images/2020/0515/170135_30539807_1100382.jpeg "conf.jpg")
+最终生成conf文件,可在此进行进一步手动修改,确认修改无误后,可覆盖本机conf文件,并进行效验和重启, 可以选择生成单一nginx.conf文件还是按域名将各个配置文件分开放在conf.d下
 
-最终生成conf文件,可在此进行进一步手动修改,确认修改无误后,可覆盖本机conf文件,并进行效验和重启
-
-![输入图片说明](https://images.gitee.com/uploads/images/2020/0518/171723_67be07d4_1100382.jpeg "remote.jpg")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0520/150617_c558509c_1100382.jpeg "remote.jpg")
 
 远程服务器管理, 如果有多台nginx服务器, 可以都部署上nginxWebUI, 然后登录其中一台, 在远程管理中添加其他服务器的ip和用户名密码, 就可以在一台机器上管理所有的nginx服务器了.
+
+提供一键同步功能, 可以将某一台服务器的数据配置和证书文件同步到其他服务器中
