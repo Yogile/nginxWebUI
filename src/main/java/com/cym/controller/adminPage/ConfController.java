@@ -143,7 +143,7 @@ public class ConfController extends BaseController {
 				rs = RuntimeUtil.execForStr("nginx -s reload");
 			}
 
-			if (rs.trim().equals("")) {
+			if (StrUtil.isEmpty(rs)) {
 				return renderSuccess("重启成功");
 			} else {
 				return renderError("重启失败:<br>" + rs.replace("\n", "<br>"));
