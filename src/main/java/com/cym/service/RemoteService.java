@@ -18,7 +18,7 @@ public class RemoteService {
 	@Autowired
 	SqlHelper sqlHelper;
 
-	public String getCreditKey(Remote remote) {
+	public void getCreditKey(Remote remote) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 
 		paramMap.put("name", remote.getName());
@@ -30,14 +30,14 @@ public class RemoteService {
 			if (StrUtil.isNotEmpty(rs)) {
 				JSONObject jsonObject = new JSONObject(rs);
 				if (jsonObject.getBool("success")) {
-					return jsonObject.getStr("obj");
+					remote.setSystem(jsonObject.getJSONObject("obj").getStr("system"));
+					remote.setCreditKey(jsonObject.getJSONObject("obj").getStr("creditKey"));
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return null;
 	}
 
 }

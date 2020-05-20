@@ -17,10 +17,10 @@ import com.cym.model.Cert;
 import com.cym.service.SettingService;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
+import com.cym.utils.SystemTool;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.RuntimeUtil;
-import cn.hutool.system.SystemUtil;
 
 @Controller
 @RequestMapping("/adminPage/cert")
@@ -76,7 +76,7 @@ public class CertController extends BaseController {
 	@RequestMapping("apply")
 	@ResponseBody
 	public JsonResult apply(String id) {
-		if (SystemUtil.get(SystemUtil.OS_NAME).toLowerCase().contains("win")) {
+		if (SystemTool.getSystem().equals("Windows")) {
 			return renderError("证书操作只能在linux下进行");
 		}
 
@@ -120,7 +120,7 @@ public class CertController extends BaseController {
 	@RequestMapping("renew")
 	@ResponseBody
 	public JsonResult renew(String id) {
-		if (SystemUtil.get(SystemUtil.OS_NAME).toLowerCase().contains("win")) {
+		if (SystemTool.isWindows()) {
 			return renderError("证书操作只能在linux下进行");
 		}
 

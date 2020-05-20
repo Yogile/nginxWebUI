@@ -31,6 +31,7 @@ import com.cym.service.SettingService;
 import com.cym.service.UpstreamService;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
+import com.cym.utils.SystemTool;
 import com.github.odiszapc.nginxparser.NgxBlock;
 import com.github.odiszapc.nginxparser.NgxConfig;
 import com.github.odiszapc.nginxparser.NgxDumper;
@@ -100,7 +101,7 @@ public class ConfController extends BaseController {
 
 		try {
 			String rs = null;
-			if (SystemUtil.get(SystemUtil.OS_NAME).toLowerCase().contains("win")) {
+			if (SystemTool.isWindows()) {
 				File file = new File(nginxPath);
 				if (file.exists() && file.getParentFile().getParentFile().exists()) {
 					File nginxDir = file.getParentFile().getParentFile();
@@ -130,7 +131,7 @@ public class ConfController extends BaseController {
 		settingService.set("nginxPath", nginxPath);
 		try {
 			String rs = null;
-			if (SystemUtil.get(SystemUtil.OS_NAME).toLowerCase().contains("win")) {
+			if (SystemTool.isWindows()) {
 				File file = new File(nginxPath);
 				if (file.exists() && file.getParentFile().getParentFile().exists()) {
 					File nginxDir = file.getParentFile().getParentFile();
