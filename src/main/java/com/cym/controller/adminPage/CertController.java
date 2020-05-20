@@ -79,6 +79,9 @@ public class CertController extends BaseController {
 		if (SystemTool.getSystem().equals("Windows")) {
 			return renderError("证书操作只能在linux下进行");
 		}
+		if (!SystemTool.hasNginx()) {
+			return renderError("系统中未安装nginx命令");
+		}
 
 		String nginxPath = settingService.get("nginxPath");
 		if (!FileUtil.exist(nginxPath)) {
@@ -123,7 +126,10 @@ public class CertController extends BaseController {
 		if (SystemTool.isWindows()) {
 			return renderError("证书操作只能在linux下进行");
 		}
-
+		if (!SystemTool.hasNginx()) {
+			return renderError("系统中未安装nginx命令");
+		}
+		
 		String nginxPath = settingService.get("nginxPath");
 		if (!FileUtil.exist(nginxPath)) {
 			return renderError("未找到nginx配置文件:" + nginxPath + ", 请先在【生成conf】模块中设置并读取.");

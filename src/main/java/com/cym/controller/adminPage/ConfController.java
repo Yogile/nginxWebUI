@@ -61,7 +61,6 @@ public class ConfController extends BaseController {
 	@RequestMapping("")
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView) throws IOException, SQLException {
 
-
 		String nginxPath = settingService.get("nginxPath");
 		modelAndView.addObject("nginxPath", nginxPath);
 
@@ -80,9 +79,9 @@ public class ConfController extends BaseController {
 		if (!FileUtil.exist(nginxPath)) {
 			return renderError("目标文件不存在");
 		}
-		
+
 		try {
-			confService.replace(nginxPath, nginxContent,subContent,  subName);
+			confService.replace(nginxPath, nginxContent, subContent, subName);
 			return renderSuccess("替换成功，原文件已备份");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -95,6 +94,10 @@ public class ConfController extends BaseController {
 	@RequestMapping(value = "check")
 	@ResponseBody
 	public JsonResult check(String nginxPath) {
+		if (!SystemTool.hasNginx()) {
+			return renderError("系统中未安装nginx命令");
+		}
+
 		settingService.set("nginxPath", nginxPath);
 
 		try {
@@ -126,6 +129,10 @@ public class ConfController extends BaseController {
 	@RequestMapping(value = "reboot")
 	@ResponseBody
 	public JsonResult reboot(String nginxPath) {
+		if (!SystemTool.hasNginx()) {
+			return renderError("系统中未安装nginx命令");
+		}
+
 		settingService.set("nginxPath", nginxPath);
 		try {
 			String rs = null;
@@ -165,7 +172,7 @@ public class ConfController extends BaseController {
 	@ResponseBody
 	public JsonResult loadOrg(String nginxPath) {
 		nginxPath = nginxPath.replace("\\", "/");
-		
+
 		settingService.set("nginxPath", nginxPath);
 
 		String decompose = settingService.get("decompose");
