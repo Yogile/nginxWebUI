@@ -128,7 +128,7 @@ public class RemoteController extends BaseController {
 			json = HttpUtil.get(remoteFrom.getProtocol() + "://" + remoteFrom.getIp() + ":" + remoteFrom.getPort() + "/adminPage/remote/getAsycPack?creditKey=" + remoteFrom.getCreditKey(), 500);
 		}
 
-		if (remoteId != null) {
+		if (remoteId != null ) {
 			List<Remote> remoteList = sqlHelper.findListByIds(Arrays.asList(remoteId), Remote.class);
 			for (Remote remoteTo : remoteList) {
 				System.out.println("同步到" + remoteTo.getIp());
