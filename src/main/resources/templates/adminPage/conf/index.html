@@ -29,31 +29,42 @@
 				</fieldset>
 				<form id="addForm">
 					<div class="layui-form">
-						<div class="layui-input-inline">
-							<label class="layui-form-label">目标路径</label>
-						</div>
-						<div class="layui-input-inline">
-							<input type="text" id="nginxPath" name="nginxPath" class="layui-input" style="width: 400px;" value="${nginxPath}">
-						</div>
-						
-						<div class="layui-inline">
-							<button type="button" class="layui-btn layui-btn-normal" onclick="loadOrg()">读取文件</button>
-						</div>
-						<div class="layui-inline">
-							<button type="button" class="layui-btn layui-btn-normal" onclick="replace()">替换文件</button>
-						</div>
-						<div class="layui-inline">
-							<button type="button" class="layui-btn layui-btn-normal" onclick="check()">效验文件</button>
-						</div>
-						<div class="layui-inline">
-							<button type="button" class="layui-btn layui-btn-normal" onclick="reboot()">重启nginx</button>
+						<div>
+							<div class="layui-input-inline">
+								<label class="layui-form-label" style="width: 120px;">conf配置文件路径</label>
+							</div>
+							<div class="layui-input-inline">
+								<input type="text" id="nginxPath" name="nginxPath" class="layui-input" style="width: 400px;" value="${nginxPath}">
+							</div>
+							
+							<div class="layui-input-inline">
+								<label class="layui-form-label" style="width: 120px;">nginx执行命令路径</label>
+							</div>
+							<div class="layui-input-inline">
+								<input type="text" id="nginxExe" name="nginxExe" class="layui-input" style="width: 400px;" value="${nginxExe}">
+							</div>
 						</div>
 						
-						<div class="layui-input-inline">
-							<label class="layui-form-label" style="width: 120px;">按域名分解文件</label>
-						</div>
-						<div class="layui-inline">
-							 <input type="checkbox" name="switch" lay-filter="decompose" lay-text="开启|关闭" lay-skin="switch" ${(decompose=='true')?string('checked','')}>
+						<div style="margin-top: 20px;padding-left: 150px;">
+							<div class="layui-inline">
+								<button type="button" class="layui-btn layui-btn-normal" onclick="loadOrg()">读取文件</button>
+							</div>
+							<div class="layui-inline">
+								<button type="button" class="layui-btn layui-btn-normal" onclick="replace()">替换文件</button>
+							</div>
+							<div class="layui-inline">
+								<button type="button" class="layui-btn layui-btn-normal" onclick="check()">效验文件</button>
+							</div>
+							<div class="layui-inline">
+								<button type="button" class="layui-btn layui-btn-normal" onclick="reboot()">重启nginx</button>
+							</div>
+							
+							<div class="layui-input-inline">
+								<label class="layui-form-label" style="width: 120px;">按域名分解文件</label>
+							</div>
+							<div class="layui-inline">
+								 <input type="checkbox" name="switch" lay-filter="decompose" lay-text="开启|关闭" lay-skin="switch" ${(decompose=='true')?string('checked','')}>
+							</div>
 						</div>
 					</div>
 	

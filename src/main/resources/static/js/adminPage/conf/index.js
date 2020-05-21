@@ -127,15 +127,22 @@ function loadOrg() {
 
 function check() {
 	if ($("#nginxPath").val() == '') {
-		alert("nginx配置文件路径为空");
+		alert("conf配置文件路径为空");
 		return;
 	}
+	
+	if ($("#nginxExe").val() == '') {
+		alert("nginx执行文件路径为空");
+		return;
+	}
+	
 	layer.load();
 	$.ajax({
 		type : 'POST',
 		url : ctx + '/adminPage/conf/check',
 		data : {
-			nginxPath : $("#nginxPath").val()
+			nginxPath : $("#nginxPath").val(),
+			nginxExe : $("#nginxExe").val()
 		},
 		dataType : 'json',
 		success : function(data) {
@@ -158,12 +165,23 @@ function check() {
 }
 
 function reboot() {
+	if ($("#nginxPath").val() == '') {
+		alert("conf配置文件路径为空");
+		return;
+	}
+	
+	if ($("#nginxExe").val() == '') {
+		alert("nginx执行文件路径为空");
+		return;
+	}
+	
 	layer.load();
 	$.ajax({
 		type : 'POST',
 		url : ctx + '/adminPage/conf/reboot',
 		data : {
-			nginxPath : $("#nginxPath").val()
+			nginxPath : $("#nginxPath").val(),
+			nginxExe : $("#nginxExe").val()
 		},
 		dataType : 'json',
 		success : function(data) {
