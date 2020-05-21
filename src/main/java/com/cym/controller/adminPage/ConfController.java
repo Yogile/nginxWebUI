@@ -105,12 +105,14 @@ public class ConfController extends BaseController {
 		try {
 			String rs = null;
 			if (SystemTool.isWindows()) {
-				String cmd = nginxExe + " -c " + nginxPath + " -p " + nginxExe.replace("/nginx.exe", "") + " -t";
+				File file = new File(nginxExe);
+				String cmd = nginxExe + " -c " + nginxPath + " -p " + file.getParent() + " -t";
 				rs = RuntimeUtil.execForStr(cmd);
 			} else { 
 				String cmd = nginxExe + " -t";
 				if(nginxExe.contains("/")) {
-					cmd = nginxExe + " -c " + nginxPath + " -p " + nginxExe.replace("/nginx.exe", "") + " -t";	
+					File file = new File(nginxExe);
+					cmd = nginxExe + " -c " + nginxPath + " -p " + file.getParent() + " -t";	
 				}
 				rs = RuntimeUtil.execForStr(cmd);
 			}
@@ -137,12 +139,14 @@ public class ConfController extends BaseController {
 		try {
 			String rs = null;
 			if (SystemTool.isWindows()) {
-				String cmd = nginxExe + " -c " + nginxPath + " -p " + nginxExe.replace("/nginx.exe", "") + " -s reload";
+				File file = new File(nginxExe);
+				String cmd = nginxExe + " -c " + nginxPath + " -p " + file.getParent() + " -s reload";
 				rs = RuntimeUtil.execForStr(cmd);
 			} else {
 				String cmd = nginxExe + " -s reload";
 				if(nginxExe.contains("/")) {
-					cmd = nginxExe + " -c " + nginxPath + " -p " + nginxExe.replace("/nginx.exe", "") + " -s reload";	
+					File file = new File(nginxExe);
+					cmd = nginxExe + " -c " + nginxPath + " -p " + file.getParent() + " -s reload";	
 				}
 				rs = RuntimeUtil.execForStr(cmd);
 			}
