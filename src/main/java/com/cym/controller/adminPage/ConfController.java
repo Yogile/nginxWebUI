@@ -104,23 +104,24 @@ public class ConfController extends BaseController {
 		settingService.set("nginxExe", nginxExe);
 		try {
 			String rs = null;
+			String cmd = null;
 			if (SystemTool.isWindows()) {
 				File file = new File(nginxExe);
-				String cmd = nginxExe + " -c " + nginxPath + " -p " + file.getParent() + " -t";
+				cmd = nginxExe + " -c " + nginxPath + " -p " + file.getParent() + " -t";
 				rs = RuntimeUtil.execForStr(cmd);
 			} else { 
-				String cmd = nginxExe + " -t";
+				cmd = nginxExe + " -t";
 				if(nginxExe.contains("/")) {
 					File file = new File(nginxExe);
-					cmd = nginxExe + " -c " + nginxPath + " -p " + file.getParent() + " -t";	
+					cmd = nginxExe + " -c " + nginxPath + " -p " + file.getParentFile().getParent() + " -t";	
 				}
 				rs = RuntimeUtil.execForStr(cmd);
 			}
 
 			if (rs.contains("successful")) {
-				return renderSuccess("效验成功");
+				return renderSuccess(cmd + "<br>效验成功");
 			} else {
-				return renderError("效验失败:<br>" + rs.replace("\n", "<br>"));
+				return renderError(cmd + "<br>效验失败:<br>" + rs.replace("\n", "<br>"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -128,9 +129,9 @@ public class ConfController extends BaseController {
 		}
 	}
 
-	@RequestMapping(value = "reboot")
+	@RequestMapping(value = "reload")
 	@ResponseBody
-	public JsonResult reboot(String nginxPath,String nginxExe) {
+	public JsonResult reload(String nginxPath,String nginxExe) {
 		nginxPath = nginxPath.replace("\\", "/");
 		nginxExe = nginxExe.replace("\\", "/");
 		settingService.set("nginxPath", nginxPath);
@@ -138,29 +139,59 @@ public class ConfController extends BaseController {
 
 		try {
 			String rs = null;
+			String cmd = null;
 			if (SystemTool.isWindows()) {
 				File file = new File(nginxExe);
-				String cmd = nginxExe + " -c " + nginxPath + " -p " + file.getParent() + " -s reload";
+				cmd = nginxExe + " -c " + nginxPath + " -p " + file.getParent() + " -s reload";
 				rs = RuntimeUtil.execForStr(cmd);
 			} else {
-				String cmd = nginxExe + " -s reload";
+				cmd = nginxExe + " -s reload";
 				if(nginxExe.contains("/")) {
 					File file = new File(nginxExe);
-					cmd = nginxExe + " -c " + nginxPath + " -p " + file.getParent() + " -s reload";	
+					cmd = nginxExe + " -c " + nginxPath + " -p " + file.getParentFile().getParent() + " -s reload";	
 				}
 				rs = RuntimeUtil.execForStr(cmd);
 			}
 
 			if (StrUtil.isEmpty(rs)) {
-				return renderSuccess("重启成功");
+				return renderSuccess(cmd + "<br>重新装载成功");
 			} else {
-				return renderError("重启失败:<br>" + rs.replace("\n", "<br>"));
+				if(rs.contains("The system cannot find the file specified")) {
+					rs = rs.replace("\n", "<br>") + "可能nginx进程没有启动";
+				}
+				
+				return renderError(cmd + "<br>重新装载失败:<br>" + rs.replace("\n", "<br>"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return renderError("重启失败:<br>" + e.getMessage().replace("\n", "<br>"));
+			return renderError("重新装载失败:<br>" + e.getMessage().replace("\n", "<br>"));
 		}
 	}
+	
+	
+//	@RequestMapping(value = "start")
+//	@ResponseBody
+//	public JsonResult start(String nginxPath,String nginxExe) {
+//		nginxPath = nginxPath.replace("\\", "/");
+//		nginxExe = nginxExe.replace("\\", "/");
+//		settingService.set("nginxPath", nginxPath);
+//		settingService.set("nginxExe", nginxExe);
+//
+//		try {
+//			File file = new File(nginxExe);
+//			String cmd = nginxExe + " -c " + nginxPath + " -p " + file.getParent();
+//			String rs = RuntimeUtil.execForStr(cmd);
+//
+//			if (StrUtil.isEmpty(rs)) {
+//				return renderSuccess("启动成功");
+//			} else {
+//				return renderError("启动失败:<br>" + rs.replace("\n", "<br>"));
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			return renderError("启动失败:<br>" + e.getMessage().replace("\n", "<br>"));
+//		}
+//	}
 
 	@RequestMapping(value = "loadConf")
 	@ResponseBody

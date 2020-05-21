@@ -148,7 +148,11 @@ function check() {
 		success : function(data) {
 			layer.closeAll();
 			if (data.success) {
-				layer.msg(data.obj);
+				layer.open({
+					  type: 0, 
+					  area : [ '810px', '400px' ],
+					  content: data.obj
+				});
 			} else {
 				layer.open({
 					  type: 0, 
@@ -164,7 +168,7 @@ function check() {
 	});
 }
 
-function reboot() {
+function reload() {
 	if ($("#nginxPath").val() == '') {
 		alert("conf配置文件路径为空");
 		return;
@@ -178,7 +182,7 @@ function reboot() {
 	layer.load();
 	$.ajax({
 		type : 'POST',
-		url : ctx + '/adminPage/conf/reboot',
+		url : ctx + '/adminPage/conf/reload',
 		data : {
 			nginxPath : $("#nginxPath").val(),
 			nginxExe : $("#nginxExe").val()
@@ -187,7 +191,11 @@ function reboot() {
 		success : function(data) {
 			layer.closeAll();
 			if (data.success) {
-				layer.msg(data.obj);
+				layer.open({
+					  type: 0, 
+					  area : [ '810px', '400px' ],
+					  content: data.obj
+				});
 			} else {
 				layer.open({
 					  type: 0, 
