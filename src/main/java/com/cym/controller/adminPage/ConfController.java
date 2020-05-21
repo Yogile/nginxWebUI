@@ -105,7 +105,7 @@ public class ConfController extends BaseController {
 		try {
 			String rs = null;
 			if (SystemTool.isWindows()) {
-				String cmd = "cmd /c " + nginxExe + " -c " + nginxPath + " -p " + nginxExe.replace("/nginx.exe", "") + " -t";
+				String cmd = nginxExe + " -c " + nginxPath + " -p " + nginxExe.replace("/nginx.exe", "") + " -t";
 				rs = RuntimeUtil.execForStr(cmd);
 			} else { 
 				String cmd = nginxExe + " -t";
@@ -128,24 +128,23 @@ public class ConfController extends BaseController {
 
 	@RequestMapping(value = "reboot")
 	@ResponseBody
-	public JsonResult reboot(String nginxPath) {
-		if (!SystemTool.hasNginx()) {
-			return renderError("系统中未安装nginx命令");
-		}
-
+	public JsonResult reboot(String nginxPath,String nginxExe) {
+		nginxPath = nginxPath.replace("\\", "/");
+		nginxExe = nginxExe.replace("\\", "/");
 		settingService.set("nginxPath", nginxPath);
+		settingService.set("nginxExe", nginxExe);
+
 		try {
 			String rs = null;
 			if (SystemTool.isWindows()) {
-				File file = new File(nginxPath);
-				if (file.exists() && file.getParentFile().getParentFile().exists()) {
-					File nginxDir = file.getParentFile().getParentFile();
-					rs = RuntimeUtil.execForStr("cmd /c powershell cd " + nginxDir.getPath() + "; ./nginx.exe -s reload;");
-				} else {
-					return renderError("nginx目录不存在");
-				}
+				String cmd = nginxExe + " -c " + nginxPath + " -p " + nginxExe.replace("/nginx.exe", "") + " -s reload";
+				rs = RuntimeUtil.execForStr(cmd);
 			} else {
-				rs = RuntimeUtil.execForStr("nginx -s reload");
+				String cmd = nginxExe + " -s reload";
+				if(nginxExe.contains("/")) {
+					cmd = nginxExe + " -c " + nginxPath + " -p " + nginxExe.replace("/nginx.exe", "") + " -s reload";	
+				}
+				rs = RuntimeUtil.execForStr(cmd);
 			}
 
 			if (StrUtil.isEmpty(rs)) {
