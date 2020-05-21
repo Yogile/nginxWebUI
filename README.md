@@ -39,6 +39,12 @@ apt install nginx
 
 2.下载最新版发行包jar,下载地址https://gitee.com/cym1102/nginxWebUI/releases
 
+码云的服务器下载较慢, CDN地址(可使用wget下载): 
+
+wget https://craccd.oss-cn-beijing.aliyuncs.com/nginxWebUI-1.1.4.jar
+
+有新版本只需要修改路径中的版本即可
+
 启动命令
 
 nohup java -jar nginxWebUI-1.0.0.jar --server.port=8080 > nginxWebUI.log &
@@ -80,7 +86,7 @@ nohup java -jar nginxWebUI-1.0.0.jar --server.port=8080 > nginxWebUI.log &
 
 备份文件管理, 这里可以看到nginx.cnf的备份历史版本, nginx出现错误时可以选择回滚到某一个历史版本
 
-![输入图片说明](https://images.gitee.com/uploads/images/2020/0520/150807_6a923034_1100382.jpeg "QQ截图20200520150750.jpg")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0521/160033_74601d0e_1100382.jpeg "QQ截图20200521160020.jpg")
 
 最终生成conf文件,可在此进行进一步手动修改,确认修改无误后,可覆盖本机conf文件,并进行效验和重启, 可以选择生成单一nginx.conf文件还是按域名将各个配置文件分开放在conf.d下
 
