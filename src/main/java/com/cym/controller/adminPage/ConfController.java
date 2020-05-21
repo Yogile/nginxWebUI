@@ -67,6 +67,9 @@ public class ConfController extends BaseController {
 		String nginxExe = settingService.get("nginxExe");
 		modelAndView.addObject("nginxExe", nginxExe);
 
+		String nginxDir = settingService.get("nginxDir");
+		modelAndView.addObject("nginxDir", nginxDir);
+		
 		String decompose = settingService.get("decompose");
 		modelAndView.addObject("decompose", decompose);
 
@@ -97,23 +100,24 @@ public class ConfController extends BaseController {
 
 	@RequestMapping(value = "check")
 	@ResponseBody
-	public JsonResult check(String nginxPath, String nginxExe) {
+	public JsonResult check(String nginxPath, String nginxExe,String nginxDir) {
 		nginxPath = nginxPath.replace("\\", "/");
 		nginxExe = nginxExe.replace("\\", "/");
+		nginxDir = nginxDir.replace("\\", "/");
+		
 		settingService.set("nginxPath", nginxPath);
 		settingService.set("nginxExe", nginxExe);
+		settingService.set("nginxDir", nginxDir);
 		try {
 			String rs = null;
 			String cmd = null;
 			if (SystemTool.isWindows()) {
-				File file = new File(nginxExe);
-				cmd = nginxExe + " -c " + nginxPath + " -p " + file.getParent() + " -t";
+				cmd = nginxExe + " -c " + nginxPath + " -p " + nginxDir + " -t";
 				rs = RuntimeUtil.execForStr(cmd);
 			} else { 
 				cmd = nginxExe + " -t";
 				if(nginxExe.contains("/")) {
-					File file = new File(nginxExe);
-					cmd = nginxExe + " -c " + nginxPath + " -p " + file.getParentFile().getParent() + " -t";	
+					cmd = nginxExe + " -c " + nginxPath + " -p " + nginxDir + " -t";	
 				}
 				rs = RuntimeUtil.execForStr(cmd);
 			}
@@ -131,24 +135,25 @@ public class ConfController extends BaseController {
 
 	@RequestMapping(value = "reload")
 	@ResponseBody
-	public JsonResult reload(String nginxPath,String nginxExe) {
+	public JsonResult reload(String nginxPath,String nginxExe,String nginxDir) {
 		nginxPath = nginxPath.replace("\\", "/");
 		nginxExe = nginxExe.replace("\\", "/");
+		nginxDir = nginxDir.replace("\\", "/");
+		
 		settingService.set("nginxPath", nginxPath);
 		settingService.set("nginxExe", nginxExe);
-
+		settingService.set("nginxDir", nginxDir);
+		
 		try {
 			String rs = null;
 			String cmd = null;
 			if (SystemTool.isWindows()) {
-				File file = new File(nginxExe);
-				cmd = nginxExe + " -c " + nginxPath + " -p " + file.getParent() + " -s reload";
+				cmd = nginxExe + " -c " + nginxPath + " -p " + nginxDir + " -s reload";
 				rs = RuntimeUtil.execForStr(cmd);
 			} else {
 				cmd = nginxExe + " -s reload";
 				if(nginxExe.contains("/")) {
-					File file = new File(nginxExe);
-					cmd = nginxExe + " -c " + nginxPath + " -p " + file.getParentFile().getParent() + " -s reload";	
+					cmd = nginxExe + " -c " + nginxPath + " -p " + nginxDir + " -s reload";	
 				}
 				rs = RuntimeUtil.execForStr(cmd);
 			}
@@ -169,29 +174,6 @@ public class ConfController extends BaseController {
 	}
 	
 	
-//	@RequestMapping(value = "start")
-//	@ResponseBody
-//	public JsonResult start(String nginxPath,String nginxExe) {
-//		nginxPath = nginxPath.replace("\\", "/");
-//		nginxExe = nginxExe.replace("\\", "/");
-//		settingService.set("nginxPath", nginxPath);
-//		settingService.set("nginxExe", nginxExe);
-//
-//		try {
-//			File file = new File(nginxExe);
-//			String cmd = nginxExe + " -c " + nginxPath + " -p " + file.getParent();
-//			String rs = RuntimeUtil.execForStr(cmd);
-//
-//			if (StrUtil.isEmpty(rs)) {
-//				return renderSuccess("启动成功");
-//			} else {
-//				return renderError("启动失败:<br>" + rs.replace("\n", "<br>"));
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			return renderError("启动失败:<br>" + e.getMessage().replace("\n", "<br>"));
-//		}
-//	}
 
 	@RequestMapping(value = "loadConf")
 	@ResponseBody

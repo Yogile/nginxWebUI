@@ -3,7 +3,6 @@ package com.cym.config;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 
 import javax.annotation.PostConstruct;
 
@@ -19,7 +18,6 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.ZipUtil;
-import cn.hutool.system.SystemUtil;
 
 @Component
 public class CertConfig {
@@ -60,9 +58,7 @@ public class CertConfig {
 				String rs = RuntimeTool.execForOne("which nginx");
 				if (StrUtil.isNotEmpty(rs)) {
 					settingService.set("nginxExe", "nginx");
-				} else {
-					settingService.set("nginxExe", nginxPath.replace("conf/nginx.conf", "nginx"));
-				}
+				} 
 			}
 
 		}

@@ -136,13 +136,21 @@ function check() {
 		return;
 	}
 	
+	if($("#nginxExe").val().indexOf('/') || $("#nginxExe").val().indexOf('\\')){
+		if ($("#nginxDir").val() == '') {
+			alert("你使用了绝对路径执行命令，请填写nginx目录");
+			return;
+		}
+	}
+	
 	layer.load();
 	$.ajax({
 		type : 'POST',
 		url : ctx + '/adminPage/conf/check',
 		data : {
 			nginxPath : $("#nginxPath").val(),
-			nginxExe : $("#nginxExe").val()
+			nginxExe : $("#nginxExe").val(),
+			nginxDir : $("#nginxDir").val()
 		},
 		dataType : 'json',
 		success : function(data) {
@@ -179,13 +187,21 @@ function reload() {
 		return;
 	}
 	
+	if($("#nginxExe").val().indexOf('/') || $("#nginxExe").val().indexOf('\\')){
+		if ($("#nginxDir").val() == '') {
+			alert("你使用了绝对路径执行命令，请填写nginx目录");
+			return;
+		}
+	}
+	
 	layer.load();
 	$.ajax({
 		type : 'POST',
 		url : ctx + '/adminPage/conf/reload',
 		data : {
 			nginxPath : $("#nginxPath").val(),
-			nginxExe : $("#nginxExe").val()
+			nginxExe : $("#nginxExe").val(),
+			nginxDir : $("#nginxDir").val()
 		},
 		dataType : 'json',
 		success : function(data) {
