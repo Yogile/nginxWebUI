@@ -80,7 +80,7 @@ public class CertController extends BaseController {
 			return renderError("证书操作只能在linux下进行");
 		}
 		if (!SystemTool.hasNginx()) {
-			return renderError("系统中未安装nginx命令");
+			return renderError("系统中未安装nginx命令，如果是编译安装nginx，请尝试在系统中执行ln -s [nginx执行文件路径] /usr/bin建立命令链接");
 		}
 
 		String nginxPath = settingService.get("nginxPath");
