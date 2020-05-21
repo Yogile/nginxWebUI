@@ -50,10 +50,13 @@ wget https://craccd.oss-cn-beijing.aliyuncs.com/nginxWebUI-1.1.4.jar
 启动命令
 
 ```
-nohup java -jar nginxWebUI-1.1.4.jar --server.port=8080 > nginxWebUI.log &
+nohup java -jar nginxWebUI-1.1.4.jar --server.port=8080 --spring.database.sqlite-name=.sqlite > nginxWebUI.log &
 ```
 
-如果不加--server.port=xxxx, 默认以8080端口启动
+参数说明
+
+--server.port 占用端口, 默认以8080端口启动
+--spring.database.sqlite-name sqlite文件释放后文件名, 默认释放为.sqlite
 
 #### 使用说明
 
