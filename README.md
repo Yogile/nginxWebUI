@@ -41,7 +41,9 @@ apt install nginx
 
 码云的服务器下载较慢, CDN地址(可使用wget下载): 
 
+```
 wget https://craccd.oss-cn-beijing.aliyuncs.com/nginxWebUI-1.1.4.jar
+```
 
 有新版本只需要修改路径中的版本即可
 
