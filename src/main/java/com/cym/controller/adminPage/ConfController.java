@@ -64,6 +64,9 @@ public class ConfController extends BaseController {
 		String nginxPath = settingService.get("nginxPath");
 		modelAndView.addObject("nginxPath", nginxPath);
 
+		String nginxExe = settingService.get("nginxExe");
+		modelAndView.addObject("nginxExe", nginxExe);
+
 		String decompose = settingService.get("decompose");
 		modelAndView.addObject("decompose", decompose);
 
@@ -74,6 +77,7 @@ public class ConfController extends BaseController {
 	@RequestMapping(value = "replace")
 	@ResponseBody
 	public JsonResult replace(String nginxPath, String nginxContent, String[] subContent, String[] subName) {
+		nginxPath = nginxPath.replace("\\", "/");
 		settingService.set("nginxPath", nginxPath);
 
 		if (!FileUtil.exist(nginxPath)) {
@@ -93,26 +97,22 @@ public class ConfController extends BaseController {
 
 	@RequestMapping(value = "check")
 	@ResponseBody
-	public JsonResult check(String nginxPath) {
-		if (!SystemTool.hasNginx()) {
-			return renderError("系统中未安装nginx命令");
-		}
-
+	public JsonResult check(String nginxPath, String nginxExe) {
+		nginxPath = nginxPath.replace("\\", "/");
+		nginxExe = nginxExe.replace("\\", "/");
 		settingService.set("nginxPath", nginxPath);
-
+		settingService.set("nginxExe", nginxExe);
 		try {
 			String rs = null;
 			if (SystemTool.isWindows()) {
-				File file = new File(nginxPath);
-				if (file.exists() && file.getParentFile().getParentFile().exists()) {
-					File nginxDir = file.getParentFile().getParentFile();
-					rs = RuntimeUtil.execForStr("cmd /c powershell cd " + nginxDir.getPath() + "; ./nginx.exe -t;");
-
-				} else {
-					return renderError("nginx目录不存在");
+				String cmd = "cmd /c " + nginxExe + " -c " + nginxPath + " -p " + nginxExe.replace("/nginx.exe", "") + " -t";
+				rs = RuntimeUtil.execForStr(cmd);
+			} else { 
+				String cmd = nginxExe + " -t";
+				if(nginxExe.contains("/")) {
+					cmd = nginxExe + " -c " + nginxPath + " -p " + nginxExe.replace("/nginx.exe", "") + " -t";	
 				}
-			} else {
-				rs = RuntimeUtil.execForStr("nginx -t");
+				rs = RuntimeUtil.execForStr(cmd);
 			}
 
 			if (rs.contains("successful")) {

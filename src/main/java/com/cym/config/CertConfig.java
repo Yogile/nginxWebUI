@@ -30,7 +30,7 @@ public class CertConfig {
 
 	@PostConstruct
 	public void init() throws IOException {
-		if (!SystemUtil.get(SystemUtil.OS_NAME).toLowerCase().contains("win")) {
+		if (SystemTool.isLinux()) {
 			// 初始化acme.sh
 			String userDir = FileUtil.getUserHomePath();
 
@@ -55,6 +55,15 @@ public class CertConfig {
 				}
 			}
 
+			String nginxExe = settingService.get("nginxExe");
+			if (StrUtil.isEmpty(nginxExe)) {
+				String rs = RuntimeTool.execForOne("which nginx");
+				if (StrUtil.isNotEmpty(rs)) {
+					settingService.set("nginxExe", "nginx");
+				} else {
+					settingService.set("nginxExe", nginxPath.replace("conf/nginx.conf", "nginx"));
+				}
+			}
 
 		}
 
