@@ -42,7 +42,7 @@ apt install nginx
 码云的服务器下载较慢, CDN地址(可使用wget下载): 
 
 ```
-wget https://craccd.oss-cn-beijing.aliyuncs.com/nginxWebUI-1.1.5.jar
+wget https://craccd.oss-cn-beijing.aliyuncs.com/nginxWebUI-1.1.6.jar
 ```
 
 有新版本只需要修改路径中的版本即可
@@ -50,7 +50,7 @@ wget https://craccd.oss-cn-beijing.aliyuncs.com/nginxWebUI-1.1.5.jar
 启动命令
 
 ```
-nohup java -jar nginxWebUI-1.1.5.jar --server.port=8080 --spring.database.sqlite-name=.sqlite > nginxWebUI.log &
+nohup java -jar nginxWebUI-1.1.6.jar --server.port=8080 --spring.database.sqlite-name=.sqlite > nginxWebUI.log &
 ```
 
 参数说明
