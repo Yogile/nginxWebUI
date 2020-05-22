@@ -10,6 +10,7 @@ import com.cym.model.Group;
 import com.cym.model.Remote;
 
 import cn.craccd.sqlHelper.utils.CriteriaAndWrapper;
+import cn.craccd.sqlHelper.utils.CriteriaOrWrapper;
 import cn.craccd.sqlHelper.utils.SqlHelper;
 import cn.hutool.core.util.StrUtil;
 
@@ -40,7 +41,7 @@ public class GroupService {
 	public List<Group> getListByParent(String id) {
 		CriteriaAndWrapper criteriaAndWrapper = new CriteriaAndWrapper();
 		if (StrUtil.isEmpty(id)) {
-			criteriaAndWrapper.eq("parentId", "");
+			criteriaAndWrapper.and(new CriteriaOrWrapper().eq("parentId", "").isNull("parentId"));
 		} else {
 			criteriaAndWrapper.eq("parentId", id);
 		}
