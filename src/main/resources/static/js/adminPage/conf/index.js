@@ -40,7 +40,7 @@ function replace() {
 		success : function(data) {
 			if (data.success) {
 				layer.msg(data.obj);
-				loadConf();
+				//loadConf();
 				loadOrg();
 
 			} else {
