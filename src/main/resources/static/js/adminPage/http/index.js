@@ -120,9 +120,10 @@ function addGiudeOver(){
 		var http = {};
 		http.name = $(this).attr("id");
 		http.value = $(this).val();
+		http.unit = $(this).attr("lang");
 		
 		if(http.name == 'gzip'){
-			if($(this).prop("check")){
+			if($(this).prop("checked")){
 				http.value = "on";
 			}else{
 				http.value = "off";
