@@ -1,6 +1,7 @@
 package com.cym.controller.adminPage;
 
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cym.ext.AsycPack;
+import com.cym.ext.Tree;
 import com.cym.model.Group;
 import com.cym.model.Remote;
 import com.cym.service.ConfService;
@@ -136,7 +138,38 @@ public class RemoteController extends BaseController {
 		return renderSuccess();
 	}
 
-	
+	@RequestMapping("getGroupTree")
+	@ResponseBody
+	public JsonResult getGroupTree() {
+		
+		List<Group> groups = groupService.getListByParent(null);
+		List<Tree> treeList = new ArrayList<>();
+		fillTree(groups ,treeList);
+		
+		Tree tree = new Tree();
+		tree.setName("--无分组--");
+		tree.setValue("");
+		
+		treeList.add(0, tree);
+		
+		return renderSuccess(treeList);
+	}
+
+	private void fillTree(List<Group> groups, List<Tree> treeList) {
+		for(Group group:groups) {
+			Tree tree = new Tree();
+			tree.setName(group.getName());
+			tree.setValue(group.getId());
+			
+			List<Tree> treeSubList = new ArrayList<>();
+			fillTree(groupService.getListByParent(group.getId()),treeSubList);
+			tree.setChildren(treeSubList);
+			
+			treeList.add(tree);
+		}
+		
+	}
+
 	@RequestMapping("getAllowRemote")
 	@ResponseBody
 	public JsonResult getAllowRemote(String id) {

@@ -1,4 +1,76 @@
+var parentId;
+var groupParentId
 $(function(){
+	// 加载组件
+	layui.config({
+		base: ctx + 'lib/layui/exts/xmSelect/'
+	}).extend({
+		xmSelect: 'xm-select'
+	}).use(['xmSelect'], function(){
+		var xmSelect = layui.xmSelect;
+		
+		$.ajax({
+			type : 'GET',
+			url : ctx + '/adminPage/remote/getGroupTree',
+			success : function(data) {
+				if (data) {
+					// 渲染多选
+					parentId = xmSelect.render({
+					    el: '#parentId', 
+					    name : 'parentId',
+					    // 显示为text模式
+					    model: { label: { type: 'text' } },
+					    // 单选模式
+					    radio: true,
+					    // 选中关闭
+					    clickClose: true,
+					    // 树
+					    tree: {
+					    	show: true,
+					    	// 非严格模式
+					    	strict: false,
+					    	// 默认展开节点
+					    	expandedKeys: true,
+					    	
+					    },
+					    data: data.obj
+					})
+					
+					groupParentId = xmSelect.render({
+					    el: '#groupParentId', 
+					    name : 'parentId',
+					    // 显示为text模式
+					    model: { label: { type: 'text' } },
+					    // 单选模式
+					    radio: true,
+					    // 选中关闭
+					    clickClose: true,
+					    // 树
+					    tree: {
+					    	show: true,
+					    	// 非严格模式
+					    	strict: false,
+					    	// 默认展开节点
+					    	expandedKeys: true,
+					    	
+					    },
+					    data: data.obj
+					})
+				}else{
+					layer.msg(data.msg);
+				}
+			},
+			error : function() {
+				alert("出错了,请联系技术人员!");
+			}
+		});
+		
+		
+		
+		
+	})
+	
+	
 	layui.config({
 		base: ctx + 'lib/layui/exts/treeTable/'
 	}).extend({
@@ -15,7 +87,7 @@ $(function(){
 					is_checkbox : false,
 					end : function(e) {
 						console.dir(e);
-						//checkPermission();
+						// checkPermission();
 						form.render();
 					},
 					cols : [{
@@ -104,7 +176,9 @@ function add() {
 	$("#protocol").val("http"); 
 	$("#name").val(""); 
 	$("#pass").val(""); 
-	$("#parentId option:first").prop("checked", true);
+	//$("#parentId option:first").prop("checked", true);
+	parentId.setValue([""]);
+	
 	showWindow("添加远程服务器");
 }
 
@@ -113,7 +187,7 @@ function showWindow(title){
 	layer.open({
 		type : 1,
 		title : title,
-		area : [ '400px', '600px' ], // 宽高
+		area : [ '500px', '700px' ], // 宽高
 		content : $('#windowDiv')
 	});
 }
@@ -225,7 +299,8 @@ function edit(id) {
 				$("#port").val(remote.port); 
 				$("#protocol").val(remote.protocol); 
 				$("#descr").val(remote.descr); 
-				$("#parentId").val(remote.parentId); 
+				//$("#parentId").val(remote.parentId); 
+				parentId.setValue([remote.parentId]);
 				
 				form.render();
 				showWindow("编辑远程服务器");
@@ -356,12 +431,13 @@ function asycOver(){
 function addGroup(){
 	$("#groupId").val("");
 	$("#GroupName").val("");
-	$("#groupParentId option:first").prop("checked", true);
+	//$("#groupParentId option:first").prop("checked", true);
+	groupParentId.setValue([""]);
 	
 	layer.open({
 		type : 1,
 		title : "添加分组",
-		area : [ '400px', '300px' ], // 宽高
+		area : [ '400px', '500px' ], // 宽高
 		content : $('#groupDiv')
 	});
 	
@@ -383,12 +459,12 @@ function editGroup(id) {
 				var group = data.obj;
 				$("#groupId").val(group.id); 
 				$("#groupName").val(group.name);
-				$("#groupParentId").val(group.parentId); 
-				
+				//$("#groupParentId").val(group.parentId); 
+				groupParentId.setValue([group.parentId]);
 				layer.open({
 					type : 1,
 					title : "编辑分组",
-					area : [ '400px', '300px' ], // 宽高
+					area : [ '400px', '500px' ], // 宽高
 					content : $('#groupDiv')
 				});
 				
