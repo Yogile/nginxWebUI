@@ -11,28 +11,41 @@ import com.cym.model.Remote;
 
 import cn.craccd.sqlHelper.utils.CriteriaAndWrapper;
 import cn.craccd.sqlHelper.utils.SqlHelper;
+import cn.hutool.core.util.StrUtil;
 
 @Service
 public class GroupService {
 	@Autowired
 	SqlHelper sqlHelper;
+
 	@Transactional
 	public void delete(String id) {
 
 		sqlHelper.deleteById(id, Group.class);
-		
+
 		List<Remote> remoteList = sqlHelper.findListByQuery(new CriteriaAndWrapper().eq("parentId", id), Remote.class);
-		for(Remote remote:remoteList) {
+		for (Remote remote : remoteList) {
 			remote.setParentId(null);
 			sqlHelper.updateAllColumnById(remote);
 		}
-		
+
 		List<Group> groupList = sqlHelper.findListByQuery(new CriteriaAndWrapper().eq("parentId", id), Group.class);
-		for(Group group:groupList) {
+		for (Group group : groupList) {
 			group.setParentId(null);
 			sqlHelper.updateAllColumnById(group);
 		}
-		
+
+	}
+
+	public List<Group> getListByParent(String id) {
+		CriteriaAndWrapper criteriaAndWrapper = new CriteriaAndWrapper();
+		if (StrUtil.isEmpty(id)) {
+			criteriaAndWrapper.eq("parentId", "");
+		} else {
+			criteriaAndWrapper.eq("parentId", id);
+		}
+
+		return sqlHelper.findListByQuery(criteriaAndWrapper, Group.class);
 	}
 
 }

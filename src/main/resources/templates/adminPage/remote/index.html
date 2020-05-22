@@ -142,14 +142,11 @@
 				</div>
 				
 				<div class="layui-form-item">
-					<label class="layui-form-label">上级分组</label>
+					<label class="layui-form-label">分组</label>
 					<div class="layui-input-block">
-						<select name="parentId" id="parentId">
-							<option value="">--无分组--</option>
-							<#list groupList as group>
-								<option value="${group.id}">${group.name}</option>
-							</#list>
-						</select>
+						
+						
+						<div id="parentId"></div>
 					</div>
 				</div>
 
@@ -174,12 +171,8 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label">上级分组</label>
 					<div class="layui-input-block">
-						<select name="parentId" id="groupParentId">
-							<option value="">--无分组--</option>
-							<#list groupList as group>
-								<option value="${group.id}">${group.name}</option>
-							</#list>
-						</select>
+						<div  id="groupParentId">
+						</div>
 					</div>
 				</div>
 			
