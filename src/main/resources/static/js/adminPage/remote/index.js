@@ -1,3 +1,97 @@
+$(function(){
+	layui.config({
+		base: ctx + 'lib/layui/exts/treeTable/'
+	}).extend({
+		treeTable: 'treeTable'
+	}).use(['treeTable'], function(){
+		var treeTable = layui.treeTable;
+		var re = treeTable
+				.render({
+					elem : '#tree-table',
+					url: ctx + 'adminPage/remote/allTable' ,
+					icon_key : 'descr',
+					primary_key: 'id',
+					parent_key: 'parentId',
+					is_checkbox : false,
+					end : function(e) {
+						console.dir(e);
+						//checkPermission();
+						form.render();
+					},
+					cols : [{
+								key : 'descr',
+								title : '别名',
+								template : function(remote) {
+									if(remote.type == 0){
+										return `<span class="black">${remote.descr}</span>`
+									}
+									if(remote.type == 1){
+										return `<span class="blue">${remote.descr}</span>`
+									}
+								}
+							},{
+								key: 'protocol',
+								title : '协议'
+							},{
+								key: 'ip',
+								title : 'ip'
+							},{
+								key: 'port',
+								title : '端口',
+								template : function(remote) {
+									return remote.port != null?remote.port:"";
+								}
+							},{
+								key: 'version',
+								title : '版本'
+							},{
+								key: 'system',
+								title : '操作系统'
+							},{	
+								title : '状态',
+								template : function(remote) {
+									if(remote.status == 1){
+										return `<span class="green">在线</span>`
+									}
+									if(remote.status == 0){
+										return `<span class="red">掉线</span>`
+									}
+									
+									return "";
+								}
+							},{
+								title : '操作',
+								template : function(remote) {
+									var html = 
+										`<button class="layui-btn layui-btn-sm layui-btn-normal" onclick="change('${remote.id}')">切换到此服务器</button>
+										<button class="layui-btn layui-btn-sm layui-btn-normal" onclick="asyc('${remote.id}')">同步到其他服务器</button>
+										`
+									
+									if(remote.type == 0){
+										if(remote.id != '本地'){
+											html += `
+												<button class="layui-btn layui-btn-sm" onclick="content('${remote.id}')">查看conf</button>
+												<button class="layui-btn layui-btn-sm" onclick="edit('${remote.id}')">编辑</button>
+												<button class="layui-btn layui-btn-danger layui-btn-sm" onclick="del('${remote.id}')">删除</button>
+											`;
+										} else {
+											html += `
+												<button class="layui-btn layui-btn-sm" onclick="contentLocal()">查看conf</button>
+											`
+										}
+									}else{
+										html += `
+										<button class="layui-btn layui-btn-sm" onclick="editGroup('${remote.id}')">编辑</button>
+										<button class="layui-btn layui-btn-danger layui-btn-sm" onclick="delGroup('${remote.id}')">删除</button>
+										`
+									}
+									return html;
+								}
+							}]
+				});
+		});
+})
+
 function search() {
 	$("input[name='curr']").val(1);
 	$("#searchForm").submit();
@@ -10,7 +104,7 @@ function add() {
 	$("#protocol").val("http"); 
 	$("#name").val(""); 
 	$("#pass").val(""); 
-	
+	$("#parentId option:first").prop("checked", true);
 	showWindow("添加远程服务器");
 }
 
@@ -19,7 +113,7 @@ function showWindow(title){
 	layer.open({
 		type : 1,
 		title : title,
-		area : [ '400px', '500px' ], // 宽高
+		area : [ '400px', '600px' ], // 宽高
 		content : $('#windowDiv')
 	});
 }
@@ -131,6 +225,7 @@ function edit(id) {
 				$("#port").val(remote.port); 
 				$("#protocol").val(remote.protocol); 
 				$("#descr").val(remote.descr); 
+				$("#parentId").val(remote.parentId); 
 				
 				form.render();
 				showWindow("编辑远程服务器");
@@ -255,4 +350,102 @@ function asycOver(){
 			alert("出错了,请联系技术人员!");
 		}
 	});
+}
+
+
+function addGroup(){
+	$("#groupId").val("");
+	$("#GroupName").val("");
+	$("#groupParentId option:first").prop("checked", true);
+	
+	layer.open({
+		type : 1,
+		title : "添加分组",
+		area : [ '400px', '300px' ], // 宽高
+		content : $('#groupDiv')
+	});
+	
+}
+
+
+function editGroup(id) {
+	$("#groupId").val(id); 
+	
+	$.ajax({
+		type : 'GET',
+		url : ctx + '/adminPage/remote/groupDetail',
+		dataType : 'json',
+		data : {
+			id : id
+		},
+		success : function(data) {
+			if (data.success) {
+				var group = data.obj;
+				$("#groupId").val(group.id); 
+				$("#groupName").val(group.name);
+				$("#groupParentId").val(group.parentId); 
+				
+				layer.open({
+					type : 1,
+					title : "编辑分组",
+					area : [ '400px', '300px' ], // 宽高
+					content : $('#groupDiv')
+				});
+				
+				form.render();
+			}else{
+				layer.msg(data.msg);
+			}
+		},
+		error : function() {
+			alert("出错了,请联系技术人员!");
+		}
+	});
+}
+
+
+function addGroupOver(){
+	$.ajax({
+		type : 'POST',
+		url : ctx + '/adminPage/remote/addGroupOver',
+		data : $("#addGroupForm").serialize(),
+		dataType : 'json',
+		success : function(data) {
+			if (data.success) {
+				location.reload();
+			}else{
+				layer.msg(data.msg)
+			}
+		},
+		error : function() {
+			layer.closeAll();
+			alert("出错了,请联系技术人员!");
+		}
+	});
+}
+
+
+function delGroup(id){
+	if(confirm("确认删除?")){
+		$.ajax({
+			type : 'POST',
+			url : ctx + '/adminPage/remote/delGroup',
+			data : {
+				id : id
+			},
+			dataType : 'json',
+			success : function(data) {
+				if (data.success) {
+					location.reload();
+				}else{
+					layer.msg(data.msg)
+				}
+			},
+			error : function() {
+				layer.closeAll();
+				alert("出错了,请联系技术人员!");
+			}
+		});
+	}
+	
 }

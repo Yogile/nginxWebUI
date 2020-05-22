@@ -1,7 +1,6 @@
 package com.cym.controller.adminPage;
 
 import java.nio.charset.Charset;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,8 +15,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cym.ext.AsycPack;
+import com.cym.model.Group;
 import com.cym.model.Remote;
 import com.cym.service.ConfService;
+import com.cym.service.GroupService;
 import com.cym.service.RemoteService;
 import com.cym.service.SettingService;
 import com.cym.utils.BaseController;
@@ -38,6 +39,9 @@ public class RemoteController extends BaseController {
 	SettingService settingService;
 	@Autowired
 	ConfService confService;
+	@Autowired
+	GroupService groupService;
+	
 	@Value("${project.version}")
 	String version;
 	@Value("${server.port}")
@@ -45,6 +49,16 @@ public class RemoteController extends BaseController {
 
 	@RequestMapping("")
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView) {
+
+		modelAndView.addObject("groupList", sqlHelper.findAll(Group.class));
+		modelAndView.setViewName("/adminPage/remote/index");
+
+		return modelAndView;
+	}
+
+	@RequestMapping("allTable")
+	@ResponseBody
+	public List<Remote> allTable() {
 		List<Remote> remoteList = sqlHelper.findAll(Remote.class);
 
 		for (Remote remote : remoteList) {
@@ -56,26 +70,73 @@ public class RemoteController extends BaseController {
 					remote.setVersion(version);
 				}
 
+				if (remote.getParentId() == null) {
+					remote.setParentId("");
+				}
+
+				remote.setType(0);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+
 		}
 
-		Remote remote = new Remote();
-		remote.setId("本地");
-		remote.setIp("本地");
-		remote.setVersion(version);
-		remote.setPort(port);
-		remote.setSystem(SystemTool.getSystem());
+		Remote remoteLocal = new Remote();
+		remoteLocal.setId("本地");
+		remoteLocal.setIp("");
+		remoteLocal.setProtocol("");
+		remoteLocal.setParentId("");
+		remoteLocal.setDescr("本地");
+		remoteLocal.setVersion(version);
+		remoteLocal.setPort(port);
+		remoteLocal.setStatus(1);
+		remoteLocal.setType(0);
+		remoteLocal.setSystem(SystemTool.getSystem());
+		remoteList.add(0, remoteLocal);
 
-		remoteList.add(0, remote);
+		List<Group> groupList = sqlHelper.findAll(Group.class);
+		for (Group group : groupList) {
+			Remote remoteGroup = new Remote();
+			remoteGroup.setDescr(group.getName());
+			remoteGroup.setId(group.getId());
+			remoteGroup.setParentId(group.getParentId()!=null?group.getParentId():"");
+			remoteGroup.setType(1);
+			
+			remoteGroup.setIp("");
+			remoteGroup.setProtocol("");
+			remoteGroup.setVersion("");
+			remoteGroup.setSystem("");
+			
+			remoteList.add(remoteGroup);
+		}
 
-		modelAndView.addObject("remoteList", remoteList);
-		modelAndView.setViewName("/adminPage/remote/index");
-
-		return modelAndView;
+		return remoteList;
 	}
 
+	@RequestMapping("addGroupOver")
+	@ResponseBody
+	public JsonResult addGroupOver(Group group) {
+		
+		sqlHelper.insertOrUpdate(group);
+
+		return renderSuccess();
+	}
+
+	@RequestMapping("groupDetail")
+	@ResponseBody
+	public JsonResult groupDetail(String id) {
+		return renderSuccess(sqlHelper.findById(id, Group.class));
+	}
+	
+	@RequestMapping("delGroup")
+	@ResponseBody
+	public JsonResult delGroup(String id) {
+		
+		groupService.delete(id);
+		return renderSuccess();
+	}
+
+	
 	@RequestMapping("getAllowRemote")
 	@ResponseBody
 	public JsonResult getAllowRemote(String id) {
@@ -215,7 +276,6 @@ public class RemoteController extends BaseController {
 
 		return renderSuccess(rs);
 	}
-
 
 	@RequestMapping("version")
 	@ResponseBody
