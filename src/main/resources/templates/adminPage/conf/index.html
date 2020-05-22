@@ -35,6 +35,10 @@
 							</div>
 							<div class="layui-input-inline">
 								<input type="text" id="nginxPath" name="nginxPath" class="layui-input" style="width: 300px;" value="${nginxPath}">
+								
+							</div>
+							<div class="layui-input-inline">
+								<i class="layui-icon layui-icon-export" onclick="selectRoot('nginxPath')"></i>   
 							</div>
 
 							<div class="layui-input-inline">
@@ -43,12 +47,18 @@
 							<div class="layui-input-inline">
 								<input type="text" id="nginxExe" name="nginxExe" class="layui-input" style="width: 300px;" value="${nginxExe}">
 							</div>
-
+							<div class="layui-input-inline">
+								<i class="layui-icon layui-icon-export" onclick="selectRoot('nginxExe')"></i>   
+							</div>
+							
 							<div class="layui-input-inline">
 								<label class="layui-form-label" style="width: 120px;">nginx目录</label>
 							</div>
 							<div class="layui-input-inline">
 								<input type="text" id="nginxDir" name="nginxDir" class="layui-input" style="width: 300px;" value="${nginxDir}">
+							</div>
+							<div class="layui-input-inline">
+								<i class="layui-icon layui-icon-export" onclick="selectRoot('nginxDir')"></i>   
 							</div>
 						</div>
 
@@ -107,6 +117,7 @@
 	</div>
 
 	<#include '/adminPage/script.html'/>
+	<#include '/adminPage/select_root.html'/>
 	<script src="${ctx}/lib/auto-line-number/auto-line-number.js" type="text/javascript"></script>
 	<script src="${ctx}/js/adminPage/conf/index.js?v=${jsrandom}" type="text/javascript"></script>
 </body>

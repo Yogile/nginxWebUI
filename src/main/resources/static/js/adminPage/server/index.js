@@ -59,10 +59,10 @@ function checkType(type,id){
 
 function checkSsl(value){
 	if (value == 0) {
-		$("#pemDiv").hide();
+		$(".pemDiv").hide();
 	} 
 	if (value == 1) {
-		$("#pemDiv").show();
+		$(".pemDiv").show();
 	} 
 }
 
@@ -216,7 +216,8 @@ function edit(id) {
 								</td>
 								
 								<td>
-									<input type="text" name="value" class="layui-input" value=""  placeholder="例：http://127.0.0.1:8080 或 /root/www">
+									<input type="text" name="value" id="value_${uuid}" class="layui-input" value=""  placeholder="例：http://127.0.0.1:8080 或 /root/www">
+									
 									<span name="upstreamSelect">
 									${upstreamSelect}
 									</span>
@@ -290,7 +291,8 @@ function addItem(){
 						</td>
 						
 						<td>
-							<input type="text" name="value" class="layui-input" value="" placeholder="例：http://127.0.0.1:8080 或 /root/www">
+							<input type="text" name="value" id="value_${uuid}" class="layui-input" value=""  placeholder="例：http://127.0.0.1:8080 或 /root/www">
+							
 							<span name="upstreamSelect">
 								${upstreamSelect}
 							</span>
@@ -346,4 +348,20 @@ function selectCertOver(){
 			alert("出错了,请联系技术人员!");
 		}
 	});
+}
+
+
+function selectPem(){
+	rootSelect.selectOne(function(rs){
+		$("#pem").val(rs);
+		$("#pemPath").html(rs);
+	})
+}
+
+
+function selectKey(){
+	rootSelect.selectOne(function(rs){
+		$("#key").val(rs);
+		$("#keyPath").html(rs);
+	})
 }
