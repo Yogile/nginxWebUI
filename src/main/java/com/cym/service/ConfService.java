@@ -420,9 +420,11 @@ public class ConfService {
 
 		if ("true".equals(decompose)) {
 			// 写入conf.d文件
-			for (int i = 0; i < subContent.length; i++) {
-				String tagert = nginxPath.replace("nginx.conf", "conf.d/" + subName[i]);
-				FileUtil.writeString(subContent[i], tagert, Charset.defaultCharset()); // 清空
+			if (subContent != null) {
+				for (int i = 0; i < subContent.length; i++) {
+					String tagert = nginxPath.replace("nginx.conf", "conf.d/" + subName[i]);
+					FileUtil.writeString(subContent[i], tagert, Charset.defaultCharset()); // 清空
+				}
 			}
 		} else {
 			// 删除conf.d下全部文件

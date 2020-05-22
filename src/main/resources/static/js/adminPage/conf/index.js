@@ -227,3 +227,99 @@ function reload() {
 	});
 
 }
+
+function start(){
+	if ($("#nginxExe").val() == '') {
+		alert("nginx执行文件路径为空");
+		return;
+	}
+	
+	if($("#nginxExe").val().indexOf('/') > -1 || $("#nginxExe").val().indexOf('\\') > -1){
+		if ($("#nginxDir").val() == '') {
+			alert("你使用了绝对路径执行命令，请填写nginx目录");
+			return;
+		}
+	}
+	
+	
+	if(confirm("确认启动?")){
+		$.ajax({
+			type : 'POST',
+			url : ctx + '/adminPage/conf/start',
+			data : {
+				nginxExe : $("#nginxExe").val(),
+				nginxDir : $("#nginxDir").val()
+			},
+			dataType : 'json',
+			success : function(data) {
+				layer.closeAll();
+				if (data.success) {
+					layer.open({
+						  type: 0, 
+						  area : [ '810px', '400px' ],
+						  content: data.obj
+					});
+				} else {
+					layer.open({
+						  type: 0, 
+						  area : [ '810px', '400px' ],
+						  content: data.msg
+					});
+				}
+			},
+			error : function() {
+				layer.closeAll();
+				alert("出错了,请联系技术人员!");
+			}
+		});
+	}
+}
+
+
+
+function stop(){
+	if ($("#nginxExe").val() == '') {
+		alert("nginx执行文件路径为空");
+		return;
+	}
+	
+	if($("#nginxExe").val().indexOf('/') > -1 || $("#nginxExe").val().indexOf('\\') > -1){
+		if ($("#nginxDir").val() == '') {
+			alert("你使用了绝对路径执行命令，请填写nginx目录");
+			return;
+		}
+	}
+	
+	
+	if(confirm("确认停止?")){
+		$.ajax({
+			type : 'POST',
+			url : ctx + '/adminPage/conf/stop',
+			data : {
+				nginxExe : $("#nginxExe").val(),
+				nginxDir : $("#nginxDir").val()
+			},
+			dataType : 'json',
+			success : function(data) {
+				layer.closeAll();
+				if (data.success) {
+					layer.open({
+						  type: 0, 
+						  area : [ '810px', '400px' ],
+						  content: data.obj
+					});
+				} else {
+					layer.open({
+						  type: 0, 
+						  area : [ '810px', '400px' ],
+						  content: data.msg
+					});
+				}
+			},
+			error : function() {
+				layer.closeAll();
+				alert("出错了,请联系技术人员!");
+			}
+		});
+	}
+}

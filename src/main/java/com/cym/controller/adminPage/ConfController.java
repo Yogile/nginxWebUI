@@ -1,17 +1,15 @@
 package com.cym.controller.adminPage;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,12 +17,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.cym.ext.ConfExt;
 import com.cym.ext.ConfFile;
-import com.cym.model.Http;
-import com.cym.model.Location;
-import com.cym.model.Server;
-import com.cym.model.Stream;
-import com.cym.model.Upstream;
-import com.cym.model.UpstreamServer;
 import com.cym.service.ConfService;
 import com.cym.service.ServerService;
 import com.cym.service.SettingService;
@@ -32,17 +24,10 @@ import com.cym.service.UpstreamService;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
 import com.cym.utils.SystemTool;
-import com.github.odiszapc.nginxparser.NgxBlock;
-import com.github.odiszapc.nginxparser.NgxConfig;
-import com.github.odiszapc.nginxparser.NgxDumper;
-import com.github.odiszapc.nginxparser.NgxParam;
 
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.core.util.ZipUtil;
-import cn.hutool.system.SystemUtil;
 
 @Controller
 @RequestMapping("/adminPage/conf")
@@ -69,7 +54,7 @@ public class ConfController extends BaseController {
 
 		String nginxDir = settingService.get("nginxDir");
 		modelAndView.addObject("nginxDir", nginxDir);
-		
+
 		String decompose = settingService.get("decompose");
 		modelAndView.addObject("decompose", decompose);
 
@@ -100,11 +85,11 @@ public class ConfController extends BaseController {
 
 	@RequestMapping(value = "check")
 	@ResponseBody
-	public JsonResult check(String nginxPath, String nginxExe,String nginxDir) {
+	public JsonResult check(String nginxPath, String nginxExe, String nginxDir) {
 		nginxPath = nginxPath.replace("\\", "/");
 		nginxExe = nginxExe.replace("\\", "/");
 		nginxDir = nginxDir.replace("\\", "/");
-		
+
 		settingService.set("nginxPath", nginxPath);
 		settingService.set("nginxExe", nginxExe);
 		settingService.set("nginxDir", nginxDir);
@@ -114,10 +99,10 @@ public class ConfController extends BaseController {
 			if (SystemTool.isWindows()) {
 				cmd = nginxExe + " -c " + nginxPath + " -p " + nginxDir + " -t";
 				rs = RuntimeUtil.execForStr(cmd);
-			} else { 
-				cmd = nginxExe + " -t";
-				if(nginxExe.contains("/")) {
-					cmd = nginxExe + " -c " + nginxPath + " -p " + nginxDir + " -t";	
+			} else {
+				cmd = nginxExe + " -t ";
+				if (nginxExe.contains("/")) {
+					cmd = cmd + " -c " + nginxPath + " -p " + nginxDir;
 				}
 				rs = RuntimeUtil.execForStr(cmd);
 			}
@@ -135,15 +120,15 @@ public class ConfController extends BaseController {
 
 	@RequestMapping(value = "reload")
 	@ResponseBody
-	public JsonResult reload(String nginxPath,String nginxExe,String nginxDir) {
+	public JsonResult reload(String nginxPath, String nginxExe, String nginxDir) {
 		nginxPath = nginxPath.replace("\\", "/");
 		nginxExe = nginxExe.replace("\\", "/");
 		nginxDir = nginxDir.replace("\\", "/");
-		
+
 		settingService.set("nginxPath", nginxPath);
 		settingService.set("nginxExe", nginxExe);
 		settingService.set("nginxDir", nginxDir);
-		
+
 		try {
 			String rs = null;
 			String cmd = null;
@@ -151,9 +136,9 @@ public class ConfController extends BaseController {
 				cmd = nginxExe + " -c " + nginxPath + " -p " + nginxDir + " -s reload";
 				rs = RuntimeUtil.execForStr(cmd);
 			} else {
-				cmd = nginxExe + " -s reload";
-				if(nginxExe.contains("/")) {
-					cmd = nginxExe + " -c " + nginxPath + " -p " + nginxDir + " -s reload";	
+				cmd = nginxExe + " -s reload ";
+				if (nginxExe.contains("/")) {
+					cmd = cmd + " -c " + nginxPath + " -p " + nginxDir;
 				}
 				rs = RuntimeUtil.execForStr(cmd);
 			}
@@ -161,10 +146,10 @@ public class ConfController extends BaseController {
 			if (StrUtil.isEmpty(rs)) {
 				return renderSuccess(cmd + "<br>重新装载成功");
 			} else {
-				if(rs.contains("The system cannot find the file specified")) {
+				if (rs.contains("The system cannot find the file specified")) {
 					rs = rs.replace("\n", "<br>") + "可能nginx进程没有启动";
 				}
-				
+
 				return renderError(cmd + "<br>重新装载失败:<br>" + rs.replace("\n", "<br>"));
 			}
 		} catch (Exception e) {
@@ -172,8 +157,74 @@ public class ConfController extends BaseController {
 			return renderError("重新装载失败:<br>" + e.getMessage().replace("\n", "<br>"));
 		}
 	}
-	
-	
+
+	@RequestMapping(value = "start")
+	@ResponseBody
+	public JsonResult start(String nginxExe, String nginxDir) {
+		nginxExe = nginxExe.replace("\\", "/");
+		nginxDir = nginxDir.replace("\\", "/");
+
+		settingService.set("nginxExe", nginxExe);
+		settingService.set("nginxDir", nginxDir);
+
+		try {
+			String rs = null;
+			String cmd = null;
+			if (SystemTool.isWindows()) {
+				cmd = "cmd /c start nginx";
+				RuntimeUtil.exec(new String[] {}, new File(nginxDir), cmd);
+			} else {
+				cmd = nginxExe;
+				if (nginxExe.contains("/")) {
+					cmd = cmd + " -p " + nginxDir;
+				}
+				rs = RuntimeUtil.execForStr(cmd);
+			}
+
+			if (StrUtil.isEmpty(rs)) {
+				return renderSuccess(cmd + "<br>启动成功");
+			} else {
+				return renderError(cmd + "<br>启动失败:<br>" + rs.replace("\n", "<br>"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return renderError("启动失败:<br>" + e.getMessage().replace("\n", "<br>"));
+		}
+	}
+
+	@RequestMapping(value = "stop")
+	@ResponseBody
+	public JsonResult stop(String nginxExe, String nginxDir) {
+		nginxExe = nginxExe.replace("\\", "/");
+		nginxDir = nginxDir.replace("\\", "/");
+
+		settingService.set("nginxExe", nginxExe);
+		settingService.set("nginxDir", nginxDir);
+
+		try {
+			String rs = null;
+			String cmd = null;
+			if (SystemTool.isWindows()) {
+				cmd = nginxExe + " -p " + nginxDir + " -s stop";
+				rs = RuntimeUtil.execForStr(cmd);
+			} else {
+				cmd = nginxExe + " -s stop";
+				if (nginxExe.contains("/")) {
+					cmd = cmd + " -p " + nginxDir;
+				}
+				rs = RuntimeUtil.execForStr(cmd);
+			}
+
+			if (StrUtil.isEmpty(rs)) {
+				return renderSuccess(cmd + "<br>停止成功");
+			} else {
+				return renderError(cmd + "<br>停止失败:<br>" + rs.replace("\n", "<br>"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return renderError("停止失败:<br>" + e.getMessage().replace("\n", "<br>"));
+		}
+	}
 
 	@RequestMapping(value = "loadConf")
 	@ResponseBody
@@ -220,4 +271,5 @@ public class ConfController extends BaseController {
 		settingService.set("decompose", decompose);
 		return renderSuccess();
 	}
+
 }
