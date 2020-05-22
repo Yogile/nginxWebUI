@@ -146,7 +146,7 @@ public class ConfController extends BaseController {
 			if (StrUtil.isEmpty(rs)) {
 				return renderSuccess(cmd + "<br>重新装载成功");
 			} else {
-				if (rs.contains("The system cannot find the file specified")) {
+				if (rs.contains("The system cannot find the file specified") || rs.contains("nginx.pid")) {
 					rs = rs.replace("\n", "<br>") + "可能nginx进程没有启动";
 				}
 
