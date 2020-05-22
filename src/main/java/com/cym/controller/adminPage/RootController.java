@@ -3,6 +3,7 @@ package com.cym.controller.adminPage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -54,6 +55,23 @@ public class RootController extends BaseController {
 			list.add(treeNode);
 
 		}
+
+		// 按文件夹进行排序
+		list.sort(new Comparator<TreeNode>() {
+
+			@Override
+			public int compare(TreeNode o1, TreeNode o2) {
+
+				if (o1.getIsParent().equals("true") && o2.getIsParent().equals("false")) {
+					return -1;
+				}
+				if (o1.getIsParent().equals("false") && o2.getIsParent().equals("true")) {
+					return 1;
+				}
+				return 0;
+			}
+		});
+
 
 		return list;
 	}
