@@ -18,7 +18,26 @@ public class Remote extends BaseModel{
 	String system;
 	String descr;
 	
+	String parentId;
+	Integer type; //0 服务器 1分组
+
 	
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
+
+	public String getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
+	}
+
 	public String getDescr() {
 		return descr;
 	}

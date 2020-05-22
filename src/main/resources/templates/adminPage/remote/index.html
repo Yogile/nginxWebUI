@@ -21,6 +21,8 @@
 					<div class="layui-form">
 						<div class="layui-inline">
 							<button type="button" class="layui-btn layui-btn-normal" onclick="add()">添加远程服务器</button>
+							
+							<button type="button" class="layui-btn" onclick="addGroup()">添加分组</button>
 						</div>
 						<div class="layui-inline">
 							<div class="layui-form-mid layui-word-aux proxyHttp">
@@ -31,7 +33,13 @@
 					</div>
 				</form>
 
-				<table class="layui-table">
+
+				<table  class="layui-table" id="tree-table">
+					
+				</table>
+				
+				
+				<table class="layui-table" style="display: none;">
 					<thead>
 						<tr>
 							<th>协议</th>
@@ -88,6 +96,13 @@
 				<input type="hidden" name="id" id="id">
 				
 				<div class="layui-form-item">
+					<label class="layui-form-label">别名</label>
+					<div class="layui-input-block">
+						<input type="text" name="descr" id="descr" class="layui-input">
+					</div>
+				</div>
+				
+				<div class="layui-form-item">
 					<label class="layui-form-label">协议</label>
 					<div class="layui-input-block">
 						<select id="protocol" name="protocol">
@@ -113,13 +128,6 @@
 				</div>
 				
 				<div class="layui-form-item">
-					<label class="layui-form-label">别名</label>
-					<div class="layui-input-block">
-						<input type="text" name="descr" id="descr" class="layui-input">
-					</div>
-				</div>
-				
-				<div class="layui-form-item">
 					<label class="layui-form-label">用户名</label>
 					<div class="layui-input-block">
 						<input type="text" name="name" id="name" class="layui-input">
@@ -132,9 +140,52 @@
 						<input type="password" name="pass" id="pass" class="layui-input">
 					</div>
 				</div>
+				
+				<div class="layui-form-item">
+					<label class="layui-form-label">上级分组</label>
+					<div class="layui-input-block">
+						<select name="parentId" id="parentId">
+							<option value="">--无分组--</option>
+							<#list groupList as group>
+								<option value="${group.id}">${group.name}</option>
+							</#list>
+						</select>
+					</div>
+				</div>
 
 				<div class="layui-form-item">
 					<button type="button" class="layui-btn layui-btn-normal" onclick="addOver()">提交</button>
+					<button type="button" class="layui-btn" onclick="layer.closeAll()">关闭</button>
+				</div>
+			</form>
+		</div>
+		
+		<div class="layui-form" id="groupDiv" style="padding: 15px; display: none">
+			<form id="addGroupForm">
+				<input type="hidden" name="id" id="groupId">
+				
+				<div class="layui-form-item">
+					<label class="layui-form-label">名称</label>
+					<div class="layui-input-block">
+						<input type="text" name="name" id="groupName" class="layui-input">
+					</div>
+				</div>
+				
+				<div class="layui-form-item">
+					<label class="layui-form-label">上级分组</label>
+					<div class="layui-input-block">
+						<select name="parentId" id="groupParentId">
+							<option value="">--无分组--</option>
+							<#list groupList as group>
+								<option value="${group.id}">${group.name}</option>
+							</#list>
+						</select>
+					</div>
+				</div>
+			
+
+				<div class="layui-form-item">
+					<button type="button" class="layui-btn layui-btn-normal" onclick="addGroupOver()">提交</button>
 					<button type="button" class="layui-btn" onclick="layer.closeAll()">关闭</button>
 				</div>
 			</form>
@@ -164,7 +215,7 @@
 
 	<#include '/adminPage/script.html'/>
 	<script src="${ctx}/lib/auto-line-number/auto-line-number.js" type="text/javascript"></script>
-	<script src="${ctx}/js/adminPage/remote/index.js?v=${jsrandom}" type="text/javascript"></script>
+	<script src="${ctx}/js/adminPage/remote/index.js" type="text/javascript"></script>
 </body>
 
 
