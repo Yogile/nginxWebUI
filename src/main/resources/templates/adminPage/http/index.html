@@ -21,6 +21,8 @@
 					<div class="layui-form">
 						<div class="layui-inline">
 							<button type="button" class="layui-btn layui-btn-normal" onclick="add()">添加http转发配置</button>
+							
+							<button type="button" class="layui-btn layui-btn-normal" onclick="guide()">简易配置向导</button>
 						</div>
 
 					</div>
@@ -78,6 +80,72 @@
 			</form>
 		</div>
 
+		<div class="layui-form" id="guideDiv" style="padding: 15px; display: none">
+			<form id="addForm">
+				<div class="layui-form-item">
+					<label class="layui-form-label">keepalive_timeout</label>
+					<div class="layui-input-inline">
+						<input type="text" name="param" id="keepalive_timeout" class="layui-input" value="75">
+					</div>
+					<div class="layui-form-mid layui-word-aux">秒，连接超时时间</div>
+				</div>
+
+				<div class="layui-form-item">
+					<label class="layui-form-label">gzip</label>
+					<div class="layui-input-inline">
+						<input type="checkbox" name="param" id="gzip" lay-skin="primary" value="on" checked>
+					</div>
+					<div class="layui-form-mid layui-word-aux">是否开启压缩传输</div>
+				</div>
+				
+				<div class="layui-form-item">
+					<label class="layui-form-label">gzip_mini_length</label>
+					<div class="layui-input-inline">
+						<input type="text" name="param" id="gzip_mini_length" class="layui-input" value="8">
+					</div>
+					<div class="layui-form-mid layui-word-aux">KB，最小压缩文件</div>
+				</div>
+				
+				<div class="layui-form-item">
+					<label class="layui-form-label">gzip_comp_level</label>
+					<div class="layui-input-inline">
+						<input type="text" name="param" id="gzip_comp_level" class="layui-input" value="2">
+					</div>
+					<div class="layui-form-mid layui-word-aux">压缩率</div>
+				</div>
+				
+				<div class="layui-form-item">
+					<label class="layui-form-label">client_max_body_size</label>
+					<div class="layui-input-inline">
+						<input type="text" name="param" id="client_max_body_size" class="layui-input" value="512">
+					</div>
+					<div class="layui-form-mid layui-word-aux">MB，最大上传限制</div>
+				</div>
+				
+				<div class="layui-form-item">
+					<label class="layui-form-label">client_header_buffer_size</label>
+					<div class="layui-input-inline">
+						<input type="text" name="param" id="client_header_buffer_size" class="layui-input" value="32">
+					</div>
+					<div class="layui-form-mid layui-word-aux">KB，客户端请求头buffer大小</div>
+				</div>
+				
+				<div class="layui-form-item">
+					<label class="layui-form-label">keepalive_timeout</label>
+					<div class="layui-input-inline">
+						<input type="text" name="param" id="keepalive_timeout" class="layui-input" value="8">
+					</div>
+					<div class="layui-form-mid layui-word-aux">MB，请求主体缓冲区</div>
+				</div>
+				
+
+				<div class="layui-form-item">
+					<button type="button" class="layui-btn layui-btn-normal" onclick="addGiudeOver()">提交</button>
+					<button type="button" class="layui-btn" onclick="layer.closeAll()">关闭</button>
+				</div>
+			</form>
+		</div>
+		
 	</div>
 
 	<#include '/adminPage/script.html'/>

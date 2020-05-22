@@ -136,7 +136,7 @@ function check() {
 		return;
 	}
 	
-	if($("#nginxExe").val().indexOf('/') || $("#nginxExe").val().indexOf('\\')){
+	if($("#nginxExe").val().indexOf('/') > -1 || $("#nginxExe").val().indexOf('\\') > -1){
 		if ($("#nginxDir").val() == '') {
 			alert("你使用了绝对路径执行命令，请填写nginx目录");
 			return;
@@ -187,7 +187,7 @@ function reload() {
 		return;
 	}
 	
-	if($("#nginxExe").val().indexOf('/') || $("#nginxExe").val().indexOf('\\')){
+	if($("#nginxExe").val().indexOf('/') > -1 || $("#nginxExe").val().indexOf('\\') > -1){
 		if ($("#nginxDir").val() == '') {
 			alert("你使用了绝对路径执行命令，请填写nginx目录");
 			return;

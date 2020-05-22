@@ -20,6 +20,7 @@ import cn.craccd.sqlHelper.bean.Page;
 import cn.craccd.sqlHelper.bean.Sort;
 import cn.craccd.sqlHelper.bean.Sort.Direction;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 
 @Controller
 @RequestMapping("/adminPage/http")
@@ -61,4 +62,17 @@ public class HttpController extends BaseController {
 		return renderSuccess();
 	}
 
+	
+	@RequestMapping("addGiudeOver")
+	@ResponseBody
+	public JsonResult addGiudeOver(String json)  {
+		List<Http> https = JSONUtil.toList(JSONUtil.parseArray(json), Http.class); 
+		
+		httpService.setAll(https);
+		
+		return renderSuccess();
+	}
+
+	
+	
 }
