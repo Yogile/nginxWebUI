@@ -68,7 +68,9 @@ public class RootController extends BaseController {
 				if (o1.getIsParent().equals("false") && o2.getIsParent().equals("true")) {
 					return 1;
 				}
-				return 0;
+				
+				
+				return o1.getName().compareToIgnoreCase(o2.getName());
 			}
 		});
 
