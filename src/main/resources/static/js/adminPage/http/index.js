@@ -121,6 +121,14 @@ function addGiudeOver(){
 		http.name = $(this).attr("id");
 		http.value = $(this).val();
 		
+		if(http.name == 'gzip'){
+			if($(this).prop("check")){
+				http.value = "on";
+			}else{
+				http.value = "off";
+			}
+		}
+		
 		params.push(http);
 	})
 	

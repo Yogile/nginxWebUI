@@ -66,16 +66,19 @@
 								<button type="button" class="layui-btn layui-btn-normal" onclick="reload()">重新装载</button>
 							</div>
 
-							<div class="layui-input-inline">
+							<div class="layui-inline">
 								<label class="layui-form-label" style="width: 120px;">按域名分解文件</label>
 							</div>
 							<div class="layui-inline">
 								<input type="checkbox" name="switch" lay-filter="decompose" lay-text="开启|关闭" lay-skin="switch" ${(decompose=='true')?string('checked','')}>
 							</div>
 
-							<!-- <div class="layui-inline">
-								<button type="button" class="layui-btn layui-btn-normal" onclick="start()">启动nginx</button>
-							</div> -->
+							<div class="layui-inline" style="margin-left: 20px;">
+								<button type="button" class="layui-btn" onclick="start()">启动nginx</button>
+							</div>
+							<div class="layui-inline">
+								<button type="button" class="layui-btn" onclick="stop()">停止nginx</button>
+							</div>
 						</div>
 					</div>
 

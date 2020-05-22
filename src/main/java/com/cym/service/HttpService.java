@@ -33,9 +33,9 @@ public class HttpService {
 				http.setId(httpOrg.getId());
 			}
 
-			if (http.getName().equals("gzip") && StrUtil.isEmpty(http.getValue())) {
-				http.setValue("off");
-			}
+//			if (http.getName().equals("gzip") && StrUtil.isEmpty(http.getValue())) {
+//				http.setValue("off");
+//			}
 
 			sqlHelper.insertOrUpdate(http);
 
