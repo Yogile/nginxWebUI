@@ -90,6 +90,10 @@ public class LoginController extends BaseController {
 				return renderSuccess("本地");
 			} else {
 				Remote remote = (Remote) httpSession.getAttribute("remote");
+				if(StrUtil.isNotEmpty(remote.getDescr())) {
+					return renderSuccess(remote.getDescr());
+				}
+				
 				return renderSuccess(remote.getIp() + ":" + remote.getPort());
 			}
 		}
