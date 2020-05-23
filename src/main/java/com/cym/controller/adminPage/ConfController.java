@@ -107,6 +107,7 @@ public class ConfController extends BaseController {
 				rs = RuntimeUtil.execForStr(cmd);
 			}
 
+			cmd = "<span class='blue'>" + cmd + "</span>";
 			if (rs.contains("successful")) {
 				return renderSuccess(cmd + "<br>效验成功");
 			} else {
@@ -143,6 +144,7 @@ public class ConfController extends BaseController {
 				rs = RuntimeUtil.execForStr(cmd);
 			}
 
+			cmd = "<span class='blue'>" + cmd + "</span>";
 			if (StrUtil.isEmpty(rs)) {
 				return renderSuccess(cmd + "<br>重新装载成功");
 			} else {

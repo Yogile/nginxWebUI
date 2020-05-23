@@ -233,11 +233,12 @@ public class ConfService {
 				if (server.getSsl() == 1 && server.getRewrite() == 1) {
 					ngxBlockServer = new NgxBlock();
 					ngxBlockServer.addValue("server");
-
-					ngxParam = new NgxParam();
-					ngxParam.addValue("server_name " + server.getServerName());
-					ngxBlockServer.addEntry(ngxParam);
-
+					
+					if(StrUtil.isNotEmpty( server.getServerName())) {
+						ngxParam = new NgxParam();
+						ngxParam.addValue("server_name " + server.getServerName());
+						ngxBlockServer.addEntry(ngxParam);
+					}
 					ngxParam = new NgxParam();
 					ngxParam.addValue("listen 80");
 					ngxBlockServer.addEntry(ngxParam);
