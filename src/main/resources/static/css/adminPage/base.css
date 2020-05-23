@@ -25,3 +25,7 @@
 	color: gray;
 	cursor: pointer;
 }
+
+textarea {
+	resize: none;
+}

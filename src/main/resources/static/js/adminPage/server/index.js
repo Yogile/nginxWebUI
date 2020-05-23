@@ -120,6 +120,11 @@ function addOver() {
 		return;
 	}
 	
+	if($("#ssl").val() == 1 && $("#serverName").val() == ''){
+		layer.msg("开启ssl必须填写域名");
+		return;
+	}
+	
 	var over = true;
 	$("input[name='path']").each(function(){
 		if($(this).val().trim() == ''){
