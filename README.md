@@ -9,6 +9,8 @@ QQ技术交流群: 1106758598
 
 本项目可以使用WebUI配置nginx的各项功能, 包括http协议转发, tcp协议转发, 反向代理, 负载均衡, ssl证书自动申请、续签、配置等, 最终生成nginx.conf文件并覆盖nginx的默认配置文件, 完成nginx的最终功能配置. 
 
+本项目可管理多个nginx服务器集群, 随时一键切换到对应服务器上进行nginx配置, 也可以一键将某台服务器配置同步到其他服务器, 方便集群管理
+
 nginx本身功能复杂, 本项目并不能涵盖nginx所有功能, 只能配置常用功能, 更高级的功能配置仍然需要在最终生成的nginx.conf中进行手动编写。
 
 部署此项目后, 配置nginx再也不用上网各种搜索, 再也不用手动申请和配置ssl证书, 只需要在本项目中进行增删改查就可方便的配置nginx。
@@ -21,7 +23,7 @@ nginx本身功能复杂, 本项目并不能涵盖nginx所有功能, 只能配置
 
 > sqlHelper是一个可以像mongodb一样使用sql数据库的orm, 解放开发者对sql数据库表结构的维护工作, 支持sqlite, mysql, postgresql三种数据库, 有兴趣的可以了解一下 https://gitee.com/cym1102/sqlHelper
 
-本系统通过Let's encrypt申请证书, 使用acme.sh脚本进行自动化申请和续签, 开启续签的证书将在每天凌晨2点进行续签, 只有超过60天的证书才会进行续签.
+本系统通过Let's encrypt申请证书, 使用acme.sh脚本进行自动化申请和续签, 开启续签的证书将在每天凌晨2点进行续签, 只有超过60天的证书才会进行续签. 只支持在linux下签发证书.
 
 因为申请证书必须要使用80端口, 因此在申请和续签的时候nginx将会短暂关闭，请注意。
 
@@ -57,7 +59,7 @@ nohup java -jar nginxWebUI-1.1.7.jar --server.port=8080 --spring.database.sqlite
 
 --server.port 占用端口, 默认以8080端口启动
 
---spring.database.sqlite-name sqlite文件释放后文件名, 默认释放为.sqlite
+--spring.database.sqlite-name sqlite文件释放后文件名, 默认释放为.sqlite, 修改此项可在一台机器上部署多个nginxWebUI
 
 #### 使用说明
 
