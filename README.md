@@ -44,7 +44,7 @@ apt install nginx
 码云的服务器下载较慢, CDN地址(可使用wget下载): 
 
 ```
-wget https://craccd.oss-cn-beijing.aliyuncs.com/nginxWebUI-1.1.7.jar
+wget https://craccd.oss-cn-beijing.aliyuncs.com/nginxWebUI-1.1.8.jar
 ```
 
 有新版本只需要修改路径中的版本即可
@@ -52,7 +52,7 @@ wget https://craccd.oss-cn-beijing.aliyuncs.com/nginxWebUI-1.1.7.jar
 启动命令
 
 ```
-nohup java -jar -Xms64m -Xmx64m nginxWebUI-1.1.7.jar --server.port=8080 --spring.database.sqlite-name=.sqlite > nginxWebUI.log &
+nohup java -jar -Xms64m -Xmx64m nginxWebUI-1.1.8.jar --server.port=8080 --spring.database.sqlite-name=.sqlite > nginxWebUI.log &
 ```
 
 参数说明(非必填)
@@ -67,7 +67,7 @@ nohup java -jar -Xms64m -Xmx64m nginxWebUI-1.1.7.jar --server.port=8080 --spring
 
 #### 使用说明
 
-打开http://xxx.xxx.xxx.xx:8080
+打开http://xxx.xxx.xxx.xxx:8080
 默认登录名密码为admin/admin
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0515/165140_ee1bd853_1100382.jpeg "login.jpg")
