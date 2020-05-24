@@ -55,7 +55,7 @@ wget https://craccd.oss-cn-beijing.aliyuncs.com/nginxWebUI-1.1.7.jar
 nohup java -jar -Xms64m -Xmx64m nginxWebUI-1.1.7.jar --server.port=8080 --spring.database.sqlite-name=.sqlite > nginxWebUI.log &
 ```
 
-参数说明
+参数说明(非必填)
 
 -Xms64m 起始分配内存数
 
