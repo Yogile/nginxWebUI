@@ -64,10 +64,6 @@ $(function(){
 				alert("出错了,请联系技术人员!");
 			}
 		});
-		
-		
-		
-		
 	})
 	
 	
@@ -134,12 +130,14 @@ $(function(){
 							},{
 								title : '操作',
 								template : function(remote) {
-									var html = 
-										`<button class="layui-btn layui-btn-sm layui-btn-normal" onclick="change('${remote.id}')">切换到此服务器</button>
-										<button class="layui-btn layui-btn-sm layui-btn-normal" onclick="asyc('${remote.id}')">同步到其他服务器</button>
-										`
+									var html = "";
 									
 									if(remote.type == 0){
+										// 服务器
+										html += `<button class="layui-btn layui-btn-sm layui-btn-normal" onclick="change('${remote.id}')">切换到此服务器</button>
+											<button class="layui-btn layui-btn-sm layui-btn-normal" onclick="asyc('${remote.id}')">同步到其他服务器</button>
+											`;
+											
 										if(remote.id != '本地'){
 											html += `
 												<button class="layui-btn layui-btn-sm" onclick="content('${remote.id}')">查看conf</button>
@@ -149,13 +147,15 @@ $(function(){
 										} else {
 											html += `
 												<button class="layui-btn layui-btn-sm" onclick="contentLocal()">查看conf</button>
-											`
+											`;
 										}
-									}else{
+										
+									} else {
+										// 分组
 										html += `
 										<button class="layui-btn layui-btn-sm" onclick="editGroup('${remote.id}')">编辑</button>
 										<button class="layui-btn layui-btn-danger layui-btn-sm" onclick="delGroup('${remote.id}')">删除</button>
-										`
+										`;
 									}
 									return html;
 								}
