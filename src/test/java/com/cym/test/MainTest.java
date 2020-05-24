@@ -34,7 +34,7 @@ public class MainTest {
 	@Test
 	public void testStartUp() {
 		Version version = new Version();
-		version.setVersion(this.version);
+		version.setVersion(this.version.replace("v", ""));
 		version.setUrl("http://craccd.oss-cn-beijing.aliyuncs.com/nginxWebUI-" + version.getVersion() + ".jar");
 
 		FileUtil.writeString(JSONUtil.toJsonStr(version), "d:/version.json", Charset.defaultCharset());
