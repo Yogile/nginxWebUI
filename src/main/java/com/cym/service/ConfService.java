@@ -3,7 +3,6 @@ package com.cym.service;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -19,8 +18,8 @@ import com.cym.ext.ConfFile;
 import com.cym.model.Cert;
 import com.cym.model.Http;
 import com.cym.model.Location;
+import com.cym.model.Param;
 import com.cym.model.Server;
-import com.cym.model.Setting;
 import com.cym.model.Stream;
 import com.cym.model.Upstream;
 import com.cym.model.UpstreamServer;
@@ -35,10 +34,8 @@ import cn.craccd.sqlHelper.utils.CriteriaAndWrapper;
 import cn.craccd.sqlHelper.utils.SqlHelper;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.ZipUtil;
-import cn.hutool.system.SystemUtil;
 
 @Service
 public class ConfService {
@@ -50,6 +47,10 @@ public class ConfService {
 	SettingService settingService;
 	@Autowired
 	ServerService serverService;
+	@Autowired
+	LocationService locationService;
+	@Autowired
+	ParamService paramService;
 	@Autowired
 	SqlHelper sqlHelper;
 
@@ -146,14 +147,23 @@ public class ConfService {
 					ngxBlockServer.addEntry(ngxParam);
 
 				}
+				
+				// 自定义参数
+				List<Param> paramList = paramService.getListByTypeId(server.getId(), "server");
+				for(Param param:paramList) {
+					ngxParam = new NgxParam();
+					ngxParam.addValue(param.getName() + " " + param.getValue());
+					ngxBlockServer.addEntry(ngxParam);
+				}
+				
 
 				List<Location> locationList = serverService.getLocationByServerId(server.getId());
 
 				// http转发配置
 				for (Location location : locationList) {
+					NgxBlock ngxBlockLocation = new NgxBlock();
 					if (location.getType() == 0 || location.getType() == 2) { // http或负载均衡
 						// 添加location
-						NgxBlock ngxBlockLocation = new NgxBlock();
 						ngxBlockLocation.addValue("location");
 						ngxBlockLocation.addValue(location.getPath());
 
@@ -186,10 +196,9 @@ public class ConfService {
 						ngxParam.addValue("proxy_set_header X-Forwarded-Proto $scheme");
 						ngxBlockLocation.addEntry(ngxParam);
 
-						ngxBlockServer.addEntry(ngxBlockLocation);
+						
 
 					} else if (location.getType() == 1) { // 静态html
-						NgxBlock ngxBlockLocation = new NgxBlock();
 						ngxBlockLocation.addValue("location");
 						ngxBlockLocation.addValue(location.getPath());
 
@@ -206,9 +215,18 @@ public class ConfService {
 						ngxParam = new NgxParam();
 						ngxParam.addValue("index index.html");
 						ngxBlockLocation.addEntry(ngxParam);
-
-						ngxBlockServer.addEntry(ngxBlockLocation);
 					}
+					
+					// 自定义参数
+					paramList = paramService.getListByTypeId(location.getId(), "location");
+					for(Param param:paramList) {
+						ngxParam = new NgxParam();
+						ngxParam.addValue(param.getName() + " " + param.getValue());
+						ngxBlockLocation.addEntry(ngxParam);
+					}
+					
+					ngxBlockServer.addEntry(ngxBlockLocation);
+					
 				}
 				hasHttp = true;
 
@@ -461,6 +479,8 @@ public class ConfService {
 		asycPack.setUpstreamServerList(sqlHelper.findAll(UpstreamServer.class));
 		asycPack.setStreamList(sqlHelper.findAll(Stream.class));
 
+		asycPack.setParamList(sqlHelper.findAll(Param.class));
+		
 		String nginxPath = settingService.get("nginxPath");
 		String decompose = settingService.get("decompose");
 
@@ -495,7 +515,8 @@ public class ConfService {
 		sqlHelper.deleteByQuery(new CriteriaAndWrapper(), Upstream.class);
 		sqlHelper.deleteByQuery(new CriteriaAndWrapper(), UpstreamServer.class);
 		sqlHelper.deleteByQuery(new CriteriaAndWrapper(), Stream.class);
-
+		sqlHelper.deleteByQuery(new CriteriaAndWrapper(), Param.class);
+		
 		sqlHelper.insertAll(asycPack.getCertList());
 		sqlHelper.insertAll(asycPack.getHttpList());
 		sqlHelper.insertAll(asycPack.getServerList());
@@ -503,7 +524,8 @@ public class ConfService {
 		sqlHelper.insertAll(asycPack.getUpstreamList());
 		sqlHelper.insertAll(asycPack.getUpstreamServerList());
 		sqlHelper.insertAll(asycPack.getStreamList());
-
+		sqlHelper.insertAll(asycPack.getParamList());
+		
 		for (Cert cert : asycPack.getCertList()) {
 			if (StrUtil.isNotEmpty(cert.getPem())) {
 				FileUtil.writeString(cert.getPemStr(), cert.getPem(), Charset.defaultCharset());
