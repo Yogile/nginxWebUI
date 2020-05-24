@@ -17,11 +17,18 @@ public class ParamService {
 	@Autowired
 	SqlHelper sqlHelper;
 
-	public String getJsonById(String id, String type) {
+	public String getJsonByTypeId(String id, String type) {
 
 		List<Param> list = sqlHelper.findListByQuery(new CriteriaAndWrapper().eq(type + "Id", id), Param.class);
 
 		return JSONUtil.toJsonStr(list);
 	}
 
+	
+	public List<Param> getListByTypeId(String id, String type) {
+
+		List<Param> list = sqlHelper.findListByQuery(new CriteriaAndWrapper().eq(type + "Id", id), Param.class);
+
+		return list;
+	}
 }
