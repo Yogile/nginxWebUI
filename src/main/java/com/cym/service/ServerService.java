@@ -47,12 +47,12 @@ public class ServerService {
 		sqlHelper.insertOrUpdate(server);
 		List<Param> paramList = JSONUtil.toList(JSONUtil.parseArray(serverParamJson.replace("%2C", ",")), Param.class);
 		List<String> locationIds = sqlHelper.findIdsByQuery(new CriteriaAndWrapper().eq("serverId", server.getId()), Location.class);
-		sqlHelper.deleteByQuery(new CriteriaOrWrapper().eq("serverId", server.getId()).in("locationId", locationIds), Param.class); 
-		for(Param param:paramList) {
+		sqlHelper.deleteByQuery(new CriteriaOrWrapper().eq("serverId", server.getId()).in("locationId", locationIds), Param.class);
+		for (Param param : paramList) {
 			param.setServerId(server.getId());
 			sqlHelper.insert(param);
 		}
-		
+
 		sqlHelper.deleteByQuery(new CriteriaAndWrapper().eq("serverId", server.getId()), Location.class);
 
 		if (type != null) {
@@ -69,9 +69,9 @@ public class ServerService {
 				}
 
 				sqlHelper.insert(location);
-				
-				paramList = JSONUtil.toList(JSONUtil.parseArray(locationParamJson[i].replace("%2C", ",")), Param.class); 
-				for(Param param:paramList) {
+
+				paramList = JSONUtil.toList(JSONUtil.parseArray(locationParamJson[i].replace("%2C", ",")), Param.class);
+				for (Param param : paramList) {
 					param.setLocationId(location.getId());
 					sqlHelper.insert(param);
 				}
@@ -80,7 +80,7 @@ public class ServerService {
 	}
 
 	@Transactional
-	public void addOverTcp(Server server) {
+	public void addOverTcp(Server server, String serverParamJson) {
 		server.setSsl(null);
 		server.setPem(null);
 		server.setKey(null);
@@ -93,8 +93,15 @@ public class ServerService {
 			sqlHelper.updateAllColumnById(server);
 		}
 
-		sqlHelper.deleteByQuery(new CriteriaAndWrapper().eq("serverId", server.getId()), Location.class);
+		List<String> locationIds = sqlHelper.findIdsByQuery(new CriteriaAndWrapper().eq("serverId", server.getId()), Location.class);
+		sqlHelper.deleteByQuery(new CriteriaOrWrapper().eq("serverId", server.getId()).in("locationId", locationIds), Param.class);
+		List<Param> paramList = JSONUtil.toList(JSONUtil.parseArray(serverParamJson.replace("%2C", ",")), Param.class);
+		for (Param param : paramList) {
+			param.setServerId(server.getId());
+			sqlHelper.insert(param);
+		}
 
+		sqlHelper.deleteByQuery(new CriteriaAndWrapper().eq("serverId", server.getId()), Location.class);
 	}
 
 	public List<Server> getListByProxyType(Integer proxyType) {

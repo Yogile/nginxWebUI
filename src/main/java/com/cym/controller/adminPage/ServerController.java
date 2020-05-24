@@ -94,7 +94,7 @@ public class ServerController extends BaseController {
 		if (server.getProxyType() == 0) {
 			serverService.addOver(server, serverParamJson, type, path, value, upstreamId, locationParamJson);
 		} else {
-			serverService.addOverTcp(server);
+			serverService.addOverTcp(server, serverParamJson);
 		}
 
 		return renderSuccess();
