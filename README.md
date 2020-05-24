@@ -67,7 +67,7 @@ nohup java -jar -Xms64m -Xmx64m nginxWebUI-1.1.8.jar --server.port=8080 --spring
 
 #### 使用说明
 
-打开http://xxx.xxx.xxx.xx:8080
+打开http://xxx.xxx.xxx.xxx:8080
 默认登录名密码为admin/admin
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0515/165140_ee1bd853_1100382.jpeg "login.jpg")
