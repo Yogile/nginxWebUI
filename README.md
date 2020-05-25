@@ -79,11 +79,11 @@ nohup java -jar -Xms64m -Xmx64m nginxWebUI-1.1.9.jar --server.port=8080 --spring
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0518/171217_a1c2effc_1100382.jpeg "http.jpg")
 
-在http转发配置中可以配置nginx的http项目,进行http转发,默认会给出几个常用配置,其他需要的配置可自由增删改查
+在http参数配置中可以配置nginx的http项目,进行http转发,默认会给出几个常用配置,其他需要的配置可自由增删改查
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0518/171234_e767f5a6_1100382.jpeg "stream.jpg")
 
-在tcp转发配置中可以配置nginx的steam项目参数,进行tcp转发
+在TCP参数配置中可以配置nginx的steam项目参数,进行tcp转发
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0518/171323_8865fca3_1100382.jpeg "server.jpg")
 
