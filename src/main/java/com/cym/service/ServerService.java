@@ -1,5 +1,6 @@
 package com.cym.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,10 @@ public class ServerService {
 	@Transactional
 	public void addOver(Server server, String serverParamJson, Integer[] type, String[] path, String[] value, String[] upstreamId, String[] locationParamJson) {
 		sqlHelper.insertOrUpdate(server);
-		List<Param> paramList = JSONUtil.toList(JSONUtil.parseArray(serverParamJson.replace("%2C", ",")), Param.class);
+		List<Param> paramList = new ArrayList<Param>();
+		if (StrUtil.isNotEmpty(serverParamJson) && JSONUtil.isJson(serverParamJson.replace("%2C", ","))) {
+			paramList = JSONUtil.toList(JSONUtil.parseArray(serverParamJson.replace("%2C", ",")), Param.class);
+		}
 		List<String> locationIds = sqlHelper.findIdsByQuery(new CriteriaAndWrapper().eq("serverId", server.getId()), Location.class);
 		sqlHelper.deleteByQuery(new CriteriaOrWrapper().eq("serverId", server.getId()).in("locationId", locationIds), Param.class);
 		for (Param param : paramList) {
@@ -70,7 +74,11 @@ public class ServerService {
 
 				sqlHelper.insert(location);
 
-				paramList = JSONUtil.toList(JSONUtil.parseArray(locationParamJson[i].replace("%2C", ",")), Param.class);
+				paramList = new ArrayList<Param>();
+				if (locationParamJson.length > 0 && StrUtil.isNotEmpty(locationParamJson[i]) && JSONUtil.isJson(locationParamJson[i].replace("%2C", ","))) {
+					paramList = JSONUtil.toList(JSONUtil.parseArray(locationParamJson[i].replace("%2C", ",")), Param.class);
+				}
+
 				for (Param param : paramList) {
 					param.setLocationId(location.getId());
 					sqlHelper.insert(param);
@@ -95,7 +103,11 @@ public class ServerService {
 
 		List<String> locationIds = sqlHelper.findIdsByQuery(new CriteriaAndWrapper().eq("serverId", server.getId()), Location.class);
 		sqlHelper.deleteByQuery(new CriteriaOrWrapper().eq("serverId", server.getId()).in("locationId", locationIds), Param.class);
-		List<Param> paramList = JSONUtil.toList(JSONUtil.parseArray(serverParamJson.replace("%2C", ",")), Param.class);
+		List<Param> paramList = new ArrayList<Param>();
+		if (StrUtil.isNotEmpty(serverParamJson) && JSONUtil.isJson(serverParamJson.replace("%2C", ","))) {
+			paramList = JSONUtil.toList(JSONUtil.parseArray(serverParamJson.replace("%2C", ",")), Param.class);
+		}
+
 		for (Param param : paramList) {
 			param.setServerId(server.getId());
 			sqlHelper.insert(param);
