@@ -43,7 +43,7 @@ public class RemoteController extends BaseController {
 	ConfService confService;
 	@Autowired
 	GroupService groupService;
-	
+
 	@Value("${project.version}")
 	String version;
 	@Value("${server.port}")
@@ -101,14 +101,14 @@ public class RemoteController extends BaseController {
 			Remote remoteGroup = new Remote();
 			remoteGroup.setDescr(group.getName());
 			remoteGroup.setId(group.getId());
-			remoteGroup.setParentId(group.getParentId()!=null?group.getParentId():"");
+			remoteGroup.setParentId(group.getParentId() != null ? group.getParentId() : "");
 			remoteGroup.setType(1);
-			
+
 			remoteGroup.setIp("");
 			remoteGroup.setProtocol("");
 			remoteGroup.setVersion("");
 			remoteGroup.setSystem("");
-			
+
 			remoteList.add(remoteGroup);
 		}
 
@@ -118,7 +118,7 @@ public class RemoteController extends BaseController {
 	@RequestMapping("addGroupOver")
 	@ResponseBody
 	public JsonResult addGroupOver(Group group) {
-		
+
 		sqlHelper.insertOrUpdate(group);
 
 		return renderSuccess();
@@ -129,11 +129,11 @@ public class RemoteController extends BaseController {
 	public JsonResult groupDetail(String id) {
 		return renderSuccess(sqlHelper.findById(id, Group.class));
 	}
-	
+
 	@RequestMapping("delGroup")
 	@ResponseBody
 	public JsonResult delGroup(String id) {
-		
+
 		groupService.delete(id);
 		return renderSuccess();
 	}
@@ -141,33 +141,33 @@ public class RemoteController extends BaseController {
 	@RequestMapping("getGroupTree")
 	@ResponseBody
 	public JsonResult getGroupTree() {
-		
+
 		List<Group> groups = groupService.getListByParent(null);
 		List<Tree> treeList = new ArrayList<>();
-		fillTree(groups ,treeList);
-		
+		fillTree(groups, treeList);
+
 		Tree tree = new Tree();
 		tree.setName("--无分组--");
 		tree.setValue("");
-		
+
 		treeList.add(0, tree);
-		
+
 		return renderSuccess(treeList);
 	}
 
 	private void fillTree(List<Group> groups, List<Tree> treeList) {
-		for(Group group:groups) {
+		for (Group group : groups) {
 			Tree tree = new Tree();
 			tree.setName(group.getName());
 			tree.setValue(group.getId());
-			
+
 			List<Tree> treeSubList = new ArrayList<>();
-			fillTree(groupService.getListByParent(group.getId()),treeSubList);
+			fillTree(groupService.getListByParent(group.getId()), treeSubList);
 			tree.setChildren(treeSubList);
-			
+
 			treeList.add(tree);
 		}
-		
+
 	}
 
 	@RequestMapping("getAllowRemote")
@@ -209,6 +209,34 @@ public class RemoteController extends BaseController {
 
 		return renderSuccess(remotes);
 	}
+
+	@RequestMapping("getCmdRemote")
+	@ResponseBody
+	public JsonResult getCmdRemote() {
+		List<Remote> remotes = sqlHelper.findAll(Remote.class);
+
+		Remote remote = new Remote();
+		remote.setId("本地");
+		remote.setIp("本地");
+		remote.setVersion(version);
+		remote.setPort(port);
+		remote.setSystem(SystemTool.getSystem());
+		remote.setDescr("");
+
+		remotes.add(0, remote);
+
+		return renderSuccess(remotes);
+	}
+	
+	
+	@RequestMapping("cmdOver")
+	@ResponseBody
+	public JsonResult cmdOver(String[] remoteId, String cmd) {
+		
+
+		return renderSuccess();
+	}
+
 
 	@RequestMapping("asyc")
 	@ResponseBody
