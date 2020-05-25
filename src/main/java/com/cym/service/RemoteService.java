@@ -7,9 +7,11 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cym.model.Group;
 import com.cym.model.Remote;
 
 import cn.craccd.sqlHelper.utils.CriteriaAndWrapper;
+import cn.craccd.sqlHelper.utils.CriteriaOrWrapper;
 import cn.craccd.sqlHelper.utils.SqlHelper;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
@@ -44,6 +46,17 @@ public class RemoteService {
 
 	public List<Remote> getBySystem(String system) {
 		return sqlHelper.findListByQuery(new CriteriaAndWrapper().eq("system", system), Remote.class);
+	}
+
+	public List<Remote> getListByParent(String parentId) {
+		CriteriaAndWrapper criteriaAndWrapper = new CriteriaAndWrapper();
+		if (StrUtil.isEmpty(parentId)) {
+			criteriaAndWrapper.and(new CriteriaOrWrapper().eq("parentId", "").isNull("parentId"));
+		} else {
+			criteriaAndWrapper.eq("parentId", parentId);
+		}
+
+		return sqlHelper.findListByQuery(criteriaAndWrapper, Remote.class);
 	}
 
 }

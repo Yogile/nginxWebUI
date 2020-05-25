@@ -172,71 +172,98 @@ public class RemoteController extends BaseController {
 
 	}
 
-	@RequestMapping("getAllowRemote")
-	@ResponseBody
-	public JsonResult getAllowRemote(String id) {
-		Remote remoteFrom = sqlHelper.findById(id, Remote.class);
-		String system = null;
-		List<Remote> remotes = null;
-		if (remoteFrom == null) {
-			// 本地
-			system = SystemTool.getSystem();
-			remotes = remoteService.getBySystem(system);
-		} else {
-			// 远程
-			system = remoteFrom.getSystem();
-			remotes = remoteService.getBySystem(system);
-
-			// 去掉自己
-			for (Remote remote : remotes) {
-				if (remote.getId().equals(remoteFrom.getId())) {
-					remotes.remove(remote);
-					break;
-				}
-			}
-
-			// 系统相同,加上本地
-			if (system.equals(SystemTool.getSystem())) {
-				Remote remote = new Remote();
-				remote.setId("本地");
-				remote.setIp("本地");
-				remote.setVersion(version);
-				remote.setPort(port);
-				remote.setSystem(SystemTool.getSystem());
-				remote.setDescr("");
-
-				remotes.add(0, remote);
-			}
-		}
-
-		return renderSuccess(remotes);
-	}
+//	@RequestMapping("getAllowRemote")
+//	@ResponseBody
+//	public JsonResult getAllowRemote(String id) {
+//		Remote remoteFrom = sqlHelper.findById(id, Remote.class);
+//		String system = null;
+//		List<Remote> remotes = null;
+//		if (remoteFrom == null) {
+//			// 本地
+//			system = SystemTool.getSystem();
+//			remotes = remoteService.getBySystem(system);
+//		} else {
+//			// 远程
+//			system = remoteFrom.getSystem();
+//			remotes = remoteService.getBySystem(system);
+//
+//			// 去掉自己
+//			for (Remote remote : remotes) {
+//				if (remote.getId().equals(remoteFrom.getId())) {
+//					remotes.remove(remote);
+//					break;
+//				}
+//			}
+//
+//			// 系统相同,加上本地
+//			if (system.equals(SystemTool.getSystem())) {
+//				Remote remote = new Remote();
+//				remote.setId("本地");
+//				remote.setIp("本地");
+//				remote.setVersion(version);
+//				remote.setPort(port);
+//				remote.setSystem(SystemTool.getSystem());
+//				remote.setDescr("");
+//
+//				remotes.add(0, remote);
+//			}
+//		}
+//
+//		return renderSuccess(remotes);
+//	}
 
 	@RequestMapping("getCmdRemote")
 	@ResponseBody
 	public JsonResult getCmdRemote() {
-		List<Remote> remotes = sqlHelper.findAll(Remote.class);
+//		List<Remote> remotes = sqlHelper.findAll(Remote.class);
 
-		Remote remote = new Remote();
-		remote.setId("本地");
-		remote.setIp("本地");
-		remote.setVersion(version);
-		remote.setPort(port);
-		remote.setSystem(SystemTool.getSystem());
-		remote.setDescr("");
+		List<Group> groups = groupService.getListByParent(null);
+		List<Remote> remotes = remoteService.getListByParent(null);
 
-		remotes.add(0, remote);
+		List<Tree> treeList = new ArrayList<>();
+		fillTreeRemote(groups, remotes, treeList);
 
-		return renderSuccess(remotes);
+		Tree tree = new Tree();
+		tree.setName("本地");
+		tree.setValue("本地");
+
+		treeList.add(0, tree);
+
+		return renderSuccess(treeList);
+	}
+
+	private void fillTreeRemote(List<Group> groups, List<Remote> remotes, List<Tree> treeList) {
+		for (Group group : groups) {
+			Tree tree = new Tree();
+			tree.setName(group.getName());
+			tree.setValue(group.getId());
+
+			List<Tree> treeSubList = new ArrayList<>();
+
+			fillTreeRemote(groupService.getListByParent(group.getId()), remoteService.getListByParent(group.getId()), treeSubList);
+
+			tree.setChildren(treeSubList);
+
+			treeList.add(tree);
+		}
+
+		for (Remote remote : remotes) {
+			Tree tree = new Tree();
+			tree.setName(remote.getIp() + "【" + remote.getDescr() + "】");
+			tree.setValue(remote.getId());
+
+			treeList.add(tree);
+		}
+
 	}
 
 	@RequestMapping("cmdOver")
 	@ResponseBody
 	public JsonResult cmdOver(String[] remoteId, String cmd) {
-		if(remoteId==null || remoteId.length==0) {
+		if (remoteId == null || remoteId.length == 0) {
 			return renderSuccess("未选择服务器");
 		}
-		
+
 		String rs = "";
 		if (remoteId != null) {
 			for (String id : remoteId) {
@@ -280,7 +307,10 @@ public class RemoteController extends BaseController {
 	@RequestMapping("asyc")
 	@ResponseBody
 	public JsonResult asyc(String fromId, String[] remoteId) {
-
+		if (StrUtil.isEmpty(fromId) || remoteId == null || remoteId.length == 0) {
+			return renderSuccess("未选择服务器");
+		}
+		
 		Remote remoteFrom = sqlHelper.findById(fromId, Remote.class);
 		String json = null;
 		if (remoteFrom == null) {
