@@ -63,9 +63,9 @@ public class ConfController extends BaseController {
 	@RequestMapping(value = "replace")
 	@ResponseBody
 	public JsonResult replace(String nginxPath, String nginxContent, String[] subContent, String[] subName) {
-		nginxPath = nginxPath.replace("\\", "/");
-		settingService.set("nginxPath", nginxPath);
-
+		if (nginxPath == null) {
+			nginxPath = settingService.get("nginxPath");
+		}
 		if (!FileUtil.exist(nginxPath)) {
 			return renderError("目标文件不存在");
 		}
@@ -84,16 +84,19 @@ public class ConfController extends BaseController {
 	@RequestMapping(value = "check")
 	@ResponseBody
 	public JsonResult check(String nginxPath, String nginxExe, String nginxDir) {
-		nginxPath = nginxPath.replace("\\", "/");
-		nginxExe = nginxExe.replace("\\", "/");
-		nginxDir = nginxDir.replace("\\", "/");
+		if (nginxPath == null) {
+			nginxPath = settingService.get("nginxPath");
+		}
+		if (nginxExe == null) {
+			nginxExe = settingService.get("nginxExe");
+		}
+		if (nginxDir == null) {
+			nginxDir = settingService.get("nginxDir");
+		}
 
-		settingService.set("nginxPath", nginxPath);
-		settingService.set("nginxExe", nginxExe);
-		settingService.set("nginxDir", nginxDir);
+		String rs = null;
+		String cmd = null;
 		try {
-			String rs = null;
-			String cmd = null;
 			if (SystemTool.isWindows()) {
 				cmd = nginxExe + " -t -c " + nginxPath + " -p " + nginxDir;
 				rs = RuntimeUtil.execForStr(cmd);
@@ -104,30 +107,48 @@ public class ConfController extends BaseController {
 				}
 				rs = RuntimeUtil.execForStr(cmd);
 			}
-
-			cmd = "<span class='blue'>" + cmd + "</span>";
-			if (rs.contains("successful")) {
-				return renderSuccess(cmd + "<br>效验成功");
-			} else {
-				return renderError(cmd + "<br>效验失败:<br>" + rs.replace("\n", "<br>"));
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return renderError("效验失败:<br>" + e.getMessage().replace("\n", "<br>"));
+			rs = e.getMessage().replace("\n", "<br>");
 		}
+
+		cmd = "<span class='blue'>" + cmd + "</span>";
+		if (rs.contains("successful")) {
+			return renderSuccess(cmd + "<br>效验成功");
+		} else {
+			return renderError(cmd + "<br>效验失败:<br>" + rs.replace("\n", "<br>"));
+		}
+
+	}
+
+	@RequestMapping(value = "saveCmd")
+	@ResponseBody
+	public JsonResult saveCmd(String nginxPath, String nginxExe, String nginxDir) {
+		nginxPath = nginxPath.replace("\\", "/");
+		settingService.set("nginxPath", nginxPath);
+
+		nginxExe = nginxExe.replace("\\", "/");
+		settingService.set("nginxExe", nginxExe);
+
+		nginxDir = nginxDir.replace("\\", "/");
+		settingService.set("nginxDir", nginxDir);
+
+		return renderSuccess();
 	}
 
 	@RequestMapping(value = "reload")
 	@ResponseBody
 	public JsonResult reload(String nginxPath, String nginxExe, String nginxDir) {
-		nginxPath = nginxPath.replace("\\", "/");
-		nginxExe = nginxExe.replace("\\", "/");
-		nginxDir = nginxDir.replace("\\", "/");
-
-		settingService.set("nginxPath", nginxPath);
-		settingService.set("nginxExe", nginxExe);
-		settingService.set("nginxDir", nginxDir);
-
+		if (nginxPath == null) {
+			nginxPath = settingService.get("nginxPath");
+		}
+		if (nginxExe == null) {
+			nginxExe = settingService.get("nginxExe");
+		}
+		if (nginxDir == null) {
+			nginxDir = settingService.get("nginxDir");
+		}
+		
 		try {
 			String rs = null;
 			String cmd = null;
@@ -161,12 +182,12 @@ public class ConfController extends BaseController {
 	@RequestMapping(value = "start")
 	@ResponseBody
 	public JsonResult start(String nginxExe, String nginxDir) {
-		nginxExe = nginxExe.replace("\\", "/");
-		nginxDir = nginxDir.replace("\\", "/");
-
-		settingService.set("nginxExe", nginxExe);
-		settingService.set("nginxDir", nginxDir);
-
+		if (nginxExe == null) {
+			nginxExe = settingService.get("nginxExe");
+		}
+		if (nginxDir == null) {
+			nginxDir = settingService.get("nginxDir");
+		}
 		try {
 			String rs = null;
 			String cmd = null;
@@ -195,12 +216,12 @@ public class ConfController extends BaseController {
 	@RequestMapping(value = "stop")
 	@ResponseBody
 	public JsonResult stop(String nginxExe, String nginxDir) {
-		nginxExe = nginxExe.replace("\\", "/");
-		nginxDir = nginxDir.replace("\\", "/");
-
-		settingService.set("nginxExe", nginxExe);
-		settingService.set("nginxDir", nginxDir);
-
+		if (nginxExe == null) {
+			nginxExe = settingService.get("nginxExe");
+		}
+		if (nginxDir == null) {
+			nginxDir = settingService.get("nginxDir");
+		}
 		try {
 			String rs = null;
 			String cmd = null;
@@ -238,9 +259,6 @@ public class ConfController extends BaseController {
 	@RequestMapping(value = "loadOrg")
 	@ResponseBody
 	public JsonResult loadOrg(String nginxPath) {
-		nginxPath = nginxPath.replace("\\", "/");
-
-		settingService.set("nginxPath", nginxPath);
 
 		String decompose = settingService.get("decompose");
 		ConfExt confExt = confService.buildConf(StrUtil.isNotEmpty(decompose) && decompose.equals("true"));

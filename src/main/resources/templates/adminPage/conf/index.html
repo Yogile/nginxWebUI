@@ -34,7 +34,7 @@
 								<label class="layui-form-label" style="width: 120px;">conf文件路径<span class="red">*</span></label>
 							</div>
 							<div class="layui-input-inline">
-								<input type="text" id="nginxPath" name="nginxPath" class="layui-input" style="width: 300px;" value="${nginxPath}">
+								<input type="text" id="nginxPath" name="nginxPath" class="layui-input" style="width: 300px;" value="${nginxPath}" onchange="saveCmd()">
 								
 							</div>
 							<div class="layui-input-inline">
@@ -45,7 +45,7 @@
 								<label class="layui-form-label" style="width: 120px;">nginx执行命令<span class="red">*</span></label>
 							</div>
 							<div class="layui-input-inline">
-								<input type="text" id="nginxExe" name="nginxExe" class="layui-input" style="width: 300px;" value="${nginxExe}">
+								<input type="text" id="nginxExe" name="nginxExe" class="layui-input" style="width: 300px;" value="${nginxExe}" onchange="saveCmd()">
 							</div>
 							<div class="layui-input-inline">
 								<i class="layui-icon layui-icon-export" onclick="selectRoot('nginxExe')"></i>   
@@ -55,7 +55,7 @@
 								<label class="layui-form-label" style="width: 120px;">nginx目录</label>
 							</div>
 							<div class="layui-input-inline">
-								<input type="text" id="nginxDir" name="nginxDir" class="layui-input" style="width: 300px;" value="${nginxDir}">
+								<input type="text" id="nginxDir" name="nginxDir" class="layui-input" style="width: 300px;" value="${nginxDir}" onchange="saveCmd()">
 							</div>
 							<div class="layui-input-inline">
 								<i class="layui-icon layui-icon-export" onclick="selectRoot('nginxDir')"></i>   

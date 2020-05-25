@@ -43,6 +43,8 @@ public class RemoteController extends BaseController {
 	ConfService confService;
 	@Autowired
 	GroupService groupService;
+	@Autowired
+	ConfController confController;
 
 	@Value("${project.version}")
 	String version;
@@ -227,16 +229,47 @@ public class RemoteController extends BaseController {
 
 		return renderSuccess(remotes);
 	}
-	
-	
+
 	@RequestMapping("cmdOver")
 	@ResponseBody
 	public JsonResult cmdOver(String[] remoteId, String cmd) {
+		if(remoteId==null || remoteId.length==0) {
+			return renderSuccess("未选择服务器");
+		}
 		
+		String rs = "";
+		if (remoteId != null) {
+			for (String id : remoteId) {
+				JsonResult jsonResult = null;
+				if (id.equals("本地")) {
+					if (cmd.contentEquals("check")) {
+						jsonResult = confController.check(null, null, null);
+					}
+					if (cmd.contentEquals("reload")) {
+						jsonResult = confController.reload(null, null, null);
+					}
 
-		return renderSuccess();
+					rs += "<span class='blue'>本地> </span>";
+				} else {
+					Remote remote = sqlHelper.findById(id, Remote.class);
+					rs += "<span class='blue'>" + remote.getIp() + "> </span>";
+					String json = HttpUtil.get(remote.getProtocol() + "://" + remote.getIp() + ":" + remote.getPort() + "/adminPage/conf/" + cmd + "?creditKey=" + remote.getCreditKey(), 500);
+					jsonResult = JSONUtil.toBean(json, JsonResult.class);
+
+				}
+
+				if (jsonResult.isSuccess()) {
+					rs += jsonResult.getObj().toString();
+				} else {
+					rs += jsonResult.getMsg();
+				}
+
+				rs += "<br>";
+			}
+		}
+
+		return renderSuccess(rs);
 	}
-
 
 	@RequestMapping("asyc")
 	@ResponseBody

@@ -323,3 +323,25 @@ function stop(){
 		});
 	}
 }
+
+
+function saveCmd(){
+	
+	$.ajax({
+		type : 'POST',
+		url : ctx + '/adminPage/conf/saveCmd',
+		data : {
+			nginxExe : $("#nginxExe").val(),
+			nginxDir : $("#nginxDir").val(),
+			nginxPath : $("#nginxPath").val()
+		},
+		dataType : 'json',
+		success : function(data) {
+			
+		},
+		error : function() {
+			
+		}
+	});
+	
+}
