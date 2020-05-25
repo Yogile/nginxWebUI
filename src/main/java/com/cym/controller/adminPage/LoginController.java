@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cym.config.VersionConfig;
 import com.cym.model.Admin;
 import com.cym.model.Remote;
 import com.cym.service.AdminService;
@@ -23,7 +24,6 @@ import com.cym.utils.PwdCheckUtil;
 import com.cym.utils.SystemTool;
 
 import cn.craccd.sqlHelper.utils.CriteriaAndWrapper;
-import cn.craccd.sqlHelper.utils.CriteriaWrapper;
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.ShearCaptcha;
 import cn.hutool.captcha.generator.RandomGenerator;
@@ -42,7 +42,8 @@ public class LoginController extends BaseController {
 	AdminService adminService;
 	@Autowired
 	CreditService creditService;
-
+	@Autowired
+	VersionConfig versionConfig;
 	@RequestMapping("")
 	public ModelAndView admin(ModelAndView modelAndView) {
 
@@ -63,6 +64,9 @@ public class LoginController extends BaseController {
 
 			httpSession.setAttribute("localType", "本地");
 			httpSession.setAttribute("isLogin", true);
+			
+			versionConfig.getNewVersion();
+			
 			return renderSuccess();
 		} else {
 			return renderError("用户名密码错误");
