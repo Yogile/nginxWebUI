@@ -11,13 +11,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cym.model.Admin;
 import com.cym.model.Remote;
 import com.cym.service.AdminService;
 import com.cym.service.CreditService;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
+import com.cym.utils.PwdCheckUtil;
 import com.cym.utils.SystemTool;
 
+import cn.craccd.sqlHelper.utils.CriteriaAndWrapper;
+import cn.craccd.sqlHelper.utils.CriteriaWrapper;
 import cn.hutool.core.util.StrUtil;
 
 /**
@@ -36,6 +40,8 @@ public class LoginController extends BaseController {
 
 	@RequestMapping("")
 	public ModelAndView admin(ModelAndView modelAndView) {
+
+		modelAndView.addObject("adminCount", sqlHelper.findCountByQuery(new CriteriaAndWrapper(), Admin.class));
 		modelAndView.setViewName("/adminPage/login/index");
 		return modelAndView;
 	}
@@ -59,13 +65,12 @@ public class LoginController extends BaseController {
 		httpSession.removeAttribute("isLogin");
 		return "redirect:/adminPage/login";
 	}
-	
+
 	@RequestMapping("noServer")
 	public ModelAndView noServer(ModelAndView modelAndView) {
 		modelAndView.setViewName("/adminPage/login/noServer");
 		return modelAndView;
 	}
-	
 
 	@ResponseBody
 	@RequestMapping("getCredit")
@@ -90,15 +95,38 @@ public class LoginController extends BaseController {
 				return renderSuccess("本地");
 			} else {
 				Remote remote = (Remote) httpSession.getAttribute("remote");
-				if(StrUtil.isNotEmpty(remote.getDescr())) {
+				if (StrUtil.isNotEmpty(remote.getDescr())) {
 					return renderSuccess(remote.getDescr());
 				}
-				
+
 				return renderSuccess(remote.getIp() + ":" + remote.getPort());
 			}
 		}
-		
+
 		return renderSuccess("");
+	}
+
+	@RequestMapping("addAdmin")
+	@ResponseBody
+	public JsonResult addAdmin(String name, String pass) {
+
+		Long adminCount = sqlHelper.findCountByQuery(new CriteriaAndWrapper(), Admin.class);
+		if (adminCount > 0) {
+			return renderError("管理员已初始化, 不能再次初始化");
+		}
+
+		if (!(PwdCheckUtil.checkContainUpperCase(pass) && PwdCheckUtil.checkContainLowerCase(pass) && PwdCheckUtil.checkContainDigit(pass) && PwdCheckUtil.checkPasswordLength(pass, "8", "100"))) {
+			return renderError("密码复杂度太低");
+		}
+		
+
+		Admin admin = new Admin();
+		admin.setName(name);
+		admin.setPass(pass);
+
+		sqlHelper.insert(admin);
+
+		return renderSuccess();
 	}
 
 }
