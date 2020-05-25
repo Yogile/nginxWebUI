@@ -248,6 +248,12 @@ public class RemoteController extends BaseController {
 					if (cmd.contentEquals("reload")) {
 						jsonResult = confController.reload(null, null, null);
 					}
+					if (cmd.contentEquals("start")) {
+						jsonResult = confController.start(null, null);
+					}
+					if (cmd.contentEquals("stop")) {
+						jsonResult = confController.stop(null, null);
+					}
 
 					rs += "<span class='blue'>本地> </span>";
 				} else {
