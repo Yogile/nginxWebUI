@@ -31,7 +31,6 @@ $(function(){
 					    	strict: false,
 					    	// 默认展开节点
 					    	expandedKeys: true,
-					    	
 					    },
 					    data: data.obj
 					})
@@ -428,10 +427,78 @@ function asycOver(){
 }
 
 
+function cmdGroup(){
+	$.ajax({
+		type : 'POST',
+		url : ctx + '/adminPage/remote/getCmdRemote',
+		data : {
+		
+		},
+		dataType : 'json',
+		success : function(data) {
+			layer.closeAll();
+			if (data.success) {
+				var list = data.obj;
+				var html = ``;
+				for(let i=0;i<list.length;i++){
+					var remote = list[i];
+					html += `<input type="checkbox" name="remoteId" title="${remote.ip}  ${remote.descr}" lay-skin="primary" value="${remote.id}"><br>`
+				}
+				$("#checkboxCmdDiv").html(html);
+				
+				form.render();
+				
+				layer.open({
+					type : 1,
+					title : "执行命令",
+					area : [ '400px', '500px' ], // 宽高
+					content : $('#cmdDiv')
+				});
+			} else {
+				layer.msg(data.msg)
+			}
+		},
+		error : function() {
+			layer.closeAll();
+			alert("出错了,请联系技术人员!");
+		}
+	});
+	
+}
+
+
+
+function cmdOver(){
+	
+	layer.load();
+	$.ajax({
+		type : 'POST',
+		url : ctx + '/adminPage/remote/cmdOver',
+		data : $("#cmdForm").serialize(),
+		dataType : 'json',
+		success : function(data) {
+			layer.closeAll();
+			if (data.success) {
+				layer.open({
+					  type: 0, 
+					  area : [ '810px', '400px' ],
+					  content: data.obj
+				});
+			}else{
+				layer.msg(data.msg)
+			}
+		},
+		error : function() {
+			layer.closeAll();
+			alert("出错了,请联系技术人员!");
+		}
+	});
+}
+
+
 function addGroup(){
 	$("#groupId").val("");
 	$("#GroupName").val("");
-	//$("#groupParentId option:first").prop("checked", true);
 	groupParentId.setValue([""]);
 	
 	layer.open({
