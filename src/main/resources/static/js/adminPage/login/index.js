@@ -33,7 +33,7 @@ function login() {
 			if (data.success) {
 				location.href = ctx + "adminPage/http";
 			} else {
-				alert("登录失败,请检查输入");
+				layer.msg(data.msg);
 			}
 		},
 		error : function() {
@@ -81,3 +81,9 @@ function getKey() {
 		login();
 	}
 }
+
+
+function refreshCode(id) {
+	$("#" + id).attr("src", ctx + "adminPage/login/getCode?t=" + (new Date()).getTime());
+}
+

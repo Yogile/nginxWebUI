@@ -3,6 +3,8 @@ package com.cym.controller.adminPage;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,9 @@ import com.cym.utils.SystemTool;
 
 import cn.craccd.sqlHelper.utils.CriteriaAndWrapper;
 import cn.craccd.sqlHelper.utils.CriteriaWrapper;
+import cn.hutool.captcha.CaptchaUtil;
+import cn.hutool.captcha.ShearCaptcha;
+import cn.hutool.captcha.generator.RandomGenerator;
 import cn.hutool.core.util.StrUtil;
 
 /**
@@ -48,7 +53,11 @@ public class LoginController extends BaseController {
 
 	@RequestMapping("login")
 	@ResponseBody
-	public JsonResult submitLogin(String name, String pass, HttpSession httpSession) {
+	public JsonResult submitLogin(String name, String pass,String code, HttpSession httpSession) {
+		String imgCode = (String) httpSession.getAttribute("imgCode");
+		if (!imgCode.equalsIgnoreCase(code)) {
+			return renderError("验证码不正确");
+		}
 
 		if (adminService.login(name, pass)) {
 
@@ -56,7 +65,7 @@ public class LoginController extends BaseController {
 			httpSession.setAttribute("isLogin", true);
 			return renderSuccess();
 		} else {
-			return renderError();
+			return renderError("用户名密码错误");
 		}
 	}
 
@@ -129,4 +138,14 @@ public class LoginController extends BaseController {
 		return renderSuccess();
 	}
 
+	@RequestMapping("/getCode")
+	public void getCode(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws Exception {
+		ShearCaptcha captcha = CaptchaUtil.createShearCaptcha(100, 40);
+		captcha.setGenerator(new RandomGenerator("0123456789", 4));
+		
+		String createText = captcha.getCode();
+		httpServletRequest.getSession().setAttribute("imgCode", createText);
+		
+		captcha.write(httpServletResponse.getOutputStream());
+	}
 }
