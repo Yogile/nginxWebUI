@@ -158,7 +158,7 @@ public class ConfService {
 
 				List<Location> locationList = serverService.getLocationByServerId(server.getId());
 
-				// http转发配置
+				// http参数配置
 				for (Location location : locationList) {
 					NgxBlock ngxBlockLocation = new NgxBlock();
 					if (location.getType() == 0 || location.getType() == 2) { // http或负载均衡
