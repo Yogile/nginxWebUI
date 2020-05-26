@@ -71,11 +71,11 @@ nohup java -jar -Xms64m -Xmx64m nginxWebUI-1.1.9.jar --server.port=8080 --spring
 
 本项目制作了docker镜像, 同时包含nginx和nginxWebUI在内, 一体化管理与运行nginx. 
 
-下载镜像: docker push registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.2.0
+下载镜像: `docker push registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.2.0`
 
-启动容器: docker run -itd --net=host registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.2.0
+启动容器: `docker run -itd --net=host registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.2.0`
 
-查看容器日志: docker logs -f [容器id]
+查看容器日志: `docker logs -f [容器id]`
 
 注意: 启动容器时请使用--net=host参数, 直接映射本机端口, 因为内部nginx可能使用任意一个端口, 所以必须映射本机所有端口
 
