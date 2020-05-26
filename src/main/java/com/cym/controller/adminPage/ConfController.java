@@ -63,13 +63,13 @@ public class ConfController extends BaseController {
 	@RequestMapping(value = "nginxStatus")
 	@ResponseBody
 	public JsonResult nginxStatus() {
-		if(SystemTool.isWindows()) {
+		if (SystemTool.isWindows()) {
 			return renderSuccess("");
 		}
-		
-		String rs = RuntimeUtil.execForStr("ps -ef|grep nginx");
-		System.out.println(rs); 
-		
+		String[] command = { "/bin/sh", "-c", "ps -ef|grep nginx" };
+		String rs = RuntimeUtil.execForStr(command);
+		System.out.println(rs);
+
 		if (rs.contains("nginx: master process")) {
 			return renderSuccess("nginx运行状态:<span class='green'>运行中</span>");
 		} else {
