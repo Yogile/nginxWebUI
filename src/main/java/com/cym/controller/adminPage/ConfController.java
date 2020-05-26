@@ -71,9 +71,9 @@ public class ConfController extends BaseController {
 		System.out.println(rs);
 
 		if (rs.contains("nginx: master process")) {
-			return renderSuccess("nginx运行状态:<span class='green'>运行中</span>");
+			return renderSuccess("nginx运行状态：<span class='green'>运行中</span>");
 		} else {
-			return renderSuccess("nginx运行状态:<span class='red'>未运行</span>");
+			return renderSuccess("nginx运行状态：<span class='red'>未运行</span>");
 		}
 
 	}
