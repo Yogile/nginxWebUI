@@ -383,7 +383,6 @@ public class ConfService {
 				}
 
 				if (StrUtil.isNotEmpty(module)) {
-					module = module.trim();
 					settingService.set("ngx_stream_module", module);
 					conf = "load_module " + module + ";\n" + conf;
 				}
