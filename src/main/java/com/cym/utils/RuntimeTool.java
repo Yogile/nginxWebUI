@@ -12,6 +12,10 @@ public class RuntimeTool {
 		List<String> list = RuntimeUtil.execForLines(CharsetUtil.systemCharset(), cmds);
 
 		if (list != null && list.size() > 0) {
+			for(String str :list) {
+				
+			}
+			
 			return list.get(list.size() - 1).trim();
 		} else {
 			return null;

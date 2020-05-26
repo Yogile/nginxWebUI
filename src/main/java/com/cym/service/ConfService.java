@@ -378,7 +378,7 @@ public class ConfService {
 			// 装载ngx_stream_module模块
 			if (hasStream && SystemTool.isLinux()) {
 				String module = settingService.get("ngx_stream_module");
-				if (StrUtil.isEmpty(module) && FileUtil.exist(module)) {
+				if (StrUtil.isEmpty(module) || !FileUtil.exist(module)) {
 					module = RuntimeTool.execForOne("find / -name ngx_stream_module.so");
 				}
 
