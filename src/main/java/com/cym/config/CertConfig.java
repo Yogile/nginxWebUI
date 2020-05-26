@@ -59,6 +59,7 @@ public class CertConfig {
 				if (StrUtil.isNotEmpty(rs)) {
 					settingService.set("nginxExe", "nginx");
 					
+					// 尝试启动nginx
 					String[] command = { "/bin/sh", "-c", "ps -ef|grep nginx" };
 					rs = RuntimeUtil.execForStr(command);
 					if(!rs.contains("nginx: master process")) {
