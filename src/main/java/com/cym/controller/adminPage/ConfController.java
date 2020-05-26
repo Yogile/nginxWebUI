@@ -60,6 +60,22 @@ public class ConfController extends BaseController {
 		return modelAndView;
 	}
 
+	@RequestMapping(value = "nginxStatus")
+	@ResponseBody
+	public JsonResult nginxStatus() {
+		if(SystemTool.isWindows()) {
+			return renderSuccess("");
+		}
+		
+		String rs = RuntimeUtil.execForStr("ps -ef|grep nginx");
+		if (rs.contains("nginx: worker process")) {
+			return renderSuccess("nginx运行状态:<span class='green'>运行中</span>");
+		} else {
+			return renderSuccess("nginx运行状态:<span class='red'>未运行</span>");
+		}
+
+	}
+
 	@RequestMapping(value = "replace")
 	@ResponseBody
 	public JsonResult replace(String nginxPath, String nginxContent, String[] subContent, String[] subName) {
@@ -114,9 +130,9 @@ public class ConfController extends BaseController {
 
 		cmd = "<span class='blue'>" + cmd + "</span>";
 		if (rs.contains("successful")) {
-			return renderSuccess(cmd + "<br>效验成功:<br>" + rs.replace("\n", "<br>"));
+			return renderSuccess(cmd + "<br>效验成功<br>" + rs.replace("\n", "<br>"));
 		} else {
-			return renderError(cmd + "<br>效验失败:<br>" + rs.replace("\n", "<br>"));
+			return renderError(cmd + "<br>效验失败<br>" + rs.replace("\n", "<br>"));
 		}
 
 	}
@@ -148,7 +164,7 @@ public class ConfController extends BaseController {
 		if (nginxDir == null) {
 			nginxDir = settingService.get("nginxDir");
 		}
-		
+
 		try {
 			String rs = null;
 			String cmd = null;
@@ -165,17 +181,17 @@ public class ConfController extends BaseController {
 
 			cmd = "<span class='blue'>" + cmd + "</span>";
 			if (StrUtil.isEmpty(rs) || rs.contains("signal process started")) {
-				return renderSuccess(cmd + "<br>重新装载成功:<br>" + rs.replace("\n", "<br>"));
+				return renderSuccess(cmd + "<br>重新装载成功<br>" + rs.replace("\n", "<br>"));
 			} else {
 				if (rs.contains("The system cannot find the file specified") || rs.contains("nginx.pid") || rs.contains("PID")) {
 					rs = rs + "可能nginx进程没有启动";
 				}
 
-				return renderError(cmd + "<br>重新装载失败:<br>" + rs.replace("\n", "<br>"));
+				return renderError(cmd + "<br>重新装载失败<br>" + rs.replace("\n", "<br>"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return renderError("重新装载失败:<br>" + e.getMessage().replace("\n", "<br>"));
+			return renderError("重新装载失败<br>" + e.getMessage().replace("\n", "<br>"));
 		}
 	}
 
@@ -202,14 +218,15 @@ public class ConfController extends BaseController {
 				rs = RuntimeUtil.execForStr(cmd);
 			}
 
-			if (StrUtil.isEmpty(rs) || rs.contains("signal process started")) { 
-				return renderSuccess(cmd + "<br>启动成功:<br>" + rs.replace("\n", "<br>"));
+			cmd = "<span class='blue'>" + cmd + "</span>";
+			if (StrUtil.isEmpty(rs) || rs.contains("signal process started")) {
+				return renderSuccess(cmd + "<br>启动成功<br>" + rs.replace("\n", "<br>"));
 			} else {
-				return renderError(cmd + "<br>启动失败:<br>" + rs.replace("\n", "<br>"));
+				return renderError(cmd + "<br>启动失败<br>" + rs.replace("\n", "<br>"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return renderError("启动失败:<br>" + e.getMessage().replace("\n", "<br>"));
+			return renderError("启动失败<br>" + e.getMessage().replace("\n", "<br>"));
 		}
 	}
 
@@ -236,14 +253,15 @@ public class ConfController extends BaseController {
 				rs = RuntimeUtil.execForStr(cmd);
 			}
 
+			cmd = "<span class='blue'>" + cmd + "</span>";
 			if (StrUtil.isEmpty(rs) || rs.contains("signal process started")) {
-				return renderSuccess(cmd + "<br>停止成功:<br>" + rs.replace("\n", "<br>"));
+				return renderSuccess(cmd + "<br>停止成功<br>" + rs.replace("\n", "<br>"));
 			} else {
-				return renderError(cmd + "<br>停止失败:<br>" + rs.replace("\n", "<br>"));
+				return renderError(cmd + "<br>停止失败<br>" + rs.replace("\n", "<br>"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return renderError("停止失败:<br>" + e.getMessage().replace("\n", "<br>"));
+			return renderError("停止失败<br>" + e.getMessage().replace("\n", "<br>"));
 		}
 	}
 
