@@ -360,11 +360,20 @@ function saveCmd(){
 		},
 		dataType : 'json',
 		success : function(data) {
-			
+			//layer.msg("ok");
 		},
 		error : function() {
 			
 		}
 	});
 	
+}
+
+
+
+function selectRootCustom(inputId){
+	rootSelect.selectOne(function callBack(val){
+		$("#" + inputId).val(val);
+		saveCmd();
+	});
 }
