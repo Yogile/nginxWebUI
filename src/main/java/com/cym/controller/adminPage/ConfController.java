@@ -164,7 +164,7 @@ public class ConfController extends BaseController {
 			}
 
 			cmd = "<span class='blue'>" + cmd + "</span>";
-			if (StrUtil.isEmpty(rs)) {
+			if (StrUtil.isEmpty(rs) || rs.contains("signal process started")) {
 				return renderSuccess(cmd + "<br>重新装载成功");
 			} else {
 				if (rs.contains("The system cannot find the file specified") || rs.contains("nginx.pid") || rs.contains("PID")) {
