@@ -379,10 +379,11 @@ public class ConfService {
 			if (hasStream && SystemTool.isLinux()) {
 				String module = settingService.get("ngx_stream_module");
 				if (StrUtil.isEmpty(module)) {
-					module = RuntimeTool.execForOne("find / -name ngx_stream_module.so").trim();
+					module = RuntimeTool.execForOne("find / -name ngx_stream_module.so");
 				}
 
 				if (StrUtil.isNotEmpty(module)) {
+					module = module.trim();
 					settingService.set("ngx_stream_module", module);
 					conf = "load_module " + module + ";\n" + conf;
 				}
