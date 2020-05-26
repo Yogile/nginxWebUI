@@ -21,15 +21,6 @@ public class SqlConfig {
 
 	@PostConstruct
 	public void initAdmin() {
-//		Long count = sqlHelper.findAllCount(Admin.class);
-
-//		if (count == 0) {
-//			Admin admin = new Admin();
-//			admin.setName("admin");
-//			admin.setPass("admin");
-//
-//			sqlHelper.insert(admin);
-//		}
 
 		Long count = sqlHelper.findAllCount(Http.class);
 		if (count == 0) {

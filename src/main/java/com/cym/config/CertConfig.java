@@ -58,6 +58,8 @@ public class CertConfig {
 				String rs = RuntimeTool.execForOne("which nginx");
 				if (StrUtil.isNotEmpty(rs)) {
 					settingService.set("nginxExe", "nginx");
+					
+					RuntimeUtil.exec("nginx");
 				} 
 			}
 
