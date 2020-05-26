@@ -29,7 +29,7 @@ nginx本身功能复杂, 本项目并不能涵盖nginx所有功能, 只能配置
 
 添加tcp/ip转发配置支持时, 一些低版本的nginx可能需要重新编译，通过添加–with-stream参数指定安装stream模块才能使用, 但在ubuntu 18.04下, 官方软件库中的nginx已经带有stream模块, 不需要重新编译. 本系统如果配置了tcp转发项的话, 会自动引入ngx_stream_module.so的配置项, 如果没有开启则不引入, 最大限度优化ngnix配置文件. 
 
-#### 安装说明
+#### jar安装说明
 以Ubuntu操作系统为例, 以下命令请使用root账户权限执行  
 
  **注意：本项目需要在root用户下运行系统命令，极容易被黑客利用，请一定修改密码为复杂密码**
@@ -66,6 +66,18 @@ nohup java -jar -Xms64m -Xmx64m nginxWebUI-1.1.9.jar --server.port=8080 --spring
 --server.port 占用端口, 默认以8080端口启动
 
 --spring.database.sqlite-name sqlite文件释放后文件名, 默认释放为.sqlite, 修改此项可在一台机器上部署多个nginxWebUI
+
+#### docker安装说明
+
+本项目制作了docker镜像, 同时包含nginx和nginxWebUI在内, 一体化管理与运行nginx. 
+
+下载镜像: docker push registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.2.0
+
+启动容器: docker run -itd --net=host registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.2.0
+
+查看容器日志: docker logs -f [容器id]
+
+注意: 启动容器时请使用--net=host参数, 直接映射本机端口, 因为内部nginx可能使用任意一个端口, 所以必须映射本机所有端口
 
 #### 使用说明
 
