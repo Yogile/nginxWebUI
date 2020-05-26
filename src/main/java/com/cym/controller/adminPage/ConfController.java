@@ -114,7 +114,7 @@ public class ConfController extends BaseController {
 
 		cmd = "<span class='blue'>" + cmd + "</span>";
 		if (rs.contains("successful")) {
-			return renderSuccess(cmd + "<br>效验成功");
+			return renderSuccess(cmd + "<br>效验成功:<br>" + rs.replace("\n", "<br>"));
 		} else {
 			return renderError(cmd + "<br>效验失败:<br>" + rs.replace("\n", "<br>"));
 		}
@@ -165,10 +165,10 @@ public class ConfController extends BaseController {
 
 			cmd = "<span class='blue'>" + cmd + "</span>";
 			if (StrUtil.isEmpty(rs) || rs.contains("signal process started")) {
-				return renderSuccess(cmd + "<br>重新装载成功");
+				return renderSuccess(cmd + "<br>重新装载成功:<br>" + rs.replace("\n", "<br>"));
 			} else {
 				if (rs.contains("The system cannot find the file specified") || rs.contains("nginx.pid") || rs.contains("PID")) {
-					rs = rs.replace("\n", "<br>") + "可能nginx进程没有启动";
+					rs = rs + "可能nginx进程没有启动";
 				}
 
 				return renderError(cmd + "<br>重新装载失败:<br>" + rs.replace("\n", "<br>"));
@@ -203,7 +203,7 @@ public class ConfController extends BaseController {
 			}
 
 			if (StrUtil.isEmpty(rs) || rs.contains("signal process started")) { 
-				return renderSuccess(cmd + "<br>启动成功");
+				return renderSuccess(cmd + "<br>启动成功:<br>" + rs.replace("\n", "<br>"));
 			} else {
 				return renderError(cmd + "<br>启动失败:<br>" + rs.replace("\n", "<br>"));
 			}
@@ -237,7 +237,7 @@ public class ConfController extends BaseController {
 			}
 
 			if (StrUtil.isEmpty(rs) || rs.contains("signal process started")) {
-				return renderSuccess(cmd + "<br>停止成功");
+				return renderSuccess(cmd + "<br>停止成功:<br>" + rs.replace("\n", "<br>"));
 			} else {
 				return renderError(cmd + "<br>停止失败:<br>" + rs.replace("\n", "<br>"));
 			}
