@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import com.cym.model.Group;
 import com.cym.model.Remote;
 
-import cn.craccd.sqlHelper.utils.CriteriaAndWrapper;
-import cn.craccd.sqlHelper.utils.CriteriaOrWrapper;
+import cn.craccd.sqlHelper.utils.ConditionAndWrapper;
+import cn.craccd.sqlHelper.utils.ConditionOrWrapper;
 import cn.craccd.sqlHelper.utils.SqlHelper;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
@@ -45,18 +45,18 @@ public class RemoteService {
 	}
 
 	public List<Remote> getBySystem(String system) {
-		return sqlHelper.findListByQuery(new CriteriaAndWrapper().eq("system", system), Remote.class);
+		return sqlHelper.findListByQuery(new ConditionAndWrapper().eq("system", system), Remote.class);
 	}
 
 	public List<Remote> getListByParent(String parentId) {
-		CriteriaAndWrapper criteriaAndWrapper = new CriteriaAndWrapper();
+		ConditionAndWrapper conditionAndWrapper = new ConditionAndWrapper();
 		if (StrUtil.isEmpty(parentId)) {
-			criteriaAndWrapper.and(new CriteriaOrWrapper().eq("parentId", "").isNull("parentId"));
+			conditionAndWrapper.and(new ConditionOrWrapper().eq("parentId", "").isNull("parentId"));
 		} else {
-			criteriaAndWrapper.eq("parentId", parentId);
+			conditionAndWrapper.eq("parentId", parentId);
 		}
 
-		return sqlHelper.findListByQuery(criteriaAndWrapper, Remote.class);
+		return sqlHelper.findListByQuery(conditionAndWrapper, Remote.class);
 	}
 
 }

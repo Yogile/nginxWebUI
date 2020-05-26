@@ -32,7 +32,7 @@ import com.github.odiszapc.nginxparser.NgxDumper;
 import com.github.odiszapc.nginxparser.NgxEntry;
 import com.github.odiszapc.nginxparser.NgxParam;
 
-import cn.craccd.sqlHelper.utils.CriteriaAndWrapper;
+import cn.craccd.sqlHelper.utils.ConditionAndWrapper;
 import cn.craccd.sqlHelper.utils.SqlHelper;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
@@ -524,14 +524,14 @@ public class ConfService {
 	@Transactional
 	public void setAsycPack(AsycPack asycPack) {
 
-		sqlHelper.deleteByQuery(new CriteriaAndWrapper(), Cert.class);
-		sqlHelper.deleteByQuery(new CriteriaAndWrapper(), Http.class);
-		sqlHelper.deleteByQuery(new CriteriaAndWrapper(), Server.class);
-		sqlHelper.deleteByQuery(new CriteriaAndWrapper(), Location.class);
-		sqlHelper.deleteByQuery(new CriteriaAndWrapper(), Upstream.class);
-		sqlHelper.deleteByQuery(new CriteriaAndWrapper(), UpstreamServer.class);
-		sqlHelper.deleteByQuery(new CriteriaAndWrapper(), Stream.class);
-		sqlHelper.deleteByQuery(new CriteriaAndWrapper(), Param.class);
+		sqlHelper.deleteByQuery(new ConditionAndWrapper(), Cert.class);
+		sqlHelper.deleteByQuery(new ConditionAndWrapper(), Http.class);
+		sqlHelper.deleteByQuery(new ConditionAndWrapper(), Server.class);
+		sqlHelper.deleteByQuery(new ConditionAndWrapper(), Location.class);
+		sqlHelper.deleteByQuery(new ConditionAndWrapper(), Upstream.class);
+		sqlHelper.deleteByQuery(new ConditionAndWrapper(), UpstreamServer.class);
+		sqlHelper.deleteByQuery(new ConditionAndWrapper(), Stream.class);
+		sqlHelper.deleteByQuery(new ConditionAndWrapper(), Param.class);
 
 		sqlHelper.insertAll(asycPack.getCertList());
 		sqlHelper.insertAll(asycPack.getHttpList());

@@ -23,7 +23,7 @@ import com.cym.utils.JsonResult;
 import com.cym.utils.PwdCheckUtil;
 import com.cym.utils.SystemTool;
 
-import cn.craccd.sqlHelper.utils.CriteriaAndWrapper;
+import cn.craccd.sqlHelper.utils.ConditionAndWrapper;
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.ShearCaptcha;
 import cn.hutool.captcha.generator.RandomGenerator;
@@ -47,7 +47,7 @@ public class LoginController extends BaseController {
 	@RequestMapping("")
 	public ModelAndView admin(ModelAndView modelAndView) {
 
-		modelAndView.addObject("adminCount", sqlHelper.findCountByQuery(new CriteriaAndWrapper(), Admin.class));
+		modelAndView.addObject("adminCount", sqlHelper.findCountByQuery(new ConditionAndWrapper(), Admin.class));
 		modelAndView.setViewName("/adminPage/login/index");
 		return modelAndView;
 	}
@@ -123,7 +123,7 @@ public class LoginController extends BaseController {
 	@ResponseBody
 	public JsonResult addAdmin(String name, String pass) {
 
-		Long adminCount = sqlHelper.findCountByQuery(new CriteriaAndWrapper(), Admin.class);
+		Long adminCount = sqlHelper.findCountByQuery(new ConditionAndWrapper(), Admin.class);
 		if (adminCount > 0) {
 			return renderError("管理员已初始化, 不能再次初始化");
 		}
