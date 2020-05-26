@@ -22,6 +22,7 @@ public class SqlConfig {
 	@PostConstruct
 	public void initAdmin() {
 
+		
 		Long count = sqlHelper.findAllCount(Http.class);
 		if (count == 0) {
 			List<Http> https = new ArrayList<Http>();
@@ -30,6 +31,7 @@ public class SqlConfig {
 
 			sqlHelper.insertAll(https);
 		}
+		
 
 	}
 }
