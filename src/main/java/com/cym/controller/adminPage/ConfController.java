@@ -167,7 +167,7 @@ public class ConfController extends BaseController {
 			if (StrUtil.isEmpty(rs)) {
 				return renderSuccess(cmd + "<br>重新装载成功");
 			} else {
-				if (rs.contains("The system cannot find the file specified") || rs.contains("nginx.pid")) {
+				if (rs.contains("The system cannot find the file specified") || rs.contains("nginx.pid") || rs.contains("PID")) {
 					rs = rs.replace("\n", "<br>") + "可能nginx进程没有启动";
 				}
 
@@ -196,13 +196,13 @@ public class ConfController extends BaseController {
 				RuntimeUtil.exec(new String[] {}, new File(nginxDir), cmd);
 			} else {
 				cmd = nginxExe;
-				if (nginxExe.contains("/")) {
+				if (nginxExe.contains("/") && StrUtil.isNotEmpty(nginxDir)) {
 					cmd = cmd + " -p " + nginxDir;
 				}
 				rs = RuntimeUtil.execForStr(cmd);
 			}
 
-			if (StrUtil.isEmpty(rs)) {
+			if (StrUtil.isEmpty(rs) || rs.contains("signal process started")) { 
 				return renderSuccess(cmd + "<br>启动成功");
 			} else {
 				return renderError(cmd + "<br>启动失败:<br>" + rs.replace("\n", "<br>"));
@@ -230,13 +230,13 @@ public class ConfController extends BaseController {
 				rs = RuntimeUtil.execForStr(cmd);
 			} else {
 				cmd = nginxExe + " -s stop";
-				if (nginxExe.contains("/")) {
+				if (nginxExe.contains("/") && StrUtil.isNotEmpty(nginxDir)) {
 					cmd = cmd + " -p " + nginxDir;
 				}
 				rs = RuntimeUtil.execForStr(cmd);
 			}
 
-			if (StrUtil.isEmpty(rs)) {
+			if (StrUtil.isEmpty(rs) || rs.contains("signal process started")) {
 				return renderSuccess(cmd + "<br>停止成功");
 			} else {
 				return renderError(cmd + "<br>停止失败:<br>" + rs.replace("\n", "<br>"));

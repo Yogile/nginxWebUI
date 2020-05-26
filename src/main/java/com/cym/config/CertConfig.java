@@ -48,7 +48,7 @@ public class CertConfig {
 			if (StrUtil.isEmpty(nginxPath)) {
 				nginxPath = RuntimeTool.execForOne("find / -name nginx.conf");
 
-				if (StrUtil.isNotEmpty(nginxPath)) {
+				if (StrUtil.isNotEmpty(nginxPath) && FileUtil.exist(nginxPath)) {
 					settingService.set("nginxPath", nginxPath.replace("\\", "/"));
 				}
 			}
