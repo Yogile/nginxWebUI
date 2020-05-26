@@ -85,7 +85,7 @@ public class BakController extends BaseController {
 		String nginxPath = settingService.get("nginxPath");
 
 		String str = FileUtil.readString(path, Charset.defaultCharset());
-		
+
 		if (StrUtil.isNotEmpty(nginxPath)) {
 			FileUtil.writeString(str, nginxPath, Charset.defaultCharset());
 
@@ -93,7 +93,9 @@ public class BakController extends BaseController {
 				String confd = nginxPath.replace("nginx.conf", "conf.d/");
 				FileUtil.del(confd);
 				ZipUtil.unzip(path.replace(".bak", ".zip"));
-				FileUtil.rename(new File(path.replace(".bak", "")), confd, false, true);
+				if (FileUtil.exist(path.replace(".bak", ""))) {
+					FileUtil.rename(new File(path.replace(".bak", "")), confd, false, true);
+				}
 			}
 
 			return renderSuccess();
