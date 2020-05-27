@@ -46,7 +46,7 @@ apt install nginx
 码云的服务器下载较慢, CDN地址(可使用wget下载): 
 
 ```
-wget https://craccd.oss-cn-beijing.aliyuncs.com/nginxWebUI-1.2.0.jar
+wget https://craccd.oss-cn-beijing.aliyuncs.com/nginxWebUI-1.2.1.jar
 ```
 
 有新版本只需要修改路径中的版本即可
@@ -54,7 +54,7 @@ wget https://craccd.oss-cn-beijing.aliyuncs.com/nginxWebUI-1.2.0.jar
 启动命令
 
 ```
-nohup java -jar -Xms64m -Xmx64m nginxWebUI-1.2.0.jar --server.port=8080 --logging.file.path=/home/log/ --spring.database.sqlite-name=.sqlite > /dev/null &
+nohup java -jar -Xms64m -Xmx64m nginxWebUI-1.2.1.jar --server.port=8080 --logging.file.path=/home/log/ --spring.database.sqlite-name=.sqlite > /dev/null &
 ```
 
 参数说明(非必填)
@@ -73,9 +73,9 @@ nohup java -jar -Xms64m -Xmx64m nginxWebUI-1.2.0.jar --server.port=8080 --loggin
 
 本项目制作了docker镜像, 同时包含nginx和nginxWebUI在内, 一体化管理与运行nginx. 
 
-下载镜像: `docker pull registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.2.0`
+下载镜像: `docker pull registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.2.1`
 
-启动容器: `docker run -itd --net=host registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.2.0`
+启动容器: `docker run -itd --net=host registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.2.1`
 
 查看容器日志: `docker logs -f [容器id]`
 
