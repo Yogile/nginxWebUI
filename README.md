@@ -46,7 +46,7 @@ apt install nginx
 码云的服务器下载较慢, CDN地址(可使用wget下载): 
 
 ```
-wget https://craccd.oss-cn-beijing.aliyuncs.com/nginxWebUI-1.1.9.jar
+wget https://craccd.oss-cn-beijing.aliyuncs.com/nginxWebUI-1.2.0.jar
 ```
 
 有新版本只需要修改路径中的版本即可
@@ -54,7 +54,7 @@ wget https://craccd.oss-cn-beijing.aliyuncs.com/nginxWebUI-1.1.9.jar
 启动命令
 
 ```
-nohup java -jar -Xms64m -Xmx64m nginxWebUI-1.1.9.jar --server.port=8080 --spring.database.sqlite-name=.sqlite > nginxWebUI.log &
+nohup java -jar -Xms64m -Xmx64m nginxWebUI-1.2.0.jar --server.port=8080 --logging.file.path=/home/log/ --spring.database.sqlite-name=.sqlite > /dev/null &
 ```
 
 参数说明(非必填)
@@ -66,6 +66,8 @@ nohup java -jar -Xms64m -Xmx64m nginxWebUI-1.1.9.jar --server.port=8080 --spring
 --server.port 占用端口, 默认以8080端口启动
 
 --spring.database.sqlite-name sqlite文件释放后文件名, 默认释放为.sqlite, 修改此项可在一台机器上部署多个nginxWebUI
+
+--logging.file.path 日志存放目录，会已10m大小为界限分割日志文件
 
 #### docker安装说明
 
