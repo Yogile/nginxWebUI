@@ -75,7 +75,7 @@ public class BakController extends BaseController {
 	@RequestMapping("content")
 	@ResponseBody
 	public JsonResult content(String path) {
-		String str = FileUtil.readString(path, Charset.defaultCharset());
+		String str = FileUtil.readString(path, Charset.forName("UTF-8"));
 		return renderSuccess(str);
 	}
 
@@ -84,10 +84,10 @@ public class BakController extends BaseController {
 	public JsonResult replace(String path) {
 		String nginxPath = settingService.get("nginxPath");
 
-		String str = FileUtil.readString(path, Charset.defaultCharset());
+		String str = FileUtil.readString(path, Charset.forName("UTF-8"));
 
 		if (StrUtil.isNotEmpty(nginxPath)) {
-			FileUtil.writeString(str, nginxPath, Charset.defaultCharset());
+			FileUtil.writeString(str, nginxPath, Charset.forName("UTF-8"));
 
 			if (FileUtil.exist(path.replace(".bak", ".zip"))) {
 				String confd = nginxPath.replace("nginx.conf", "conf.d/");

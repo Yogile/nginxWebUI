@@ -28,7 +28,9 @@ import com.cym.utils.JsonResult;
 import com.cym.utils.SystemTool;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.net.URLEncoder;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.URLUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
 
@@ -359,7 +361,7 @@ public class RemoteController extends BaseController {
 	@RequestMapping("setAsycPack")
 	@ResponseBody
 	public JsonResult setAsycPack(String json) {
-		System.err.println("收到同步信息");
+		System.err.println("收到同步信息:" + json);
 		AsycPack asycPack = JSONUtil.toBean(json, AsycPack.class);
 
 		confService.setAsycPack(asycPack);
@@ -420,7 +422,7 @@ public class RemoteController extends BaseController {
 		String nginxPath = settingService.get("nginxPath");
 
 		if (FileUtil.exist(nginxPath)) {
-			String orgStr = FileUtil.readString(nginxPath, Charset.defaultCharset());
+			String orgStr = FileUtil.readString(nginxPath, Charset.forName("UTF-8"));
 			return orgStr;
 		} else {
 			return "文件不存在";
