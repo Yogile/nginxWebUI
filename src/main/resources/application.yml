@@ -32,6 +32,6 @@ spring:
 project:
   version: v@project.version@
   
-logging: 
+logging:   file:    name: nginxWebUI.log
   level: 
     root: info
