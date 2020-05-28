@@ -474,8 +474,8 @@ public class ConfService {
 		List<Cert> certList = sqlHelper.findAll(Cert.class);
 		for (Cert cert : certList) {
 			if (StrUtil.isNotEmpty(cert.getPem())) {
-				cert.setPemStr(FileUtil.readString(cert.getPem(), Charset.defaultCharset()));
-				cert.setKeyStr(FileUtil.readString(cert.getKey(), Charset.defaultCharset()));
+				cert.setPemStr(FileUtil.readString(cert.getPem(), Charset.forName("UTF-8")));
+				cert.setKeyStr(FileUtil.readString(cert.getKey(), Charset.forName("UTF-8")));
 			}
 		}
 
@@ -484,8 +484,8 @@ public class ConfService {
 		List<Server> serverList = sqlHelper.findAll(Server.class);
 		for (Server server : serverList) {
 			if (StrUtil.isNotEmpty(server.getPem())) {
-				server.setPemStr(FileUtil.readString(server.getPem(), Charset.defaultCharset()));
-				server.setKeyStr(FileUtil.readString(server.getKey(), Charset.defaultCharset()));
+				server.setPemStr(FileUtil.readString(server.getPem(), Charset.forName("UTF-8")));
+				server.setKeyStr(FileUtil.readString(server.getKey(), Charset.forName("UTF-8")));
 			}
 		}
 		asycPack.setServerList(serverList);
@@ -503,7 +503,7 @@ public class ConfService {
 		ConfExt confExt = buildConf(StrUtil.isNotEmpty(decompose) && decompose.equals("true"));
 
 		if (FileUtil.exist(nginxPath)) {
-			String orgStr = FileUtil.readString(nginxPath, Charset.defaultCharset());
+			String orgStr = FileUtil.readString(nginxPath, Charset.forName("UTF-8"));
 			confExt.setConf(orgStr);
 
 			for (ConfFile confFile : confExt.getFileList()) {
@@ -511,7 +511,7 @@ public class ConfService {
 
 				String filePath = nginxPath.replace("nginx.conf", "conf.d/" + confFile.getName());
 				if (FileUtil.exist(filePath)) {
-					confFile.setConf(FileUtil.readString(filePath, Charset.defaultCharset()));
+					confFile.setConf(FileUtil.readString(filePath, Charset.forName("UTF-8")));
 				}
 			}
 		}
@@ -544,15 +544,15 @@ public class ConfService {
 
 		for (Cert cert : asycPack.getCertList()) {
 			if (StrUtil.isNotEmpty(cert.getPem())) {
-				FileUtil.writeString(cert.getPemStr(), cert.getPem(), Charset.defaultCharset());
-				FileUtil.writeString(cert.getKeyStr(), cert.getKey(), Charset.defaultCharset());
+				FileUtil.writeString(cert.getPemStr(), cert.getPem(), Charset.forName("UTF-8"));
+				FileUtil.writeString(cert.getKeyStr(), cert.getKey(), Charset.forName("UTF-8"));
 			}
 		}
 
 		for (Server server : asycPack.getServerList()) {
 			if (StrUtil.isNotEmpty(server.getPem())) {
-				FileUtil.writeString(server.getPemStr(), server.getPem(), Charset.defaultCharset());
-				FileUtil.writeString(server.getKeyStr(), server.getKey(), Charset.defaultCharset());
+				FileUtil.writeString(server.getPemStr(), server.getPem(), Charset.forName("UTF-8"));
+				FileUtil.writeString(server.getKeyStr(), server.getKey(), Charset.forName("UTF-8"));
 			}
 		}
 
