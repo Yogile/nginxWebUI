@@ -177,7 +177,7 @@ public class CertController extends BaseController {
 
 		// 替换备份文件
 		FileUtil.copy(nginxPath, nginxPath + ".org", true);
-		FileUtil.writeString(nginxContent, nginxPath, Charset.defaultCharset());
+		FileUtil.writeString(nginxContent, nginxPath, Charset.forName("UTF-8"));
 
 		// 重启nginx
 		RuntimeUtil.exec("nginx -s reload");

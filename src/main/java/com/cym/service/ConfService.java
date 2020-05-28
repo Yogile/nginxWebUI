@@ -450,7 +450,7 @@ public class ConfService {
 		ZipUtil.zip(confd, nginxPath + date + ".zip");
 
 		// 写入主文件
-		FileUtil.writeString(nginxContent, nginxPath, Charset.defaultCharset());
+		FileUtil.writeString(nginxContent, nginxPath, Charset.forName("UTF-8"));
 		String decompose = settingService.get("decompose");
 
 		if ("true".equals(decompose)) {
@@ -458,7 +458,7 @@ public class ConfService {
 			if (subContent != null) {
 				for (int i = 0; i < subContent.length; i++) {
 					String tagert = nginxPath.replace("nginx.conf", "conf.d/" + subName[i]);
-					FileUtil.writeString(subContent[i], tagert, Charset.defaultCharset()); // 清空
+					FileUtil.writeString(subContent[i], tagert, Charset.forName("UTF-8")); // 清空
 				}
 			}
 		} else {

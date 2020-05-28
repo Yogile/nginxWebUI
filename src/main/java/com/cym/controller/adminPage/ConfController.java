@@ -284,7 +284,7 @@ public class ConfController extends BaseController {
 		ConfExt confExt = confService.buildConf(StrUtil.isNotEmpty(decompose) && decompose.equals("true"));
 
 		if (FileUtil.exist(nginxPath)) {
-			String orgStr = FileUtil.readString(nginxPath, Charset.defaultCharset());
+			String orgStr = FileUtil.readString(nginxPath, Charset.forName("UTF-8"));
 			confExt.setConf(orgStr);
 
 			for (ConfFile confFile : confExt.getFileList()) {
@@ -292,7 +292,7 @@ public class ConfController extends BaseController {
 
 				String filePath = nginxPath.replace("nginx.conf", "conf.d/" + confFile.getName());
 				if (FileUtil.exist(filePath)) {
-					confFile.setConf(FileUtil.readString(filePath, Charset.defaultCharset()));
+					confFile.setConf(FileUtil.readString(filePath, Charset.forName("UTF-8")));
 				}
 			}
 
