@@ -191,6 +191,7 @@ public class CertController extends BaseController {
 
 	// 替换nginx.conf并重启
 	private void replaceStartNginx(String nginxPath, String domain) {
+		System.out.println("替换nginx.conf并重启");
 		String nginxContent = "worker_processes  1; \n" //
 				+ "events {worker_connections  1024;} \n" //
 				+ "http { \n" //
@@ -212,7 +213,7 @@ public class CertController extends BaseController {
 
 	// 还原nginx.conf并重启
 	private void backupStartNginx(String nginxPath) {
-
+		System.out.println("还原nginx.conf并重启");
 		// 还原备份文件
 		FileUtil.copy(nginxPath + ".org", nginxPath, true);
 		FileUtil.del(nginxPath + ".org");
