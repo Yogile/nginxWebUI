@@ -69,14 +69,18 @@ public class CertConfig {
 			if (StrUtil.isEmpty(nginxExe)) {
 				String rs = RuntimeTool.execForOne("which nginx");
 				if (StrUtil.isNotEmpty(rs)) {
-					settingService.set("nginxExe", "nginx");
+					nginxExe = "nginx";
+					settingService.set("nginxExe", nginxExe);
+				}
+			}
+			
 
-					// 尝试启动nginx
-					String[] command = { "/bin/sh", "-c", "ps -ef|grep nginx" };
-					rs = RuntimeUtil.execForStr(command);
-					if (!rs.contains("nginx: master process")) {
-						RuntimeUtil.exec("nginx");
-					}
+			// 尝试启动nginx
+			if(nginxExe.equals("nginx")) {
+				String[] command = { "/bin/sh", "-c", "ps -ef|grep nginx" };
+				String rs = RuntimeUtil.execForStr(command);
+				if (!rs.contains("nginx: master process")) {
+					RuntimeUtil.exec("nginx");
 				}
 			}
 		}
