@@ -97,7 +97,9 @@ public class CertController extends BaseController {
 		replaceStartNginx(nginxPath, cert.getDomain());
 
 		// 申请
-		String cmd = certConfig.acmeSh + " --issue --nginx -d " + cert.getDomain();
+		String certDir = FileUtil.getUserHomePath() + File.separator + ".acme.sh" + File.separator + cert.getDomain() + File.separator;
+	
+		String cmd = certConfig.acmeSh + " --issue --nginx -d " + cert.getDomain() + "  --webroot " + certDir;
 		System.out.println(cmd);
 		String rs = RuntimeUtil.execForStr(cmd);
 		System.out.println(rs);
@@ -106,7 +108,6 @@ public class CertController extends BaseController {
 		backupStartNginx(nginxPath);
 
 		if (rs.contains("Cert success")) {
-			String certDir = FileUtil.getUserHomePath() + File.separator + ".acme.sh" + File.separator + cert.getDomain() + File.separator;
 			cert.setPem(certDir + cert.getDomain() + ".cer");
 			cert.setKey(certDir + cert.getDomain() + ".key");
 
