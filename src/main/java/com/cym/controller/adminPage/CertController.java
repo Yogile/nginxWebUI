@@ -102,7 +102,7 @@ public class CertController extends BaseController {
 			System.out.println(cmd);
 			String rs = RuntimeUtil.execForStr(cmd);
 			System.out.println(rs);
-			
+
 			if (rs.contains("Cert success")) {
 				String certDir = "/root/.acme.sh/" + cert.getDomain() + "/";
 
@@ -123,10 +123,11 @@ public class CertController extends BaseController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			// 还原nginx.conf并重启
+			backupStartNginx(nginxPath);
 		}
-		
-		// 还原nginx.conf并重启
-		backupStartNginx(nginxPath);
+
 		return renderError();
 	}
 
@@ -152,14 +153,14 @@ public class CertController extends BaseController {
 
 		// 替换nginx.conf并重启
 		replaceStartNginx(nginxPath, cert.getDomain());
-		
+
 		try {
 			// 续签
 			String cmd = certConfig.acmeSh + " --renew --force -d " + cert.getDomain();
 			System.out.println(cmd);
 			String rs = RuntimeUtil.execForStr(cmd);
 			System.out.println(rs);
-			
+
 			if (rs.contains("Cert success")) {
 				String certDir = "/root/.acme.sh/" + cert.getDomain() + "/";
 
@@ -180,11 +181,11 @@ public class CertController extends BaseController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			// 还原nginx.conf并重启
+			backupStartNginx(nginxPath);
 		}
-		
-		// 还原nginx.conf并重启
-		backupStartNginx(nginxPath);
-		
+
 		return renderError();
 	}
 
