@@ -29,6 +29,9 @@ public class CertConfig {
 
 	@PostConstruct
 	public void init() throws IOException {
+		
+		System.out.println("------------------------CertConfig-----------------------------------------------");
+		
 		if (SystemTool.isLinux()) {
 			// 初始化acme.sh
 			String userDir = "/home/nginxWebUI/";
@@ -42,7 +45,7 @@ public class CertConfig {
 			FileUtil.del(userDir + "acme.zip");
 
 			acmeSh = userDir + ".acme.sh/acme.sh";
-			
+			System.out.println("------------------------acmeSh-----------------------------------------------");
 			System.out.println(acmeSh);
 			RuntimeUtil.exec("chmod 777 " + acmeSh);
 
