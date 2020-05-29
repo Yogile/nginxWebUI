@@ -188,7 +188,7 @@ public class CertController extends BaseController {
 	// 替换nginx.conf并重启
 	private void replaceStartNginx(String nginxPath, String domain) {
 		System.out.println("替换nginx.conf并重启");
-		String nginxContent = "worker_processes  1; \n" //
+		String nginxContent = "worker_processes  auto; \n" //
 				+ "events {worker_connections  1024;} \n" //
 				+ "http { \n" //
 				+ "   server { \n" //
