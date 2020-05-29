@@ -69,7 +69,8 @@ public class ConfService {
 
 			// 获取http
 			List<Http> httpList = sqlHelper.findAll(Http.class);
-			NgxBlock ngxBlockHttp = ngxConfig.findBlock("http");
+			NgxBlock ngxBlockHttp = new NgxBlock();
+			ngxBlockHttp.addValue("http"); 
 			for (Http http : httpList) {
 				NgxParam ngxParam = new NgxParam();
 				ngxParam.addValue(http.getName() + " " + http.getValue());
@@ -265,22 +266,22 @@ public class ConfService {
 					// 是否需要分解
 					if (decompose) {
 						addConfFile(confExt, server.getServerName() + ".conf", ngxBlockServer);
-
 					} else {
 						ngxBlockHttp.addEntry(ngxBlockServer);
 					}
 				}
 
 			}
-			if (!hasHttp) {
-				ngxConfig.remove(ngxBlockHttp);
+			if (hasHttp) {
+				ngxConfig.addEntry(ngxBlockHttp);
 			}
 
 			// TCP转发
 			// 创建stream
 			List<Stream> streamList = sqlHelper.findAll(Stream.class);
 			boolean hasStream = false;
-			NgxBlock ngxBlockStream = ngxConfig.findBlock("stream");
+			NgxBlock ngxBlockStream = new NgxBlock();
+			ngxBlockStream.addValue("stream");
 			for (Stream stream : streamList) {
 				ngxParam = new NgxParam();
 				ngxParam.addValue(stream.getName() + " " + stream.getValue());
@@ -369,8 +370,8 @@ public class ConfService {
 				hasStream = true;
 			}
 
-			if (!hasStream) {
-				ngxConfig.remove(ngxBlockStream);
+			if (hasStream) {
+				ngxConfig.addEntry(ngxBlockStream);
 			}
 
 			String conf = new NgxDumper(ngxConfig).dump();
