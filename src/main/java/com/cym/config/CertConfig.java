@@ -46,10 +46,17 @@ public class CertConfig {
 			// 找寻nginx配置文件
 			String nginxPath = settingService.get("nginxPath");
 			if (StrUtil.isEmpty(nginxPath)) {
-				nginxPath = RuntimeTool.execForOne("find / -name nginx.conf");
+				// 检查是否存在容器中的nginx.conf
+				nginxPath = userDir + File.separator + "nginx.conf";
+				if(FileUtil.exist(nginxPath)) {
+					settingService.set("nginxPath", nginxPath);
+				}else {
+					// 都没有才查找nginx.conf
+					nginxPath = RuntimeTool.execForOne("find / -name nginx.conf");
 
-				if (StrUtil.isNotEmpty(nginxPath) && FileUtil.exist(nginxPath)) {
-					settingService.set("nginxPath", nginxPath.replace("\\", "/"));
+					if (StrUtil.isNotEmpty(nginxPath) && FileUtil.exist(nginxPath)) {
+						settingService.set("nginxPath", nginxPath.replace("\\", "/"));
+					}
 				}
 			}
 
