@@ -2,6 +2,7 @@ package com.cym.config;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Struct;
 
 import javax.annotation.PostConstruct;
 
@@ -45,20 +46,25 @@ public class CertConfig {
 			// 找寻nginx配置文件
 			String nginxPath = settingService.get("nginxPath");
 			if (StrUtil.isEmpty(nginxPath)) {
-				// 检查是否存在容器中的nginx.conf
-				nginxPath = userDir + "nginx.conf";
-				if (FileUtil.exist(nginxPath)) {
-					settingService.set("nginxPath", nginxPath);
-				} else {
-					// 都没有才查找nginx.conf
-					nginxPath = RuntimeTool.execForOne("find / -name nginx.conf");
-
-					if (StrUtil.isNotEmpty(nginxPath) && FileUtil.exist(nginxPath)) {
-						settingService.set("nginxPath", nginxPath);
+				// 查找nginx.conf
+				nginxPath = RuntimeTool.execForOne("find / -name nginx.conf");
+				if (StrUtil.isNotEmpty(nginxPath) && FileUtil.exist(nginxPath)) {
+					// 判断是否是容器中
+					String lines = FileUtil.readUtf8String(nginxPath);
+					if(StrUtil.isNotEmpty(lines) && lines.contains("include /root/nginx.conf;")) {
+						nginxPath = userDir + "nginx.conf";
+						
+						//释放nginxOrg.conf
+						resource = new ClassPathResource("nginxOrg.conf");
+						inputStream = resource.getInputStream();
+						FileUtil.writeFromStream(inputStream, nginxPath);
 					}
+					
+					settingService.set("nginxPath", nginxPath);
 				}
 			}
 
+			// 查找nginx仔细文件
 			String nginxExe = settingService.get("nginxExe");
 			if (StrUtil.isEmpty(nginxExe)) {
 				String rs = RuntimeTool.execForOne("which nginx");
