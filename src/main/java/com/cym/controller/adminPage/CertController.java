@@ -65,7 +65,7 @@ public class CertController extends BaseController {
 		Cert cert = sqlHelper.findById(id, Cert.class);
 		if (cert.getKey() != null) {
 			File file = new File(cert.getKey());
-			
+
 			FileUtil.del(file.getParent());
 		}
 
@@ -97,9 +97,7 @@ public class CertController extends BaseController {
 		replaceStartNginx(nginxPath, cert.getDomain());
 
 		// 申请
-		String certDir = FileUtil.getUserHomePath() + File.separator + ".acme.sh" + File.separator + cert.getDomain() + File.separator;
-		System.out.println(certDir);
-		String cmd = certConfig.acmeSh + " --issue --nginx -d " + cert.getDomain() + "  --webroot " + certDir;
+		String cmd = certConfig.acmeSh + " --issue --nginx -d " + cert.getDomain();
 		System.out.println(cmd);
 		String rs = RuntimeUtil.execForStr(cmd);
 		System.out.println(rs);
@@ -108,8 +106,15 @@ public class CertController extends BaseController {
 		backupStartNginx(nginxPath);
 
 		if (rs.contains("Cert success")) {
-			cert.setPem(certDir + cert.getDomain() + ".cer");
-			cert.setKey(certDir + cert.getDomain() + ".key");
+			String certDir = "/root/.acme.sh/" + cert.getDomain() + "/";
+
+			String dest = "/home/nginxWebUI/cert/" + cert.getDomain() + ".cer";
+			FileUtil.move(new File(certDir + cert.getDomain() + ".cer"), new File(dest), true);
+			cert.setPem(dest);
+
+			dest = "/home/nginxWebUI/cert/" + cert.getDomain() + ".key";
+			FileUtil.move(new File(certDir + cert.getDomain() + ".key"), new File(dest), true);
+			cert.setKey(dest);
 
 			cert.setMakeTime(System.currentTimeMillis());
 			sqlHelper.updateById(cert);
@@ -130,7 +135,7 @@ public class CertController extends BaseController {
 		if (!SystemTool.hasNginx()) {
 			return renderError("系统中未安装nginx命令");
 		}
-		
+
 		String nginxPath = settingService.get("nginxPath");
 		if (!FileUtil.exist(nginxPath)) {
 			return renderError("未找到nginx配置文件:" + nginxPath + ", 请先在【生成conf】模块中设置并读取.");
@@ -190,7 +195,7 @@ public class CertController extends BaseController {
 		// 还原备份文件
 		FileUtil.copy(nginxPath + ".org", nginxPath, true);
 		FileUtil.del(nginxPath + ".org");
-		
+
 		// 重启nginx
 		RuntimeUtil.exec("nginx -s reload");
 
