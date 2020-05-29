@@ -109,11 +109,11 @@ public class CertController extends BaseController {
 			String certDir = "/root/.acme.sh/" + cert.getDomain() + "/";
 
 			String dest = "/home/nginxWebUI/cert/" + cert.getDomain() + ".cer";
-			FileUtil.move(new File(certDir + cert.getDomain() + ".cer"), new File(dest), true);
+			FileUtil.copy(new File(certDir + cert.getDomain() + ".cer"), new File(dest), true);
 			cert.setPem(dest);
 
 			dest = "/home/nginxWebUI/cert/" + cert.getDomain() + ".key";
-			FileUtil.move(new File(certDir + cert.getDomain() + ".key"), new File(dest), true);
+			FileUtil.copy(new File(certDir + cert.getDomain() + ".key"), new File(dest), true);
 			cert.setKey(dest);
 
 			cert.setMakeTime(System.currentTimeMillis());
