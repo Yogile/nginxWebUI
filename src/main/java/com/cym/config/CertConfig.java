@@ -58,8 +58,8 @@ public class CertConfig {
 						nginxPath = userDir + "nginx.conf";
 
 						// 释放nginxOrg.conf
-						resource = new ClassPathResource("nginxOrg.conf");
-						inputStream = resource.getInputStream();
+						ClassPathResource resource = new ClassPathResource("nginxOrg.conf");
+						InputStream inputStream = resource.getInputStream();
 						FileUtil.writeFromStream(inputStream, nginxPath);
 					}
 
