@@ -51,7 +51,7 @@ public class CertConfig {
 				if (StrUtil.isNotEmpty(nginxPath) && FileUtil.exist(nginxPath)) {
 					// 判断是否是容器中
 					String lines = FileUtil.readUtf8String(nginxPath);
-					if(StrUtil.isNotEmpty(lines) && lines.contains("include /root/nginx.conf;")) {
+					if(StrUtil.isNotEmpty(lines) && lines.contains("include /home/nginxWebUI/nginx.conf;")) {
 						nginxPath = userDir + "nginx.conf";
 						
 						//释放nginxOrg.conf
