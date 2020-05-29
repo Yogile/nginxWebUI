@@ -76,10 +76,13 @@ public class CertConfig {
 			
 
 			// 尝试启动nginx
+			System.err.println("nginxExe:"+nginxExe);
 			if(nginxExe.equals("nginx")) {
 				String[] command = { "/bin/sh", "-c", "ps -ef|grep nginx" };
 				String rs = RuntimeUtil.execForStr(command);
+				System.err.println("ps:"+ rs);
 				if (!rs.contains("nginx: master process")) {
+					System.err.println("run:nginx");
 					RuntimeUtil.exec("nginx");
 				}
 			}
