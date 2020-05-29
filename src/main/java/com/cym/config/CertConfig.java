@@ -23,6 +23,7 @@ import cn.hutool.core.util.ZipUtil;
 public class CertConfig {
 
 	public String acmeSh;
+	
 	@Autowired
 	SettingService settingService;
 
@@ -41,6 +42,8 @@ public class CertConfig {
 			FileUtil.del(userDir + "acme.zip");
 
 			acmeSh = userDir + ".acme.sh/acme.sh";
+			
+			System.out.println(acmeSh);
 			RuntimeUtil.exec("chmod 777 " + acmeSh);
 
 			// 找寻nginx配置文件

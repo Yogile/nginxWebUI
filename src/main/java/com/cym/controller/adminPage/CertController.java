@@ -98,7 +98,7 @@ public class CertController extends BaseController {
 
 		// 申请
 		String certDir = FileUtil.getUserHomePath() + File.separator + ".acme.sh" + File.separator + cert.getDomain() + File.separator;
-	
+		System.out.println(certDir);
 		String cmd = certConfig.acmeSh + " --issue --nginx -d " + cert.getDomain() + "  --webroot " + certDir;
 		System.out.println(cmd);
 		String rs = RuntimeUtil.execForStr(cmd);
