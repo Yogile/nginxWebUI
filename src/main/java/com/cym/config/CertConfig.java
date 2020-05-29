@@ -64,7 +64,7 @@ public class CertConfig {
 				}
 			}
 
-			// 查找nginx仔细文件
+			// 查找nginx执行文件
 			String nginxExe = settingService.get("nginxExe");
 			if (StrUtil.isEmpty(nginxExe)) {
 				String rs = RuntimeTool.execForOne("which nginx");
