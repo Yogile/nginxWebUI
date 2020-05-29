@@ -152,24 +152,40 @@ public class CertController extends BaseController {
 
 		// 替换nginx.conf并重启
 		replaceStartNginx(nginxPath, cert.getDomain());
+		
+		try {
+			// 续签
+			String cmd = certConfig.acmeSh + " --renew --force -d " + cert.getDomain();
+			System.out.println(cmd);
+			String rs = RuntimeUtil.execForStr(cmd);
+			System.out.println(rs);
+			
+			if (rs.contains("Cert success")) {
+				String certDir = "/root/.acme.sh/" + cert.getDomain() + "/";
 
-		// 续签
-		String cmd = certConfig.acmeSh + " --renew --force -d " + cert.getDomain();
-		System.out.println(cmd);
-		String rs = RuntimeUtil.execForStr(cmd);
-		System.out.println(rs);
+				String dest = "/home/nginxWebUI/cert/" + cert.getDomain() + ".cer";
+				FileUtil.copy(new File(certDir + cert.getDomain() + ".cer"), new File(dest), true);
+				cert.setPem(dest);
 
+				dest = "/home/nginxWebUI/cert/" + cert.getDomain() + ".key";
+				FileUtil.copy(new File(certDir + cert.getDomain() + ".key"), new File(dest), true);
+				cert.setKey(dest);
+
+				cert.setMakeTime(System.currentTimeMillis());
+				sqlHelper.updateById(cert);
+
+				return renderSuccess();
+			} else {
+				return renderError(rs.replace("\n", "<br>"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		// 还原nginx.conf并重启
 		backupStartNginx(nginxPath);
-
-		if (rs.contains("Cert success")) {
-			cert.setMakeTime(System.currentTimeMillis());
-			sqlHelper.updateById(cert);
-		} else {
-			return renderError(rs.replace("\n", "<br>"));
-		}
-
-		return renderSuccess();
+		
+		return renderError();
 	}
 
 	// 替换nginx.conf并重启
