@@ -2,7 +2,6 @@ package com.cym.config;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Struct;
 
 import javax.annotation.PostConstruct;
 
@@ -23,30 +22,30 @@ import cn.hutool.core.util.ZipUtil;
 public class CertConfig {
 
 	public String acmeSh;
-	
+
 	@Autowired
 	SettingService settingService;
 
 	@PostConstruct
 	public void init() throws IOException {
-		
-		
+
 		if (SystemTool.isLinux()) {
 			// 初始化acme.sh
 			String userDir = "/home/nginxWebUI/";
 
-			ClassPathResource resource = new ClassPathResource("acme.zip");
-			InputStream inputStream = resource.getInputStream();
+			if (!FileUtil.exist("/root/.acme.sh")) {
+				ClassPathResource resource = new ClassPathResource("acme.zip");
+				InputStream inputStream = resource.getInputStream();
 
-			FileUtil.writeFromStream(inputStream, userDir + "acme.zip");
-			FileUtil.mkdir(userDir + ".acme.sh");
-			ZipUtil.unzip(userDir + "acme.zip", userDir + ".acme.sh");
-			FileUtil.del(userDir + "acme.zip");
+				FileUtil.writeFromStream(inputStream, "/root/acme.zip");
+				FileUtil.mkdir("/root/.acme.sh");
+				ZipUtil.unzip("/root/acme.zip", "/root/.acme.sh");
+				FileUtil.del("/root/acme.zip");
 
-			acmeSh = userDir + ".acme.sh/acme.sh";
-			System.out.println(acmeSh);
-			RuntimeUtil.exec("chmod 777 " + acmeSh);
-
+				acmeSh = "/root/.acme.sh/acme.sh";
+				RuntimeUtil.exec("chmod 777 " + acmeSh);
+			}
+			
 			// 找寻nginx配置文件
 			String nginxPath = settingService.get("nginxPath");
 			if (StrUtil.isEmpty(nginxPath)) {
@@ -55,15 +54,15 @@ public class CertConfig {
 				if (StrUtil.isNotEmpty(nginxPath) && FileUtil.exist(nginxPath)) {
 					// 判断是否是容器中
 					String lines = FileUtil.readUtf8String(nginxPath);
-					if(StrUtil.isNotEmpty(lines) && lines.contains("include /home/nginxWebUI/nginx.conf;")) {
+					if (StrUtil.isNotEmpty(lines) && lines.contains("include /home/nginxWebUI/nginx.conf;")) {
 						nginxPath = userDir + "nginx.conf";
-						
-						//释放nginxOrg.conf
+
+						// 释放nginxOrg.conf
 						resource = new ClassPathResource("nginxOrg.conf");
 						inputStream = resource.getInputStream();
 						FileUtil.writeFromStream(inputStream, nginxPath);
 					}
-					
+
 					settingService.set("nginxPath", nginxPath);
 				}
 			}
@@ -77,10 +76,9 @@ public class CertConfig {
 					settingService.set("nginxExe", nginxExe);
 				}
 			}
-			
 
 			// 尝试启动nginx
-			if(nginxExe.equals("nginx")) {
+			if (nginxExe.equals("nginx")) {
 				String[] command = { "/bin/sh", "-c", "ps -ef|grep nginx" };
 				String rs = RuntimeUtil.execForStr(command);
 				if (!rs.contains("nginx: master process")) {
