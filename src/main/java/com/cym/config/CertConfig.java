@@ -21,7 +21,7 @@ import cn.hutool.core.util.ZipUtil;
 @Component
 public class CertConfig {
 
-	public String acmeSh;
+	public String acmeSh = "/root/.acme.sh/acme.sh";
 
 	@Autowired
 	SettingService settingService;
@@ -42,10 +42,9 @@ public class CertConfig {
 				ZipUtil.unzip("/root/acme.zip", "/root/.acme.sh");
 				FileUtil.del("/root/acme.zip");
 
-				acmeSh = "/root/.acme.sh/acme.sh";
 				RuntimeUtil.exec("chmod 777 " + acmeSh);
 			}
-			
+
 			// 找寻nginx配置文件
 			String nginxPath = settingService.get("nginxPath");
 			if (StrUtil.isEmpty(nginxPath)) {
