@@ -1,6 +1,5 @@
 package com.cym.config;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -30,32 +29,32 @@ public class CertConfig {
 	public void init() throws IOException {
 		if (SystemTool.isLinux()) {
 			// 初始化acme.sh
-			String userDir = FileUtil.getUserHomePath();
+			String userDir = "/home/nginxWebUI/";
 
 			ClassPathResource resource = new ClassPathResource("acme.zip");
 			InputStream inputStream = resource.getInputStream();
 
-			FileUtil.writeFromStream(inputStream, userDir + File.separator + "acme.zip");
-			FileUtil.mkdir(userDir + File.separator + ".acme.sh");
-			ZipUtil.unzip(userDir + File.separator + "acme.zip", userDir + File.separator + ".acme.sh");
-			FileUtil.del(userDir + File.separator + "acme.zip");
+			FileUtil.writeFromStream(inputStream, userDir + "acme.zip");
+			FileUtil.mkdir(userDir + ".acme.sh");
+			ZipUtil.unzip(userDir + "acme.zip", userDir + ".acme.sh");
+			FileUtil.del(userDir + "acme.zip");
 
-			acmeSh = userDir + File.separator + ".acme.sh" + File.separator + "acme.sh";
+			acmeSh = userDir + ".acme.sh/acme.sh";
 			RuntimeUtil.exec("chmod 777 " + acmeSh);
 
 			// 找寻nginx配置文件
 			String nginxPath = settingService.get("nginxPath");
 			if (StrUtil.isEmpty(nginxPath)) {
 				// 检查是否存在容器中的nginx.conf
-				nginxPath = userDir + File.separator + "nginx.conf";
-				if(FileUtil.exist(nginxPath)) {
+				nginxPath = userDir + "nginx.conf";
+				if (FileUtil.exist(nginxPath)) {
 					settingService.set("nginxPath", nginxPath);
-				}else {
+				} else {
 					// 都没有才查找nginx.conf
 					nginxPath = RuntimeTool.execForOne("find / -name nginx.conf");
 
 					if (StrUtil.isNotEmpty(nginxPath) && FileUtil.exist(nginxPath)) {
-						settingService.set("nginxPath", nginxPath.replace("\\", "/"));
+						settingService.set("nginxPath", nginxPath);
 					}
 				}
 			}
@@ -65,18 +64,15 @@ public class CertConfig {
 				String rs = RuntimeTool.execForOne("which nginx");
 				if (StrUtil.isNotEmpty(rs)) {
 					settingService.set("nginxExe", "nginx");
-					
+
 					// 尝试启动nginx
 					String[] command = { "/bin/sh", "-c", "ps -ef|grep nginx" };
 					rs = RuntimeUtil.execForStr(command);
-					if(!rs.contains("nginx: master process")) {
+					if (!rs.contains("nginx: master process")) {
 						RuntimeUtil.exec("nginx");
 					}
-				} 
+				}
 			}
-
 		}
-
 	}
-
 }
