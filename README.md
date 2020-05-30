@@ -57,7 +57,7 @@ wget https://craccd.oss-cn-beijing.aliyuncs.com/nginxWebUI-1.2.4.jar
 nohup java -jar -Xmx64m nginxWebUI-1.2.4.jar --server.port=8080 --logging.file.path=/home/log/nginxWebUI.log --spring.database.sqlite-path=/home/nginxWebUI/sqlite > /dev/null &
 ```
 
-参数说明(非必填)
+参数说明(都是非必填)
 
 -Xmx64m 最大分配内存数
 
