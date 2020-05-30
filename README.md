@@ -46,7 +46,7 @@ apt install nginx
 码云的服务器下载较慢, CDN地址(可使用wget下载): 
 
 ```
-wget https://craccd.oss-cn-beijing.aliyuncs.com/nginxWebUI-1.2.3.jar
+wget https://craccd.oss-cn-beijing.aliyuncs.com/nginxWebUI-1.2.4.jar
 ```
 
 有新版本只需要修改路径中的版本即可
@@ -54,32 +54,44 @@ wget https://craccd.oss-cn-beijing.aliyuncs.com/nginxWebUI-1.2.3.jar
 启动命令
 
 ```
-nohup java -jar -Xms64m -Xmx64m nginxWebUI-1.2.3.jar --server.port=8080 --logging.file.path=/home/log/nginxWebUI.log --spring.database.sqlite-name=.sqlite > /dev/null &
+nohup java -jar -Xmx64m nginxWebUI-1.2.4.jar --server.port=8080 --logging.file.path=/home/log/nginxWebUI.log --spring.database.sqlite-path=/home/nginxWebUI/sqlite > /dev/null &
 ```
 
 参数说明(非必填)
-
--Xms64m 起始分配内存数
 
 -Xmx64m 最大分配内存数
 
 --server.port 占用端口, 默认以8080端口启动
 
---spring.database.sqlite-name sqlite文件释放后文件名, 默认释放为.sqlite, 修改此项可在一台机器上部署多个nginxWebUI
+--spring.database.sqlite-path sqlite文件释放后文件路径, 默认释放为/home/nginxWebUI/sqlite.db, 修改此项可在一台机器上部署多个nginxWebUI
 
---logging.file.name 日志存放路径，会已10m大小为界限分割日志文件
+--logging.file.name 日志存放路径，会已10m大小为界限分割日志文件, 默认为/home/nginxWebUI/log/nginxWebUI.log
 
 #### docker安装说明
 
 本项目制作了docker镜像, 同时包含nginx和nginxWebUI在内, 一体化管理与运行nginx. 
 
-下载镜像: `docker pull registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.2.3`
+下载镜像: 
 
-启动容器: `docker run -itd --net=host registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.2.3`
+```
+docker pull registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.2.4
+```
+
+启动容器: 
+
+```
+docker run -itd -v /home/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--变量名=变量值 --变量名2=变量值2" --privileged=true --net=host  registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.2.4 /bin/bash
+```
 
 查看容器日志: `docker logs -f [容器id]`
 
-注意: 启动容器时请使用--net=host参数, 直接映射本机端口, 因为内部nginx可能使用任意一个端口, 所以必须映射本机所有端口
+注意: 
+
+1. 启动容器时请使用--net=host参数, 直接映射本机端口, 因为内部nginx可能使用任意一个端口, 所以必须映射本机所有端口. 
+
+2. 容器需要映射路径/home/nginxWebUI:/home/nginxWebUI, 此路径下存放项目所有数据文件, 包括数据库, nginx配置文件, 日志, 证书等, 升级镜像时, 此目录可保证项目数据不丢失. 请注意备份.
+
+3. -e BOOT_OPTIONS 参数可填充java启动参数, jar安装教程中的参数均可使用, 可以靠此项参数修改端口号等
 
 #### 使用说明
 
