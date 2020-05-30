@@ -71,9 +71,17 @@ nohup java -jar -Xmx64m nginxWebUI-1.2.4.jar --server.port=8080 --logging.file.p
 
 本项目制作了docker镜像, 同时包含nginx和nginxWebUI在内, 一体化管理与运行nginx. 
 
-下载镜像: `docker pull registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.2.4`
+下载镜像: 
 
-启动容器: `docker run -itd -v /home/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--变量名=变量值 --变量名2=变量值2" --privileged=true --net=host  registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.2.4 /bin/bash`
+```
+docker pull registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.2.4
+```
+
+启动容器: 
+
+```
+docker run -itd -v /home/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--变量名=变量值 --变量名2=变量值2" --privileged=true --net=host  registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.2.4 /bin/bash
+```
 
 查看容器日志: `docker logs -f [容器id]`
 
