@@ -29,5 +29,6 @@ project:
   version: v@project.version@
   
 logging: 
+  file:    name: /home/nginxWebUI/log/nginxWebUI.log
   level: 
     root: info
