@@ -23,8 +23,6 @@ import cn.hutool.core.io.FileUtil;
 public class SqlConfig  {
 	@Autowired
 	SqlHelper sqlHelper;
-	@Value("${spring.database.sqlite-path:}")
-	String sqlitePath;
 
 	@PostConstruct
 	public void initAdmin() {
