@@ -3,6 +3,8 @@ server:
   servlet: 
     session:
       timeout: 7200 
+  tomcat: 
+    max-threads: 5
       
 spring:
   application:
