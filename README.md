@@ -54,7 +54,7 @@ wget https://craccd.oss-cn-beijing.aliyuncs.com/nginxWebUI-1.2.4.jar
 启动命令
 
 ```
-nohup java -jar -Xmx64m nginxWebUI-1.2.4.jar --server.port=8080 --logging.file.path=/home/log/nginxWebUI.log --spring.database.sqlite-path=/home/nginxWebUI/sqlite > /dev/null &
+java -jar -Xmx64m nginxWebUI-1.2.4.jar --server.port=8080 --logging.file.path=/home/log/nginxWebUI.log --spring.database.sqlite-path=/home/nginxWebUI/sqlite &
 ```
 
 参数说明(都是非必填)
@@ -66,6 +66,8 @@ nohup java -jar -Xmx64m nginxWebUI-1.2.4.jar --server.port=8080 --logging.file.p
 --spring.database.sqlite-path sqlite文件释放后文件路径, 默认释放为/home/nginxWebUI/sqlite.db
 
 --logging.file.name 日志存放路径，会已10m大小为界限分割日志文件, 默认为/home/nginxWebUI/log/nginxWebUI.log
+
+注意命令最后加一个&号, 表示项目后台运行
 
 #### docker安装说明
 
