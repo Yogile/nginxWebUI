@@ -67,6 +67,8 @@ java -jar -Xmx64m nginxWebUI-1.2.4.jar --server.port=8080 --logging.file.path=/h
 
 --logging.file.name 日志存放路径，会已10m大小为界限分割日志文件, 默认为/home/nginxWebUI/log/nginxWebUI.log
 
+注意命令最后加一个&号, 表示项目后台运行
+
 #### docker安装说明
 
 本项目制作了docker镜像, 同时包含nginx和nginxWebUI在内, 一体化管理与运行nginx. 
