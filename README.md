@@ -37,7 +37,7 @@ nginx本身功能复杂, 本项目并不能涵盖nginx所有功能, 只能配置
 1.安装java运行环境和nginx
 
 ```
-apt install openjdk-11-jdk
+apt install openjdk-8-jdk
 apt install nginx
 ```
 
