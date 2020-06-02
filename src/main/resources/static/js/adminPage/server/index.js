@@ -399,6 +399,31 @@ function selectCertOver(){
 }
 
 
+//function seq(id, count){
+//	
+//	$.ajax({
+//		type : 'POST',
+//		url : ctx + '/adminPage/server/seq',
+//		data : {
+//			id : id,
+//			count : count
+//		},
+//		dataType : 'json',
+//		success : function(data) {
+//			if (data.success) {
+//				location.reload();
+//			} else {
+//				layer.msg(data.msg)
+//			}
+//		},
+//		error : function() {
+//			alert("出错了,请联系技术人员!");
+//		}
+//	});
+//}
+
+
+
 function selectPem(){
 	rootSelect.selectOne(function(rs){
 		$("#pem").val(rs);
