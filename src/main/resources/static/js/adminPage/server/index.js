@@ -1,4 +1,24 @@
 $(function() {
+	form.on('switch(enable)', function(data){
+		  
+		  $.ajax({
+				type : 'POST',
+				url : ctx + '/adminPage/server/setEnable',
+				data : {
+					enable : data.elem.checked,
+					id : data.elem.value
+				},
+				dataType : 'json',
+				success : function(data) {			
+					
+				},
+				error : function() {
+					alert("出错了,请联系技术人员!");
+				}
+		});
+	});   
+	
+	
 	form.on('select(type)', function(data) {
 		checkType(data.value, $(data.elem).attr("lang"));
 	});

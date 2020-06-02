@@ -116,6 +116,10 @@ public class ConfService {
 			// 添加server
 			List<Server> servers = serverService.getListByProxyType(0);
 			for (Server server : servers) {
+				if (!server.getEnable()) {
+					continue;
+				}
+
 				NgxBlock ngxBlockServer = new NgxBlock();
 				ngxBlockServer.addValue("server");
 
@@ -163,7 +167,7 @@ public class ConfService {
 						ngxParam = new NgxParam();
 						ngxParam.addValue("rewrite ^(.*) https://$server_name$1 permanent");
 						ngxBlock.addEntry(ngxParam);
-						
+
 						ngxBlockServer.addEntry(ngxBlock);
 					}
 				}

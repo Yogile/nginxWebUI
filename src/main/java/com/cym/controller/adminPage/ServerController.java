@@ -100,6 +100,16 @@ public class ServerController extends BaseController {
 		return renderSuccess();
 	}
 
+	@RequestMapping("setEnable")
+	@ResponseBody
+	public JsonResult setEnable(Server server) {
+		sqlHelper.updateById(server);
+		return renderSuccess();
+	}
+
+	
+	
+	
 	@RequestMapping("detail")
 	@ResponseBody
 	public JsonResult detail(String id) {
