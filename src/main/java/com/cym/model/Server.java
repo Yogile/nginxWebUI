@@ -10,6 +10,7 @@ public class Server extends BaseModel {
 	String listen;
 	Integer rewrite; // 0否 1是
 	Integer ssl; // 0 否 1是
+	Integer http2; // 0否 1是
 	String pem;
 	String key;
 	// 代理类型
@@ -21,6 +22,12 @@ public class Server extends BaseModel {
 	String keyStr;
 	
 	
+	public Integer getHttp2() {
+		return http2;
+	}
+	public void setHttp2(Integer http2) {
+		this.http2 = http2;
+	}
 	public String getPemStr() {
 		return pemStr;
 	}

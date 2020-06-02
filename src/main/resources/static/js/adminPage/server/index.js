@@ -89,6 +89,7 @@ function add() {
 	$("#serverName").val("");
 	$("#ssl option:first").prop("selected", true);
 	$("#rewrite option:first").prop("selected", true);
+	$("#http2 option:first").prop("selected", true);
 	$("#proxyType option:first").prop("selected", true);
 	$("#proxyUpstreamId option:first").prop("selected", true);
 	
@@ -199,6 +200,12 @@ function edit(id) {
 					$("#rewrite").val(server.rewrite);
 				} else{
 					$("#rewrite option:first").prop("selected", true);
+				}
+				
+				if(server.http2 != null){
+					$("#http2").val(server.http2);
+				} else{
+					$("#http2 option:first").prop("selected", true);
 				}
 				
 				checkSsl(server.ssl);
