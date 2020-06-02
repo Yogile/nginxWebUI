@@ -109,7 +109,7 @@ docker run -itd -v /home/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--变量�
 
 在http参数配置中可以配置nginx的http项目,进行http转发,默认会给出几个常用配置,其他需要的配置可自由增删改查
 
-![输入图片说明](https://craccd.oss-cn-beijing.aliyuncs.com/img/stream.jpeg "stream.jpg")
+![输入图片说明](https://craccd.oss-cn-beijing.aliyuncs.com/img/upstream.jpeg "stream.jpg")
 
 在TCP参数配置中可以配置nginx的steam项目参数,进行tcp转发
 
