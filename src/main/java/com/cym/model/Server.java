@@ -23,8 +23,6 @@ public class Server extends BaseModel {
 	
 	@InitValue("true")
 	Boolean enable; // 是否启用
-	@InitValue("0")
-	Integer seq; // 顺序
 	
 	
 	public Boolean getEnable() {
@@ -32,12 +30,6 @@ public class Server extends BaseModel {
 	}
 	public void setEnable(Boolean enable) {
 		this.enable = enable;
-	}
-	public Integer getSeq() {
-		return seq;
-	}
-	public void setSeq(Integer seq) {
-		this.seq = seq;
 	}
 	public Integer getHttp2() {
 		return http2;

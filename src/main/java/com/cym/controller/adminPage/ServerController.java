@@ -109,7 +109,6 @@ public class ServerController extends BaseController {
 
 	
 	
-	
 	@RequestMapping("detail")
 	@ResponseBody
 	public JsonResult detail(String id) {
