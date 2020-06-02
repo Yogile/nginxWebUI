@@ -25,7 +25,7 @@ public class ServerService {
 	SqlHelper sqlHelper;
 
 	public Page search(Page page) {
-		page = sqlHelper.findPage(new Sort("seq", Sort.Direction.DESC), page, Server.class);
+		page = sqlHelper.findPage(new Sort("serverName", Sort.Direction.ASC), page, Server.class);
 
 		return page;
 	}
