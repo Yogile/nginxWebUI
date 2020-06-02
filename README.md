@@ -99,41 +99,41 @@ docker run -itd -v /home/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--变量�
 
 打开 http://xxx.xxx.xxx.xxx:8080 第一次打开会要求初始化管理员账号
 
-![输入图片说明](https://craccd.oss-cn-beijing.aliyuncs.com/login.jpeg "login.jpg")
+![输入图片说明](https://craccd.oss-cn-beijing.aliyuncs.com/img/login.jpeg "login.jpg")
 
-![输入图片说明](https://craccd.oss-cn-beijing.aliyuncs.com/admin.jpeg "admin.jpg")
+![输入图片说明](https://craccd.oss-cn-beijing.aliyuncs.com/img/admin.jpeg "admin.jpg")
 
 进入系统后,可在管理员管理里面添加修改管理员账号
 
-![输入图片说明](https://craccd.oss-cn-beijing.aliyuncs.com/http.jpeg "http.jpg")
+![输入图片说明](https://craccd.oss-cn-beijing.aliyuncs.com/img/http.jpeg "http.jpg")
 
 在http参数配置中可以配置nginx的http项目,进行http转发,默认会给出几个常用配置,其他需要的配置可自由增删改查
 
-![输入图片说明](https://craccd.oss-cn-beijing.aliyuncs.com/stream.jpeg "stream.jpg")
+![输入图片说明](https://craccd.oss-cn-beijing.aliyuncs.com/img/stream.jpeg "stream.jpg")
 
 在TCP参数配置中可以配置nginx的steam项目参数,进行tcp转发
 
-![输入图片说明](https://craccd.oss-cn-beijing.aliyuncs.com/server.jpeg "server.jpg")
+![输入图片说明](https://craccd.oss-cn-beijing.aliyuncs.com/img/server.jpeg "server.jpg")
 
 在反向代理中可配置nginx的反向代理即server项功能, 可开启ssl功能, 可以直接从网页上上传pem文件和key文件, 或者使用内置申请的证书, 可以直接开启http转跳https功能
 
-![输入图片说明](https://craccd.oss-cn-beijing.aliyuncs.com/upstream.jpeg "upstream.jpg")
+![输入图片说明](https://craccd.oss-cn-beijing.aliyuncs.com/img/upstream.jpeg "upstream.jpg")
 
 在负载均衡中可配置nginx的负载均衡即upstream项功能, 在反向代理管理中可选择代理目标为配置好的负载均衡
 
-![输入图片说明](https://craccd.oss-cn-beijing.aliyuncs.com/cert.jpeg "cert.jpg")
+![输入图片说明](https://craccd.oss-cn-beijing.aliyuncs.com/img/cert.jpeg "cert.jpg")
 
 在证书管理中可添加证书, 并进行签发和续签, 开启定时续签后, 系统会自动续签即将过期的证书 
 
-![输入图片说明](https://craccd.oss-cn-beijing.aliyuncs.com/bak.jpeg "bak.jpg")
+![输入图片说明](https://craccd.oss-cn-beijing.aliyuncs.com/img/bak.jpeg "bak.jpg")
 
 备份文件管理, 这里可以看到nginx.cnf的备份历史版本, nginx出现错误时可以选择回滚到某一个历史版本
 
-![输入图片说明](https://craccd.oss-cn-beijing.aliyuncs.com/conf.jpeg "conf.jpg")
+![输入图片说明](https://craccd.oss-cn-beijing.aliyuncs.com/img/conf.jpeg "conf.jpg")
 
 最终生成conf文件,可在此进行进一步手动修改,确认修改无误后,可覆盖本机conf文件,并进行效验和重启, 可以选择生成单一nginx.conf文件还是按域名将各个配置文件分开放在conf.d下
 
-![输入图片说明](https://craccd.oss-cn-beijing.aliyuncs.com/remote.jpeg "remote.jpg")
+![输入图片说明](https://craccd.oss-cn-beijing.aliyuncs.com/img/remote.jpeg "remote.jpg")
 
 远程服务器管理, 如果有多台nginx服务器, 可以都部署上nginxWebUI, 然后登录其中一台, 在远程管理中添加其他服务器的ip和用户名密码, 就可以在一台机器上管理所有的nginx服务器了.
 
