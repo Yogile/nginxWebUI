@@ -36,7 +36,7 @@ public class ServerController extends BaseController {
 	ParamService paramService;
 
 	@RequestMapping("")
-	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView, Page page,String sort,String direction) {
+	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView, Page page, String sort, String direction) {
 		page = serverService.search(page, sort, direction);
 
 		List<ServerExt> exts = new ArrayList<ServerExt>();
@@ -80,7 +80,8 @@ public class ServerController extends BaseController {
 			} else if (location.getType() == 2) {
 				Upstream upstream = sqlHelper.findById(location.getUpstreamId(), Upstream.class);
 				if (upstream != null) {
-					str.add("<span class='path'>" + location.getPath() + "</span><span class='value'>http://" + upstream.getName() + "</span>");
+					str.add("<span class='path'>" + location.getPath() + "</span><span class='value'>http://" + upstream.getName()
+							+ (location.getUpstreamPath() != null ? location.getUpstreamPath() : "") + "</span>");
 				}
 			}
 
@@ -90,10 +91,10 @@ public class ServerController extends BaseController {
 
 	@RequestMapping("addOver")
 	@ResponseBody
-	public JsonResult addOver(Server server, String serverParamJson, Integer type[], String[] path, String[] value, String[] upstreamId, String[] locationParamJson) {
+	public JsonResult addOver(Server server, String serverParamJson, Integer type[], String[] path, String[] value, String[] upstreamId, String[] upstreamPath, String[] locationParamJson) {
 
 		if (server.getProxyType() == 0) {
-			serverService.addOver(server, serverParamJson, type, path, value, upstreamId, locationParamJson);
+			serverService.addOver(server, serverParamJson, type, path, value, upstreamId, upstreamPath, locationParamJson);
 		} else {
 			serverService.addOverTcp(server, serverParamJson);
 		}
@@ -108,8 +109,6 @@ public class ServerController extends BaseController {
 		return renderSuccess();
 	}
 
-	
-	
 	@RequestMapping("detail")
 	@ResponseBody
 	public JsonResult detail(String id) {

@@ -173,6 +173,13 @@ function addOver() {
 		return;
 	}
 	
+	$("input[name='upstreamPath']").each(function(){
+		if($(this).val() == ''){
+			$(this).val("is_null");
+		}
+	})
+	
+	
 	$.ajax({
 		type : 'POST',
 		url : ctx + '/adminPage/server/addOver',
@@ -273,6 +280,7 @@ function edit(id) {
 						$("#" + uuid + " input[name='value']").val(location.value);
 					} else {
 						$("#" + uuid + " select[name='upstreamId']").val(location.upstreamId);
+						$("#" + uuid + " input[name='upstreamPath']").val(location.upstreamPath);
 					}
 					
 					checkType(location.type, uuid)

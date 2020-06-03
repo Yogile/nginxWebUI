@@ -126,8 +126,6 @@
 									<button type="button" class="layui-btn layui-btn-sm" onclick="edit('${ext.server.id}')">编辑</button>
 									<button type="button" class="layui-btn layui-btn-danger layui-btn-sm" onclick="del('${ext.server.id}')">删除</button>
 									
-									<!-- <button class="layui-btn layui-btn-sm" onclick="seq('${ext.server.id}',1)">↑</button>
-									<button class="layui-btn layui-btn-sm" onclick="seq('${ext.server.id}',-1)">↓</button> -->
 								</td>
 							</tr>
 							</#list>
@@ -320,16 +318,21 @@
 		</div>
 
 		<div id="upstreamSelect" style="display: none;"> 
-			<select name="upstreamId">
-				
-				<#list upstreamList as upstream>
-				<option value="${upstream.id}">${upstream.name}</option>
-				</#list>
-				
-				<#if upstreamSize == 0>
-				<option value="">--无可用负载均衡--</option>
-				</#if>
-			</select>
+			<div class="layui-inline" style="width: 150px;">
+				<select name="upstreamId" >
+					
+					<#list upstreamList as upstream>
+					<option value="${upstream.id}">${upstream.name}</option>
+					</#list>
+					
+					<#if upstreamSize == 0>
+					<option value="">--无可用负载均衡--</option>
+					</#if>
+				</select>
+			</div>
+			<div class="layui-inline" style="width: 150px;">
+				<input type="text" name="upstreamPath" class="layui-input" placeholder="额外路径，默认为空">
+			</div>
 		</div>
 		
 		<div id="certDiv"  style="padding: 15px; display: none"> 
