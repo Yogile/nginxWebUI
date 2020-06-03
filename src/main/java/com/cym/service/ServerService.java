@@ -47,7 +47,7 @@ public class ServerService {
 	}
 
 	@Transactional
-	public void addOver(Server server, String serverParamJson, Integer[] type, String[] path, String[] value, String[] upstreamId, String[] locationParamJson) {
+	public void addOver(Server server, String serverParamJson, Integer[] type, String[] path, String[] value, String[] upstreamId, String[] upstreamPath, String[] locationParamJson) {
 		sqlHelper.insertOrUpdate(server);
 		List<Param> paramList = new ArrayList<Param>();
 		if (StrUtil.isNotEmpty(serverParamJson) && JSONUtil.isJson(serverParamJson.replace("%2C", ","))) {
@@ -73,6 +73,10 @@ public class ServerService {
 					location.setValue(value[i]);
 				} else if (location.getType() == 2) {
 					location.setUpstreamId(upstreamId[i]);
+
+					if (!upstreamPath[i].equals("is_null")) {
+						location.setUpstreamPath(upstreamPath[i]);
+					}
 				}
 
 				sqlHelper.insert(location);
