@@ -36,8 +36,8 @@ public class ServerController extends BaseController {
 	ParamService paramService;
 
 	@RequestMapping("")
-	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView, Page page) {
-		page = serverService.search(page);
+	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView, Page page,String sort,String direction) {
+		page = serverService.search(page, sort, direction);
 
 		List<ServerExt> exts = new ArrayList<ServerExt>();
 		for (Server server : page.getRecords(Server.class)) {
@@ -65,7 +65,8 @@ public class ServerController extends BaseController {
 		modelAndView.addObject("upstreamTcpSize", upstreamTcpList.size());
 
 		modelAndView.addObject("certList", sqlHelper.findAll(Cert.class));
-
+		modelAndView.addObject("sort", sort);
+		modelAndView.addObject("direction", direction);
 		modelAndView.setViewName("/adminPage/server/index");
 		return modelAndView;
 	}

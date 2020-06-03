@@ -13,6 +13,7 @@ import com.cym.model.Server;
 
 import cn.craccd.sqlHelper.bean.Page;
 import cn.craccd.sqlHelper.bean.Sort;
+import cn.craccd.sqlHelper.bean.Sort.Direction;
 import cn.craccd.sqlHelper.utils.ConditionAndWrapper;
 import cn.craccd.sqlHelper.utils.ConditionOrWrapper;
 import cn.craccd.sqlHelper.utils.SqlHelper;
@@ -24,8 +25,13 @@ public class ServerService {
 	@Autowired
 	SqlHelper sqlHelper;
 
-	public Page search(Page page) {
-		page = sqlHelper.findPage(new Sort("serverName", Sort.Direction.ASC), page, Server.class);
+	public Page search(Page page, String sortColum, String direction) {
+		Sort sort = null;
+		if (StrUtil.isNotEmpty(sortColum)) {
+			sort = new Sort(sortColum, "asc".equalsIgnoreCase(direction) ? Direction.ASC : Direction.DESC);
+		}
+
+		page = sqlHelper.findPage(sort, page, Server.class);
 
 		return page;
 	}
