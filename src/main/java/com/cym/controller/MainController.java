@@ -37,9 +37,14 @@ public class MainController extends BaseController {
 	@ResponseBody
 	@RequestMapping("/upload")
 	public JsonResult upload(@RequestParam("file") MultipartFile file, HttpSession httpSession) {
-		String path = FileUtil.getUserHomePath() + File.separator + System.currentTimeMillis() + "." + file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
-
-		File dest = new File(path);
+		File dest = new File( "/home/nginxWebUI/cert/" + System.currentTimeMillis() + "." + file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1));
+		boolean mkdir = dest.getParentFile().mkdirs();
+		
+		if(!mkdir) {
+			// 建立文件夹失败,使用用户文件夹
+			dest = new File(FileUtil.getUserHomePath() + File.separator + System.currentTimeMillis() + "." + file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1));
+		}
+		
 		// 保存文件
 		try {
 			file.transferTo(dest);
