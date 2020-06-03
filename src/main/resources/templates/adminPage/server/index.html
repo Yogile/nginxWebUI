@@ -29,6 +29,14 @@
 	display: inline-block;
 	width: 40px;
 }
+
+.layui-icon{
+	cursor: pointer;
+}
+
+.blue{
+	font-weight: bolder;
+}
 </style>
 </head>
 <body class="layui-layout-body">
@@ -49,7 +57,10 @@
 						<div class="layui-inline">
 							<button type="button" class="layui-btn layui-btn-normal" onclick="add()">添加反向代理</button>
 						</div>
-
+						
+						<input type="hidden" name="sort" id="sort" value="${sort}">
+						<input type="hidden" name="direction" id="direction" value="${direction}">
+						
 						<input type="hidden" name="curr" value="${page.curr}">
 					</div>
 			
@@ -57,9 +68,9 @@
 					<table class="layui-table layui-form">
 						<thead>
 							<tr>
-								<th>转发类型</th>
-								<th>监听端口</th>
-								<th>监听域名</th>
+								<th>转发类型 <i class="layui-icon ${(direction=='desc'&&sort=='proxyType')?string('layui-icon-down','layui-icon-up')} ${(sort=='proxyType')?string('blue','')}" id="proxyTypeSort"  onclick="sort('proxyTypeSort')"></i></th>
+								<th>监听端口 <i class="layui-icon ${(direction=='desc'&&sort=='listen')?string('layui-icon-down','layui-icon-up')} ${(sort=='listen')?string('blue','')}" id="listenSort"  onclick="sort('listenSort')"></i></th>
+								<th>监听域名 <i class="layui-icon ${(direction=='desc'&&sort=='serverName')?string('layui-icon-down','layui-icon-up')} ${(sort=='serverName')?string('blue','')}" id="serverNameSort" onclick="sort('serverNameSort')"></i></th>
 								<th>开启ssl</th>
 								<th>ssl选项</th>
 								<th>ssl文件路径</th>
