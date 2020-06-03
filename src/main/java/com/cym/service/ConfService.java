@@ -346,7 +346,10 @@ public class ConfService {
 			// 添加server
 			servers = serverService.getListByProxyType(1);
 			for (Server server : servers) {
-
+				if (!server.getEnable()) {
+					continue;
+				}
+				
 				NgxBlock ngxBlockServer = new NgxBlock();
 				ngxBlockServer.addValue("server");
 
