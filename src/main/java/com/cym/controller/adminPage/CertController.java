@@ -30,6 +30,8 @@ public class CertController extends BaseController {
 	@Autowired
 	SettingService settingService;
 
+	Boolean isInApply = false;
+	
 	@RequestMapping("")
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView) {
 		List<Cert> certs = sqlHelper.findAll(Cert.class);
@@ -76,9 +78,9 @@ public class CertController extends BaseController {
 	@RequestMapping("apply")
 	@ResponseBody
 	public JsonResult apply(String id) {
-		if (SystemTool.getSystem().equals("Windows")) {
-			return renderError("证书操作只能在linux下进行");
-		}
+//		if (SystemTool.getSystem().equals("Windows")) {
+//			return renderError("证书操作只能在linux下进行");
+//		}
 		if (!SystemTool.hasNginx()) {
 			return renderError("系统中未安装nginx命令，如果是编译安装nginx，请尝试在系统中执行ln -s [nginx执行文件路径] /usr/bin建立命令链接");
 		}
@@ -93,6 +95,11 @@ public class CertController extends BaseController {
 			return renderError("该证书已申请");
 		}
 
+		if(isInApply) {
+			return renderError("另一个申请进程正在进行，请稍后再申请");
+		}
+		isInApply = true;
+		
 		// 替换nginx.conf并重启
 		replaceStartNginx(nginxPath, cert.getDomain());
 		String rs = "";
@@ -100,8 +107,11 @@ public class CertController extends BaseController {
 			// 申请
 			String cmd = certConfig.acmeSh + " --issue --nginx -d " + cert.getDomain();
 			System.out.println(cmd);
-			rs = RuntimeUtil.execForStr(cmd);
-			System.out.println(rs);
+//			rs = RuntimeUtil.execForStr(cmd);
+//			System.out.println(rs);
+			
+
+			Thread.sleep(10000);
 		} catch (Exception e) {
 			e.printStackTrace();
 			rs = e.getMessage();
@@ -122,8 +132,11 @@ public class CertController extends BaseController {
 			cert.setMakeTime(System.currentTimeMillis());
 			sqlHelper.updateById(cert);
 
+			isInApply = false;
 			return renderSuccess();
 		} else {
+			
+			isInApply = false;
 			return renderError(rs.replace("\n", "<br>"));
 		}
 
@@ -132,11 +145,11 @@ public class CertController extends BaseController {
 	@RequestMapping("renew")
 	@ResponseBody
 	public JsonResult renew(String id) {
-		if (SystemTool.isWindows()) {
-			return renderError("证书操作只能在linux下进行");
-		}
+//		if (SystemTool.isWindows()) {
+//			return renderError("证书操作只能在linux下进行");
+//		}
 		if (!SystemTool.hasNginx()) {
-			return renderError("系统中未安装nginx命令");
+			return renderError("系统中未安装nginx命令，如果是编译安装nginx，请尝试在系统中执行ln -s [nginx执行文件路径] /usr/bin建立命令链接");
 		}
 
 		String nginxPath = settingService.get("nginxPath");
@@ -149,6 +162,11 @@ public class CertController extends BaseController {
 			return renderError("该证书还未申请");
 		}
 
+		if(isInApply) {
+			return renderError("另一个申请进程正在进行，请稍后再申请");
+		}
+		isInApply = true;
+		
 		// 替换nginx.conf并重启
 		replaceStartNginx(nginxPath, cert.getDomain());
 		String rs = "";
@@ -156,8 +174,10 @@ public class CertController extends BaseController {
 			// 续签
 			String cmd = certConfig.acmeSh + " --renew --force -d " + cert.getDomain();
 			System.out.println(cmd);
-			rs = RuntimeUtil.execForStr(cmd);
-			System.out.println(rs);
+//			rs = RuntimeUtil.execForStr(cmd);
+//			System.out.println(rs);
+			
+			Thread.sleep(10000);
 		} catch (Exception e) {
 			e.printStackTrace();
 			rs = e.getMessage();
@@ -178,8 +198,11 @@ public class CertController extends BaseController {
 			cert.setMakeTime(System.currentTimeMillis());
 			sqlHelper.updateById(cert);
 
+			isInApply = false;
 			return renderSuccess();
 		} else {
+			
+			isInApply = false;
 			return renderError(rs.replace("\n", "<br>"));
 		}
 
