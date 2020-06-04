@@ -81,8 +81,12 @@ public class CertConfig {
 				String[] command = { "/bin/sh", "-c", "ps -ef|grep nginx" };
 				String rs = RuntimeUtil.execForStr(command);
 				if (!rs.contains("nginx: master process")) {
-					System.err.println("run:nginx");
-					RuntimeUtil.exec("nginx");
+					System.err.println("尝试启动nginx");
+					try {
+						RuntimeUtil.exec("nginx");
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}
