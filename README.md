@@ -46,7 +46,7 @@ apt install nginx
 码云的服务器下载较慢, CDN地址(可使用wget下载): 
 
 ```
-wget https://craccd.oss-cn-beijing.aliyuncs.com/nginxWebUI-1.2.5.jar
+wget https://craccd.oss-cn-beijing.aliyuncs.com/nginxWebUI-1.2.6.jar
 ```
 
 有新版本只需要修改路径中的版本即可
@@ -54,7 +54,7 @@ wget https://craccd.oss-cn-beijing.aliyuncs.com/nginxWebUI-1.2.5.jar
 启动命令
 
 ```
-nohup java -jar -Xmx64m nginxWebUI-1.2.5.jar --server.port=8080 --logging.file.name=/home/nginxWebUI/log/nginxWebUI.log --spring.database.sqlite-path=/home/nginxWebUI/sqlite.db &
+nohup java -jar -Xmx64m nginxWebUI-1.2.6.jar --server.port=8080 --logging.file.name=/home/nginxWebUI/log/nginxWebUI.log --spring.database.sqlite-path=/home/nginxWebUI/sqlite.db &
 ```
 
 参数说明(都是非必填)
@@ -76,13 +76,13 @@ nohup java -jar -Xmx64m nginxWebUI-1.2.5.jar --server.port=8080 --logging.file.n
 下载镜像: 
 
 ```
-docker pull registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.2.5
+docker pull registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.2.6
 ```
 
 启动容器: 
 
 ```
-docker run -itd -v /home/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--变量名=变量值 --变量名2=变量值2" --privileged=true --net=host  registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.2.5 /bin/bash
+docker run -itd -v /home/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--变量名=变量值 --变量名2=变量值2" --privileged=true --net=host  registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.2.6 /bin/bash
 ```
 
 注意: 
