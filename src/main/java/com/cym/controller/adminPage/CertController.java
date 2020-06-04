@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +31,9 @@ public class CertController extends BaseController {
 	CertConfig certConfig;
 	@Autowired
 	SettingService settingService;
-
+	
+	Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 	Boolean isInApply = false;
 	
 	@RequestMapping("")
@@ -78,9 +82,9 @@ public class CertController extends BaseController {
 	@RequestMapping("apply")
 	@ResponseBody
 	public JsonResult apply(String id) {
-//		if (SystemTool.getSystem().equals("Windows")) {
-//			return renderError("证书操作只能在linux下进行");
-//		}
+		if (SystemTool.getSystem().equals("Windows")) {
+			return renderError("证书操作只能在linux下进行");
+		}
 		if (!SystemTool.hasNginx()) {
 			return renderError("系统中未安装nginx命令，如果是编译安装nginx，请尝试在系统中执行ln -s [nginx执行文件路径] /usr/bin建立命令链接");
 		}
@@ -106,12 +110,10 @@ public class CertController extends BaseController {
 		try {
 			// 申请
 			String cmd = certConfig.acmeSh + " --issue --nginx -d " + cert.getDomain();
-			System.out.println(cmd);
-//			rs = RuntimeUtil.execForStr(cmd);
-//			System.out.println(rs);
+			logger.info(cmd);
+			rs = RuntimeUtil.execForStr(cmd);
+			logger.info(rs);
 			
-
-			Thread.sleep(10000);
 		} catch (Exception e) {
 			e.printStackTrace();
 			rs = e.getMessage();
@@ -145,9 +147,9 @@ public class CertController extends BaseController {
 	@RequestMapping("renew")
 	@ResponseBody
 	public JsonResult renew(String id) {
-//		if (SystemTool.isWindows()) {
-//			return renderError("证书操作只能在linux下进行");
-//		}
+		if (SystemTool.isWindows()) {
+			return renderError("证书操作只能在linux下进行");
+		}
 		if (!SystemTool.hasNginx()) {
 			return renderError("系统中未安装nginx命令，如果是编译安装nginx，请尝试在系统中执行ln -s [nginx执行文件路径] /usr/bin建立命令链接");
 		}
@@ -173,11 +175,9 @@ public class CertController extends BaseController {
 		try {
 			// 续签
 			String cmd = certConfig.acmeSh + " --renew --force -d " + cert.getDomain();
-			System.out.println(cmd);
-//			rs = RuntimeUtil.execForStr(cmd);
-//			System.out.println(rs);
-			
-			Thread.sleep(10000);
+			logger.info(cmd);
+			rs = RuntimeUtil.execForStr(cmd);
+			logger.info(rs);
 		} catch (Exception e) {
 			e.printStackTrace();
 			rs = e.getMessage();
@@ -210,7 +210,7 @@ public class CertController extends BaseController {
 
 	// 替换nginx.conf并重启
 	private void replaceStartNginx(String nginxPath, String domain) {
-		System.out.println("替换nginx.conf并重启");
+		logger.info("替换nginx.conf并重启");
 		String nginxContent = "worker_processes  auto; \n" //
 				+ "events {worker_connections  1024;} \n" //
 				+ "http { \n" //
@@ -232,7 +232,7 @@ public class CertController extends BaseController {
 
 	// 还原nginx.conf并重启
 	private void backupStartNginx(String nginxPath) {
-		System.out.println("还原nginx.conf并重启");
+		logger.info("还原nginx.conf并重启");
 		// 还原备份文件
 		FileUtil.copy(nginxPath + ".org", nginxPath, true);
 		FileUtil.del(nginxPath + ".org");
