@@ -88,7 +88,7 @@ public class ConfService {
 					ngxBlockHttp.addEntry(ngxParam);
 
 					ngxParam = new NgxParam();
-					ngxParam.addValue("access_log /home/nginxWebUI/log/access.log");
+					ngxParam.addValue("access_log /home/nginxWebUI/log/access.log main");
 					ngxBlockHttp.addEntry(ngxParam);
 				}
 			}
@@ -426,7 +426,7 @@ public class ConfService {
 		logInfo.setRequestTime("$request_time");
 		logInfo.setUpstreamResponseTime("$upstream_response_time");
 		
-		return JSONUtil.toJsonStr(logInfo).replace("{", "\\{").replace("}", "\\}");
+		return "'" + JSONUtil.toJsonStr(logInfo) + "'";
 	}
 
 	private void setSameParam(Param param, NgxBlock ngxBlock) {
