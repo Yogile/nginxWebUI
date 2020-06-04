@@ -89,6 +89,9 @@ public class CertConfig {
 					}
 				}
 			}
+			
+			
+			settingService.set("logStatus","true");
 		}
 	}
 }

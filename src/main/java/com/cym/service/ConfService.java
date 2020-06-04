@@ -3,9 +3,10 @@ package com.cym.service;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -19,6 +20,7 @@ import com.cym.ext.ConfFile;
 import com.cym.model.Cert;
 import com.cym.model.Http;
 import com.cym.model.Location;
+import com.cym.model.LogInfo;
 import com.cym.model.Param;
 import com.cym.model.Server;
 import com.cym.model.Stream;
@@ -38,6 +40,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.ZipUtil;
+import cn.hutool.json.JSONUtil;
 
 @Service
 public class ConfService {
@@ -75,6 +78,19 @@ public class ConfService {
 				NgxParam ngxParam = new NgxParam();
 				ngxParam.addValue(http.getName() + " " + http.getValue());
 				ngxBlockHttp.addEntry(ngxParam);
+			}
+
+			if (StrUtil.isNotEmpty(settingService.get("logStatus"))) {
+				Boolean logStatus = Boolean.parseBoolean(settingService.get("logStatus"));
+				if (logStatus) {
+					NgxParam ngxParam = new NgxParam();
+					ngxParam.addValue("log_format main " + buildLogFormat());
+					ngxBlockHttp.addEntry(ngxParam);
+
+					ngxParam = new NgxParam();
+					ngxParam.addValue("access_log /home/nginxWebUI/log/access.log");
+					ngxBlockHttp.addEntry(ngxParam);
+				}
 			}
 
 			boolean hasHttp = false;
@@ -264,34 +280,6 @@ public class ConfService {
 					ngxBlockHttp.addEntry(ngxBlockServer);
 				}
 
-				// https添加80端口重写
-//				if (server.getSsl() == 1 && server.getRewrite() == 1) {
-//					ngxBlockServer = new NgxBlock();
-//					ngxBlockServer.addValue("server");
-//
-//					if (StrUtil.isNotEmpty(server.getServerName())) {
-//						ngxParam = new NgxParam();
-//						ngxParam.addValue("server_name " + server.getServerName());
-//						ngxBlockServer.addEntry(ngxParam);
-//					}
-//					ngxParam = new NgxParam();
-//					ngxParam.addValue("listen 80");
-//					ngxBlockServer.addEntry(ngxParam);
-//
-//					ngxParam = new NgxParam();
-//					ngxParam.addValue("rewrite ^(.*)$ https://${server_name}$1 permanent");
-//					ngxBlockServer.addEntry(ngxParam);
-//
-//					hasHttp = true;
-//
-//					// 是否需要分解
-//					if (decompose) {
-//						addConfFile(confExt, server.getServerName() + ".conf", ngxBlockServer);
-//					} else {
-//						ngxBlockHttp.addEntry(ngxBlockServer);
-//					}
-//				}
-
 			}
 			if (hasHttp) {
 				ngxConfig.addEntry(ngxBlockHttp);
@@ -349,7 +337,7 @@ public class ConfService {
 				if (!server.getEnable()) {
 					continue;
 				}
-				
+
 				NgxBlock ngxBlockServer = new NgxBlock();
 				ngxBlockServer.addValue("server");
 
@@ -421,6 +409,24 @@ public class ConfService {
 		}
 
 		return null;
+	}
+
+	private String buildLogFormat() {
+		LogInfo logInfo = new LogInfo();
+		logInfo.setRemoteAddr("$remote_addr");
+		logInfo.setRemoteUser("$remote_user");
+		logInfo.setTimeLocal("$time_local");
+		logInfo.setRequest("$request");
+		logInfo.setHttpHost("$http_host");
+		logInfo.setStatus("$status");
+		logInfo.setRequestLength("$request_length");
+		logInfo.setBodyBytesDent("$body_bytes_sent");
+		logInfo.setHttpReferer("$http_referer");
+		logInfo.setHttpUserAgent("$http_user_agent");
+		logInfo.setRequestTime("$request_time");
+		logInfo.setUpstreamResponseTime("$upstream_response_time");
+		
+		return JSONUtil.toJsonStr(logInfo).replace("{", "\\{").replace("}", "\\}");
 	}
 
 	private void setSameParam(Param param, NgxBlock ngxBlock) {
