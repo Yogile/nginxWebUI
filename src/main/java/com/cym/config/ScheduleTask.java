@@ -60,12 +60,18 @@ public class ScheduleTask {
 			if (SystemTool.isLinux()) {
 				
 				// linux 使用命令
-				String nginxPid = settingService.get("nginxPid");
-				System.err.println("nginxPid:"+nginxPid);
-				if (StrUtil.isNotEmpty(nginxPid)) {
-					System.err.println("kill -USR1 `cat " + nginxPid + "`");
-					RuntimeUtil.exec("kill -USR1 `cat " + nginxPid + "`");
-				}
+//				String nginxPid = settingService.get("nginxPid");
+//				System.err.println("nginxPid:"+nginxPid);
+//				if (StrUtil.isNotEmpty(nginxPid)) {
+//					System.err.println("kill -USR1 `cat " + nginxPid + "`");
+//					RuntimeUtil.exec("kill -USR1 `cat " + nginxPid + "`");
+//				}
+				String nginxExe = settingService.get("nginxExe");
+				String nginxDir = settingService.get("nginxDir");
+				String nginxPath = settingService.get("nginxPath");
+				confController.reload(nginxPath, nginxExe, nginxDir);
+				
+				System.err.println("执行reload");
 			} else {
 				// windows 重启nginx
 				String nginxExe = settingService.get("nginxExe");
