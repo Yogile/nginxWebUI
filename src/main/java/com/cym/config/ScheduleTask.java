@@ -52,7 +52,7 @@ public class ScheduleTask {
 		}
 	}
 
-	// 分隔日志,每分钟
+	// 分隔日志,每天
 	@Scheduled(cron = "0 0 0 * * ?")
 	public void diviLog() {
 		if (FileUtil.exist("/home/nginxWebUI/log/access.log")) {
