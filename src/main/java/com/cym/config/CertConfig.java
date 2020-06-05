@@ -91,7 +91,14 @@ public class CertConfig {
 			}
 			
 			
-			settingService.set("logStatus","true");
+			//查找nginx.pid文件
+			String nginxPid = settingService.get("nginxPid");
+			if (StrUtil.isEmpty(nginxPid)) {
+				nginxPid = RuntimeTool.execForOne("find / -name nginx.pid");
+				if (StrUtil.isNotEmpty(nginxPid)) {
+					settingService.set("nginxPid", nginxPid);
+				}
+			}
 		}
 	}
 }
