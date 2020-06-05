@@ -2,7 +2,13 @@
 <html>
 <head>
 <#include "/adminPage/common.html"/>
-
+<style type="text/css">
+.group{
+	width: 550px;
+	height: 300px;
+	float: left;
+}
+</style>
 </head>
 <body class="layui-layout-body">
 	<div class="layui-layout layui-layout-admin">
@@ -18,9 +24,7 @@
 				</fieldset>
 
 				<form action="${ctx}/adminPage/log" id="searchForm" method="post">
-					<div class="layui-form">
-					
-					</div>
+					<div class="layui-form"></div>
 				</form>
 
 				<table class="layui-table">
@@ -48,7 +52,22 @@
 		</div>
 	</div>
 
+	<div style="height: 0px; width: 0px; overflow: hidden;">
+		<!-- 弹出框 -->
+		<div id="windowDiv" style="padding: 15px;">
+		
+			<div id="statusDiv" class="group"></div>
+			
+			<div id="browser" class="group"></div>
+			
+			<div id="pvuv" class="group"></div>
 
+
+
+			<div id="httpReferer" class="group"></div>
+		</div>
+
+	</div>
 	<#include '/adminPage/script.html'/>
 	<script src="${ctx}/js/adminPage/log/index.js?v=${jsrandom}" type="text/javascript"></script>
 </body>

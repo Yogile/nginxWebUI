@@ -63,17 +63,17 @@ public class ScheduleTask {
 		}
 		
 		// 删掉1小时前日志
-		Long time = System.currentTimeMillis();
-		File dir = new File("/home/nginxWebUI/log/");
-		File[] fileList = dir.listFiles();
-		for (File file : fileList) {
-			if (file.getName().contains("access") && !file.getName().equals("access.log")) {
-				DateTime date = DateUtil.parse(file.getName().replace("access.", "").replace(".log", ""), "yyyy-MM-dd_HH-mm-ss");
-				if(time - date.getTime() >  60 * 60 * 1000) {
-					FileUtil.del(file);
-				}
-			}
-		}
+//		Long time = System.currentTimeMillis();
+//		File dir = new File("/home/nginxWebUI/log/");
+//		File[] fileList = dir.listFiles();
+//		for (File file : fileList) {
+//			if (file.getName().contains("access") && !file.getName().equals("access.log")) {
+//				DateTime date = DateUtil.parse(file.getName().replace("access.", "").replace(".log", ""), "yyyy-MM-dd_HH-mm-ss");
+//				if(time - date.getTime() >  60 * 60 * 1000) {
+//					FileUtil.del(file);
+//				}
+//			}
+//		}
 
 	}
 
