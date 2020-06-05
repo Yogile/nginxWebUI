@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cym.ext.DataGroup;
 import com.cym.model.Log;
 import com.cym.model.LogInfo;
 import com.cym.service.LogInfoService;
@@ -86,9 +87,9 @@ public class LogController extends BaseController {
 			logInfoService.addOver(path);
 		}
 		
-		Long count = sqlHelper.findCountByQuery(null, LogInfo.class);
+		DataGroup dataGroup = logInfoService.getDataGroup();
 		
-		return renderSuccess(count);
+		return renderSuccess(dataGroup);
 	}
 	
 	
