@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cym.model.Log;
+import com.cym.model.LogInfo;
+import com.cym.service.LogInfoService;
 import com.cym.service.SettingService;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
@@ -29,7 +31,8 @@ import cn.hutool.core.util.StrUtil;
 public class LogController extends BaseController {
 	@Autowired
 	SettingService settingService;
-
+	@Autowired
+	LogInfoService logInfoService;
 	@RequestMapping("")
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView) {
 		List<Log> logList = getLogList();
@@ -73,6 +76,21 @@ public class LogController extends BaseController {
 		FileUtil.del(path);
 		return renderSuccess();
 	}
+	
+	
+	@RequestMapping("content")
+	@ResponseBody
+	public JsonResult content(String path) {
+		
+		if(FileUtil.exist(path)) {
+			logInfoService.addOver(path);
+		}
+		
+		Long count = sqlHelper.findCountByQuery(null, LogInfo.class);
+		
+		return renderSuccess(count);
+	}
+	
 	
 
 }

@@ -1,6 +1,10 @@
 package com.cym.model;
 
-public class LogInfo {
+import cn.craccd.sqlHelper.bean.BaseModel;
+import cn.craccd.sqlHelper.config.Table;
+
+@Table
+public class LogInfo extends BaseModel{
 	String remoteAddr;
 	String remoteUser;
 	String timeLocal;
