@@ -58,9 +58,12 @@ public class ScheduleTask {
 			FileUtil.move(new File("/home/nginxWebUI/log/access.log"), new File("/home/nginxWebUI/log/access." + date + ".log"), true);
 
 			if (SystemTool.isLinux()) {
+				
 				// linux 使用命令
 				String nginxPid = settingService.get("nginxPid");
+				System.err.println("nginxPid:"+nginxPid);
 				if (StrUtil.isNotEmpty(nginxPid)) {
+					System.err.println("kill -USR1 `cat " + nginxPid + "`");
 					RuntimeUtil.exec("kill -USR1 `cat " + nginxPid + "`");
 				}
 			} else {
