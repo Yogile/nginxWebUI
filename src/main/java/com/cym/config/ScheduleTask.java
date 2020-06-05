@@ -56,29 +56,7 @@ public class ScheduleTask {
 			String date = DateUtil.format(new Date(), "yyyy-MM-dd_HH-mm-ss");
 
 			FileUtil.move(new File("/home/nginxWebUI/log/access.log"), new File("/home/nginxWebUI/log/access." + date + ".log"), true);
-
-			if (SystemTool.isLinux()) {
-				
-				// linux 使用命令
-//				String nginxPid = settingService.get("nginxPid");
-//				System.err.println("nginxPid:"+nginxPid);
-//				if (StrUtil.isNotEmpty(nginxPid)) {
-//					System.err.println("kill -USR1 `cat " + nginxPid + "`");
-//					RuntimeUtil.exec("kill -USR1 `cat " + nginxPid + "`");
-//				}
-				String nginxExe = settingService.get("nginxExe");
-				String nginxDir = settingService.get("nginxDir");
-				String nginxPath = settingService.get("nginxPath");
-				confController.reload(nginxPath, nginxExe, nginxDir);
-				
-				System.err.println("执行reload");
-			} else {
-				// windows 重启nginx
-				String nginxExe = settingService.get("nginxExe");
-				String nginxDir = settingService.get("nginxDir");
-				confController.stop(nginxExe, nginxDir);
-				confController.start(nginxExe, nginxDir);
-			}
+			confController.reload(null, null, null);
 
 		}
 	}
