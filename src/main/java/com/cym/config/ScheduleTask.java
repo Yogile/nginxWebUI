@@ -53,7 +53,7 @@ public class ScheduleTask {
 	}
 
 	// 分隔日志,每分钟
-	@Scheduled(cron = "0 * * * * ?")
+	@Scheduled(cron = "0 0 0 * * ?")
 	public void diviLog() {
 		if (FileUtil.exist("/home/nginxWebUI/log/access.log")) {
 			String date = DateUtil.format(new Date(), "yyyy-MM-dd_HH-mm-ss");
@@ -62,18 +62,18 @@ public class ScheduleTask {
 			confController.reload(null, null, null);
 		}
 		
-		// 删掉1小时前日志
-//		Long time = System.currentTimeMillis();
-//		File dir = new File("/home/nginxWebUI/log/");
-//		File[] fileList = dir.listFiles();
-//		for (File file : fileList) {
-//			if (file.getName().contains("access") && !file.getName().equals("access.log")) {
-//				DateTime date = DateUtil.parse(file.getName().replace("access.", "").replace(".log", ""), "yyyy-MM-dd_HH-mm-ss");
-//				if(time - date.getTime() >  60 * 60 * 1000) {
-//					FileUtil.del(file);
-//				}
-//			}
-//		}
+		// 删掉10天前日志
+		Long time = System.currentTimeMillis();
+		File dir = new File("/home/nginxWebUI/log/");
+		File[] fileList = dir.listFiles();
+		for (File file : fileList) {
+			if (file.getName().contains("access") && !file.getName().equals("access.log")) {
+				DateTime date = DateUtil.parse(file.getName().replace("access.", "").replace(".log", ""), "yyyy-MM-dd_HH-mm-ss");
+				if(time - date.getTime() > 10 * 24 * 60 * 60 * 1000) {
+					FileUtil.del(file);
+				}
+			}
+		}
 
 	}
 
