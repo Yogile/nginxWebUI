@@ -34,6 +34,8 @@ import com.github.odiszapc.nginxparser.NgxDumper;
 import com.github.odiszapc.nginxparser.NgxEntry;
 import com.github.odiszapc.nginxparser.NgxParam;
 
+import cn.craccd.sqlHelper.bean.Sort;
+import cn.craccd.sqlHelper.bean.Sort.Direction;
 import cn.craccd.sqlHelper.utils.ConditionAndWrapper;
 import cn.craccd.sqlHelper.utils.SqlHelper;
 import cn.hutool.core.date.DateUtil;
@@ -71,26 +73,13 @@ public class ConfService {
 			NgxConfig ngxConfig = NgxConfig.read(inputStream);
 
 			// 获取http
-			List<Http> httpList = sqlHelper.findAll(Http.class);
+			List<Http> httpList = sqlHelper.findAll(new Sort("name", Direction.DESC), Http.class);
 			NgxBlock ngxBlockHttp = new NgxBlock();
 			ngxBlockHttp.addValue("http");
 			for (Http http : httpList) {
 				NgxParam ngxParam = new NgxParam();
 				ngxParam.addValue(http.getName() + " " + http.getValue());
 				ngxBlockHttp.addEntry(ngxParam);
-			}
-
-			if (StrUtil.isNotEmpty(settingService.get("logStatus"))) {
-				Boolean logStatus = Boolean.parseBoolean(settingService.get("logStatus"));
-				if (logStatus) {
-					NgxParam ngxParam = new NgxParam();
-					ngxParam.addValue("log_format main " + buildLogFormat());
-					ngxBlockHttp.addEntry(ngxParam);
-
-					ngxParam = new NgxParam();
-					ngxParam.addValue("access_log /home/nginxWebUI/log/access.log main");
-					ngxBlockHttp.addEntry(ngxParam);
-				}
 			}
 
 			boolean hasHttp = false;
@@ -409,24 +398,6 @@ public class ConfService {
 		}
 
 		return null;
-	}
-
-	private String buildLogFormat() {
-		LogInfo logInfo = new LogInfo();
-		logInfo.setRemoteAddr("$remote_addr");
-		logInfo.setRemoteUser("$remote_user");
-		logInfo.setTimeLocal("$time_local");
-		logInfo.setRequest("$request");
-		logInfo.setHttpHost("$http_host");
-		logInfo.setStatus("$status");
-		logInfo.setRequestLength("$request_length");
-		logInfo.setBodyBytesDent("$body_bytes_sent");
-		logInfo.setHttpReferer("$http_referer");
-		logInfo.setHttpUserAgent("$http_user_agent");
-		logInfo.setRequestTime("$request_time");
-		logInfo.setUpstreamResponseTime("$upstream_response_time");
-		
-		return "'" + JSONUtil.toJsonStr(logInfo) + "'";
 	}
 
 	private void setSameParam(Param param, NgxBlock ngxBlock) {

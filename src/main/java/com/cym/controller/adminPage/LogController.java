@@ -54,7 +54,7 @@ public class LogController extends BaseController {
 
 		File[] fileList = dir.listFiles();
 		for (File file : fileList) {
-			if (file.getName().contains("access")) {
+			if (file.getName().contains("access") && !file.getName().equals("access.log")) {
 				Log log = new Log();
 				log.setPath(file.getPath().replace("\\", "/"));
 				DateTime date = DateUtil.parse(file.getName().replace("access.log", ""), "yyyy-MM-dd_HH-mm-ss");
@@ -74,14 +74,5 @@ public class LogController extends BaseController {
 		return renderSuccess();
 	}
 	
-	@RequestMapping("setLog")
-	@ResponseBody
-	public JsonResult setLog(Boolean logStatus) {
-
-		settingService.set("logStatus", logStatus.toString());
-		
-		
-		return renderSuccess();
-	}
 
 }
