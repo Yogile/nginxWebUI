@@ -56,11 +56,11 @@ public class ScheduleTask {
 	// 分隔日志,每天
 	@Scheduled(cron = "0 0 0 * * ?")
 	public void diviLog() {
-		if (FileUtil.exist("/home/nginxWebUI/log/access.log")) {
+		if (FileUtil.exist(InitConfig.home + "log/access.log")) {
 			String date = DateUtil.format(new Date(), "yyyy-MM-dd_HH-mm-ss");
 
-			File dist = new File("/home/nginxWebUI/log/access." + date + ".log");
-			FileUtil.move(new File("/home/nginxWebUI/log/access.log"), dist, true);
+			File dist = new File(InitConfig.home + "log/access." + date + ".log");
+			FileUtil.move(new File(InitConfig.home + "log/access.log"), dist, true);
 			ZipUtil.zip(dist);
 			FileUtil.del(dist);
 			confController.reload(null, null, null);
@@ -68,7 +68,7 @@ public class ScheduleTask {
 		
 		// 删掉10天前日志
 		Long time = System.currentTimeMillis();
-		File dir = new File("/home/nginxWebUI/log/");
+		File dir = new File(InitConfig.home + "log/");
 		File[] fileList = dir.listFiles();
 		for (File file : fileList) {
 			if (file.getName().contains("access") && file.getName().contains(".zip")) {

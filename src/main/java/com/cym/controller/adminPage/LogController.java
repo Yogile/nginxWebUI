@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cym.config.InitConfig;
 import com.cym.ext.DataGroup;
 import com.cym.model.Log;
 import com.cym.model.LogInfo;
@@ -54,7 +55,7 @@ public class LogController extends BaseController {
 	private List<Log> getLogList() {
 		List<Log> list = new ArrayList<Log>();
 
-		File dir = new File("/home/nginxWebUI/log/");
+		File dir = new File(InitConfig.home + "log/");
 
 		File[] fileList = dir.listFiles();
 		for (File file : fileList) {

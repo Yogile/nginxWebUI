@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.cym.config.CertConfig;
+import com.cym.config.InitConfig;
 import com.cym.model.Cert;
 import com.cym.service.SettingService;
 import com.cym.utils.BaseController;
@@ -27,8 +27,6 @@ import cn.hutool.core.util.RuntimeUtil;
 @Controller
 @RequestMapping("/adminPage/cert")
 public class CertController extends BaseController {
-	@Autowired
-	CertConfig certConfig;
 	@Autowired
 	SettingService settingService;
 	
@@ -109,7 +107,7 @@ public class CertController extends BaseController {
 		String rs = "";
 		try {
 			// 申请
-			String cmd = certConfig.acmeSh + " --issue --nginx -d " + cert.getDomain();
+			String cmd = InitConfig.acmeSh + " --issue --nginx -d " + cert.getDomain();
 			logger.info(cmd);
 			rs = RuntimeUtil.execForStr(cmd);
 			logger.info(rs);
@@ -123,11 +121,11 @@ public class CertController extends BaseController {
 		if (rs.contains("Cert success")) {
 			String certDir = "/root/.acme.sh/" + cert.getDomain() + "/";
 
-			String dest = "/home/nginxWebUI/cert/" + cert.getDomain() + ".cer";
+			String dest = InitConfig.home + "cert/" + cert.getDomain() + ".cer";
 			FileUtil.copy(new File(certDir + cert.getDomain() + ".cer"), new File(dest), true);
 			cert.setPem(dest);
 
-			dest = "/home/nginxWebUI/cert/" + cert.getDomain() + ".key";
+			dest = InitConfig.home + "cert/" + cert.getDomain() + ".key";
 			FileUtil.copy(new File(certDir + cert.getDomain() + ".key"), new File(dest), true);
 			cert.setKey(dest);
 
@@ -174,7 +172,7 @@ public class CertController extends BaseController {
 		String rs = "";
 		try {
 			// 续签
-			String cmd = certConfig.acmeSh + " --renew --force -d " + cert.getDomain();
+			String cmd = InitConfig.acmeSh + " --renew --force -d " + cert.getDomain();
 			logger.info(cmd);
 			rs = RuntimeUtil.execForStr(cmd);
 			logger.info(rs);
@@ -187,11 +185,11 @@ public class CertController extends BaseController {
 		if (rs.contains("Cert success")) {
 			String certDir = "/root/.acme.sh/" + cert.getDomain() + "/";
 
-			String dest = "/home/nginxWebUI/cert/" + cert.getDomain() + ".cer";
+			String dest = InitConfig.home + "cert/" + cert.getDomain() + ".cer";
 			FileUtil.copy(new File(certDir + cert.getDomain() + ".cer"), new File(dest), true);
 			cert.setPem(dest);
 
-			dest = "/home/nginxWebUI/cert/" + cert.getDomain() + ".key";
+			dest = InitConfig.home + "cert/" + cert.getDomain() + ".key";
 			FileUtil.copy(new File(certDir + cert.getDomain() + ".key"), new File(dest), true);
 			cert.setKey(dest);
 
