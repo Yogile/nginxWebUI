@@ -10,9 +10,7 @@ public class DataGroup {
 	List<KeyValue> browser;
 
 	List<KeyValue> httpReferer;
-	
-	
-	
+
 	public List<KeyValue> getHttpReferer() {
 		return httpReferer;
 	}
@@ -52,5 +50,6 @@ public class DataGroup {
 	public void setUv(Integer uv) {
 		this.uv = uv;
 	}
+
 
 }

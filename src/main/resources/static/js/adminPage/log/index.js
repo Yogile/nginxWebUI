@@ -9,6 +9,7 @@ $(function() {
 })
 
 function content(path) {
+	layer.load();
 	$.ajax({
 		type : 'GET',
 		url : ctx + '/adminPage/log/content',
@@ -17,6 +18,7 @@ function content(path) {
 			path : path
 		},
 		success : function(data) {
+			layer.closeAll();
 			if (data.success) {
 				showContent(data.obj)
 			} else {
@@ -24,6 +26,7 @@ function content(path) {
 			}
 		},
 		error : function() {
+			layer.closeAll();
 			alert("出错了,请联系技术人员!");
 		}
 	});
@@ -37,7 +40,6 @@ function showContent(dataGroup) {
 			left : 'center'
 		},
 		series : [ {
-			name : '请求状态占比',
 			type : 'pie',
 			radius : '55%',
 			data : dataGroup.status,
@@ -48,15 +50,13 @@ function showContent(dataGroup) {
 	};
 
 	statusDiv.setOption(option);
-	
-	// 浏览器占比
+	// 系统占比
 	option = {
 		title : {
-			text : '浏览器占比',
+			text : '系统占比',
 			left : 'center'
 		},
 		series : [ {
-			name : '浏览器占比',
 			type : 'pie',
 			radius : '55%',
 			data : dataGroup.browser,
@@ -73,7 +73,9 @@ function showContent(dataGroup) {
 		title : {
 			text : '访问统计',
 			left : 'center'
-		},	
+		},tooltip: {
+	        trigger: 'item'
+	    },
 		xAxis : {
 			type : 'value'
 		},
@@ -94,7 +96,7 @@ function showContent(dataGroup) {
 	pvuv.setOption(option);
 	
 
-	// 请求统计
+	// 域名统计
 	var names = [];
 	var values = [];
 	for (var i = 0; i < dataGroup.httpReferer.length; i++) {
@@ -104,9 +106,12 @@ function showContent(dataGroup) {
 
 	option = {
 		title : {
-			text : '请求统计',
+			text : '域名统计',
 			left : 'center'
 		},
+		tooltip: {
+	        trigger: 'item'
+	    },
 		xAxis : {
 			type : 'value'
 		},
@@ -115,7 +120,7 @@ function showContent(dataGroup) {
 			data : names
 		},
 		grid: { // 控制图的大小，调整下面这些值就可以，
-			x: 300// x的值可以空值y轴与label标签的距离，效果如下图：
+			x: 100// x的值可以空值y轴与label标签的距离，效果如下图：
 		},
 		series : [ {
 			data : values,

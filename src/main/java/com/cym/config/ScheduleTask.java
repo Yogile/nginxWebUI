@@ -23,6 +23,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.ZipUtil;
 
 @Configuration // 1.主要用于标记配置类，兼备Component的效果。
 @EnableScheduling // 2.开启定时任务
@@ -58,7 +59,10 @@ public class ScheduleTask {
 		if (FileUtil.exist("/home/nginxWebUI/log/access.log")) {
 			String date = DateUtil.format(new Date(), "yyyy-MM-dd_HH-mm-ss");
 
-			FileUtil.move(new File("/home/nginxWebUI/log/access.log"), new File("/home/nginxWebUI/log/access." + date + ".log"), true);
+			File dist = new File("/home/nginxWebUI/log/access." + date + ".log");
+			FileUtil.move(new File("/home/nginxWebUI/log/access.log"), dist, true);
+			ZipUtil.zip(dist);
+			FileUtil.del(dist);
 			confController.reload(null, null, null);
 		}
 		
@@ -67,8 +71,15 @@ public class ScheduleTask {
 		File dir = new File("/home/nginxWebUI/log/");
 		File[] fileList = dir.listFiles();
 		for (File file : fileList) {
-			if (file.getName().contains("access") && !file.getName().equals("access.log")) {
-				DateTime date = DateUtil.parse(file.getName().replace("access.", "").replace(".log", ""), "yyyy-MM-dd_HH-mm-ss");
+			if (file.getName().contains("access") && file.getName().contains(".zip")) {
+				DateTime date = DateUtil.parse(file.getName().replace("access.", "").replace(".zip", ""), "yyyy-MM-dd_HH-mm-ss");
+				if(time - date.getTime() > 10 * 24 * 60 * 60 * 1000) {
+					FileUtil.del(file);
+				}
+			}
+			
+			if (file.getName().contains("nginxWebUI.log") && file.getName().contains(".gz")) {
+				DateTime date = DateUtil.parse(file.getName().replace("nginxWebUI.log.", "").split(".")[0], "yyyy-MM-dd");
 				if(time - date.getTime() > 10 * 24 * 60 * 60 * 1000) {
 					FileUtil.del(file);
 				}
