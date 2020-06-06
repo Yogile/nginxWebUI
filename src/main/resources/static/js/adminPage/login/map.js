@@ -19,13 +19,33 @@ $(function() {
 	// wms.setMap(map)
 
 	var map = new AMap.Map('container', {
-		zoom : 40,
+		zoom : 20,
+		zooms:[3,20],
 		center : [ 120.148697,35.943452 ],
 		viewMode : '3D',
 		pitch : 40,
 		expandZoomRange :true
 	});
+	
+	// 同时引入工具条插件，比例尺插件和鹰眼插件
+	AMap.plugin([
+	    'AMap.ToolBar',
+	    'AMap.Scale',
+	    'AMap.MapType',
+	], function(){
+	    // 在图面添加工具条控件，工具条控件集成了缩放、平移、定位等功能按钮在内的组合控件
+	    map.addControl(new AMap.ToolBar());
 
+	    // 在图面添加比例尺控件，展示地图在当前层级和纬度下的比例尺
+	    map.addControl(new AMap.Scale());
+
+	    // 在图面添加类别切换控件，实现默认图层与卫星图、实施交通图层之间切换的控制
+	    map.addControl(new AMap.MapType());
+	   
+	});
+
+	return;
+	
 	var googleLayer = new AMap.TileLayer({
 		zIndex : 2,
 		getTileUrl : function(x, y, z) {
