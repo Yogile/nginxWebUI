@@ -19,10 +19,11 @@ $(function() {
 	// wms.setMap(map)
 
 	var map = new AMap.Map('container', {
-		zoom : 16,
+		zoom : 40,
 		center : [ 120.148697,35.943452 ],
 		viewMode : '3D',
-		pitch : 40
+		pitch : 40,
+		expandZoomRange :true
 	});
 
 	var googleLayer = new AMap.TileLayer({

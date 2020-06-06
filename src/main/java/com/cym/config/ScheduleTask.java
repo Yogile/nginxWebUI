@@ -14,6 +14,7 @@ import com.cym.controller.adminPage.CertController;
 import com.cym.controller.adminPage.ConfController;
 import com.cym.model.Cert;
 import com.cym.model.Log;
+import com.cym.service.LogInfoService;
 import com.cym.service.SettingService;
 import com.cym.utils.SystemTool;
 
@@ -37,7 +38,9 @@ public class ScheduleTask {
 	SettingService settingService;
 	@Autowired
 	ConfController confController;
-
+	@Autowired
+	LogInfoService logInfoService;
+	
 	@Scheduled(cron = "0 0 2 * * ?")
 	public void mongodbTasks() {
 		List<Cert> certList = sqlHelper.findAll(Cert.class);
@@ -58,12 +61,16 @@ public class ScheduleTask {
 	public void diviLog() {
 		if (FileUtil.exist(InitConfig.home + "log/access.log")) {
 			String date = DateUtil.format(new Date(), "yyyy-MM-dd_HH-mm-ss");
-
+			// 分隔日志
 			File dist = new File(InitConfig.home + "log/access." + date + ".log");
 			FileUtil.move(new File(InitConfig.home + "log/access.log"), dist, true);
 			ZipUtil.zip(dist);
 			FileUtil.del(dist);
 			confController.reload(null, null, null);
+			
+			// 马上解析分隔出来的日志
+			logInfoService.getDataGroup(InitConfig.home + "log/access." + date + ".zip");
+			
 		}
 		
 		// 删掉10天前日志
