@@ -39,6 +39,9 @@ function showContent(dataGroup) {
 			text : '请求状态占比',
 			left : 'center'
 		},
+		tooltip: {
+	        trigger: 'item'
+	    },
 		series : [ {
 			type : 'pie',
 			radius : '55%',
@@ -56,6 +59,9 @@ function showContent(dataGroup) {
 			text : '系统占比',
 			left : 'center'
 		},
+		tooltip: {
+	        trigger: 'item'
+	    },
 		series : [ {
 			type : 'pie',
 			radius : '55%',
@@ -74,7 +80,10 @@ function showContent(dataGroup) {
 			text : '访问统计',
 			left : 'center'
 		},tooltip: {
-	        trigger: 'item'
+	        trigger: 'axis',
+	        axisPointer: {
+	            type: 'shadow'
+	        }
 	    },
 		xAxis : {
 			type : 'value'
@@ -110,7 +119,10 @@ function showContent(dataGroup) {
 			left : 'center'
 		},
 		tooltip: {
-	        trigger: 'item'
+	        trigger: 'axis',
+	        axisPointer: {
+	            type: 'shadow'
+	        }
 	    },
 		xAxis : {
 			type : 'value'
