@@ -20,7 +20,7 @@ $(function() {
 
 	var map = new AMap.Map('container', {
 		zoom : 16,
-		center : [ 104.066422, 30.65577 ],
+		center : [ 120.148697,35.943452 ],
 		viewMode : '3D',
 		pitch : 40
 	});
@@ -41,7 +41,7 @@ $(function() {
 	map.plugin([ "AMap.GltfLoader" ], function() {
 		var urlCity = 'https://a.amap.com/jsapi_demos/static/gltf-online/shanghai/scene.gltf';
 		var paramCity = {
-			position : new AMap.LngLat(104.066422, 30.65577 ), // 必须
+			position : new AMap.LngLat(120.148697,35.943452), // 必须
 			scale : 3580, // 非必须，默认1
 			height : 1800, // 非必须，默认0
 			scene : 0, // 非必须，默认0
