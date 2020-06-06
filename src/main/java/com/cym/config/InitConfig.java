@@ -2,36 +2,58 @@ package com.cym.config;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
+import com.cym.model.Http;
 import com.cym.service.SettingService;
 import com.cym.utils.RuntimeTool;
 import com.cym.utils.SystemTool;
 
+import cn.craccd.sqlHelper.utils.SqlHelper;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.ZipUtil;
 
 @Component
-public class CertConfig {
+public class InitConfig {
 
-	public String acmeSh = "/root/.acme.sh/acme.sh";
+	public static String acmeSh = "/root/.acme.sh/acme.sh";
+	public static String home;
 
 	@Autowired
 	SettingService settingService;
 
+	@Autowired
+	SqlHelper sqlHelper;
+
+	@Value("${project.home}")
+	public void setHome(String home) {
+		InitConfig.home = home;
+	}
+
 	@PostConstruct
 	public void init() throws IOException {
 
+		Long count = sqlHelper.findAllCount(Http.class);
+		if (count == 0) {
+			List<Http> https = new ArrayList<Http>();
+			https.add(new Http("include", "mime.types"));
+			https.add(new Http("default_type", "application/octet-stream"));
+
+			sqlHelper.insertAll(https);
+		}
+
 		if (SystemTool.isLinux()) {
 			// 初始化acme.sh
-			String userDir = "/home/nginxWebUI/";
 
 			if (!FileUtil.exist("/root/.acme.sh")) {
 				ClassPathResource resource = new ClassPathResource("acme.zip");
@@ -53,8 +75,8 @@ public class CertConfig {
 				if (StrUtil.isNotEmpty(nginxPath) && FileUtil.exist(nginxPath)) {
 					// 判断是否是容器中
 					String lines = FileUtil.readUtf8String(nginxPath);
-					if (StrUtil.isNotEmpty(lines) && lines.contains("include /home/nginxWebUI/nginx.conf;")) {
-						nginxPath = userDir + "nginx.conf";
+					if (StrUtil.isNotEmpty(lines) && lines.contains("include " + home + "nginx.conf;")) {
+						nginxPath = home + "nginx.conf";
 
 						// 释放nginxOrg.conf
 						ClassPathResource resource = new ClassPathResource("nginxOrg.conf");
@@ -89,9 +111,8 @@ public class CertConfig {
 					}
 				}
 			}
-			
-			
-			//查找nginx.pid文件
+
+			// 查找nginx.pid文件
 			String nginxPid = settingService.get("nginxPid");
 			if (StrUtil.isEmpty(nginxPid)) {
 				nginxPid = RuntimeTool.execForOne("find / -name nginx.pid");

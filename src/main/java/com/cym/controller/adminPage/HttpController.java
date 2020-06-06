@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cym.config.InitConfig;
 import com.cym.model.Http;
 import com.cym.model.LogInfo;
 import com.cym.service.HttpService;
@@ -81,7 +82,7 @@ public class HttpController extends BaseController {
 			
 			http = new Http();
 			http.setName("access_log");
-			http.setValue("/home/nginxWebUI/log/access.log main");
+			http.setValue(InitConfig.home + "log/access.log main");
 			http.setUnit("");
 			https.add(http);
 			
