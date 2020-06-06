@@ -1,37 +1,63 @@
 $(function() {
+	// var map = new AMap.Map('container', {
+	// zoom : 10,
+	// center : [ 104.066422, 30.65577 ],
+	// });
+	// var wms = new AMap.TileLayer.WMTS({
+	// url : 'http://t0.tianditu.gov.cn/img_w/wmts',
+	// blend : false,
+	// tileSize : 256,
+	// params : {
+	// LAYER : 'img',
+	// VERSION : '1.0.0',
+	// Format : 'tiles',
+	// TileMatrixSet : 'w',
+	// STYLE : 'default',
+	// tk : '26837ca6679a927b7877c0f0aa01407c'
+	// }
+	// })
+	// wms.setMap(map)
+
 	var map = new AMap.Map('container', {
-		zoom : 10,
+		zoom : 16,
 		center : [ 104.066422, 30.65577 ],
+		viewMode : '3D',
+		pitch : 40
 	});
-	var wms = new AMap.TileLayer.WMTS({
-		url : 'http://t0.tianditu.gov.cn/img_w/wmts',
-		blend : false,
-		tileSize : 256,
-		params : {
-			LAYER : 'img',
-			VERSION : '1.0.0',
-			Format : 'tiles',
-			TileMatrixSet : 'w',
-			STYLE : 'default',
-			tk : '26837ca6679a927b7877c0f0aa01407c'
+
+	var googleLayer = new AMap.TileLayer({
+		zIndex : 2,
+		getTileUrl : function(x, y, z) {
+			return 'http://mt1.google.cn/vt/lyrs=s@142&hl=zh-CN&gl=cn&x=' + x + '&y=' + y + '&z=' + z + '&s=Galil';
 		}
-	})
-	wms.setMap(map)
+	});
 
-	
-//	var wms = new AMap.TileLayer.WMTS({
-//		url : 'https://www.google.cn/maps/vt',
-//		blend : false,
-//		tileSize : 256,
-//		params : {
-//			lyrs : 's',
-//			gl : 'cn',
-//			Layer : 'img',
-//			Version : '1.0.0',
-//			Format : 'tiles'
-//		}
-//	})
-//	wms.setMap(map)
+	googleLayer.setMap(map);
 
-	
+	// 创建Object3DLayer图层
+	var object3Dlayer = new AMap.Object3DLayer();
+	map.add(object3Dlayer);
+
+	map.plugin([ "AMap.GltfLoader" ], function() {
+		var urlCity = 'https://a.amap.com/jsapi_demos/static/gltf-online/shanghai/scene.gltf';
+		var paramCity = {
+			position : new AMap.LngLat(104.066422, 30.65577 ), // 必须
+			scale : 3580, // 非必须，默认1
+			height : 1800, // 非必须，默认0
+			scene : 0, // 非必须，默认0
+		};
+
+
+		var gltfObj = new AMap.GltfLoader();
+
+		gltfObj.load(urlCity, function(gltfCity) {
+			gltfCity.setOption(paramCity);
+			gltfCity.rotateX(90);
+			gltfCity.rotateZ(120);
+			object3Dlayer.add(gltfCity);
+		});
+
+
+	});
+
 })
