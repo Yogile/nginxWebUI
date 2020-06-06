@@ -2,7 +2,7 @@ package com.cym.ext;
 
 import java.util.List;
 
-public class DataGroup {
+public class DataGroup{
 	Integer pv;
 	Integer uv;
 
