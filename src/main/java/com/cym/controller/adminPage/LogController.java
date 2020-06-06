@@ -58,10 +58,10 @@ public class LogController extends BaseController {
 
 		File[] fileList = dir.listFiles();
 		for (File file : fileList) {
-			if (file.getName().contains("access") && !file.getName().equals("access.log")) {
+			if (file.getName().contains("access") && file.getName().contains(".zip")) {
 				Log log = new Log();
 				log.setPath(file.getPath().replace("\\", "/"));
-				DateTime date = DateUtil.parse(file.getName().replace("access.", "").replace(".log", ""), "yyyy-MM-dd_HH-mm-ss");
+				DateTime date = DateUtil.parse(file.getName().replace("access.", "").replace(".zip", ""), "yyyy-MM-dd_HH-mm-ss");
 				log.setTime(DateUtil.format(date, "yyyy-MM-dd HH:mm:ss"));
 
 				list.add(log);
