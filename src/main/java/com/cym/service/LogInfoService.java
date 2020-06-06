@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.cym.ext.DataGroup;
 import com.cym.ext.KeyValue;
+import com.cym.model.DateResult;
 import com.cym.model.LogInfo;
 
 import cn.craccd.sqlHelper.utils.ConditionAndWrapper;
@@ -54,20 +55,19 @@ public class LogInfoService {
 					list.clear();
 					break;
 				}
-				
+
 				try {
 					list.add(JSONUtil.toBean(json, LogInfo.class));
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
-				
+
 				if (list.size() == 1000) {
 					sqlHelper.insertAll(list);
 					list.clear();
 				}
 			}
 
-			
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -76,8 +76,13 @@ public class LogInfoService {
 		}
 	}
 
-	public DataGroup getDataGroup() {
-		DataGroup dataGroup = new DataGroup();
+	public DataGroup getDataGroup(String path) {
+		DataGroup dataGroup = findByPath(path);
+		if (dataGroup != null) {
+			return dataGroup;
+		} else {
+			dataGroup = new DataGroup();
+		}
 
 		// pvuv
 		dataGroup.setUv(jdbcTemplate.queryForObject("select count(1) from (select count(1) from log_info group by remote_addr) as temp", Integer.class));
@@ -88,7 +93,7 @@ public class LogInfoService {
 
 		// 系统
 		dataGroup.setBrowser(new ArrayList<KeyValue>());
-		String[] browsers = new String[] { "Android", "iPhone", "Windows"};
+		String[] browsers = new String[] { "Android", "iPhone", "Windows" };
 		Integer allCount = 0;
 		for (String browser : browsers) {
 			KeyValue keyValue = new KeyValue();
@@ -97,19 +102,36 @@ public class LogInfoService {
 			dataGroup.getBrowser().add(keyValue);
 			allCount += keyValue.getValue();
 		}
-		
+
 		KeyValue keyValue = new KeyValue();
 		keyValue.setName("Other");
 		keyValue.setValue(sqlHelper.findCountByQuery(null, LogInfo.class).intValue() - allCount);
 		dataGroup.getBrowser().add(keyValue);
-		
+
 		// 域名
-		dataGroup.setHttpReferer(jdbcTemplate.query("select http_host as name,count(1) as value FROM log_info group by http_host order by value asc", new BeanPropertyRowMapper<KeyValue>(KeyValue.class)));
+		dataGroup.setHttpReferer(
+				jdbcTemplate.query("select http_host as name,count(1) as value FROM log_info group by http_host order by value asc", new BeanPropertyRowMapper<KeyValue>(KeyValue.class)));
 
-		
-
+		saveDataGroup(dataGroup, path);
 		return dataGroup;
 	}
 
+	public void saveDataGroup(DataGroup dataGroup, String path) {
+		sqlHelper.deleteByQuery(new ConditionAndWrapper().eq("name", path), DateResult.class);
+
+		DateResult dateResult = new DateResult();
+		dateResult.setName(path);
+		dateResult.setJson(JSONUtil.toJsonStr(dataGroup));
+
+		sqlHelper.insert(dateResult);
+	}
+
+	public DataGroup findByPath(String path) {
+		DateResult dateResult = sqlHelper.findOneByQuery(new ConditionAndWrapper().eq("name", path), DateResult.class);
+		if (dateResult != null) {
+			return JSONUtil.toBean(dateResult.getJson(), DataGroup.class);
+		}
+		return null;
+	}
 
 }
