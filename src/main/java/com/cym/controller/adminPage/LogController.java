@@ -84,17 +84,8 @@ public class LogController extends BaseController {
 	@ResponseBody
 	public JsonResult content(String path) {
 		DataGroup dataGroup = logInfoService.findByPath(path);
-		if(dataGroup!=null) {
-			return renderSuccess(dataGroup);
-		}
-		
-		if(FileUtil.exist(path)) {
-			logInfoService.addOver(path);
-		}
-		
-		dataGroup = logInfoService.getDataGroup(path);
-		
 		return renderSuccess(dataGroup);
+		
 	}
 	
 	

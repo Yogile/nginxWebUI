@@ -4,9 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -21,7 +19,6 @@ import com.cym.model.LogInfo;
 
 import cn.craccd.sqlHelper.utils.ConditionAndWrapper;
 import cn.craccd.sqlHelper.utils.SqlHelper;
-import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
@@ -37,53 +34,10 @@ public class LogInfoService {
 	JdbcTemplate jdbcTemplate;
 
 	@Transactional
-	public void addOver(String path) {
-		BufferedReader reader = null;
-		try {
-			File zipFile = new File(path);
-			File outFile = new File(path.replace(".zip", "") + File.separator + zipFile.getName().replace(".zip", ".log"));
-			ZipUtil.unzip(zipFile);
+	public DataGroup buildDataGroup(String path) {
+		insertIntoDb(path);
 
-			sqlHelper.deleteByQuery(new ConditionAndWrapper(), LogInfo.class);
-
-			reader = FileUtil.getReader(outFile, "UTF-8");
-			List<Object> list = new ArrayList<Object>();
-			while (true) {
-				String json = reader.readLine();
-				if (StrUtil.isEmpty(json)) {
-					sqlHelper.insertAll(list);
-					list.clear();
-					break;
-				}
-
-				try {
-					list.add(JSONUtil.toBean(json, LogInfo.class));
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-
-				if (list.size() == 1000) {
-					sqlHelper.insertAll(list);
-					list.clear();
-				}
-			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			IoUtil.close(reader);
-			FileUtil.del(path.replace(".zip", "") + File.separator);
-		}
-	}
-
-	public DataGroup getDataGroup(String path) {
-		DataGroup dataGroup = findByPath(path);
-		if (dataGroup != null) {
-			return dataGroup;
-		} else {
-			dataGroup = new DataGroup();
-		}
-
+		DataGroup dataGroup = new DataGroup();
 		// pvuv
 		dataGroup.setUv(jdbcTemplate.queryForObject("select count(1) from (select count(1) from log_info group by remote_addr) as temp", Integer.class));
 		dataGroup.setPv(jdbcTemplate.queryForObject("select count(1) from log_info", Integer.class));
@@ -116,7 +70,47 @@ public class LogInfoService {
 		return dataGroup;
 	}
 
-	public void saveDataGroup(DataGroup dataGroup, String path) {
+	private void insertIntoDb(String path) {
+		BufferedReader reader = null;
+		try {
+			File zipFile = new File(path);
+			File outFile = new File(path.replace(".zip", "") + File.separator + zipFile.getName().replace(".zip", ".log"));
+			ZipUtil.unzip(zipFile);
+
+			sqlHelper.deleteByQuery(new ConditionAndWrapper(), LogInfo.class);
+
+			reader = FileUtil.getReader(outFile, "UTF-8");
+			List<Object> list = new ArrayList<Object>();
+			while (true) {
+				String json = reader.readLine();
+				if (StrUtil.isEmpty(json)) {
+					sqlHelper.insertAll(list);
+					list.clear();
+					break;
+				}
+
+				json = json.replace("\\x", "");
+				if (JSONUtil.isJson(json)) {
+					list.add(JSONUtil.toBean(json, LogInfo.class));
+				} else {
+					System.err.println(json);
+				}
+
+				if (list.size() == 1000) {
+					sqlHelper.insertAll(list);
+					list.clear();
+				}
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			IoUtil.close(reader);
+			FileUtil.del(path.replace(".zip", "") + File.separator);
+		}
+	}
+
+	private void saveDataGroup(DataGroup dataGroup, String path) {
 		sqlHelper.deleteByQuery(new ConditionAndWrapper().eq("name", path), DateResult.class);
 
 		DateResult dateResult = new DateResult();
