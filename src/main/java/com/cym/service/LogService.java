@@ -27,7 +27,7 @@ import cn.hutool.json.JSONException;
 import cn.hutool.json.JSONUtil;
 
 @Service
-public class LogInfoService {
+public class LogService {
 	@Autowired
 	SqlHelper sqlHelper;
 	@Autowired
@@ -126,6 +126,12 @@ public class LogInfoService {
 			return JSONUtil.toBean(dateResult.getJson(), DataGroup.class);
 		}
 		return null;
+	}
+
+	@Transactional
+	public void delLog(String path) {
+		FileUtil.del(path);
+		sqlHelper.deleteByQuery(new ConditionAndWrapper().eq("name", path), DateResult.class);
 	}
 
 }
