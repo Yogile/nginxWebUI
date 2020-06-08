@@ -6,6 +6,29 @@ $(function() {
 
 })
 
+function delAll() {
+	if(confirm("是否清空日志?")){
+		$.ajax({
+			type : 'GET',
+			url : ctx + '/adminPage/log/delAll',
+			dataType : 'json',
+		
+			success : function(data) {
+				if (data.success) {
+					location.reload();
+				} else {
+					layer.msg(data.msg);
+				}
+			},
+			error : function() {
+				layer.closeAll();
+				alert("出错了,请联系技术人员!");
+			}
+		});
+	}
+	
+}
+
 function detail(id) {
 	$.ajax({
 		type : 'GET',
