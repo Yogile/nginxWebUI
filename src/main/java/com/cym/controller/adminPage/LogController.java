@@ -52,14 +52,14 @@ public class LogController extends BaseController {
 //		return list;
 //	}
 
-//	@RequestMapping("del")
-//	@ResponseBody
-//	public JsonResult del(String path) {
-//		
-//		logService.delLog(path);
-//		return renderSuccess();
-//	}
 	
+	
+	@RequestMapping("delAll")
+	@ResponseBody
+	public JsonResult delAll(String id) {
+		sqlHelper.deleteByQuery(null, Log.class); 
+		return renderSuccess();
+	}
 	
 	@RequestMapping("detail")
 	@ResponseBody

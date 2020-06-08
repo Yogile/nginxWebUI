@@ -24,7 +24,9 @@
 				</fieldset>
 
 				<form action="${ctx}/adminPage/log" id="searchForm" method="post">
-
+					<div class="layui-inline">
+						<button type="button" class="layui-btn layui-btn-normal" onclick="delAll()">清空日志</button>
+					</div>
 					<input type="hidden" name="curr" value="${page.curr}">
 				</form>
 
