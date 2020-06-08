@@ -1,9 +1,17 @@
 package com.cym.model;
 
-public class Log {
-	String path;
-	String time;
+import cn.craccd.sqlHelper.bean.BaseModel;
+import cn.craccd.sqlHelper.config.SingleIndex;
+import cn.craccd.sqlHelper.config.Table;
 
+@Table
+public class Log extends BaseModel {
+	
+	@SingleIndex
+	String date;
+	String json;
+	String path;
+	
 	public String getPath() {
 		return path;
 	}
@@ -12,12 +20,20 @@ public class Log {
 		this.path = path;
 	}
 
-	public String getTime() {
-		return time;
+	public String getDate() {
+		return date;
 	}
 
-	public void setTime(String time) {
-		this.time = time;
+	public void setDate(String date) {
+		this.date = date;
+	}
+
+	public String getJson() {
+		return json;
+	}
+
+	public void setJson(String json) {
+		this.json = json;
 	}
 
 }

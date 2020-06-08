@@ -43,10 +43,10 @@ public class ScheduleTask {
 	@Autowired
 	LogService logInfoService;
 	
-//	@PostConstruct
-//	public void run() {
-//		logInfoService.buildDataGroup(InitConfig.home + "log/access.2020-06-08_00-00-00.zip");
-//	}
+	@PostConstruct
+	public void runTest() {
+		logInfoService.buildDataGroup(InitConfig.home + "log/access.2020-06-08_00-00-00.zip");
+	}
 	
 	
 	@Scheduled(cron = "0 0 2 * * ?")
@@ -81,21 +81,14 @@ public class ScheduleTask {
 			
 		}
 		
-		// 删掉10天前日志
+		// 删掉7天前日志
 		Long time = System.currentTimeMillis();
 		File dir = new File(InitConfig.home + "log/");
 		File[] fileList = dir.listFiles();
 		for (File file : fileList) {
 			if (file.getName().contains("access") && file.getName().contains(".zip")) {
 				DateTime date = DateUtil.parse(file.getName().replace("access.", "").replace(".zip", ""), "yyyy-MM-dd_HH-mm-ss");
-				if(time - date.getTime() > 10 * 24 * 60 * 60 * 1000) {
-					FileUtil.del(file);
-				}
-			}
-			
-			if (file.getName().contains("nginxWebUI.log") && file.getName().contains(".gz")) {
-				DateTime date = DateUtil.parse(file.getName().replace("nginxWebUI.log.", "").split(".")[0], "yyyy-MM-dd");
-				if(time - date.getTime() > 10 * 24 * 60 * 60 * 1000) {
+				if(time - date.getTime() > 7 * 24 * 60 * 60 * 1000) {
 					FileUtil.del(file);
 				}
 			}
