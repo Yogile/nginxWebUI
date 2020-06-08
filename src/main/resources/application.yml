@@ -34,5 +34,5 @@ project:
 logging: 
   file:    name: ${project.home}log/nginxWebUI.log
   level: 
-    root: debug
+    root: info
   
