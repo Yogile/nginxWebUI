@@ -16,7 +16,7 @@ import com.cym.controller.adminPage.CertController;
 import com.cym.controller.adminPage.ConfController;
 import com.cym.model.Cert;
 import com.cym.model.Log;
-import com.cym.service.LogInfoService;
+import com.cym.service.LogService;
 import com.cym.service.SettingService;
 import com.cym.utils.SystemTool;
 
@@ -41,7 +41,7 @@ public class ScheduleTask {
 	@Autowired
 	ConfController confController;
 	@Autowired
-	LogInfoService logInfoService;
+	LogService logInfoService;
 	
 //	@PostConstruct
 //	public void run() {

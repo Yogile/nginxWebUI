@@ -17,7 +17,7 @@ import com.cym.config.InitConfig;
 import com.cym.ext.DataGroup;
 import com.cym.model.Log;
 import com.cym.model.LogInfo;
-import com.cym.service.LogInfoService;
+import com.cym.service.LogService;
 import com.cym.service.SettingService;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
@@ -34,7 +34,7 @@ public class LogController extends BaseController {
 	@Autowired
 	SettingService settingService;
 	@Autowired
-	LogInfoService logInfoService;
+	LogService logService;
 	@RequestMapping("")
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView) {
 		List<Log> logList = getLogList();
@@ -75,7 +75,8 @@ public class LogController extends BaseController {
 	@RequestMapping("del")
 	@ResponseBody
 	public JsonResult del(String path) {
-		FileUtil.del(path);
+		
+		logService.delLog(path);
 		return renderSuccess();
 	}
 	
@@ -83,7 +84,7 @@ public class LogController extends BaseController {
 	@RequestMapping("content")
 	@ResponseBody
 	public JsonResult content(String path) {
-		DataGroup dataGroup = logInfoService.findByPath(path);
+		DataGroup dataGroup = logService.findByPath(path);
 		return renderSuccess(dataGroup);
 		
 	}
