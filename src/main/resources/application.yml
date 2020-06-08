@@ -24,7 +24,7 @@ spring:
   database: 
     type: sqlite
     package: com.cym.model
-    print: false
+    print: true
     sqlite-path: ${project.home}sqlite.db 
 
 project:
@@ -34,4 +34,5 @@ project:
 logging: 
   file:    name: ${project.home}log/nginxWebUI.log
   level: 
-    root: info
+    root: debug
+  

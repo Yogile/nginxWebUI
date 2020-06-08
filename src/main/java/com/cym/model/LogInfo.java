@@ -4,7 +4,7 @@ import cn.craccd.sqlHelper.bean.BaseModel;
 import cn.craccd.sqlHelper.config.Table;
 
 @Table
-public class LogInfo extends BaseModel{
+public class LogInfo extends BaseModel {
 	String remoteAddr;
 	String remoteUser;
 	String timeLocal;
@@ -17,6 +17,35 @@ public class LogInfo extends BaseModel{
 	String httpUserAgent;
 	String requestTime;
 	String upstreamResponseTime;
+
+	String hour;
+	String minute;
+	String second;
+
+
+	public String getHour() {
+		return hour;
+	}
+
+	public void setHour(String hour) {
+		this.hour = hour;
+	}
+
+	public String getMinute() {
+		return minute;
+	}
+
+	public void setMinute(String minute) {
+		this.minute = minute;
+	}
+
+	public String getSecond() {
+		return second;
+	}
+
+	public void setSecond(String second) {
+		this.second = second;
+	}
 
 	public String getRemoteAddr() {
 		return remoteAddr;

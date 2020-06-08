@@ -1,5 +1,3 @@
-var pvuv, statusDiv, browser, httpReferer;
-
 $(function() {
 	pvuv = echarts.init(document.getElementById('pvuv'));
 	statusDiv = echarts.init(document.getElementById('statusDiv'));
@@ -8,19 +6,17 @@ $(function() {
 
 })
 
-function content(path) {
-	layer.load();
+function detail(id) {
 	$.ajax({
 		type : 'GET',
-		url : ctx + '/adminPage/log/content',
+		url : ctx + '/adminPage/log/detail',
 		dataType : 'json',
 		data : {
-			path : path
+			id : id
 		},
 		success : function(data) {
-			layer.closeAll();
 			if (data.success) {
-				showContent(data.obj)
+				showContent(JSON.parse(data.obj.json))
 			} else {
 				layer.msg(data.msg);
 			}
@@ -32,6 +28,7 @@ function content(path) {
 	});
 }
 
+var pvuv, statusDiv, browser, httpReferer;
 function showContent(dataGroup) {
 	// 请求状态占比
 	var option = {
@@ -40,7 +37,11 @@ function showContent(dataGroup) {
 			left : 'center'
 		},
 		tooltip: {
-	        trigger: 'item'
+	        trigger: 'item',
+	        formatter(params) {
+	            const item = params.data;
+	            return item.name + "状态: " + item.value;
+		    },
 	    },
 		series : [ {
 			type : 'pie',
@@ -75,31 +76,62 @@ function showContent(dataGroup) {
 	browser.setOption(option);
 	
 	// pv uv统计
+	var hour = [];
+	var pv = [];
+	var uv = [];
+	for(var i=0; i<24; i++){
+		hour.push(i);
+	}
+	
+	for (var i = 0; i < dataGroup.pv.length; i++) {
+		pv.push(dataGroup.pv[i].value);
+	}
+	for (var i = 0; i < dataGroup.uv.length; i++) {
+		uv.push(dataGroup.uv[i].value);
+	}
+	
 	option = {
 		title : {
 			text : '访问统计',
 			left : 'center'
-		},tooltip: {
+		},
+		tooltip: {
 	        trigger: 'axis',
-	        axisPointer: {
-	            type: 'shadow'
-	        }
+	        formatter(params) {
+	            return `
+	            	${params[0].name}时<br>
+	            	pv: ${params[0].data.value}<br>
+	            	uv: ${params[1].data.value}
+	            `;
+		    },
 	    },
 		xAxis : {
-			type : 'value'
+			name: '时',
+			type : 'category',
+			data : hour
 		},
 		yAxis : {
-			type : 'category',
-			data : ['uv','pv']
+			type : 'value'
 		},
 		series : [ {
-			data : [dataGroup.uv,dataGroup.pv],
-			type : 'bar',
+			name: 'pv',
+			data : dataGroup.pv,
+			type : 'line',
 			showBackground : true,
 			backgroundStyle : {
-				color : 'rgba(220, 220, 220, 0.8)'
+				color : 'rgba(108,80,243,0.3)'
 			}
-		} ]
+		},{
+			name: 'uv',
+			data : dataGroup.uv,
+			type : 'line',
+			showBackground : true,
+			backgroundStyle : {
+				color : 'rgba(0,202,149,0.3)'
+			}
+		}
+		
+		]
 	};
 
 	pvuv.setOption(option);
@@ -155,25 +187,3 @@ function showContent(dataGroup) {
 	});
 }
 
-function del(path) {
-	if (confirm("确认删除?")) {
-		$.ajax({
-			type : 'POST',
-			url : ctx + '/adminPage/log/del',
-			data : {
-				path : path
-			},
-			dataType : 'json',
-			success : function(data) {
-				if (data.success) {
-					location.reload();
-				} else {
-					layer.msg(data.msg)
-				}
-			},
-			error : function() {
-				alert("出错了,请联系技术人员!");
-			}
-		});
-	}
-}

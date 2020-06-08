@@ -3,9 +3,12 @@ package com.cym.ext;
 import java.util.List;
 
 public class DataGroup{
-	Integer pv;
-	Integer uv;
+//	Integer pv;
+//	Integer uv;
 
+	List<KeyValue> pv;
+	List<KeyValue> uv;
+	
 	List<KeyValue> status;
 	List<KeyValue> browser;
 
@@ -35,21 +38,22 @@ public class DataGroup{
 		this.status = status;
 	}
 
-	public Integer getPv() {
+	public List<KeyValue> getPv() {
 		return pv;
 	}
 
-	public void setPv(Integer pv) {
+	public void setPv(List<KeyValue> pv) {
 		this.pv = pv;
 	}
 
-	public Integer getUv() {
+	public List<KeyValue> getUv() {
 		return uv;
 	}
 
-	public void setUv(Integer uv) {
+	public void setUv(List<KeyValue> uv) {
 		this.uv = uv;
 	}
+
 
 
 }

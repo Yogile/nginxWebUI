@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -14,16 +16,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.cym.ext.DataGroup;
 import com.cym.ext.KeyValue;
-import com.cym.model.DateResult;
+import com.cym.model.Admin;
+import com.cym.model.Log;
 import com.cym.model.LogInfo;
 
+import cn.craccd.sqlHelper.bean.Page;
 import cn.craccd.sqlHelper.utils.ConditionAndWrapper;
 import cn.craccd.sqlHelper.utils.SqlHelper;
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.ZipUtil;
-import cn.hutool.json.JSONException;
 import cn.hutool.json.JSONUtil;
 
 @Service
@@ -33,15 +38,27 @@ public class LogService {
 	@Autowired
 	JdbcTemplate jdbcTemplate;
 
+	Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 	@Transactional
 	public DataGroup buildDataGroup(String path) {
 		insertIntoDb(path);
 
 		DataGroup dataGroup = new DataGroup();
 		// pvuv
-		dataGroup.setUv(jdbcTemplate.queryForObject("select count(1) from (select count(1) from log_info group by remote_addr) as temp", Integer.class));
-		dataGroup.setPv(jdbcTemplate.queryForObject("select count(1) from log_info", Integer.class));
+//		dataGroup.setUv(jdbcTemplate.queryForObject("select count(1) from (select count(1) from log_info group by remote_addr) as temp", Integer.class));
+//		dataGroup.setPv(jdbcTemplate.queryForObject("select count(1) from log_info", Integer.class));
 
+		dataGroup.setPv(jdbcTemplate.query("select hour as name,count(1) as value FROM log_info group by hour order by name", new BeanPropertyRowMapper<KeyValue>(KeyValue.class)));
+		dataGroup.setUv(jdbcTemplate.query("SELECT name, COUNT(VALUE) as value " + //
+				"FROM ( " + //
+				"	SELECT hour AS name, COUNT(remote_addr) AS value " + //
+				"	FROM log_info " + //
+				"	GROUP BY hour, remote_addr " + //
+				"	ORDER BY name " + //
+				") " + //
+				"GROUP BY name", new BeanPropertyRowMapper<KeyValue>(KeyValue.class)));
+		
 		// 状态
 		dataGroup.setStatus(jdbcTemplate.query("select status as name,count(1) as value FROM log_info group by status", new BeanPropertyRowMapper<KeyValue>(KeyValue.class)));
 
@@ -66,7 +83,7 @@ public class LogService {
 		dataGroup.setHttpReferer(
 				jdbcTemplate.query("select http_host as name,count(1) as value FROM log_info group by http_host order by value asc", new BeanPropertyRowMapper<KeyValue>(KeyValue.class)));
 
-		saveDataGroup(dataGroup, path);
+		saveLog(dataGroup, path);
 		return dataGroup;
 	}
 
@@ -79,29 +96,42 @@ public class LogService {
 
 			sqlHelper.deleteByQuery(new ConditionAndWrapper(), LogInfo.class);
 
+			Long count = 0l;
+			
 			reader = FileUtil.getReader(outFile, "UTF-8");
 			List<Object> list = new ArrayList<Object>();
 			while (true) {
 				String json = reader.readLine();
 				if (StrUtil.isEmpty(json)) {
 					sqlHelper.insertAll(list);
+					count += list.size();
 					list.clear();
+					
 					break;
 				}
 
 				json = json.replace("\\x", "");
 				if (JSONUtil.isJson(json)) {
-					list.add(JSONUtil.toBean(json, LogInfo.class));
+					LogInfo logInfo = JSONUtil.toBean(json, LogInfo.class);
+					String[] str = logInfo.getTimeLocal().split(":");
+					logInfo.setHour(str[1]);
+					logInfo.setMinute(str[2]);
+					logInfo.setSecond(str[3].split(" ")[0]);
+					
+					list.add(logInfo);
 				} else {
 					System.err.println(json);
 				}
 
 				if (list.size() == 1000) {
 					sqlHelper.insertAll(list);
+					count += list.size();
 					list.clear();
 				}
 			}
 
+			logger.info("插入LogInfo:" + count + "条"); 
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -110,28 +140,38 @@ public class LogService {
 		}
 	}
 
-	private void saveDataGroup(DataGroup dataGroup, String path) {
-		sqlHelper.deleteByQuery(new ConditionAndWrapper().eq("name", path), DateResult.class);
+	private void saveLog(DataGroup dataGroup, String path) {
+		Log log = new Log();
+		File file = new File(path);
+		DateTime date = DateUtil.parse(file.getName().replace("access.", "").replace(".zip", ""), "yyyy-MM-dd_HH-mm-ss");
 
-		DateResult dateResult = new DateResult();
-		dateResult.setName(path);
-		dateResult.setJson(JSONUtil.toJsonStr(dataGroup));
-
-		sqlHelper.insert(dateResult);
+		log.setDate(DateUtil.format(date, "yyyy-MM-dd"));
+		log.setJson(JSONUtil.toJsonStr(dataGroup));
+		log.setPath(path);
+		
+		sqlHelper.deleteByQuery(new ConditionAndWrapper().eq("date", log.getDate()), Log.class);
+		
+		sqlHelper.insert(log);
 	}
 
-	public DataGroup findByPath(String path) {
-		DateResult dateResult = sqlHelper.findOneByQuery(new ConditionAndWrapper().eq("name", path), DateResult.class);
-		if (dateResult != null) {
-			return JSONUtil.toBean(dateResult.getJson(), DataGroup.class);
-		}
-		return null;
+//	public Log findByPath(String path) {
+//		Log log = sqlHelper.findOneByQuery(new ConditionAndWrapper().eq("name", path), Log.class);
+//		if (log != null) {
+//			return JSONUtil.toBean(log.getJson(), Log.class);
+//		}
+//		return null;
+//	}
+
+//	@Transactional
+//	public void delLog(String path) {
+//		sqlHelper.deleteByQuery(new ConditionAndWrapper().eq("name", path), Log.class);
+//	}
+
+	public Page search(Page page) {
+		page = sqlHelper.findPage(page, Log.class);
+
+		return page;
 	}
 
-	@Transactional
-	public void delLog(String path) {
-		FileUtil.del(path);
-		sqlHelper.deleteByQuery(new ConditionAndWrapper().eq("name", path), DateResult.class);
-	}
 
 }
