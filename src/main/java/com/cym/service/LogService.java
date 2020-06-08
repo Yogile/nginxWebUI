@@ -46,11 +46,8 @@ public class LogService {
 
 		DataGroup dataGroup = new DataGroup();
 		// pvuv
-//		dataGroup.setUv(jdbcTemplate.queryForObject("select count(1) from (select count(1) from log_info group by remote_addr) as temp", Integer.class));
-//		dataGroup.setPv(jdbcTemplate.queryForObject("select count(1) from log_info", Integer.class));
-
 		dataGroup.setPv(jdbcTemplate.query("select hour as name,count(1) as value FROM log_info group by hour order by name", new BeanPropertyRowMapper<KeyValue>(KeyValue.class)));
-		dataGroup.setUv(jdbcTemplate.query("SELECT name, COUNT(VALUE) as value " + //
+		dataGroup.setUv(jdbcTemplate.query("SELECT name, COUNT(value) as value " + //
 				"FROM ( " + //
 				"	SELECT hour AS name, COUNT(remote_addr) AS value " + //
 				"	FROM log_info " + //
@@ -64,7 +61,7 @@ public class LogService {
 
 		// 系统
 		dataGroup.setBrowser(new ArrayList<KeyValue>());
-		String[] browsers = new String[] { "Android", "iPhone", "Windows" };
+		String[] browsers = new String[] { "Android", "iPhone", "Windows","Macintosh" };
 		Integer allCount = 0;
 		for (String browser : browsers) {
 			KeyValue keyValue = new KeyValue();
@@ -154,18 +151,6 @@ public class LogService {
 		sqlHelper.insert(log);
 	}
 
-//	public Log findByPath(String path) {
-//		Log log = sqlHelper.findOneByQuery(new ConditionAndWrapper().eq("name", path), Log.class);
-//		if (log != null) {
-//			return JSONUtil.toBean(log.getJson(), Log.class);
-//		}
-//		return null;
-//	}
-
-//	@Transactional
-//	public void delLog(String path) {
-//		sqlHelper.deleteByQuery(new ConditionAndWrapper().eq("name", path), Log.class);
-//	}
 
 	public Page search(Page page) {
 		page = sqlHelper.findPage(page, Log.class);
