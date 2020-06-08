@@ -132,7 +132,7 @@ function showContent(dataGroup) {
 			data : names
 		},
 		grid: { // 控制图的大小，调整下面这些值就可以，
-			x: 100// x的值可以空值y轴与label标签的距离，效果如下图：
+			x: 150// x的值可以空值y轴与label标签的距离，效果如下图：
 		},
 		series : [ {
 			data : values,

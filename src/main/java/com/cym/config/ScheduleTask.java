@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -41,6 +43,12 @@ public class ScheduleTask {
 	@Autowired
 	LogInfoService logInfoService;
 	
+//	@PostConstruct
+//	public void run() {
+//		logInfoService.buildDataGroup(InitConfig.home + "log/access.2020-06-08_00-00-00.zip");
+//	}
+	
+	
 	@Scheduled(cron = "0 0 2 * * ?")
 	public void mongodbTasks() {
 		List<Cert> certList = sqlHelper.findAll(Cert.class);
@@ -69,7 +77,7 @@ public class ScheduleTask {
 			confController.reload(null, null, null);
 			
 			// 马上解析分隔出来的日志
-			logInfoService.getDataGroup(InitConfig.home + "log/access." + date + ".zip");
+			logInfoService.buildDataGroup(InitConfig.home + "log/access." + date + ".zip");
 			
 		}
 		

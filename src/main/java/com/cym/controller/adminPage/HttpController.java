@@ -76,7 +76,7 @@ public class HttpController extends BaseController {
 		if(logStatus) {
 			Http http = new Http();
 			http.setName("log_format");
-			http.setValue("main " +  buildLogFormat());
+			http.setValue("main escape=json '" +  buildLogFormat() + "'");
 			http.setUnit("");
 			https.add(http);
 			
