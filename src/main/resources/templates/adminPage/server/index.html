@@ -120,7 +120,9 @@
 								</td>
 	
 								<td>
-									<input type="checkbox" name="enable" lay-filter="enable" value="${ext.server.id}" lay-text="启用|停用" lay-skin="switch" ${(ext.server.enable)?string('checked','')}>
+									<#if ext.server.enable != null>
+										<input type="checkbox" name="enable" lay-filter="enable" value="${ext.server.id}" lay-text="启用|停用" lay-skin="switch" ${(ext.server.enable)?string('checked','')}>
+									</#if>
 								</td>
 								<td>
 									<button type="button" class="layui-btn layui-btn-sm" onclick="edit('${ext.server.id}')">编辑</button>
