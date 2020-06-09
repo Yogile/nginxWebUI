@@ -15,6 +15,7 @@ import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
 
 import cn.craccd.sqlHelper.bean.Page;
+import cn.hutool.core.io.FileUtil;
 
 @Controller
 @RequestMapping("/adminPage/log")
@@ -31,28 +32,13 @@ public class LogController extends BaseController {
 		modelAndView.setViewName("/adminPage/log/index");
 		return modelAndView;
 	}
-
-//	private List<Log> getLogList() {
-//		List<Log> list = new ArrayList<Log>();
-//
-//		File dir = new File(InitConfig.home + "log/");
-//
-//		File[] fileList = dir.listFiles();
-//		for (File file : fileList) {
-//			if (file.getName().contains("access") && file.getName().contains(".zip")) {
-//				Log log = new Log();
-//				log.setPath(file.getPath().replace("\\", "/"));
-//				DateTime date = DateUtil.parse(file.getName().replace("access.", "").replace(".zip", ""), "yyyy-MM-dd_HH-mm-ss");
-//				log.setTime(DateUtil.format(date, "yyyy-MM-dd HH:mm:ss"));
-//
-//				list.add(log);
-//			}
-//		}
-//
-//		return list;
-//	}
-
 	
+	@RequestMapping("del")
+	@ResponseBody
+	public JsonResult del(String id) {
+		sqlHelper.deleteById(id, Log.class);
+		return renderSuccess();
+	}
 	
 	@RequestMapping("delAll")
 	@ResponseBody

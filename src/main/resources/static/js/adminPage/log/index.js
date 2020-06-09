@@ -51,6 +51,29 @@ function detail(id) {
 	});
 }
 
+
+function del(id) {
+	$.ajax({
+		type : 'GET',
+		url : ctx + '/adminPage/log/del',
+		dataType : 'json',
+		data : {
+			id : id
+		},
+		success : function(data) {
+			if (data.success) {
+				location.reload();
+			} else {
+				layer.msg(data.msg);
+			}
+		},
+		error : function() {
+			layer.closeAll();
+			alert("出错了,请联系技术人员!");
+		}
+	});
+}
+
 var pvuv, statusDiv, browser, httpReferer;
 function showContent(dataGroup) {
 	// 请求状态占比
@@ -205,7 +228,7 @@ function showContent(dataGroup) {
 	layer.open({
 		type : 1,
 		title : "统计",
-		area : [ '1200px', '800px' ], // 宽高
+		area : [ '1150px', '700px' ], // 宽高
 		content : $('#windowDiv')
 	});
 }
