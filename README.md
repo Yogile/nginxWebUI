@@ -139,6 +139,10 @@ docker run -itd -v /home/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--变量�
 
 最终生成conf文件,可在此进行进一步手动修改,确认修改无误后,可覆盖本机conf文件,并进行效验和重启, 可以选择生成单一nginx.conf文件还是按域名将各个配置文件分开放在conf.d下
 
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0603/145841_cd6aea21_1100382.jpeg "log.jpg")
+
+log管理, 在http配置中如果开启了log监控的话, 会每天在这里生成日志分析报告.
+
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0603/145841_33abcbd2_1100382.jpeg "remote.jpg")
 
 远程服务器管理, 如果有多台nginx服务器, 可以都部署上nginxWebUI, 然后登录其中一台, 在远程管理中添加其他服务器的ip和用户名密码, 就可以在一台机器上管理所有的nginx服务器了.
