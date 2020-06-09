@@ -80,7 +80,7 @@ apt install docker.io
 2.下载镜像: 
 
 ```
-docker pull registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.2.6
+docker pull registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.2.9
 ```
 
 3. 启动容器: 
