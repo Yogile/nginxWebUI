@@ -41,20 +41,18 @@ apt install openjdk-8-jdk
 apt install nginx
 ```
 
-2.下载最新版发行包jar,下载地址https://gitee.com/cym1102/nginxWebUI/releases
-
-码云的服务器下载较慢, CDN地址(可使用wget下载): 
+2.下载最新版发行包jar
 
 ```
-wget https://craccd.oss-cn-beijing.aliyuncs.com/nginxWebUI-1.2.6.jar
+wget https://craccd.oss-cn-beijing.aliyuncs.com/nginxWebUI-1.2.8.jar
 ```
 
 有新版本只需要修改路径中的版本即可
 
-启动命令
+3.启动程序
 
 ```
-nohup java -jar -Xmx64m nginxWebUI-1.2.6.jar --server.port=8080 --logging.file.name=/home/nginxWebUI/log/nginxWebUI.log --spring.database.sqlite-path=/home/nginxWebUI/sqlite.db &
+nohup java -jar -Xmx64m nginxWebUI-1.2.8.jar --server.port=8080 --logging.file.name=/home/nginxWebUI/log/nginxWebUI.log --spring.database.sqlite-path=/home/nginxWebUI/sqlite.db &
 ```
 
 参数说明(都是非必填)
@@ -73,16 +71,22 @@ nohup java -jar -Xmx64m nginxWebUI-1.2.6.jar --server.port=8080 --logging.file.n
 
 本项目制作了docker镜像, 同时包含nginx和nginxWebUI在内, 一体化管理与运行nginx. 
 
-下载镜像: 
+1.安装docker容器环境
+
+```
+apt install docker.io
+```
+
+2.下载镜像: 
 
 ```
 docker pull registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.2.6
 ```
 
-启动容器: 
+3. 启动容器: 
 
 ```
-docker run -itd -v /home/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--变量名=变量值 --变量名2=变量值2" --privileged=true --net=host  registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.2.6 /bin/bash
+docker run -itd -v /home/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--变量名=变量值 --变量名2=变量值2" --privileged=true --net=host  registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.2.8 /bin/bash
 ```
 
 注意: 
