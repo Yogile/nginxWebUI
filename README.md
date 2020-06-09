@@ -41,20 +41,18 @@ apt install openjdk-8-jdk
 apt install nginx
 ```
 
-2.下载最新版发行包jar,下载地址https://gitee.com/cym1102/nginxWebUI/releases
-
-码云的服务器下载较慢, CDN地址(可使用wget下载): 
+2.下载最新版发行包jar
 
 ```
-wget https://craccd.oss-cn-beijing.aliyuncs.com/nginxWebUI-1.2.6.jar
+wget https://craccd.oss-cn-beijing.aliyuncs.com/nginxWebUI-1.2.8.jar
 ```
 
 有新版本只需要修改路径中的版本即可
 
-启动命令
+3.启动程序
 
 ```
-nohup java -jar -Xmx64m nginxWebUI-1.2.6.jar --server.port=8080 --logging.file.name=/home/nginxWebUI/log/nginxWebUI.log --spring.database.sqlite-path=/home/nginxWebUI/sqlite.db &
+nohup java -jar -Xmx64m nginxWebUI-1.2.8.jar --server.port=8080 --logging.file.name=/home/nginxWebUI/log/nginxWebUI.log --spring.database.sqlite-path=/home/nginxWebUI/sqlite.db &
 ```
 
 参数说明(都是非必填)
@@ -73,16 +71,22 @@ nohup java -jar -Xmx64m nginxWebUI-1.2.6.jar --server.port=8080 --logging.file.n
 
 本项目制作了docker镜像, 同时包含nginx和nginxWebUI在内, 一体化管理与运行nginx. 
 
-下载镜像: 
+1.安装docker容器环境
+
+```
+apt install docker.io
+```
+
+2.下载镜像: 
 
 ```
 docker pull registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.2.6
 ```
 
-启动容器: 
+3. 启动容器: 
 
 ```
-docker run -itd -v /home/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--变量名=变量值 --变量名2=变量值2" --privileged=true --net=host  registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.2.6 /bin/bash
+docker run -itd -v /home/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--变量名=变量值 --变量名2=变量值2" --privileged=true --net=host  registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.2.8 /bin/bash
 ```
 
 注意: 
@@ -97,21 +101,23 @@ docker run -itd -v /home/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--变量�
 
 #### 使用说明
 
-打开 http://xxx.xxx.xxx.xxx:8080 第一次打开会要求初始化管理员账号
+打开 http://xxx.xxx.xxx.xxx:8080 进入主页
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0603/145840_f3799053_1100382.jpeg "login.jpg")
 
+登录页面, 第一次打开会要求初始化管理员账号
+
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0603/145840_32f61d0a_1100382.jpeg "admin.jpg")
 
-进入系统后,可在管理员管理里面添加修改管理员账号
+进入系统后, 可在管理员管理里面添加修改管理员账号
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0603/145840_89e83977_1100382.jpeg "http.jpg")
 
-在http参数配置中可以配置nginx的http项目,进行http转发,默认会给出几个常用配置,其他需要的配置可自由增删改查
+在http参数配置中可以配置nginx的http项目,进行http转发, 默认会给出几个常用配置, 其他需要的配置可自由增删改查. 可以勾选开启日志跟踪, 生成日志跟踪配置项, 每天0点时刻可生成上一天的日志分析报告. 由于日志文件access.log文件过大, 默认只保留7天的log文件, 但分析报告可一直保留.
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0603/145840_983c96ef_1100382.jpeg "stream.jpg")
 
-在TCP参数配置中可以配置nginx的steam项目参数,进行tcp转发
+在TCP参数配置中可以配置nginx的steam项目参数, 进行tcp转发.
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0603/145840_6c5bdbc3_1100382.jpeg "server.jpg")
 
@@ -119,7 +125,7 @@ docker run -itd -v /home/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--变量�
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0603/145840_983c96ef_1100382.jpeg "upstream.jpg")
 
-在负载均衡中可配置nginx的负载均衡即upstream项功能, 在反向代理管理中可选择代理目标为配置好的负载均衡
+在负载均衡中可配置nginx的负载均衡即upstream项功能, 在反向代理管理中可选择代理目标为配置好的负载均衡, 或在 
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0603/145840_cc75a73e_1100382.jpeg "cert.jpg")
 
