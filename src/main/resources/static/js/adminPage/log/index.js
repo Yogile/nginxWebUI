@@ -53,25 +53,27 @@ function detail(id) {
 
 
 function del(id) {
-	$.ajax({
-		type : 'GET',
-		url : ctx + '/adminPage/log/del',
-		dataType : 'json',
-		data : {
-			id : id
-		},
-		success : function(data) {
-			if (data.success) {
-				location.reload();
-			} else {
-				layer.msg(data.msg);
+	if(confirm("确认删除?")){
+		$.ajax({
+			type : 'GET',
+			url : ctx + '/adminPage/log/del',
+			dataType : 'json',
+			data : {
+				id : id
+			},
+			success : function(data) {
+				if (data.success) {
+					location.reload();
+				} else {
+					layer.msg(data.msg);
+				}
+			},
+			error : function() {
+				layer.closeAll();
+				alert("出错了,请联系技术人员!");
 			}
-		},
-		error : function() {
-			layer.closeAll();
-			alert("出错了,请联系技术人员!");
-		}
-	});
+		});
+	}
 }
 
 var pvuv, statusDiv, browser, httpReferer;
