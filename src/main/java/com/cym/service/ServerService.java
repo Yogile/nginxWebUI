@@ -105,6 +105,11 @@ public class ServerService {
 		if (StrUtil.isEmpty(server.getId())) {
 			sqlHelper.insert(server);
 		} else {
+			Server serverOrg = sqlHelper.findById(server.getId(), Server.class);
+			server.setEnable(serverOrg.getEnable());
+			if (server.getEnable() == null) {
+				server.setEnable(true);
+			}
 			sqlHelper.updateAllColumnById(server);
 		}
 
