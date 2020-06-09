@@ -69,18 +69,17 @@ public class RemoteController extends BaseController {
 
 		for (Remote remote : remoteList) {
 			remote.setStatus(0);
+			remote.setType(0);
+			if (remote.getParentId() == null) {
+				remote.setParentId("");
+			}
+			
 			try {
 				String version = HttpUtil.get(remote.getProtocol() + "://" + remote.getIp() + ":" + remote.getPort() + "/adminPage/remote/version?creditKey=" + remote.getCreditKey(), 500);
 				if (StrUtil.isNotEmpty(version)) {
 					remote.setStatus(1);
 					remote.setVersion(version);
 				}
-
-				if (remote.getParentId() == null) {
-					remote.setParentId("");
-				}
-
-				remote.setType(0);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
