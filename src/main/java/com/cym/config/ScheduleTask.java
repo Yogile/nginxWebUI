@@ -68,7 +68,9 @@ public class ScheduleTask {
 	@Scheduled(cron = "0 0 0 * * ?")
 	public void diviLog() {
 		if (FileUtil.exist(InitConfig.home + "log/access.log")) {
-			String date = DateUtil.format(new Date(), "yyyy-MM-dd_HH-mm-ss");
+			
+			
+			String date = DateUtil.format(new Date(System.currentTimeMillis() - 24 * 60 * 60 * 1000), "yyyy-MM-dd_HH-mm-ss");
 			// 分隔日志
 			File dist = new File(InitConfig.home + "log/access." + date + ".log");
 			FileUtil.move(new File(InitConfig.home + "log/access.log"), dist, true);
