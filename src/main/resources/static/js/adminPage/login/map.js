@@ -1,7 +1,7 @@
 $(function() {
 	var imageLayer = new AMap.ImageLayer({
 		url : ctx + '/img/mp.png',
-		bounds : new AMap.Bounds([120.080674,35.907112], [120.082362,35.908948]),
+		bounds : new AMap.Bounds([120.080674,35.907112], [120.082362,35.908948]), // 西南 东北
 		zooms : [ 3, 20 ],
 		zIndex : 3,
 	});
