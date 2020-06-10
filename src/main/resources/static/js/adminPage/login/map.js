@@ -1,51 +1,21 @@
 $(function() {
-	// var map = new AMap.Map('container', {
-	// zoom : 10,
-	// center : [ 104.066422, 30.65577 ],
-	// });
-	// var wms = new AMap.TileLayer.WMTS({
-	// url : 'http://t0.tianditu.gov.cn/img_w/wmts',
-	// blend : false,
-	// tileSize : 256,
-	// params : {
-	// LAYER : 'img',
-	// VERSION : '1.0.0',
-	// Format : 'tiles',
-	// TileMatrixSet : 'w',
-	// STYLE : 'default',
-	// tk : '26837ca6679a927b7877c0f0aa01407c'
-	// }
-	// })
-	// wms.setMap(map)
+	var imageLayer = new AMap.ImageLayer({
+		url : ctx + '/img/mp.png',
+		bounds : new AMap.Bounds([ 120.081730, 35.908096 ], [ 120.083030, 35.909396 ]),
+		zooms : [ 3, 20 ],
+		zIndex : 3,
+	});
 
 	var map = new AMap.Map('container', {
 		zoom : 20,
-		zooms:[3,20],
-		center : [ 120.148697,35.943452 ],
+		zooms : [ 3, 20 ],
+		center : [ 120.081730, 35.908096 ],
 		viewMode : '3D',
 		pitch : 40,
-		expandZoomRange :true
-	});
-	
-	// 同时引入工具条插件，比例尺插件和鹰眼插件
-	AMap.plugin([
-	    'AMap.ToolBar',
-	    'AMap.Scale',
-	    'AMap.MapType',
-	], function(){
-	    // 在图面添加工具条控件，工具条控件集成了缩放、平移、定位等功能按钮在内的组合控件
-	    map.addControl(new AMap.ToolBar());
-
-	    // 在图面添加比例尺控件，展示地图在当前层级和纬度下的比例尺
-	    map.addControl(new AMap.Scale());
-
-	    // 在图面添加类别切换控件，实现默认图层与卫星图、实施交通图层之间切换的控制
-	    map.addControl(new AMap.MapType());
-	   
+		expandZoomRange : true,
+		layers : [ new AMap.TileLayer(), imageLayer ]
 	});
 
-	return;
-	
 	var googleLayer = new AMap.TileLayer({
 		zIndex : 2,
 		getTileUrl : function(x, y, z) {
@@ -55,30 +25,10 @@ $(function() {
 
 	googleLayer.setMap(map);
 
-	// 创建Object3DLayer图层
-	var object3Dlayer = new AMap.Object3DLayer();
-	map.add(object3Dlayer);
-
-	map.plugin([ "AMap.GltfLoader" ], function() {
-		var urlCity = 'https://a.amap.com/jsapi_demos/static/gltf-online/shanghai/scene.gltf';
-		var paramCity = {
-			position : new AMap.LngLat(120.148697,35.943452), // 必须
-			scale : 3580, // 非必须，默认1
-			height : 1800, // 非必须，默认0
-			scene : 0, // 非必须，默认0
-		};
-
-
-		var gltfObj = new AMap.GltfLoader();
-
-		gltfObj.load(urlCity, function(gltfCity) {
-			gltfCity.setOption(paramCity);
-			gltfCity.rotateX(90);
-			gltfCity.rotateZ(120);
-			object3Dlayer.add(gltfCity);
-		});
-
-
+	var mouseTool = new AMap.MouseTool(map); // 在地图中添加MouseTool插件
+	var drawRectangle = mouseTool.rectangle(); // 用鼠标工具画矩形
+	AMap.event.addListener(mouseTool, 'draw', function(e) { // 添加事件
+		console.log(e.obj.getPath());// 获取路径
+		alert(e.obj.getPath());
 	});
-
 })
