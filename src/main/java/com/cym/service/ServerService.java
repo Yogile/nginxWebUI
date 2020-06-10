@@ -96,22 +96,6 @@ public class ServerService {
 
 	@Transactional
 	public void addOverTcp(Server server, String serverParamJson) {
-//		server.setSsl(null);
-//		server.setPem(null);
-//		server.setKey(null);
-//		server.setRewrite(null);
-//		server.setServerName(null);
-//
-//		if (StrUtil.isEmpty(server.getId())) {
-//			sqlHelper.insert(server);
-//		} else {
-//			Server serverOrg = sqlHelper.findById(server.getId(), Server.class);
-//			server.setEnable(serverOrg.getEnable());
-//			if (server.getEnable() == null) {
-//				server.setEnable(true);
-//			}
-//			sqlHelper.updateAllColumnById(server);
-//		}
 		sqlHelper.insertOrUpdate(server);
 		
 		List<String> locationIds = sqlHelper.findIdsByQuery(new ConditionAndWrapper().eq("serverId", server.getId()), Location.class);

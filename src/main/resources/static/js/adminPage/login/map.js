@@ -25,10 +25,10 @@ $(function() {
 
 	googleLayer.setMap(map);
 
-//	var mouseTool = new AMap.MouseTool(map); // 在地图中添加MouseTool插件
-//	var drawRectangle = mouseTool.rectangle(); // 用鼠标工具画矩形
-//	AMap.event.addListener(mouseTool, 'draw', function(e) { // 添加事件
-//		console.log(e.obj.getPath());// 获取路径
-//		alert(e.obj.getPath());
-//	});
+	var mouseTool = new AMap.MouseTool(map); // 在地图中添加MouseTool插件
+	var drawRectangle = mouseTool.rectangle(); // 用鼠标工具画矩形
+	AMap.event.addListener(mouseTool, 'draw', function(e) { // 添加事件
+		console.log(e.obj.getPath());// 获取路径
+		alert(e.obj.getPath());
+	});
 })
