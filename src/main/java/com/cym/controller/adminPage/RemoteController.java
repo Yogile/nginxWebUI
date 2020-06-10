@@ -28,6 +28,7 @@ import com.cym.utils.JsonResult;
 import com.cym.utils.SystemTool;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
@@ -71,12 +72,15 @@ public class RemoteController extends BaseController {
 			if (remote.getParentId() == null) {
 				remote.setParentId("");
 			}
-			
+
 			try {
-				String version = HttpUtil.get(remote.getProtocol() + "://" + remote.getIp() + ":" + remote.getPort() + "/adminPage/remote/version?creditKey=" + remote.getCreditKey(), 500);
-				if (StrUtil.isNotEmpty(version)) {
+				String json = HttpUtil.get(remote.getProtocol() + "://" + remote.getIp() + ":" + remote.getPort() + "/adminPage/remote/version?creditKey=" + remote.getCreditKey(), 500);
+				if (StrUtil.isNotEmpty(json)) {
+					Map<String, Object> map = JSONUtil.toBean(json, Map.class);
+
 					remote.setStatus(1);
-					remote.setVersion(version);
+					remote.setVersion((String) map.get("version"));
+					remote.setNginx((Integer) map.get("nginx"));
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -90,7 +94,9 @@ public class RemoteController extends BaseController {
 		remoteLocal.setProtocol("");
 		remoteLocal.setParentId("");
 		remoteLocal.setDescr("本地");
-		remoteLocal.setVersion(version);
+		Map<String, Object> map = version();
+		remoteLocal.setVersion((String) map.get("version"));
+		remoteLocal.setNginx((Integer) map.get("nginx"));
 		remoteLocal.setPort(port);
 		remoteLocal.setStatus(1);
 		remoteLocal.setType(0);
@@ -268,7 +274,7 @@ public class RemoteController extends BaseController {
 		if (StrUtil.isEmpty(fromId) || remoteId == null || remoteId.length == 0) {
 			return renderSuccess("未选择服务器");
 		}
-		
+
 		Remote remoteFrom = sqlHelper.findById(fromId, Remote.class);
 		String json = null;
 		if (remoteFrom == null) {
@@ -367,8 +373,23 @@ public class RemoteController extends BaseController {
 
 	@RequestMapping("version")
 	@ResponseBody
-	public String version() {
-		return version;
+	public Map<String, Object> version() {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("version", version);
+		map.put("nginx", 2);
+
+		if (SystemTool.isLinux()) {
+			String[] command = { "/bin/sh", "-c", "ps -ef|grep nginx" };
+			String rs = RuntimeUtil.execForStr(command);
+
+			if (rs.contains("nginx: master process")) {
+				map.put("nginx", 1);
+			} else {
+				map.put("nginx", 0);
+			}
+		}
+
+		return map;
 	}
 
 	@RequestMapping("readContent")

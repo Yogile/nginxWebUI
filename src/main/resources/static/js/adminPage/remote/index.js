@@ -115,6 +115,21 @@ $(function(){
 								key: 'system',
 								title : '操作系统'
 							},{	
+								title : 'nginx',
+								template : function(remote) {
+									if(remote.nginx == 2){
+										return `<span class="black">未知</span>`
+									}
+									if(remote.nginx == 1){
+										return `<span class="green">运行中</span>`
+									}
+									if(remote.nginx == 0){
+										return `<span class="red">未运行</span>`
+									}
+									
+									return "";
+								}
+							},{	
 								title : '状态',
 								template : function(remote) {
 									if(remote.status == 1){
