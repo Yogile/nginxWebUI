@@ -11,7 +11,7 @@ $(function() {
 		zooms : [ 3, 20 ],
 		center : [ 120.081730, 35.908096 ],
 		viewMode : '3D',
-		pitch : 40,
+		pitch : 0,
 		expandZoomRange : true,
 //		layers : [ new AMap.TileLayer(), imageLayer ]
 	});
