@@ -78,7 +78,7 @@ public class LogService {
 
 		// 域名
 		dataGroup.setHttpReferer(
-				jdbcTemplate.query("select http_host as name,count(1) as value FROM log_info group by http_host order by value asc", new BeanPropertyRowMapper<KeyValue>(KeyValue.class)));
+				jdbcTemplate.query("select http_host as name,count(1) as value FROM log_info group by http_host order by value asc limit 10", new BeanPropertyRowMapper<KeyValue>(KeyValue.class)));
 
 		saveLog(dataGroup, path);
 		return dataGroup;
