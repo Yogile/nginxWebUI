@@ -52,7 +52,7 @@ wget https://craccd.oss-cn-beijing.aliyuncs.com/nginxWebUI-1.3.1.jar
 3.启动程序
 
 ```
-nohup java -jar -Xmx64m nginxWebUI-1.3.1.jar --server.port=8080 --logging.file.name=/home/nginxWebUI/log/nginxWebUI.log --spring.database.sqlite-path=/home/nginxWebUI/sqlite.db &
+nohup java -jar -Xmx64m nginxWebUI-1.3.1.jar --server.port=8080 ----project.home=/home/nginxWebUI/  &
 ```
 
 参数说明(都是非必填)
@@ -61,7 +61,7 @@ nohup java -jar -Xmx64m nginxWebUI-1.3.1.jar --server.port=8080 --logging.file.n
 
 --server.port 占用端口, 默认以8080端口启动
 
---project.home 项目配置文件目录，存放数据库文件，证书文件，日志等, 默认为/home/nginxWebUI
+--project.home 项目配置文件目录，存放数据库文件，证书文件，日志等, 默认为/home/nginxWebUI/
 
 注意命令最后加一个&号, 表示项目后台运行
 
