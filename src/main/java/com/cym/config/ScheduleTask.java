@@ -1,7 +1,6 @@
 package com.cym.config;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -15,17 +14,13 @@ import org.springframework.scheduling.annotation.Scheduled;
 import com.cym.controller.adminPage.CertController;
 import com.cym.controller.adminPage.ConfController;
 import com.cym.model.Cert;
-import com.cym.model.Log;
 import com.cym.service.LogService;
 import com.cym.service.SettingService;
-import com.cym.utils.SystemTool;
 
 import cn.craccd.sqlHelper.utils.SqlHelper;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.util.RuntimeUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.ZipUtil;
 
 @Configuration // 1.主要用于标记配置类，兼备Component的效果。
