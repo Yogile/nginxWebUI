@@ -207,8 +207,8 @@ public class ConfController extends BaseController {
 			nginxDir = settingService.get("nginxDir");
 		}
 		try {
-			String rs = null;
-			String cmd = null;
+			String rs = "";
+			String cmd = "";
 			if (SystemTool.isWindows()) {
 				cmd = "cmd /c start nginx.exe";
 				RuntimeUtil.exec(new String[] {}, new File(nginxDir), cmd);
@@ -228,7 +228,7 @@ public class ConfController extends BaseController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return renderError("启动失败<br>" + e.getMessage().replace("\n", "<br>"));
+			return renderError("启动失败");
 		}
 	}
 
