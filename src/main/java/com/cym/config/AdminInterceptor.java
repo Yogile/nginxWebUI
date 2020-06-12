@@ -103,7 +103,7 @@ public class AdminInterceptor implements HandlerInterceptor {
 						os.write(buffer, 0, i);
 						i = bis.read(buffer);
 					}
-				}else {
+				} else {
 					PrintWriter out = response.getWriter();
 					out.append(rs);
 				}
@@ -111,7 +111,6 @@ public class AdminInterceptor implements HandlerInterceptor {
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				
 				response.sendRedirect(ctx + "/adminPage/login/noServer");
 			}
 
