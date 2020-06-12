@@ -41,7 +41,7 @@ public class WwwController extends BaseController {
 			return renderError("名称重复");
 		}
 		
-		String dir = InitConfig.home + "/wwww/" + www.getName();
+		String dir = InitConfig.home + "wwww/" + www.getName();
 		ZipUtil.unzip(www.getDir(), dir);
 		FileUtil.del(www.getDir());
 		www.setDir(dir);

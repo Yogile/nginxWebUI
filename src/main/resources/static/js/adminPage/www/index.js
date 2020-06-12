@@ -1,3 +1,4 @@
+var load;
 $(function(){
 	layui.use('upload', function() {
 		var upload = layui.upload;
@@ -5,7 +6,11 @@ $(function(){
 			elem : '#upload',
 			url : '/upload/',
 			accept : 'file',
+			before : function(res){
+				load = layer.load();
+			},
 			done : function(res) {
+				layer.close(load);
 				// 上传完毕回调
 				if (res.success) {
 					debugger
@@ -21,6 +26,7 @@ $(function(){
 
 			},
 			error : function() {
+				layer.close(load);
 				// 请求异常回调
 			}
 		});
