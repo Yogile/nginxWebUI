@@ -283,7 +283,7 @@ public class ConfController extends BaseController {
 		String decompose = settingService.get("decompose");
 		ConfExt confExt = confService.buildConf(StrUtil.isNotEmpty(decompose) && decompose.equals("true"));
 
-		if (FileUtil.exist(nginxPath)) {
+		if (StrUtil.isNotEmpty(nginxPath) && FileUtil.exist(nginxPath)) {
 			String orgStr = FileUtil.readString(nginxPath, Charset.forName("UTF-8"));
 			confExt.setConf(orgStr);
 
