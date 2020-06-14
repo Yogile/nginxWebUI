@@ -40,7 +40,7 @@ public class ScheduleTask {
 	
 	@PostConstruct
 	public void runTest() {
-//		logInfoService.buildDataGroup(InitConfig.home + "log/access.2020-06-08_00-00-00.zip");
+		logInfoService.buildDataGroup(InitConfig.home + "log/access.2020-06-13_00-00-00.zip");
 //		logInfoService.buildDataGroup(InitConfig.home + "log/access.2020-06-09_00-00-00.zip");
 	}
 	
