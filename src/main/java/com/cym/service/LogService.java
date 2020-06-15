@@ -43,6 +43,9 @@ public class LogService {
 	
 	@Transactional
 	public DataGroup buildDataGroup(String path) {
+		if (!new File(path).exists()) {
+			return null;
+		}
 		insertIntoDb(path);
 
 		DataGroup dataGroup = new DataGroup();
