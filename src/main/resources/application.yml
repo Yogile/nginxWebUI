@@ -14,10 +14,6 @@ spring:
     store-type: jdbc
     jdbc:
       initialize-schema: always
-      
-  devtools:
-    restart:
-      enabled: false
   jackson:
     default-property-inclusion: NON_NULL
   jmx:
