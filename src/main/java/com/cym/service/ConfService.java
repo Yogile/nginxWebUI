@@ -13,8 +13,6 @@ import com.cym.ext.AsycPack;
 import com.cym.ext.ConfExt;
 import com.cym.ext.ConfFile;
 import com.cym.model.*;
-import com.cym.utils.RuntimeTool;
-import com.cym.utils.SystemTool;
 import com.github.odiszapc.nginxparser.*;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -54,9 +52,7 @@ public class ConfService {
 		this.sqlHelper = sqlHelper;
 	}
 
-	// 在前端"生成conf"页面，接口 loadOrg 与 loadConf 会并发被调用，都会调用ConfService.buildConf这个方法，经常会导致异常null。
-	// 改为同步方法可解决问题,Modified by Sai on 2020-6-17.
-	public synchronized ConfExt buildConf(Boolean decompose) {
+	public ConfExt buildConf(Boolean decompose) {
 		ConfExt confExt = new ConfExt();
 		confExt.setFileList(new ArrayList<>());
 
@@ -372,18 +368,20 @@ public class ConfService {
 
 			String conf = new NgxDumper(ngxConfig).dump();
 
+			// 经反复调试，是FileUtil.exist(module)引发的异常。
+// todo 装载ngx_stream_module模块的功能经常报异常，暂时注释掉，FileUtil.exist(module)这句。
 			// 装载ngx_stream_module模块
-			if (hasStream && SystemTool.isLinux()) {
-				String module = settingService.get("ngx_stream_module");
-				if (StrUtil.isEmpty(module) || !FileUtil.exist(module)) {
-					module = RuntimeTool.execForOne("find / -name ngx_stream_module.so");
-				}
-
-				if (StrUtil.isNotEmpty(module) && FileUtil.exist(module)) {
-					settingService.set("ngx_stream_module", module);
-					conf = "load_module " + module + ";\n" + conf;
-				}
-			}
+//			if (hasStream && SystemTool.isLinux()) {
+//				String module = settingService.get("ngx_stream_module");
+//				if (StrUtil.isEmpty(module) || !FileUtil.exist(module)) {
+//					module = RuntimeTool.execForOne("find / -name ngx_stream_module.so");
+//				}
+//
+//				if (StrUtil.isNotEmpty(module) && FileUtil.exist(module)) {
+//					settingService.set("ngx_stream_module", module);
+//					conf = "load_module " + module + ";\n" + conf;
+//				}
+//			}
 
 			confExt.setConf(conf);
 
