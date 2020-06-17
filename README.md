@@ -5,6 +5,8 @@ nginx网页配置工具
 
 QQ技术交流群: 1106758598
 
+官网地址: https://nginxwebui.gitee.io
+
 #### 功能说明
 
 本项目可以使用WebUI配置nginx的各项功能, 包括http协议转发, tcp协议转发, 反向代理, 负载均衡, ssl证书自动申请、续签、配置等, 最终生成nginx.conf文件并覆盖nginx的默认配置文件, 完成nginx的最终功能配置. 
