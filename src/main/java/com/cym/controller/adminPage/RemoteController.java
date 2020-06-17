@@ -59,7 +59,7 @@ public class RemoteController extends BaseController {
 
 	@RequestMapping("")
 	public ModelAndView index(ModelAndView modelAndView) {
-
+		modelAndView.addObject("version", version);
 		modelAndView.addObject("groupList", sqlHelper.findAll(Group.class));
 		modelAndView.setViewName("/adminPage/remote/index");
 
