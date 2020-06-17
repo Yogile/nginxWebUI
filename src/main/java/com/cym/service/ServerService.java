@@ -126,18 +126,28 @@ public class ServerService {
 
 		server.setId(null);
 		sqlHelper.insertOrUpdate(server);
-
-		for (Location location : locations) {
-			location.setId(null);
-			location.setServerId(server.getId());
-			sqlHelper.insert(location);
-		}
-
 		for (Param param : params) {
 			param.setId(null);
 			param.setServerId(server.getId());
 			sqlHelper.insert(param);
 		}
+		
+		
+		for (Location location : locations) {
+			params = sqlHelper.findListByQuery(new ConditionAndWrapper().eq("locationId", location.getId()), Param.class);
+			
+			location.setId(null);
+			location.setServerId(server.getId());
+			sqlHelper.insert(location);
+			
+			for (Param param : params) {
+				param.setId(null);
+				param.setLocationId(location.getId());
+				sqlHelper.insert(param);
+			}
+		}
+
+		
 	}
 
 }
