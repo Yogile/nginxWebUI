@@ -71,7 +71,7 @@ public class InitConfig {
 			if (StrUtil.isEmpty(nginxPath)) {
 				// 查找nginx.conf
 				nginxPath = RuntimeTool.execForOne("find / -name nginx.conf");
-				if (StrUtil.isNotEmpty(nginxPath) && FileUtil.exist(nginxPath)) {
+				if (StrUtil.isNotEmpty(nginxPath)) {
 					// 判断是否是容器中
 					String lines = FileUtil.readUtf8String(nginxPath);
 					if (StrUtil.isNotEmpty(lines) && lines.contains("include " + home + "nginx.conf;")) {
