@@ -181,7 +181,7 @@ public class ConfController extends BaseController {
 			rs = RuntimeUtil.execForStr(cmd);
 
 			// 延时3秒
-			Thread.sleep(3000L);
+//			Thread.sleep(3000L);
 
 			cmd = "<span class='blue'>" + cmd + "</span>";
 			if (StrUtil.isEmpty(rs) || rs.contains("signal process started")) {
