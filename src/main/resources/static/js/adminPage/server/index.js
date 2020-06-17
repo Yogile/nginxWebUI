@@ -210,6 +210,7 @@ function edit(id) {
 		},
 		success : function(data) {
 			if (data.success) {
+				
 				var server = data.obj.server;
 				$("#id").val(server.id);
 				$("#listen").val(server.listen);
@@ -545,4 +546,29 @@ function selectWwwOver(){
 	var dir = $("#wwwId").val();
 	$("#value_" + uuid).val(dir);
 	layer.close(wwwIndex)
+}
+
+
+function clone(id){
+	if(confirm("确认进行克隆?")){
+		$.ajax({
+			type : 'POST',
+			url : ctx + '/adminPage/server/clone',
+			data : {
+				id : id
+			},
+			dataType : 'json',
+			success : function(data) {
+				if (data.success) {
+					location.reload();
+				} else {
+					layer.msg(data.msg)
+				}
+			},
+			error : function() {
+				alert("出错了,请联系技术人员!");
+			}
+		});
+	}
+	
 }

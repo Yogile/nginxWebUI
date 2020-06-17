@@ -142,4 +142,15 @@ public class ServerController extends BaseController {
 		return renderSuccess();
 	}
 
+	@RequestMapping("clone")
+	@ResponseBody
+	public JsonResult clone(String id) {
+		serverService.clone(id);
+
+		return renderSuccess();
+	}
+
+	
+	
+	
 }

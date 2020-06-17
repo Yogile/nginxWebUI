@@ -140,17 +140,20 @@ public class ConfService {
 
 				// ssl配置
 				if (server.getSsl() != null && server.getSsl() == 1) {
-					ngxParam = new NgxParam();
-					ngxParam.addValue("ssl_certificate " + server.getPem());
-					ngxBlockServer.addEntry(ngxParam);
-
-					ngxParam = new NgxParam();
-					ngxParam.addValue("ssl_certificate_key " + server.getKey());
-					ngxBlockServer.addEntry(ngxParam);
-
-					ngxParam = new NgxParam();
-					ngxParam.addValue("ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3");
-					ngxBlockServer.addEntry(ngxParam);
+					if(StrUtil.isNotEmpty(server.getPem()) && StrUtil.isNotEmpty(server.getKey())) {
+						ngxParam = new NgxParam();
+						ngxParam.addValue("ssl_certificate " + server.getPem());
+						ngxBlockServer.addEntry(ngxParam);
+						
+						ngxParam = new NgxParam();
+						ngxParam.addValue("ssl_certificate_key " + server.getKey());
+						ngxBlockServer.addEntry(ngxParam);
+						
+						ngxParam = new NgxParam();
+						ngxParam.addValue("ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3");
+						ngxBlockServer.addEntry(ngxParam);
+					}
+					
 
 					// https添加80端口重写
 					if (server.getRewrite() == 1) {
@@ -395,10 +398,12 @@ public class ConfService {
 
 	private void setSameParam(Param param, NgxBlock ngxBlock) {
 		for (NgxEntry ngxEntry : ngxBlock.getEntries()) {
-			NgxParam ngxParam = (NgxParam) ngxEntry;
-			if (ngxParam.toString().startsWith(param.getName())) {
-				ngxBlock.remove(ngxParam);
-				break;
+			if(ngxEntry instanceof NgxParam) {
+				NgxParam ngxParam = (NgxParam) ngxEntry;
+				if (ngxParam.toString().startsWith(param.getName())) {
+					ngxBlock.remove(ngxParam);
+					break;
+				}
 			}
 		}
 
