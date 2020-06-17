@@ -1,39 +1,5 @@
 package com.cym.service;
 
-import java.io.InputStream;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.cym.controller.adminPage.UpstreamController;
-import com.cym.ext.AsycPack;
-import com.cym.ext.ConfExt;
-import com.cym.ext.ConfFile;
-import com.cym.model.Cert;
-import com.cym.model.Http;
-import com.cym.model.Location;
-import com.cym.model.LogInfo;
-import com.cym.model.Param;
-import com.cym.model.Server;
-import com.cym.model.Stream;
-import com.cym.model.Upstream;
-import com.cym.model.UpstreamServer;
-import com.cym.utils.RuntimeTool;
-import com.cym.utils.SystemTool;
-import com.github.odiszapc.nginxparser.NgxBlock;
-import com.github.odiszapc.nginxparser.NgxConfig;
-import com.github.odiszapc.nginxparser.NgxDumper;
-import com.github.odiszapc.nginxparser.NgxEntry;
-import com.github.odiszapc.nginxparser.NgxParam;
-
 import cn.craccd.sqlHelper.bean.Sort;
 import cn.craccd.sqlHelper.bean.Sort.Direction;
 import cn.craccd.sqlHelper.utils.ConditionAndWrapper;
@@ -42,28 +8,53 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.ZipUtil;
-import cn.hutool.json.JSONUtil;
+import com.cym.controller.adminPage.UpstreamController;
+import com.cym.ext.AsycPack;
+import com.cym.ext.ConfExt;
+import com.cym.ext.ConfFile;
+import com.cym.model.*;
+import com.github.odiszapc.nginxparser.*;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class ConfService {
-	@Autowired
+	final
 	UpstreamController upstreamController;
-	@Autowired
+	final
 	UpstreamService upstreamService;
-	@Autowired
+	final
 	SettingService settingService;
-	@Autowired
+	final
 	ServerService serverService;
-	@Autowired
+	final
 	LocationService locationService;
-	@Autowired
+	final
 	ParamService paramService;
-	@Autowired
+	final
 	SqlHelper sqlHelper;
+
+	public ConfService(UpstreamController upstreamController, UpstreamService upstreamService, SettingService settingService,
+					   ServerService serverService, LocationService locationService, ParamService paramService, SqlHelper sqlHelper) {
+		this.upstreamController = upstreamController;
+		this.upstreamService = upstreamService;
+		this.settingService = settingService;
+		this.serverService = serverService;
+		this.locationService = locationService;
+		this.paramService = paramService;
+		this.sqlHelper = sqlHelper;
+	}
 
 	public ConfExt buildConf(Boolean decompose) {
 		ConfExt confExt = new ConfExt();
-		confExt.setFileList(new ArrayList<ConfFile>());
+		confExt.setFileList(new ArrayList<>());
 
 		String nginxPath = settingService.get("nginxPath");
 		try {
@@ -84,7 +75,7 @@ public class ConfService {
 
 			boolean hasHttp = false;
 			// 添加upstream
-			NgxParam ngxParam = null;
+			NgxParam ngxParam;
 			List<Upstream> upstreams = upstreamService.getListByProxyType(0);
 
 			for (Upstream upstream : upstreams) {
@@ -377,18 +368,20 @@ public class ConfService {
 
 			String conf = new NgxDumper(ngxConfig).dump();
 
+			// 经反复调试，是FileUtil.exist(module)引发的异常。
+// todo 装载ngx_stream_module模块的功能经常报异常，暂时注释掉，FileUtil.exist(module)这句。
 			// 装载ngx_stream_module模块
-			if (hasStream && SystemTool.isLinux()) {
-				String module = settingService.get("ngx_stream_module");
-				if (StrUtil.isEmpty(module) || !FileUtil.exist(module)) {
-					module = RuntimeTool.execForOne("find / -name ngx_stream_module.so");
-				}
-
-				if (StrUtil.isNotEmpty(module) && FileUtil.exist(module)) {
-					settingService.set("ngx_stream_module", module);
-					conf = "load_module " + module + ";\n" + conf;
-				}
-			}
+//			if (hasStream && SystemTool.isLinux()) {
+//				String module = settingService.get("ngx_stream_module");
+//				if (StrUtil.isEmpty(module) || !FileUtil.exist(module)) {
+//					module = RuntimeTool.execForOne("find / -name ngx_stream_module.so");
+//				}
+//
+//				if (StrUtil.isNotEmpty(module) && FileUtil.exist(module)) {
+//					settingService.set("ngx_stream_module", module);
+//					conf = "load_module " + module + ";\n" + conf;
+//				}
+//			}
 
 			confExt.setConf(conf);
 
@@ -452,7 +445,7 @@ public class ConfService {
 		ZipUtil.zip(confd, nginxPath + date + ".zip");
 
 		// 写入主文件
-		FileUtil.writeString(nginxContent, nginxPath, Charset.forName("UTF-8"));
+		FileUtil.writeString(nginxContent, nginxPath, StandardCharsets.UTF_8);
 		String decompose = settingService.get("decompose");
 
 		if ("true".equals(decompose)) {
@@ -460,7 +453,7 @@ public class ConfService {
 			if (subContent != null) {
 				for (int i = 0; i < subContent.length; i++) {
 					String tagert = nginxPath.replace("nginx.conf", "conf.d/" + subName[i]);
-					FileUtil.writeString(subContent[i], tagert, Charset.forName("UTF-8")); // 清空
+					FileUtil.writeString(subContent[i], tagert, StandardCharsets.UTF_8); // 清空
 				}
 			}
 		} else {
@@ -476,8 +469,8 @@ public class ConfService {
 		List<Cert> certList = sqlHelper.findAll(Cert.class);
 		for (Cert cert : certList) {
 			if (StrUtil.isNotEmpty(cert.getPem())) {
-				cert.setPemStr(FileUtil.readString(cert.getPem(), Charset.forName("UTF-8")));
-				cert.setKeyStr(FileUtil.readString(cert.getKey(), Charset.forName("UTF-8")));
+				cert.setPemStr(FileUtil.readString(cert.getPem(), StandardCharsets.UTF_8));
+				cert.setKeyStr(FileUtil.readString(cert.getKey(), StandardCharsets.UTF_8));
 			}
 		}
 
@@ -486,8 +479,8 @@ public class ConfService {
 		List<Server> serverList = sqlHelper.findAll(Server.class);
 		for (Server server : serverList) {
 			if (StrUtil.isNotEmpty(server.getPem())) {
-				server.setPemStr(FileUtil.readString(server.getPem(), Charset.forName("UTF-8")));
-				server.setKeyStr(FileUtil.readString(server.getKey(), Charset.forName("UTF-8")));
+				server.setPemStr(FileUtil.readString(server.getPem(), StandardCharsets.UTF_8));
+				server.setKeyStr(FileUtil.readString(server.getKey(), StandardCharsets.UTF_8));
 			}
 		}
 		asycPack.setServerList(serverList);
@@ -505,7 +498,7 @@ public class ConfService {
 		ConfExt confExt = buildConf(StrUtil.isNotEmpty(decompose) && decompose.equals("true"));
 
 		if (FileUtil.exist(nginxPath)) {
-			String orgStr = FileUtil.readString(nginxPath, Charset.forName("UTF-8"));
+			String orgStr = FileUtil.readString(nginxPath, StandardCharsets.UTF_8);
 			confExt.setConf(orgStr);
 
 			for (ConfFile confFile : confExt.getFileList()) {
@@ -513,7 +506,7 @@ public class ConfService {
 
 				String filePath = nginxPath.replace("nginx.conf", "conf.d/" + confFile.getName());
 				if (FileUtil.exist(filePath)) {
-					confFile.setConf(FileUtil.readString(filePath, Charset.forName("UTF-8")));
+					confFile.setConf(FileUtil.readString(filePath, StandardCharsets.UTF_8));
 				}
 			}
 		}
@@ -546,15 +539,15 @@ public class ConfService {
 
 		for (Cert cert : asycPack.getCertList()) {
 			if (StrUtil.isNotEmpty(cert.getPem())) {
-				FileUtil.writeString(cert.getPemStr(), cert.getPem(), Charset.forName("UTF-8"));
-				FileUtil.writeString(cert.getKeyStr(), cert.getKey(), Charset.forName("UTF-8"));
+				FileUtil.writeString(cert.getPemStr(), cert.getPem(), StandardCharsets.UTF_8);
+				FileUtil.writeString(cert.getKeyStr(), cert.getKey(), StandardCharsets.UTF_8);
 			}
 		}
 
 		for (Server server : asycPack.getServerList()) {
 			if (StrUtil.isNotEmpty(server.getPem())) {
-				FileUtil.writeString(server.getPemStr(), server.getPem(), Charset.forName("UTF-8"));
-				FileUtil.writeString(server.getKeyStr(), server.getKey(), Charset.forName("UTF-8"));
+				FileUtil.writeString(server.getPemStr(), server.getPem(), StandardCharsets.UTF_8);
+				FileUtil.writeString(server.getKeyStr(), server.getKey(), StandardCharsets.UTF_8);
 			}
 		}
 
@@ -566,8 +559,8 @@ public class ConfService {
 
 		if (FileUtil.exist(nginxPath)) {
 
-			List<String> subContent = new ArrayList<String>();
-			List<String> subName = new ArrayList<String>();
+			List<String> subContent = new ArrayList<>();
+			List<String> subName = new ArrayList<>();
 
 			for (ConfFile confFile : confExt.getFileList()) {
 				subContent.add(confFile.getConf());
