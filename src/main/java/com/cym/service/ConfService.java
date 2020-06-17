@@ -1,5 +1,35 @@
 package com.cym.service;
 
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.cym.controller.adminPage.UpstreamController;
+import com.cym.ext.AsycPack;
+import com.cym.ext.ConfExt;
+import com.cym.ext.ConfFile;
+import com.cym.model.Cert;
+import com.cym.model.Http;
+import com.cym.model.Location;
+import com.cym.model.Param;
+import com.cym.model.Server;
+import com.cym.model.Stream;
+import com.cym.model.Upstream;
+import com.cym.model.UpstreamServer;
+import com.cym.utils.RuntimeTool;
+import com.cym.utils.SystemTool;
+import com.github.odiszapc.nginxparser.NgxBlock;
+import com.github.odiszapc.nginxparser.NgxConfig;
+import com.github.odiszapc.nginxparser.NgxDumper;
+import com.github.odiszapc.nginxparser.NgxEntry;
+import com.github.odiszapc.nginxparser.NgxParam;
+
 import cn.craccd.sqlHelper.bean.Sort;
 import cn.craccd.sqlHelper.bean.Sort.Direction;
 import cn.craccd.sqlHelper.utils.ConditionAndWrapper;
@@ -8,21 +38,6 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.ZipUtil;
-import com.cym.controller.adminPage.UpstreamController;
-import com.cym.ext.AsycPack;
-import com.cym.ext.ConfExt;
-import com.cym.ext.ConfFile;
-import com.cym.model.*;
-import com.github.odiszapc.nginxparser.*;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Service
 public class ConfService {
@@ -52,7 +67,7 @@ public class ConfService {
 		this.sqlHelper = sqlHelper;
 	}
 
-	public ConfExt buildConf(Boolean decompose) {
+	public synchronized ConfExt buildConf(Boolean decompose) {
 		ConfExt confExt = new ConfExt();
 		confExt.setFileList(new ArrayList<>());
 
@@ -372,19 +387,20 @@ public class ConfService {
 			String conf = new NgxDumper(ngxConfig).dump();
 
 			// 经反复调试，是FileUtil.exist(module)引发的异常。
-// todo 装载ngx_stream_module模块的功能经常报异常，暂时注释掉，FileUtil.exist(module)这句。
+			// todo 装载ngx_stream_module模块的功能经常报异常，暂时注释掉，FileUtil.exist(module)这句。
+			
 			// 装载ngx_stream_module模块
-//			if (hasStream && SystemTool.isLinux()) {
-//				String module = settingService.get("ngx_stream_module");
+			if (hasStream && SystemTool.isLinux()) {
+				String module = settingService.get("ngx_stream_module");
 //				if (StrUtil.isEmpty(module) || !FileUtil.exist(module)) {
 //					module = RuntimeTool.execForOne("find / -name ngx_stream_module.so");
 //				}
-//
-//				if (StrUtil.isNotEmpty(module) && FileUtil.exist(module)) {
-//					settingService.set("ngx_stream_module", module);
-//					conf = "load_module " + module + ";\n" + conf;
-//				}
-//			}
+				// 不在生成conf的方法中查找ngx_stream_module, 放到InitConfig中查找, 只在项目启动时运行一次
+				if (StrUtil.isNotEmpty(module) /*&& FileUtil.exist(module)*/ ) {
+					settingService.set("ngx_stream_module", module);
+					conf = "load_module " + module + ";\n" + conf;
+				}
+			}
 
 			confExt.setConf(conf);
 
