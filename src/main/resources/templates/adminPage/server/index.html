@@ -131,6 +131,7 @@
 								</td>
 								<td>
 									<button type="button" class="layui-btn layui-btn-sm" onclick="edit('${ext.server.id}')">编辑</button>
+									<button type="button" class="layui-btn layui-btn-sm" onclick="clone('${ext.server.id}')">克隆</button>
 									<button type="button" class="layui-btn layui-btn-danger layui-btn-sm" onclick="del('${ext.server.id}')">删除</button>
 									
 								</td>
@@ -162,7 +163,7 @@
 					<div class="proxyTcp">
 						<label class="layui-form-label">指向负载均衡</label>
 						<div class="layui-input-inline">
-							<select name="proxyUpstreamId">
+							<select name="proxyUpstreamId" id="proxyUpstreamId">
 								<#list upstreamTcpList as upstream>
 								<option value="${upstream.id}">${upstream.name}</option>
 								</#list>

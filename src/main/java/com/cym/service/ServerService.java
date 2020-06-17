@@ -97,7 +97,7 @@ public class ServerService {
 	@Transactional
 	public void addOverTcp(Server server, String serverParamJson) {
 		sqlHelper.insertOrUpdate(server);
-		
+
 		List<String> locationIds = sqlHelper.findIdsByQuery(new ConditionAndWrapper().eq("serverId", server.getId()), Location.class);
 		sqlHelper.deleteByQuery(new ConditionOrWrapper().eq("serverId", server.getId()).in("locationId", locationIds), Param.class);
 		List<Param> paramList = new ArrayList<Param>();
@@ -115,6 +115,29 @@ public class ServerService {
 
 	public List<Server> getListByProxyType(Integer proxyType) {
 		return sqlHelper.findListByQuery(new ConditionAndWrapper().eq("proxyType", proxyType), Server.class);
+	}
+
+	@Transactional
+	public void clone(String id) {
+		Server server = sqlHelper.findById(id, Server.class);
+
+		List<Location> locations = sqlHelper.findListByQuery(new ConditionAndWrapper().eq("serverId", server.getId()), Location.class);
+		List<Param> params = sqlHelper.findListByQuery(new ConditionAndWrapper().eq("serverId", server.getId()), Param.class);
+
+		server.setId(null);
+		sqlHelper.insertOrUpdate(server);
+
+		for (Location location : locations) {
+			location.setId(null);
+			location.setServerId(server.getId());
+			sqlHelper.insert(location);
+		}
+
+		for (Param param : params) {
+			param.setId(null);
+			param.setServerId(server.getId());
+			sqlHelper.insert(param);
+		}
 	}
 
 }
