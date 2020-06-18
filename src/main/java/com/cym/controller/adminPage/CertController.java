@@ -73,11 +73,11 @@ public class CertController extends BaseController {
 	public JsonResult del(String id) {
 		Cert cert = sqlHelper.findById(id, Cert.class);
 		if (cert.getKey() != null) {
-			File file = new File(cert.getKey());
-			// 删除域名所在文件夹
-			FileUtil.del(file.getParent());
+			FileUtil.del(cert.getKey());
 		}
-
+		if (cert.getPem() != null) {
+			FileUtil.del(cert.getPem());
+		}
 		sqlHelper.deleteById(id, Cert.class);
 		return renderSuccess();
 	}
@@ -181,7 +181,7 @@ public class CertController extends BaseController {
 			// 续签
 			String cmd = InitConfig.acmeSh + " --renew --force -d " + cert.getDomain();
 			logger.info(cmd);
-			
+
 			Process process = RuntimeUtil.exec(cmd);
 			BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
 			String line = null;
@@ -191,7 +191,7 @@ public class CertController extends BaseController {
 			in.close();
 			int re = process.waitFor();
 			logger.info("over:" + re);
-			
+
 			logger.info(rs);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -234,7 +234,7 @@ public class CertController extends BaseController {
 			list.add("SAVED_DP_Key='" + cert.getDpKey() + "'");
 		}
 		list.add("USER_PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin'");
-		
-		FileUtil.writeLines(list, new File(InitConfig.acmeSh.replace("/acme.sh", "/account.conf")), Charset.defaultCharset()); 
+
+		FileUtil.writeLines(list, new File(InitConfig.acmeSh.replace("/acme.sh", "/account.conf")), Charset.defaultCharset());
 	}
 }
