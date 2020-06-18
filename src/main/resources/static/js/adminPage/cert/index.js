@@ -172,6 +172,7 @@ function apply(id){
 				}
 			},
 			error : function() {
+				layer.closeAll();
 				alert("出错了,请联系技术人员!");
 			}
 		});
@@ -203,6 +204,7 @@ function renew(id){
 				}
 			},
 			error : function() {
+				layer.closeAll();
 				alert("出错了,请联系技术人员!");
 			}
 		});
