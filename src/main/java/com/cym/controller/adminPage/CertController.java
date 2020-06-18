@@ -84,14 +84,6 @@ public class CertController extends BaseController {
 		if (SystemTool.getSystem().equals("Windows")) {
 			return renderError("证书操作只能在linux下进行");
 		}
-//		if (!SystemTool.hasNginx()) {
-//			return renderError("系统中未安装nginx命令，如果是编译安装nginx，请尝试在系统中执行ln -s [nginx执行文件路径] /usr/bin建立命令链接");
-//		}
-//
-//		String nginxPath = settingService.get("nginxPath");
-//		if (!FileUtil.exist(nginxPath)) {
-//			return renderError("未找到nginx配置文件:" + nginxPath + ", 请先在【生成conf】模块中设置并读取.");
-//		}
 
 		Cert cert = sqlHelper.findById(id, Cert.class);
 		if (cert.getMakeTime() != null) {
@@ -107,13 +99,6 @@ public class CertController extends BaseController {
 		}
 		isInApply = true;
 
-		// 如果在容器中, 要去替换主nginx.conf, 而不是/home/nginxWebUI/nginx.conf
-//		if (nginxPath.contains(InitConfig.home)) {
-//			nginxPath = "/etc/nginx/nginx.conf";
-//		}
-
-		// 替换nginx.conf并重启
-//		replaceStartNginx(nginxPath, cert.getDomain());
 		String rs = "";
 		try {
 			// 设置环境变量
@@ -129,10 +114,7 @@ public class CertController extends BaseController {
 			e.printStackTrace();
 			rs = e.getMessage();
 		}
-
-		// 还原nginx.conf并重启
-//		backupStartNginx(nginxPath);
-		if (rs.contains("Cert success")) {
+		if (rs.contains("key ok")) {
 			String certDir = "/root/.acme.sh/" + cert.getDomain() + "/";
 
 			String dest = InitConfig.home + "cert/" + cert.getDomain() + ".cer";
@@ -162,14 +144,6 @@ public class CertController extends BaseController {
 		if (SystemTool.isWindows()) {
 			return renderError("证书操作只能在linux下进行");
 		}
-//		if (!SystemTool.hasNginx()) {
-//			return renderError("系统中未安装nginx命令，如果是编译安装nginx，请尝试在系统中执行ln -s [nginx执行文件路径] /usr/bin建立命令链接");
-//		}
-
-//		String nginxPath = settingService.get("nginxPath");
-//		if (!FileUtil.exist(nginxPath)) {
-//			return renderError("未找到nginx配置文件:" + nginxPath + ", 请先在【生成conf】模块中设置并读取.");
-//		}
 
 		Cert cert = sqlHelper.findById(id, Cert.class);
 		if (cert.getMakeTime() == null) {
@@ -184,13 +158,6 @@ public class CertController extends BaseController {
 		}
 		isInApply = true;
 
-		// 如果在容器中, 要去替换主nginx.conf, 而不是/home/nginxWebUI/nginx.conf
-//		if (nginxPath.contains(InitConfig.home)) {
-//			nginxPath = "/etc/nginx/nginx.conf";
-//		}
-
-		// 替换nginx.conf并重启
-//		replaceStartNginx(nginxPath, cert.getDomain());
 		String rs = "";
 		try {
 			// 设置环境变量
@@ -206,9 +173,7 @@ public class CertController extends BaseController {
 			rs = e.getMessage();
 		}
 
-		// 还原nginx.conf并重启
-//		backupStartNginx(nginxPath);
-		if (rs.contains("Cert success")) {
+		if (rs.contains("key ok")) {
 			String certDir = "/root/.acme.sh/" + cert.getDomain() + "/";
 
 			String dest = InitConfig.home + "cert/" + cert.getDomain() + ".cer";
@@ -232,39 +197,6 @@ public class CertController extends BaseController {
 
 	}
 
-//	// 替换nginx.conf并重启
-//	private void replaceStartNginx(String nginxPath, String domain) {
-//		logger.info("替换nginx.conf并重启");
-//		String nginxContent = "worker_processes  auto; \n" //
-//				+ "events {worker_connections  1024;} \n" //
-//				+ "http { \n" //
-//				+ "   server { \n" //
-//				+ "	  server_name " + domain + "; \n" //
-//				+ "	  listen 80; \n" //
-//				+ "	  root /tmp/www/; \n" //
-//				+ "   } \n" //
-//				+ "}" //
-//		;
-//
-//		// 替换备份文件
-//		FileUtil.copy(nginxPath, nginxPath + ".org", true);
-//		FileUtil.writeString(nginxContent, nginxPath, Charset.forName("UTF-8"));
-//
-//		// 重启nginx
-//		RuntimeUtil.exec("nginx -s reload");
-//	}
-//
-//	// 还原nginx.conf并重启
-//	private void backupStartNginx(String nginxPath) {
-//		logger.info("还原nginx.conf并重启");
-//		// 还原备份文件
-//		FileUtil.copy(nginxPath + ".org", nginxPath, true);
-//		FileUtil.del(nginxPath + ".org");
-//
-//		// 重启nginx
-//		RuntimeUtil.exec("nginx -s reload");
-//
-//	}
 
 	private void setEnv(Cert cert) {
 		RuntimeUtil.execForStr(new String[] { "/bin/sh", "-c", "export Ali_Key=\"" + cert.getAliKey() + "\"" });
