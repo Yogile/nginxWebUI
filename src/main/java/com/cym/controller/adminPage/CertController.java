@@ -84,14 +84,14 @@ public class CertController extends BaseController {
 		if (SystemTool.getSystem().equals("Windows")) {
 			return renderError("证书操作只能在linux下进行");
 		}
-		if (!SystemTool.hasNginx()) {
-			return renderError("系统中未安装nginx命令，如果是编译安装nginx，请尝试在系统中执行ln -s [nginx执行文件路径] /usr/bin建立命令链接");
-		}
-
-		String nginxPath = settingService.get("nginxPath");
-		if (!FileUtil.exist(nginxPath)) {
-			return renderError("未找到nginx配置文件:" + nginxPath + ", 请先在【生成conf】模块中设置并读取.");
-		}
+//		if (!SystemTool.hasNginx()) {
+//			return renderError("系统中未安装nginx命令，如果是编译安装nginx，请尝试在系统中执行ln -s [nginx执行文件路径] /usr/bin建立命令链接");
+//		}
+//
+//		String nginxPath = settingService.get("nginxPath");
+//		if (!FileUtil.exist(nginxPath)) {
+//			return renderError("未找到nginx配置文件:" + nginxPath + ", 请先在【生成conf】模块中设置并读取.");
+//		}
 
 		Cert cert = sqlHelper.findById(id, Cert.class);
 		if (cert.getMakeTime() != null) {
@@ -162,14 +162,14 @@ public class CertController extends BaseController {
 		if (SystemTool.isWindows()) {
 			return renderError("证书操作只能在linux下进行");
 		}
-		if (!SystemTool.hasNginx()) {
-			return renderError("系统中未安装nginx命令，如果是编译安装nginx，请尝试在系统中执行ln -s [nginx执行文件路径] /usr/bin建立命令链接");
-		}
+//		if (!SystemTool.hasNginx()) {
+//			return renderError("系统中未安装nginx命令，如果是编译安装nginx，请尝试在系统中执行ln -s [nginx执行文件路径] /usr/bin建立命令链接");
+//		}
 
-		String nginxPath = settingService.get("nginxPath");
-		if (!FileUtil.exist(nginxPath)) {
-			return renderError("未找到nginx配置文件:" + nginxPath + ", 请先在【生成conf】模块中设置并读取.");
-		}
+//		String nginxPath = settingService.get("nginxPath");
+//		if (!FileUtil.exist(nginxPath)) {
+//			return renderError("未找到nginx配置文件:" + nginxPath + ", 请先在【生成conf】模块中设置并读取.");
+//		}
 
 		Cert cert = sqlHelper.findById(id, Cert.class);
 		if (cert.getMakeTime() == null) {
