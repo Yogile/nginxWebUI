@@ -55,10 +55,9 @@ public class InitConfig {
 			sqlHelper.insertAll(https);
 		}
 
-		logger.info("----------------isLinux:" + SystemTool.isLinux() + "--------------");
 		if (SystemTool.isLinux()) {
 			// 初始化acme.sh
-			logger.info("----------------初始化acme.sh--------------");
+			logger.info("----------------release acme.sh--------------");
 			if (!FileUtil.exist("/root/.acme.sh")) {
 				ClassPathResource resource = new ClassPathResource("acme.zip");
 				InputStream inputStream = resource.getInputStream();
@@ -72,20 +71,18 @@ public class InitConfig {
 			}
 
 			// 找寻nginx配置文件
-			logger.info("----------------找寻nginx配置文件--------------");
+			logger.info("----------------find nginx.conf--------------");
 			String nginxPath = settingService.get("nginxPath");
-			logger.info("nginxPath:" + nginxPath);
 			if (StrUtil.isEmpty(nginxPath)) {
 				// 查找nginx.conf
 				nginxPath = RuntimeTool.execForOne("find / -name nginx.conf");
-				logger.info("find:" + nginxPath);
 				if (StrUtil.isNotEmpty(nginxPath)) {
 					// 判断是否是容器中
 					String lines = FileUtil.readUtf8String(nginxPath);
-					logger.info(lines + ":" + lines.contains("include " + home));
 					if (StrUtil.isNotEmpty(lines) && lines.contains("include " + home)) {
 						nginxPath = home + "nginx.conf";
-
+						
+						logger.info("----------------release nginx.conf--------------");
 						// 释放nginxOrg.conf
 						ClassPathResource resource = new ClassPathResource("nginxOrg.conf");
 						InputStream inputStream = resource.getInputStream();
@@ -97,7 +94,7 @@ public class InitConfig {
 			}
 
 			// 查找nginx执行文件
-			logger.info("----------------查找nginx执行文件--------------");
+			logger.info("----------------find nginx--------------");
 			String nginxExe = settingService.get("nginxExe");
 			if (StrUtil.isEmpty(nginxExe)) {
 				String rs = RuntimeTool.execForOne("which nginx");
@@ -108,7 +105,7 @@ public class InitConfig {
 			}
 
 			// 查找ngx_stream_module模块
-			logger.info("----------------查找ngx_stream_module模块--------------");
+			logger.info("----------------find ngx_stream_module--------------");
 			String module = settingService.get("ngx_stream_module");
 			if (StrUtil.isEmpty(module)) {
 				module = RuntimeTool.execForOne("find / -name ngx_stream_module.so");
@@ -118,7 +115,7 @@ public class InitConfig {
 			}
 
 			// 尝试启动nginx
-			logger.info("----------------尝试启动nginx--------------");
+			logger.info("----------------start nginx--------------");
 			if (nginxExe.equals("nginx")) {
 				String[] command = { "/bin/sh", "-c", "ps -ef|grep nginx" };
 				String rs = RuntimeUtil.execForStr(command);
@@ -133,7 +130,7 @@ public class InitConfig {
 			}
 
 			// 查找nginx.pid文件
-			logger.info("----------------查找nginx.pid文件--------------");
+			logger.info("----------------find nginx.pid--------------");
 			String nginxPid = settingService.get("nginxPid");
 			if (StrUtil.isEmpty(nginxPid)) {
 				nginxPid = RuntimeTool.execForOne("find / -name nginx.pid");
