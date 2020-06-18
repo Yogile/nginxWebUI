@@ -1,7 +1,10 @@
 package com.cym.controller.adminPage;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -74,7 +77,6 @@ public class CertController extends BaseController {
 			FileUtil.del(file.getParent());
 		}
 
-		
 		sqlHelper.deleteById(id, Cert.class);
 		return renderSuccess();
 	}
@@ -103,18 +105,28 @@ public class CertController extends BaseController {
 		String rs = "";
 		try {
 			// 设置环境变量
-			setEnv(cert);
-
+			String[] env = getEnv(cert);
+			
 			// 申请
 			String cmd = InitConfig.acmeSh + " --issue --dns dns_ali -d " + cert.getDomain();
 			logger.info(cmd);
-			rs = RuntimeUtil.execForStr(cmd);
+			
+			Process process = RuntimeUtil.exec(env, cmd);
+			BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
+			String line = null;
+			while ((line = in.readLine()) != null) {
+				rs += line + "\n";
+			}
+			in.close();
+			
 			logger.info(rs);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			rs = e.getMessage();
 		}
+		
+		
 		if (rs.contains("key ok")) {
 			String certDir = "/root/.acme.sh/" + cert.getDomain() + "/";
 
@@ -162,12 +174,20 @@ public class CertController extends BaseController {
 		String rs = "";
 		try {
 			// 设置环境变量
-			setEnv(cert);
+			String[] env = getEnv(cert);
 
 			// 续签
 			String cmd = InitConfig.acmeSh + " --renew --force -d " + cert.getDomain();
 			logger.info(cmd);
-			rs = RuntimeUtil.execForStr(cmd);
+			
+			Process process = RuntimeUtil.exec(env, cmd);
+			BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
+			String line = null;
+			while ((line = in.readLine()) != null) {
+				rs += line + "\n";
+			}
+			in.close();
+			
 			logger.info(rs);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -198,15 +218,17 @@ public class CertController extends BaseController {
 
 	}
 
-
-	private void setEnv(Cert cert) {
-		if(cert.getDnsType().equals("ali")) {
-			RuntimeUtil.execForStr(new String[] { "source", "export Ali_Key=\"" + cert.getAliKey() + "\"" });
-			RuntimeUtil.execForStr(new String[] { "source", "export Ali_Secret=\"" + cert.getAliSecret() + "\"" });
+	private String[] getEnv(Cert cert) {
+		List<String> list = new ArrayList<>();
+		if (cert.getDnsType().equals("ali")) {
+			list.add("export Ali_Key=\"" + cert.getAliKey() + "\"");
+			list.add("export Ali_Secret=\"" + cert.getAliSecret() + "\"");
 		}
-		if(cert.getDnsType().equals("dp")) {
-			RuntimeUtil.execForStr(new String[] { "source", "export DP_Id=\"" + cert.getDpId() + "\"" });
-			RuntimeUtil.execForStr(new String[] { "source", "export DP_Key=\"" + cert.getDpKey() + "\"" });
+		if (cert.getDnsType().equals("dp")) {
+			list.add("export DP_Id=\"" + cert.getDpId() + "\"");
+			list.add("export DP_Key=\"" + cert.getDpKey() + "\"");
 		}
+		
+		return list.toArray(new String[0]);
 	}
 }
