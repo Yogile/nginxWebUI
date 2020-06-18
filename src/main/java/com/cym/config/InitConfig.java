@@ -74,7 +74,7 @@ public class InitConfig {
 				if (StrUtil.isNotEmpty(nginxPath)) {
 					// 判断是否是容器中
 					String lines = FileUtil.readUtf8String(nginxPath);
-					if (StrUtil.isNotEmpty(lines) && lines.contains("include " + home + "nginx.conf;")) {
+					if (StrUtil.isNotEmpty(lines) && lines.contains("include " + home)) {
 						nginxPath = home + "nginx.conf";
 
 						// 释放nginxOrg.conf
