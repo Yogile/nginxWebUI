@@ -103,6 +103,18 @@ function addOver() {
 		return;
 	}
 	
+	if($("#dnsType").val() == 'ali'){
+		if($("#aliKey").val() == '' || $("#aliSecret").val() == ''){
+			layer.msg("填写不完整");
+			return;
+		}
+	}
+	if($("#dnsType").val() == 'dp'){
+		if($("#dpId").val() == '' || $("#dpKey").val() == ''){
+			layer.msg("填写不完整");
+			return;
+		}
+	}
 	
 	$.ajax({
 		type : 'POST',
