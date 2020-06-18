@@ -112,16 +112,18 @@ public class CertController extends BaseController {
 			String cmd = InitConfig.acmeSh + " --issue --dns dns_ali -d " + cert.getDomain();
 			logger.info(cmd);
 
-			Process process = RuntimeUtil.exec(cmd);
-			BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
-			String line = null;
-			while ((line = in.readLine()) != null) {
-				rs += line + "\n";
-			}
-			in.close();
-			int re = process.waitFor();
-			logger.info("over:" + re);
-
+//			Process process = RuntimeUtil.exec(cmd);
+//			BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
+//			String line = null;
+//			while ((line = in.readLine()) != null) {
+//				rs += line + "\n";
+//			}
+//			in.close();
+//			int re = process.waitFor();
+//			logger.info("over:" + re);
+			
+			rs = RuntimeUtil.execForStr(cmd);
+			
 			logger.info(rs);
 
 		} catch (Exception e) {
@@ -182,16 +184,18 @@ public class CertController extends BaseController {
 			String cmd = InitConfig.acmeSh + " --renew --force -d " + cert.getDomain();
 			logger.info(cmd);
 
-			Process process = RuntimeUtil.exec(cmd);
-			BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
-			String line = null;
-			while ((line = in.readLine()) != null) {
-				rs += line + "\n";
-			}
-			in.close();
-			int re = process.waitFor();
-			logger.info("over:" + re);
+//			Process process = RuntimeUtil.exec(cmd);
+//			BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
+//			String line = null;
+//			while ((line = in.readLine()) != null) {
+//				rs += line + "\n";
+//			}
+//			in.close();
+//			int re = process.waitFor();
+//			logger.info("over:" + re);
 
+			rs = RuntimeUtil.execForStr(cmd);
+			
 			logger.info(rs);
 		} catch (Exception e) {
 			e.printStackTrace();
