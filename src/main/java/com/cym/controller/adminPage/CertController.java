@@ -200,9 +200,15 @@ public class CertController extends BaseController {
 
 
 	private void setEnv(Cert cert) {
-		RuntimeUtil.execForStr(new String[] { "/bin/sh", "-c", "export Ali_Key=\"" + cert.getAliKey() + "\"" });
-		RuntimeUtil.execForStr(new String[] { "/bin/sh", "-c", "export Ali_Secret=\"" + cert.getAliSecret() + "\"" });
-		RuntimeUtil.execForStr(new String[] { "/bin/sh", "-c", "export DP_Id=\"" + cert.getDpId() + "\"" });
-		RuntimeUtil.execForStr(new String[] { "/bin/sh", "-c", "export DP_Key=\"" + cert.getDpKey() + "\"" });
+		if(cert.getDnsType().equals("ali")) {
+			System.out.println("export Ali_Key=\"" + cert.getAliKey() + "\"" );
+			System.out.println("export Ali_Secret=\"" + cert.getAliSecret() + "\"");
+			RuntimeUtil.execForStr(new String[] { "/bin/sh", "-c", "export Ali_Key=\"" + cert.getAliKey() + "\"" });
+			RuntimeUtil.execForStr(new String[] { "/bin/sh", "-c", "export Ali_Secret=\"" + cert.getAliSecret() + "\"" });
+		}
+		if(cert.getDnsType().equals("dp")) {
+			RuntimeUtil.execForStr(new String[] { "/bin/sh", "-c", "export DP_Id=\"" + cert.getDpId() + "\"" });
+			RuntimeUtil.execForStr(new String[] { "/bin/sh", "-c", "export DP_Key=\"" + cert.getDpKey() + "\"" });
+		}
 	}
 }
