@@ -105,11 +105,11 @@ public class CertController extends BaseController {
 
 		String rs = "";
 		try {
-			// 设置环境变量
+			// 设置dns账号
 			setEnv(cert);
 
 			// 申请
-			String cmd = "sh " + InitConfig.acmeSh + " --issue --dns dns_ali -d " + cert.getDomain();
+			String cmd = InitConfig.acmeSh + " --issue --dns dns_ali -d " + cert.getDomain();
 			logger.info(cmd);
 
 			Process process = RuntimeUtil.exec(cmd);
@@ -129,7 +129,7 @@ public class CertController extends BaseController {
 			rs = e.getMessage();
 		}
 
-		if (rs.contains("Your cert is")) {
+		if (rs.contains("Your cert is in")) {
 			String certDir = "/root/.acme.sh/" + cert.getDomain() + "/";
 
 			String dest = InitConfig.home + "cert/" + cert.getDomain() + ".cer";
@@ -175,11 +175,11 @@ public class CertController extends BaseController {
 
 		String rs = "";
 		try {
-			// 设置环境变量
+			// 设置dns账号
 			setEnv(cert);
 
 			// 续签
-			String cmd = "sh " + InitConfig.acmeSh + " --renew --force -d " + cert.getDomain();
+			String cmd = InitConfig.acmeSh + " --renew --force -d " + cert.getDomain();
 			logger.info(cmd);
 			
 			Process process = RuntimeUtil.exec(cmd);
@@ -198,7 +198,7 @@ public class CertController extends BaseController {
 			rs = e.getMessage();
 		}
 
-		if (rs.contains("Your cert is")) {
+		if (rs.contains("Your cert is in")) {
 			String certDir = "/root/.acme.sh/" + cert.getDomain() + "/";
 
 			String dest = InitConfig.home + "cert/" + cert.getDomain() + ".cer";
