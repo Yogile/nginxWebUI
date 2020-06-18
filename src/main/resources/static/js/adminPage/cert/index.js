@@ -150,7 +150,7 @@ function del(id){
 
 function apply(id){
 	
-	if(confirm("确认开始申请?")){
+	if(confirm("确认开始申请？申请时间较长，请耐心等待。")){
 		layer.load();
 		$.ajax({
 			type : 'POST',
@@ -182,7 +182,7 @@ function apply(id){
 
 function renew(id){
 	
-	if(confirm("确认开始续签?")){
+	if(confirm("确认开始续签？申请时间较长，请耐心等待。")){
 		layer.load();
 		$.ajax({
 			type : 'POST',
