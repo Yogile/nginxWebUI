@@ -108,7 +108,7 @@ public class CertController extends BaseController {
 			String[] env = getEnv(cert);
 			
 			// 申请
-			String cmd = InitConfig.acmeSh + " --issue --dns dns_ali -d " + cert.getDomain();
+			String cmd = "sh " + InitConfig.acmeSh + " --issue --dns dns_ali -d " + cert.getDomain();
 			logger.info(cmd);
 			
 			Process process = RuntimeUtil.exec(env, cmd);
@@ -179,7 +179,7 @@ public class CertController extends BaseController {
 			String[] env = getEnv(cert);
 
 			// 续签
-			String cmd = InitConfig.acmeSh + " --renew --force -d " + cert.getDomain();
+			String cmd = "sh " + InitConfig.acmeSh + " --renew --force -d " + cert.getDomain();
 			logger.info(cmd);
 			
 			Process process = RuntimeUtil.exec(env, cmd);
