@@ -7,6 +7,8 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
@@ -25,7 +27,8 @@ import cn.hutool.core.util.ZipUtil;
 
 @Component
 public class InitConfig {
-
+	Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 	public static String acmeSh = "/root/.acme.sh/acme.sh";
 	public static String home;
 
@@ -52,10 +55,10 @@ public class InitConfig {
 			sqlHelper.insertAll(https);
 		}
 
-		System.err.println("----------------isLinux:" + SystemTool.isLinux() + "--------------");
+		logger.info("----------------isLinux:" + SystemTool.isLinux() + "--------------");
 		if (SystemTool.isLinux()) {
 			// 初始化acme.sh
-			System.err.println("----------------初始化acme.sh--------------");
+			logger.info("----------------初始化acme.sh--------------");
 			if (!FileUtil.exist("/root/.acme.sh")) {
 				ClassPathResource resource = new ClassPathResource("acme.zip");
 				InputStream inputStream = resource.getInputStream();
@@ -69,17 +72,17 @@ public class InitConfig {
 			}
 
 			// 找寻nginx配置文件
-			System.err.println("----------------找寻nginx配置文件--------------");
+			logger.info("----------------找寻nginx配置文件--------------");
 			String nginxPath = settingService.get("nginxPath");
-			System.err.println("nginxPath:" + nginxPath);
+			logger.info("nginxPath:" + nginxPath);
 			if (StrUtil.isEmpty(nginxPath)) {
 				// 查找nginx.conf
 				nginxPath = RuntimeTool.execForOne("find / -name nginx.conf");
-				System.err.println("find:" + nginxPath);
+				logger.info("find:" + nginxPath);
 				if (StrUtil.isNotEmpty(nginxPath)) {
 					// 判断是否是容器中
 					String lines = FileUtil.readUtf8String(nginxPath);
-					System.err.println(lines + ":" + lines.contains("include " + home));
+					logger.info(lines + ":" + lines.contains("include " + home));
 					if (StrUtil.isNotEmpty(lines) && lines.contains("include " + home)) {
 						nginxPath = home + "nginx.conf";
 
@@ -94,7 +97,7 @@ public class InitConfig {
 			}
 
 			// 查找nginx执行文件
-			System.err.println("----------------查找nginx执行文件--------------");
+			logger.info("----------------查找nginx执行文件--------------");
 			String nginxExe = settingService.get("nginxExe");
 			if (StrUtil.isEmpty(nginxExe)) {
 				String rs = RuntimeTool.execForOne("which nginx");
@@ -105,7 +108,7 @@ public class InitConfig {
 			}
 
 			// 查找ngx_stream_module模块
-			System.err.println("----------------查找ngx_stream_module模块--------------");
+			logger.info("----------------查找ngx_stream_module模块--------------");
 			String module = settingService.get("ngx_stream_module");
 			if (StrUtil.isEmpty(module)) {
 				module = RuntimeTool.execForOne("find / -name ngx_stream_module.so");
@@ -115,12 +118,12 @@ public class InitConfig {
 			}
 
 			// 尝试启动nginx
-			System.err.println("----------------尝试启动nginx--------------");
+			logger.info("----------------尝试启动nginx--------------");
 			if (nginxExe.equals("nginx")) {
 				String[] command = { "/bin/sh", "-c", "ps -ef|grep nginx" };
 				String rs = RuntimeUtil.execForStr(command);
 				if (!rs.contains("nginx: master process") && SystemTool.hasNginx()) {
-					System.err.println("尝试启动nginx");
+					logger.info("尝试启动nginx");
 					try {
 						RuntimeUtil.exec("nginx");
 					} catch (Exception e) {
@@ -130,7 +133,7 @@ public class InitConfig {
 			}
 
 			// 查找nginx.pid文件
-			System.err.println("----------------查找nginx.pid文件--------------");
+			logger.info("----------------查找nginx.pid文件--------------");
 			String nginxPid = settingService.get("nginxPid");
 			if (StrUtil.isEmpty(nginxPid)) {
 				nginxPid = RuntimeTool.execForOne("find / -name nginx.pid");
