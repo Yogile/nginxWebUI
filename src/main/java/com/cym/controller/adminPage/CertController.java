@@ -102,6 +102,11 @@ public class CertController extends BaseController {
 		}
 		isInApply = true;
 		
+		// 如果在容器中, 要去替换主nginx.conf, 而不是/home/nginxWebUI/nginx.conf
+		if(nginxPath.contains(InitConfig.home)) {
+			nginxPath = "/etc/nginx/nginx.conf";
+		}
+		
 		// 替换nginx.conf并重启
 		replaceStartNginx(nginxPath, cert.getDomain());
 		String rs = "";
@@ -116,7 +121,8 @@ public class CertController extends BaseController {
 			e.printStackTrace();
 			rs = e.getMessage();
 		}
-
+		
+		// 还原nginx.conf并重启
 		backupStartNginx(nginxPath);
 		if (rs.contains("Cert success")) {
 			String certDir = "/root/.acme.sh/" + cert.getDomain() + "/";

@@ -120,7 +120,6 @@ public class InitConfig {
 				String[] command = { "/bin/sh", "-c", "ps -ef|grep nginx" };
 				String rs = RuntimeUtil.execForStr(command);
 				if (!rs.contains("nginx: master process") && SystemTool.hasNginx()) {
-					logger.info("尝试启动nginx");
 					try {
 						RuntimeUtil.exec("nginx");
 					} catch (Exception e) {
