@@ -68,9 +68,12 @@ public class InitConfig {
 
 			// 找寻nginx配置文件
 			String nginxPath = settingService.get("nginxPath");
+			System.err.println("----------------找寻nginx配置文件--------------");
+			System.err.println("nginxPath:"+nginxPath);
 			if (StrUtil.isEmpty(nginxPath)) {
 				// 查找nginx.conf
 				nginxPath = RuntimeTool.execForOne("find / -name nginx.conf");
+				System.err.println("find:"+nginxPath);
 				if (StrUtil.isNotEmpty(nginxPath)) {
 					// 判断是否是容器中
 					String lines = FileUtil.readUtf8String(nginxPath);
