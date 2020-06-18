@@ -98,7 +98,7 @@ public class CertController extends BaseController {
 			return renderError("该证书已申请");
 		}
 
-		if (cert.getDnsType() != null) {
+		if (cert.getDnsType() == null) {
 			return renderError("该证书还未设置DNS服务商信息");
 		}
 
@@ -175,7 +175,7 @@ public class CertController extends BaseController {
 		if (cert.getMakeTime() == null) {
 			return renderError("该证书还未申请");
 		}
-		if (cert.getDnsType() != null) {
+		if (cert.getDnsType() == null) {
 			return renderError("该证书还未设置DNS服务商信息");
 		}
 
