@@ -118,6 +118,8 @@ public class CertController extends BaseController {
 				rs += line + "\n";
 			}
 			in.close();
+			int re = process.waitFor();
+			logger.info("over:" + re);
 			
 			logger.info(rs);
 
@@ -187,6 +189,8 @@ public class CertController extends BaseController {
 				rs += line + "\n";
 			}
 			in.close();
+			int re = process.waitFor();
+			logger.info("over:" + re);
 			
 			logger.info(rs);
 		} catch (Exception e) {
@@ -228,6 +232,8 @@ public class CertController extends BaseController {
 			list.add("export DP_Id=\"" + cert.getDpId() + "\"");
 			list.add("export DP_Key=\"" + cert.getDpKey() + "\"");
 		}
+		
+		
 		
 		return list.toArray(new String[0]);
 	}
