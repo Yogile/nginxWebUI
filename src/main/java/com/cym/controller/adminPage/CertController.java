@@ -225,12 +225,12 @@ public class CertController extends BaseController {
 	private String[] getEnv(Cert cert) {
 		List<String> list = new ArrayList<>();
 		if (cert.getDnsType().equals("ali")) {
-			list.add("export Ali_Key=\"" + cert.getAliKey() + "\"");
-			list.add("export Ali_Secret=\"" + cert.getAliSecret() + "\"");
+			list.add("Ali_Key=\"" + cert.getAliKey() + "\"");
+			list.add("Ali_Secret=\"" + cert.getAliSecret() + "\"");
 		}
 		if (cert.getDnsType().equals("dp")) {
-			list.add("export DP_Id=\"" + cert.getDpId() + "\"");
-			list.add("export DP_Key=\"" + cert.getDpKey() + "\"");
+			list.add("DP_Id=\"" + cert.getDpId() + "\"");
+			list.add("DP_Key=\"" + cert.getDpKey() + "\"");
 		}
 		
 		
