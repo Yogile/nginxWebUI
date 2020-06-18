@@ -111,7 +111,7 @@ public class CertController extends BaseController {
 			String cmd = "sh " + InitConfig.acmeSh + " --issue --dns dns_ali -d " + cert.getDomain();
 			logger.info(cmd);
 			
-			Process process = RuntimeUtil.exec(env, cmd);
+			Process process = RuntimeUtil.exec(cmd);
 			BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
 			String line = null;
 			while ((line = in.readLine()) != null) {
@@ -182,7 +182,7 @@ public class CertController extends BaseController {
 			String cmd = "sh " + InitConfig.acmeSh + " --renew --force -d " + cert.getDomain();
 			logger.info(cmd);
 			
-			Process process = RuntimeUtil.exec(env, cmd);
+			Process process = RuntimeUtil.exec(cmd);
 			BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
 			String line = null;
 			while ((line = in.readLine()) != null) {
