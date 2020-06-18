@@ -25,6 +25,7 @@ import com.cym.utils.JsonResult;
 import com.cym.utils.SystemTool;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
 
@@ -105,12 +106,12 @@ public class CertController extends BaseController {
 		String rs = "";
 		try {
 			// 设置环境变量
-			String[] env = getEnv(cert);
-			
+			setEnv(cert);
+
 			// 申请
 			String cmd = "sh " + InitConfig.acmeSh + " --issue --dns dns_ali -d " + cert.getDomain();
 			logger.info(cmd);
-			
+
 			Process process = RuntimeUtil.exec(cmd);
 			BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
 			String line = null;
@@ -120,16 +121,15 @@ public class CertController extends BaseController {
 			in.close();
 			int re = process.waitFor();
 			logger.info("over:" + re);
-			
+
 			logger.info(rs);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			rs = e.getMessage();
 		}
-		
-		
-		if (rs.contains("key ok")) {
+
+		if (rs.contains("Your cert is")) {
 			String certDir = "/root/.acme.sh/" + cert.getDomain() + "/";
 
 			String dest = InitConfig.home + "cert/" + cert.getDomain() + ".cer";
@@ -176,7 +176,7 @@ public class CertController extends BaseController {
 		String rs = "";
 		try {
 			// 设置环境变量
-			String[] env = getEnv(cert);
+			setEnv(cert);
 
 			// 续签
 			String cmd = "sh " + InitConfig.acmeSh + " --renew --force -d " + cert.getDomain();
@@ -198,7 +198,7 @@ public class CertController extends BaseController {
 			rs = e.getMessage();
 		}
 
-		if (rs.contains("key ok")) {
+		if (rs.contains("Your cert is")) {
 			String certDir = "/root/.acme.sh/" + cert.getDomain() + "/";
 
 			String dest = InitConfig.home + "cert/" + cert.getDomain() + ".cer";
@@ -222,19 +222,19 @@ public class CertController extends BaseController {
 
 	}
 
-	private String[] getEnv(Cert cert) {
+	private void setEnv(Cert cert) {
 		List<String> list = new ArrayList<>();
+		list.add("UPGRADE_HASH='" + UUID.randomUUID().toString().replace("-", "") + "'");
 		if (cert.getDnsType().equals("ali")) {
-			list.add("Ali_Key=\"" + cert.getAliKey() + "\"");
-			list.add("Ali_Secret=\"" + cert.getAliSecret() + "\"");
+			list.add("SAVED_Ali_Key='" + cert.getAliKey() + "'");
+			list.add("SAVED_Ali_Secret='" + cert.getAliSecret() + "'");
 		}
 		if (cert.getDnsType().equals("dp")) {
-			list.add("DP_Id=\"" + cert.getDpId() + "\"");
-			list.add("DP_Key=\"" + cert.getDpKey() + "\"");
+			list.add("SAVED_DP_Id='" + cert.getDpId() + "'");
+			list.add("SAVED_DP_Key='" + cert.getDpKey() + "'");
 		}
+		list.add("USER_PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin'");
 		
-		
-		
-		return list.toArray(new String[0]);
+		FileUtil.writeLines(list, new File(InitConfig.acmeSh.replace("/acme.sh", "/account.conf")), Charset.defaultCharset()); 
 	}
 }
