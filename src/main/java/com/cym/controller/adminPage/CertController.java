@@ -267,9 +267,9 @@ public class CertController extends BaseController {
 //	}
 
 	private void setEnv(Cert cert) {
-		RuntimeUtil.execForStr("export Ali_Key=\"" + cert.getAliKey() + "\"");
-		RuntimeUtil.execForStr("export Ali_Secret=\"" + cert.getAliSecret() + "\"");
-		RuntimeUtil.execForStr("export DP_Id=\"" + cert.getDpId() + "\"");
-		RuntimeUtil.execForStr("export DP_Key=\"" + cert.getDpKey() + "\"");
+		RuntimeUtil.execForStr(new String[] { "/bin/sh", "-c", "export Ali_Key=\"" + cert.getAliKey() + "\"" });
+		RuntimeUtil.execForStr(new String[] { "/bin/sh", "-c", "export Ali_Secret=\"" + cert.getAliSecret() + "\"" });
+		RuntimeUtil.execForStr(new String[] { "/bin/sh", "-c", "export DP_Id=\"" + cert.getDpId() + "\"" });
+		RuntimeUtil.execForStr(new String[] { "/bin/sh", "-c", "export DP_Key=\"" + cert.getDpKey() + "\"" });
 	}
 }
