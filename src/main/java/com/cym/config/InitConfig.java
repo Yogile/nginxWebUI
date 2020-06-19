@@ -1,5 +1,6 @@
 package com.cym.config;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ import cn.hutool.core.util.ZipUtil;
 @Component
 public class InitConfig {
 	Logger logger = LoggerFactory.getLogger(this.getClass());
-	
+
 	public static String acmeSh = "/root/.acme.sh/acme.sh";
 	public static String home;
 
@@ -59,15 +60,24 @@ public class InitConfig {
 			// 初始化acme.sh
 			logger.info("----------------release acme.sh--------------");
 			if (!FileUtil.exist("/root/.acme.sh")) {
-				ClassPathResource resource = new ClassPathResource("acme.zip");
-				InputStream inputStream = resource.getInputStream();
 
-				FileUtil.writeFromStream(inputStream, "/root/acme.zip");
-				FileUtil.mkdir("/root/.acme.sh");
-				ZipUtil.unzip("/root/acme.zip", "/root/.acme.sh");
-				FileUtil.del("/root/acme.zip");
+				// 查看是否存在/home/nginxWebUI/.acme.sh
+				if (FileUtil.exist(home + ".acme.sh")) {
+					// 有,直接复制过来
+					FileUtil.copy(home + ".acme.sh", "/root/.acme.sh", true);
+				} else {
+					// 没有,释放全新包
+					ClassPathResource resource = new ClassPathResource("acme.zip");
+					InputStream inputStream = resource.getInputStream();
 
-				RuntimeUtil.exec("chmod 777 " + acmeSh);
+					FileUtil.writeFromStream(inputStream, "/root/acme.zip");
+					FileUtil.mkdir("/root/.acme.sh");
+					ZipUtil.unzip("/root/acme.zip", "/root/.acme.sh");
+					FileUtil.del("/root/acme.zip");
+
+					RuntimeUtil.exec("chmod 777 " + acmeSh);
+				}
+
 			}
 
 			// 找寻nginx配置文件
@@ -81,7 +91,7 @@ public class InitConfig {
 					String lines = FileUtil.readUtf8String(nginxPath);
 					if (StrUtil.isNotEmpty(lines) && lines.contains("include " + home)) {
 						nginxPath = home + "nginx.conf";
-						
+
 						logger.info("----------------release nginx.conf--------------");
 						// 释放nginxOrg.conf
 						ClassPathResource resource = new ClassPathResource("nginxOrg.conf");

@@ -117,6 +117,10 @@ public class CertController extends BaseController {
 			e.printStackTrace();
 			rs = e.getMessage();
 		}
+		
+		// 申请完后,马上备份.acme.sh
+		FileUtil.del(InitConfig.home + ".acme.sh");
+		FileUtil.copy("/root/.acme.sh", InitConfig.home + ".acme.sh", true);
 
 		if (rs.contains("Your cert is in")) {
 			String domain = cert.getDomain().split(",")[0];
@@ -184,6 +188,10 @@ public class CertController extends BaseController {
 			rs = e.getMessage();
 		}
 
+		// 申请完后,马上备份.acme.sh
+		FileUtil.del(InitConfig.home + ".acme.sh");
+		FileUtil.copy("/root/.acme.sh", InitConfig.home + ".acme.sh", true);
+				
 		if (rs.contains("Your cert is in")) {
 			try {
 				String domain = cert.getDomain().split(",")[0];
