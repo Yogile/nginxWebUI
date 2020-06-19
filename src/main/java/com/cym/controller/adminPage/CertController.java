@@ -168,9 +168,12 @@ public class CertController extends BaseController {
 		try {
 			// 设置dns账号
 			setEnv(cert);
-
+			
+			// 续签,以第一个域名为证书名
+			String domain = cert.getDomain().split(",")[0];
+			
 			// 续签
-			String cmd = InitConfig.acmeSh + " --renew --force -d " + cert.getDomain();
+			String cmd = InitConfig.acmeSh + " --renew --force -d " + domain;
 			logger.info(cmd);
 
 			rs = RuntimeUtil.execForStr(cmd);
