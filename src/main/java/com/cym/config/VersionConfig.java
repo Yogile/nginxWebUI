@@ -17,6 +17,7 @@ public class VersionConfig {
 
 	@PostConstruct
 	public void getNewVersion() {
+		
 		try {
 			String json = HttpUtil.get("http://craccd.oss-cn-beijing.aliyuncs.com/version.json", 500);
 			if (StrUtil.isNotEmpty(json)) {
@@ -24,6 +25,10 @@ public class VersionConfig {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		
+		if(version == null) {
+			version = new Version(); //防止version为空
 		}
 
 	}
