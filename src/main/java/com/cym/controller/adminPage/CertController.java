@@ -118,9 +118,9 @@ public class CertController extends BaseController {
 //			in.close();
 //			int re = process.waitFor();
 //			logger.info("over:" + re);
-			
+
 			rs = RuntimeUtil.execForStr(cmd);
-			
+
 			logger.info(rs);
 
 		} catch (Exception e) {
@@ -192,7 +192,7 @@ public class CertController extends BaseController {
 //			logger.info("over:" + re);
 
 			rs = RuntimeUtil.execForStr(cmd);
-			
+
 			logger.info(rs);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -200,19 +200,22 @@ public class CertController extends BaseController {
 		}
 
 		if (rs.contains("Your cert is in")) {
-			String certDir = "/root/.acme.sh/" + cert.getDomain() + "/";
+			try {
+				String certDir = "/root/.acme.sh/" + cert.getDomain() + "/";
 
-			String dest = InitConfig.home + "cert/" + cert.getDomain() + ".cer";
-			FileUtil.copy(new File(certDir + cert.getDomain() + ".cer"), new File(dest), true);
-			cert.setPem(dest);
+				String dest = InitConfig.home + "cert/" + cert.getDomain() + ".cer";
+				FileUtil.copy(new File(certDir + cert.getDomain() + ".cer"), new File(dest), true);
+				cert.setPem(dest);
 
-			dest = InitConfig.home + "cert/" + cert.getDomain() + ".key";
-			FileUtil.copy(new File(certDir + cert.getDomain() + ".key"), new File(dest), true);
-			cert.setKey(dest);
+				dest = InitConfig.home + "cert/" + cert.getDomain() + ".key";
+				FileUtil.copy(new File(certDir + cert.getDomain() + ".key"), new File(dest), true);
+				cert.setKey(dest);
 
-			cert.setMakeTime(System.currentTimeMillis());
-			sqlHelper.updateById(cert);
-
+				cert.setMakeTime(System.currentTimeMillis());
+				sqlHelper.updateById(cert);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			isInApply = false;
 			return renderSuccess();
 		} else {
