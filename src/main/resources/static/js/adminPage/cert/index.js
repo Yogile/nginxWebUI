@@ -174,8 +174,9 @@ function apply(id){
 			success : function(data) {
 				layer.closeAll();
 				if (data.success) {
+					alert("申请成功!");
 					location.reload();
-				}else{
+				} else {
 					layer.open({
 						  type: 0, 
 						  area : [ '810px', '400px' ],
@@ -206,8 +207,9 @@ function renew(id){
 			success : function(data) {
 				layer.closeAll();
 				if (data.success) {
+					alert("续签成功!");
 					location.reload();
-				}else{
+				} else {
 					layer.open({
 						  type: 0, 
 						  area : [ '810px', '400px' ],
