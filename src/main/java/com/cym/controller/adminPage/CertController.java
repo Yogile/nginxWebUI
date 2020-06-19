@@ -109,16 +109,6 @@ public class CertController extends BaseController {
 			String cmd = InitConfig.acmeSh + " --issue --dns dns_ali -d " + cert.getDomain();
 			logger.info(cmd);
 
-//			Process process = RuntimeUtil.exec(cmd);
-//			BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
-//			String line = null;
-//			while ((line = in.readLine()) != null) {
-//				rs += line + "\n";
-//			}
-//			in.close();
-//			int re = process.waitFor();
-//			logger.info("over:" + re);
-
 			rs = RuntimeUtil.execForStr(cmd);
 
 			logger.info(rs);
@@ -129,14 +119,16 @@ public class CertController extends BaseController {
 		}
 
 		if (rs.contains("Your cert is in")) {
-			String certDir = "/root/.acme.sh/" + cert.getDomain() + "/";
+			String domain = cert.getDomain().split(",")[0];
+			
+			String certDir = "/root/.acme.sh/" + domain + "/";
 
-			String dest = InitConfig.home + "cert/" + cert.getDomain() + ".cer";
-			FileUtil.copy(new File(certDir + cert.getDomain() + ".cer"), new File(dest), true);
+			String dest = InitConfig.home + "cert/" + domain + ".cer";
+			FileUtil.copy(new File(certDir + domain + ".cer"), new File(dest), true);
 			cert.setPem(dest);
 
-			dest = InitConfig.home + "cert/" + cert.getDomain() + ".key";
-			FileUtil.copy(new File(certDir + cert.getDomain() + ".key"), new File(dest), true);
+			dest = InitConfig.home + "cert/" + domain + ".key";
+			FileUtil.copy(new File(certDir + domain + ".key"), new File(dest), true);
 			cert.setKey(dest);
 
 			cert.setMakeTime(System.currentTimeMillis());
@@ -181,16 +173,6 @@ public class CertController extends BaseController {
 			String cmd = InitConfig.acmeSh + " --renew --force -d " + cert.getDomain();
 			logger.info(cmd);
 
-//			Process process = RuntimeUtil.exec(cmd);
-//			BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
-//			String line = null;
-//			while ((line = in.readLine()) != null) {
-//				rs += line + "\n";
-//			}
-//			in.close();
-//			int re = process.waitFor();
-//			logger.info("over:" + re);
-
 			rs = RuntimeUtil.execForStr(cmd);
 
 			logger.info(rs);
@@ -201,14 +183,16 @@ public class CertController extends BaseController {
 
 		if (rs.contains("Your cert is in")) {
 			try {
-				String certDir = "/root/.acme.sh/" + cert.getDomain() + "/";
+				String domain = cert.getDomain().split(",")[0];
+				
+				String certDir = "/root/.acme.sh/" + domain + "/";
 
-				String dest = InitConfig.home + "cert/" + cert.getDomain() + ".cer";
-				FileUtil.copy(new File(certDir + cert.getDomain() + ".cer"), new File(dest), true);
+				String dest = InitConfig.home + "cert/" + domain + ".cer";
+				FileUtil.copy(new File(certDir + domain + ".cer"), new File(dest), true);
 				cert.setPem(dest);
 
-				dest = InitConfig.home + "cert/" + cert.getDomain() + ".key";
-				FileUtil.copy(new File(certDir + cert.getDomain() + ".key"), new File(dest), true);
+				dest = InitConfig.home + "cert/" + domain + ".key";
+				FileUtil.copy(new File(certDir + domain + ".key"), new File(dest), true);
 				cert.setKey(dest);
 
 				cert.setMakeTime(System.currentTimeMillis());
