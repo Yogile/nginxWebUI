@@ -79,8 +79,6 @@ public class LoginController extends BaseController {
 			httpSession.setAttribute("isLogin", true);
 			httpSession.setAttribute("currentVersion", currentVersion);
 			
-			versionConfig.getNewVersion();
-			
 			return renderSuccess();
 		} else {
 			return renderError("用户名密码错误");
