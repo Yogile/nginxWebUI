@@ -37,7 +37,6 @@ public class ServerController extends BaseController {
 	UpstreamService upstreamService;
 	@Autowired
 	ParamService paramService;
-
 	@RequestMapping("")
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView, Page page, String sort, String direction) {
 		page = serverService.search(page, sort, direction);
