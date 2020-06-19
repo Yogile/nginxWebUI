@@ -27,10 +27,6 @@ public class VersionConfig {
 			e.printStackTrace();
 		}
 		
-		if(version == null) {
-			version = new Version(); //防止version为空
-		}
-
 	}
 
 	public Version getVersion() {
