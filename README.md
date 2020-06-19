@@ -152,3 +152,31 @@ log管理, 在http配置中如果开启了log监控的话, 会每天在这里生
 远程服务器管理, 如果有多台nginx服务器, 可以都部署上nginxWebUI, 然后登录其中一台, 在远程管理中添加其他服务器的ip和用户名密码, 就可以在一台机器上管理所有的nginx服务器了.
 
 提供一键同步功能, 可以将某一台服务器的数据配置和证书文件同步到其他服务器中
+
+#### 找回密码
+
+如果忘记了登录密码，可按如下教程找回密码
+
+1. 安装sqlite3命令
+
+```
+apt install sqlite3
+```
+
+2. 读取sqlite.db文件
+
+```
+sqlite3 /home/nginxWebUI/sqlite.db
+```
+
+3. 查找admin表
+
+```
+select * from admin
+```
+
+4. 退出sqlite3
+
+```
+.quit
+```
