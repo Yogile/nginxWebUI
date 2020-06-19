@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.cym.NginxWebUI;
 
 import cn.craccd.sqlHelper.utils.SqlHelper;
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.RuntimeUtil;
 
 @SpringBootTest(classes = NginxWebUI.class)
@@ -33,20 +34,7 @@ public class MainTest {
 
 	@Test
 	public void testStartUp() {
-		String cmd = "cmd dir";
-		try {
-			Process process = RuntimeUtil.exec(cmd);
-			BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
-			String line = null;
-			while ((line = in.readLine()) != null) {
-				System.out.println(line);
-			}
-			in.close();
-			int re = process.waitFor();
-			System.out.println(re);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		
 	}
 
 	@AfterAll
@@ -54,4 +42,8 @@ public class MainTest {
 		System.out.println("--------------测试结束----------");
 	}
 
+	
+	public static void main(String[] args) {
+		FileUtil.copy("D:\\fileserver", "C:\\", true);
+	}
 }
