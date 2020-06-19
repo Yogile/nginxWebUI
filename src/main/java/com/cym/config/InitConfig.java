@@ -64,7 +64,7 @@ public class InitConfig {
 				// 查看是否存在/home/nginxWebUI/.acme.sh
 				if (FileUtil.exist(home + ".acme.sh")) {
 					// 有,直接复制过来
-					FileUtil.copy(home + ".acme.sh", "/root/.acme.sh", true);
+					FileUtil.copy(home + ".acme.sh", "/root/", true);
 				} else {
 					// 没有,释放全新包
 					ClassPathResource resource = new ClassPathResource("acme.zip");

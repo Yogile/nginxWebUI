@@ -118,9 +118,9 @@ public class CertController extends BaseController {
 			rs = e.getMessage();
 		}
 		
-		// 申请完后,马上备份.acme.sh
+		// 申请完后,马上备份.acme.sh,以便在升级docker后可用
 		FileUtil.del(InitConfig.home + ".acme.sh");
-		FileUtil.copy("/root/.acme.sh", InitConfig.home + ".acme.sh", true);
+		FileUtil.copy("/root/.acme.sh", InitConfig.home, true);
 
 		if (rs.contains("Your cert is in")) {
 			String domain = cert.getDomain().split(",")[0];
@@ -188,9 +188,9 @@ public class CertController extends BaseController {
 			rs = e.getMessage();
 		}
 
-		// 申请完后,马上备份.acme.sh
+		// 申请完后,马上备份.acme.sh,以便在升级docker后可用
 		FileUtil.del(InitConfig.home + ".acme.sh");
-		FileUtil.copy("/root/.acme.sh", InitConfig.home + ".acme.sh", true);
+		FileUtil.copy("/root/.acme.sh", InitConfig.home, true);
 				
 		if (rs.contains("Your cert is in")) {
 			try {
