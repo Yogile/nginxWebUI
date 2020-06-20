@@ -129,7 +129,7 @@ public class InitConfig {
 			if (nginxExe.equals("nginx")) {
 				String[] command = { "/bin/sh", "-c", "ps -ef|grep nginx" };
 				String rs = RuntimeUtil.execForStr(command);
-				if (!rs.contains("nginx: master process") && SystemTool.hasNginx()) {
+				if (!rs.contains("nginx: master process") && !rs.contains("nginx: worker process") && SystemTool.hasNginx()) {
 					try {
 						RuntimeUtil.exec("nginx");
 					} catch (Exception e) {
