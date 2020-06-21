@@ -24,8 +24,6 @@ import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
 
 import cn.craccd.sqlHelper.bean.Page;
-import cn.craccd.sqlHelper.bean.Sort;
-import cn.craccd.sqlHelper.bean.Sort.Direction;
 import cn.hutool.core.util.StrUtil;
 
 @Controller
