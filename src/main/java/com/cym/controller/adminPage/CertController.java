@@ -117,27 +117,30 @@ public class CertController extends BaseController {
 			e.printStackTrace();
 			rs = e.getMessage();
 		}
-		
+
 		// 申请完后,马上备份.acme.sh,以便在升级docker后可用
 		FileUtil.del(InitConfig.home + ".acme.sh");
 		FileUtil.copy("/root/.acme.sh", InitConfig.home, true);
 
 		if (rs.contains("Your cert is in")) {
-			String domain = cert.getDomain().split(",")[0];
-			
-			String certDir = "/root/.acme.sh/" + domain + "/";
+			try {
+				String domain = cert.getDomain().split(",")[0];
 
-			String dest = InitConfig.home + "cert/" + domain + ".cer";
-			FileUtil.copy(new File(certDir + domain + ".cer"), new File(dest), true);
-			cert.setPem(dest);
+				String certDir = "/root/.acme.sh/" + domain + "/";
 
-			dest = InitConfig.home + "cert/" + domain + ".key";
-			FileUtil.copy(new File(certDir + domain + ".key"), new File(dest), true);
-			cert.setKey(dest);
+				String dest = InitConfig.home + "cert/" + domain + ".cer";
+				FileUtil.copy(new File(certDir + domain + ".cer"), new File(dest), true);
+				cert.setPem(dest);
 
-			cert.setMakeTime(System.currentTimeMillis());
-			sqlHelper.updateById(cert);
+				dest = InitConfig.home + "cert/" + domain + ".key";
+				FileUtil.copy(new File(certDir + domain + ".key"), new File(dest), true);
+				cert.setKey(dest);
 
+				cert.setMakeTime(System.currentTimeMillis());
+				sqlHelper.updateById(cert);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			isInApply = false;
 			return renderSuccess();
 		} else {
@@ -172,10 +175,10 @@ public class CertController extends BaseController {
 		try {
 			// 设置dns账号
 			setEnv(cert);
-			
+
 			// 续签,以第一个域名为证书名
 			String domain = cert.getDomain().split(",")[0];
-			
+
 			// 续签
 			String cmd = InitConfig.acmeSh + " --renew --force -d " + domain;
 			logger.info(cmd);
@@ -191,11 +194,11 @@ public class CertController extends BaseController {
 		// 申请完后,马上备份.acme.sh,以便在升级docker后可用
 		FileUtil.del(InitConfig.home + ".acme.sh");
 		FileUtil.copy("/root/.acme.sh", InitConfig.home, true);
-				
+
 		if (rs.contains("Your cert is in")) {
 			try {
 				String domain = cert.getDomain().split(",")[0];
-				
+
 				String certDir = "/root/.acme.sh/" + domain + "/";
 
 				String dest = InitConfig.home + "cert/" + domain + ".cer";
