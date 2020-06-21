@@ -82,15 +82,11 @@ public class CertController extends BaseController {
 	@RequestMapping("apply")
 	@ResponseBody
 	public JsonResult apply(String id, String type) {
-		if (SystemTool.getSystem().equals("Windows")) {
+		if (!SystemTool.isLinux()) {
 			return renderError("证书操作只能在linux下进行");
 		}
 
 		Cert cert = sqlHelper.findById(id, Cert.class);
-		if (cert.getMakeTime() != null) {
-			return renderError("该证书已申请");
-		}
-
 		if (cert.getDnsType() == null) {
 			return renderError("该证书还未设置DNS服务商信息");
 		}
@@ -156,9 +152,23 @@ public class CertController extends BaseController {
 			isInApply = false;
 			return renderError(rs.replace("\n", "<br>"));
 		}
-
 	}
+	
+	private void setEnv(Cert cert) {
+		List<String> list = new ArrayList<>();
+		list.add("UPGRADE_HASH='" + UUID.randomUUID().toString().replace("-", "") + "'");
+		if (cert.getDnsType().equals("ali")) {
+			list.add("SAVED_Ali_Key='" + cert.getAliKey() + "'");
+			list.add("SAVED_Ali_Secret='" + cert.getAliSecret() + "'");
+		}
+		if (cert.getDnsType().equals("dp")) {
+			list.add("SAVED_DP_Id='" + cert.getDpId() + "'");
+			list.add("SAVED_DP_Key='" + cert.getDpKey() + "'");
+		}
+		list.add("USER_PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin'");
 
+		FileUtil.writeLines(list, new File(InitConfig.acmeSh.replace("/acme.sh", "/account.conf")), Charset.defaultCharset());
+	}
 //	@RequestMapping("renew")
 //	@ResponseBody
 //	public JsonResult renew(String id) {
@@ -232,19 +242,5 @@ public class CertController extends BaseController {
 //
 //	}
 
-	private void setEnv(Cert cert) {
-		List<String> list = new ArrayList<>();
-		list.add("UPGRADE_HASH='" + UUID.randomUUID().toString().replace("-", "") + "'");
-		if (cert.getDnsType().equals("ali")) {
-			list.add("SAVED_Ali_Key='" + cert.getAliKey() + "'");
-			list.add("SAVED_Ali_Secret='" + cert.getAliSecret() + "'");
-		}
-		if (cert.getDnsType().equals("dp")) {
-			list.add("SAVED_DP_Id='" + cert.getDpId() + "'");
-			list.add("SAVED_DP_Key='" + cert.getDpKey() + "'");
-		}
-		list.add("USER_PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin'");
 
-		FileUtil.writeLines(list, new File(InitConfig.acmeSh.replace("/acme.sh", "/account.conf")), Charset.defaultCharset());
-	}
 }
