@@ -80,12 +80,15 @@ public class ConfService {
 
 			// 获取http
 			List<Http> httpList = sqlHelper.findAll(new Sort("name", Direction.DESC), Http.class);
+			boolean hasHttp = false;
 			NgxBlock ngxBlockHttp = new NgxBlock();
 			ngxBlockHttp.addValue("http");
 			for (Http http : httpList) {
 				NgxParam ngxParam = new NgxParam();
 				ngxParam.addValue(http.getName() + " " + http.getValue());
 				ngxBlockHttp.addEntry(ngxParam);
+				
+				hasHttp = true;
 			}
 
 			// 添加upstream
@@ -108,7 +111,7 @@ public class ConfService {
 					ngxParam.addValue("server " + upstreamController.buildStr(upstreamServer, upstream.getProxyType()));
 					ngxBlockServer.addEntry(ngxParam);
 				}
-//				hasHttp = true;
+				hasHttp = true;
 
 				if (decompose) {
 					addConfFile(confExt, "upstreams." + upstream.getName() + ".conf", ngxBlockServer);
@@ -258,7 +261,7 @@ public class ConfService {
 					ngxBlockServer.addEntry(ngxBlockLocation);
 
 				}
-//				hasHttp = true;
+				hasHttp = true;
 
 				// 是否需要分解
 				if (decompose) {
@@ -278,9 +281,9 @@ public class ConfService {
 				}
 
 			}
-//			if (hasHttp) {
-			ngxConfig.addEntry(ngxBlockHttp);
-//			}
+			if (hasHttp) {
+				ngxConfig.addEntry(ngxBlockHttp);
+			}
 
 			// TCP转发
 			// 创建stream
@@ -385,15 +388,10 @@ public class ConfService {
 
 			String conf = new NgxDumper(ngxConfig).dump();
 
-			// 经反复调试，是FileUtil.exist(module)引发的异常。
-			// todo 装载ngx_stream_module模块的功能经常报异常，暂时注释掉，FileUtil.exist(module)这句。
-			
 			// 装载ngx_stream_module模块
 			if (hasStream && SystemTool.isLinux()) {
 				String module = settingService.get("ngx_stream_module");
-//				if (StrUtil.isEmpty(module) || !FileUtil.exist(module)) {
-//					module = RuntimeTool.execForOne("find / -name ngx_stream_module.so");
-//				}
+				
 				// 不在生成conf的方法中查找ngx_stream_module, 放到InitConfig中查找, 只在项目启动时运行一次
 				if (StrUtil.isNotEmpty(module) /*&& FileUtil.exist(module)*/ ) {
 					settingService.set("ngx_stream_module", module);
