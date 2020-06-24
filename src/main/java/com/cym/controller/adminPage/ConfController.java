@@ -173,7 +173,7 @@ public class ConfController extends BaseController {
 				cmd = nginxExe + " -s reload -c " + nginxPath + " -p " + nginxDir;
 			} else {
 				cmd = nginxExe + " -s reload";
-				if (nginxExe.contains("/")) {
+				if (nginxExe.contains("/") && StrUtil.isNotEmpty(nginxPath) && StrUtil.isNotEmpty(nginxDir)) {
 					cmd = cmd + " -c " + nginxPath + " -p " + nginxDir;
 				}
 			}
@@ -218,7 +218,7 @@ public class ConfController extends BaseController {
 				RuntimeUtil.exec(new String[] {}, new File(nginxDir), cmd);
 			} else {
 				cmd = nginxExe;
-				if (nginxExe.contains("/") && StrUtil.isNotEmpty(nginxDir)) {
+				if (nginxExe.contains("/") && StrUtil.isNotEmpty(nginxPath) && StrUtil.isNotEmpty(nginxDir)) {
 					cmd = cmd + " -c " + nginxPath + " -p " + nginxDir;
 				}
 				rs = RuntimeUtil.execForStr(cmd);
@@ -255,7 +255,6 @@ public class ConfController extends BaseController {
 				if (nginxExe.contains("/") && StrUtil.isNotEmpty(nginxDir)) {
 					cmd = cmd + " -p " + nginxDir;
 				}
-//				cmd = "killall nginx";
 			}
 			rs = RuntimeUtil.execForStr(cmd);
 
