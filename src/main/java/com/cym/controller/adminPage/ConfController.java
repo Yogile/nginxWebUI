@@ -251,11 +251,11 @@ public class ConfController extends BaseController {
 			if (SystemTool.isWindows()) {
 				cmd = "taskkill /im nginx.exe /f";
 			} else {
-//				cmd = nginxExe + " -s stop";
-//				if (nginxExe.contains("/") && StrUtil.isNotEmpty(nginxDir)) {
-//					cmd = cmd + " -p " + nginxDir;
-//				}
-				cmd = "killall nginx";
+				cmd = nginxExe + " -s stop";
+				if (nginxExe.contains("/") && StrUtil.isNotEmpty(nginxDir)) {
+					cmd = cmd + " -p " + nginxDir;
+				}
+//				cmd = "killall nginx";
 			}
 			rs = RuntimeUtil.execForStr(cmd);
 
