@@ -133,7 +133,7 @@ docker run -itd -v /home/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--变量�
 
 ![输入图片说明](http://craccd.oss-cn-beijing.aliyuncs.com/img/cert.jpeg "cert.jpg")
 
-在证书管理中可添加证书, 并进行签发和续签, 开启定时续签后, 系统会自动续签即将过期的证书 
+在证书管理中可添加证书, 并进行签发和续签, 开启定时续签后, 系统会自动续签即将过期的证书, 注意:证书的签发是用的acme.sh的dns模式, 需要配合阿里云的aliKey和aliSecret来使用. 请先申请好aliKey和aliSecret
 
 ![输入图片说明](http://craccd.oss-cn-beijing.aliyuncs.com/img/bak.jpeg "bak.jpg")
 
