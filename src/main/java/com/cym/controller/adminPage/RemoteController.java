@@ -240,7 +240,7 @@ public class RemoteController extends BaseController {
 					jsonResult = confController.reload(null, null, null);
 				}
 				if (cmd.contentEquals("start")) {
-					jsonResult = confController.start(null, null);
+					jsonResult = confController.start(null, null, null);
 				}
 				if (cmd.contentEquals("stop")) {
 					jsonResult = confController.stop(null, null);

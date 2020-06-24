@@ -200,7 +200,10 @@ public class ConfController extends BaseController {
 
 	@RequestMapping(value = "start")
 	@ResponseBody
-	public JsonResult start(String nginxExe, String nginxDir) {
+	public JsonResult start(String nginxPath, String nginxExe, String nginxDir) {
+		if (nginxPath == null) {
+			nginxPath = settingService.get("nginxPath");
+		}
 		if (nginxExe == null) {
 			nginxExe = settingService.get("nginxExe");
 		}
@@ -211,12 +214,12 @@ public class ConfController extends BaseController {
 			String rs = "";
 			String cmd;
 			if (SystemTool.isWindows()) {
-				cmd = "cmd /c start nginx.exe";
+				cmd = "cmd /c start nginx.exe" + " -c " + nginxPath + " -p " + nginxDir;
 				RuntimeUtil.exec(new String[] {}, new File(nginxDir), cmd);
 			} else {
 				cmd = nginxExe;
 				if (nginxExe.contains("/") && StrUtil.isNotEmpty(nginxDir)) {
-					cmd = cmd + " -p " + nginxDir;
+					cmd = cmd + " -c " + nginxPath + " -p " + nginxDir;
 				}
 				rs = RuntimeUtil.execForStr(cmd);
 			}
@@ -246,17 +249,18 @@ public class ConfController extends BaseController {
 			String rs;
 			String cmd;
 			if (SystemTool.isWindows()) {
-				cmd = nginxExe + " -s stop -p " + nginxDir;
+				cmd = "taskkill /im nginx.exe /f";
 			} else {
-				cmd = nginxExe + " -s stop";
-				if (nginxExe.contains("/") && StrUtil.isNotEmpty(nginxDir)) {
-					cmd = cmd + " -p " + nginxDir;
-				}
+//				cmd = nginxExe + " -s stop";
+//				if (nginxExe.contains("/") && StrUtil.isNotEmpty(nginxDir)) {
+//					cmd = cmd + " -p " + nginxDir;
+//				}
+				cmd = "killall nginx";
 			}
 			rs = RuntimeUtil.execForStr(cmd);
 
 			cmd = "<span class='blue'>" + cmd + "</span>";
-			if (StrUtil.isEmpty(rs) || rs.contains("signal process started")) {
+			if (StrUtil.isEmpty(rs) || rs.contains("已终止进程")) {
 				return renderSuccess(cmd + "<br>停止成功<br>" + rs.replace("\n", "<br>"));
 			} else {
 				return renderError(cmd + "<br>停止失败<br>" + rs.replace("\n", "<br>"));
