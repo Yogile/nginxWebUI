@@ -88,7 +88,6 @@ public class ConfService {
 				ngxBlockHttp.addEntry(ngxParam);
 			}
 
-			boolean hasHttp = false;
 			// 添加upstream
 			NgxParam ngxParam;
 			List<Upstream> upstreams = upstreamService.getListByProxyType(0);
@@ -109,7 +108,7 @@ public class ConfService {
 					ngxParam.addValue("server " + upstreamController.buildStr(upstreamServer, upstream.getProxyType()));
 					ngxBlockServer.addEntry(ngxParam);
 				}
-				hasHttp = true;
+//				hasHttp = true;
 
 				if (decompose) {
 					addConfFile(confExt, "upstreams." + upstream.getName() + ".conf", ngxBlockServer);
@@ -259,7 +258,7 @@ public class ConfService {
 					ngxBlockServer.addEntry(ngxBlockLocation);
 
 				}
-				hasHttp = true;
+//				hasHttp = true;
 
 				// 是否需要分解
 				if (decompose) {
@@ -279,9 +278,9 @@ public class ConfService {
 				}
 
 			}
-			if (hasHttp) {
-				ngxConfig.addEntry(ngxBlockHttp);
-			}
+//			if (hasHttp) {
+			ngxConfig.addEntry(ngxBlockHttp);
+//			}
 
 			// TCP转发
 			// 创建stream

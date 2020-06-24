@@ -251,6 +251,11 @@ function reload() {
 }
 
 function start(){
+	if ($("#nginxPath").val() == '') {
+		alert("conf配置文件路径为空");
+		return;
+	}
+	
 	if ($("#nginxExe").val() == '') {
 		alert("nginx执行文件路径为空");
 		return;
@@ -269,6 +274,7 @@ function start(){
 			type : 'POST',
 			url : ctx + '/adminPage/conf/start',
 			data : {
+				nginxPath : $("#nginxPath").val(),
 				nginxExe : $("#nginxExe").val(),
 				nginxDir : $("#nginxDir").val()
 			},
