@@ -75,8 +75,6 @@ public class RemoteController extends BaseController {
 
 	@RequestMapping("")
 	public ModelAndView index(ModelAndView modelAndView) {
-//		modelAndView.addObject("projectVersion", projectVersion);
-//      modelAndView.addObject("groupList", sqlHelper.findAll(Group.class));
 		modelAndView.setViewName("/adminPage/remote/index");
 
 		return modelAndView;
