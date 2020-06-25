@@ -3,6 +3,9 @@ package com.cym.controller.adminPage;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
+
 import com.cym.ext.ConfExt;
 import com.cym.ext.ConfFile;
 import com.cym.service.ConfService;
@@ -19,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 @Controller
 @RequestMapping("/adminPage/conf")
@@ -80,7 +84,14 @@ public class ConfController extends BaseController {
 
 	@RequestMapping(value = "replace")
 	@ResponseBody
-	public JsonResult replace(String nginxPath, String nginxContent, String[] subContent, String[] subName) {
+	public JsonResult replace(String json) {
+		JSONObject jsonObject = JSONUtil.parseObj(json);
+		
+		String nginxPath = jsonObject.getStr("nginxPath");
+		String nginxContent = jsonObject.getStr("nginxContent");
+		List<String> subContent = jsonObject.getJSONArray("subContent").toList(String.class);
+		List<String> subName = jsonObject.getJSONArray("subName").toList(String.class);
+		
 		if (nginxPath == null) {
 			nginxPath = settingService.get("nginxPath");
 		}

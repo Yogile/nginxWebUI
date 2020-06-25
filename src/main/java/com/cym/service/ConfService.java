@@ -451,7 +451,7 @@ public class ConfService {
 		return new NgxDumper(ngxConfig).dump();
 	}
 
-	public void replace(String nginxPath, String nginxContent, String[] subContent, String[] subName) {
+	public void replace(String nginxPath, String nginxContent, List<String> subContent, List<String> subName) {
 		String date = DateUtil.format(new Date(), "yyyy-MM-dd_HH-mm-ss");
 		// 备份主文件
 		FileUtil.copy(nginxPath, nginxPath + date + ".bak", true);
@@ -469,9 +469,9 @@ public class ConfService {
 		if ("true".equals(decompose)) {
 			// 写入conf.d文件
 			if (subContent != null) {
-				for (int i = 0; i < subContent.length; i++) {
-					String tagert = nginxPath.replace("nginx.conf", "conf.d/" + subName[i]);
-					FileUtil.writeString(subContent[i], tagert, StandardCharsets.UTF_8); // 清空
+				for (int i = 0; i < subContent.size(); i++) {
+					String tagert = nginxPath.replace("nginx.conf", "conf.d/" + subName.get(i)); 
+					FileUtil.writeString(subContent.get(i), tagert, StandardCharsets.UTF_8); // 清空
 				}
 			}
 		} else {
@@ -585,7 +585,7 @@ public class ConfService {
 				subName.add(confFile.getName());
 			}
 
-			replace(nginxPath, confExt.getConf(), subContent.toArray(new String[0]), subName.toArray(new String[0]));
+			replace(nginxPath, confExt.getConf(), subContent, subName);
 		}
 	}
 
