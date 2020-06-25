@@ -52,10 +52,31 @@ public class RemoteController extends BaseController {
 		this.confController = confController;
 	}
 
+	@RequestMapping("version")
+	@ResponseBody
+	public Map<String, Object> version() {
+		Map<String, Object> map = new HashMap<>();
+		map.put("version", version);
+		map.put("nginx", 2);
+
+		if (SystemTool.isLinux()) {
+			String[] command = { "/bin/sh", "-c", "ps -ef|grep nginx" };
+			String rs = RuntimeUtil.execForStr(command);
+
+			if (rs.contains("nginx: master process") || rs.contains("nginx: worker process")) {
+				map.put("nginx", 1);
+			} else {
+				map.put("nginx", 0);
+			}
+		}
+
+		return map;
+	}
+
 	@RequestMapping("")
 	public ModelAndView index(ModelAndView modelAndView) {
-		modelAndView.addObject("version", version);
-		modelAndView.addObject("groupList", sqlHelper.findAll(Group.class));
+//		modelAndView.addObject("projectVersion", projectVersion);
+//      modelAndView.addObject("groupList", sqlHelper.findAll(Group.class));
 		modelAndView.setViewName("/adminPage/remote/index");
 
 		return modelAndView;
@@ -366,27 +387,6 @@ public class RemoteController extends BaseController {
 		String rs = HttpUtil.get(remote.getProtocol() + "://" + remote.getIp() + ":" + remote.getPort() + "/adminPage/remote/readContent?creditKey=" + remote.getCreditKey());
 
 		return renderSuccess(rs);
-	}
-
-	@RequestMapping("version")
-	@ResponseBody
-	public Map<String, Object> version() {
-		Map<String, Object> map = new HashMap<>();
-		map.put("version", version);
-		map.put("nginx", 2);
-
-		if (SystemTool.isLinux()) {
-			String[] command = { "/bin/sh", "-c", "ps -ef|grep nginx" };
-			String rs = RuntimeUtil.execForStr(command);
-
-			if (rs.contains("nginx: master process") || rs.contains("nginx: worker process")) {
-				map.put("nginx", 1);
-			} else {
-				map.put("nginx", 0);
-			}
-		}
-
-		return map;
 	}
 
 	@RequestMapping("readContent")
