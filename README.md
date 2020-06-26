@@ -172,7 +172,7 @@ sqlite3 /home/nginxWebUI/sqlite.db
 3. 查找admin表
 
 ```
-select * from admin
+select * from admin;
 ```
 
 4. 退出sqlite3
