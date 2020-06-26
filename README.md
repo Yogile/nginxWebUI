@@ -117,7 +117,7 @@ docker run -itd -v /home/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--变量�
 
 ![输入图片说明](http://craccd.oss-cn-beijing.aliyuncs.com/img/tcp.jpeg "tcp.jpg")
 
-在TCP参数配置中可以配置nginx的steam项目参数, 进行tcp转发.
+在TCP参数配置中可以配置nginx的steam项目参数, 大多数情况下可不配.
 
 ![输入图片说明](http://craccd.oss-cn-beijing.aliyuncs.com/img/server.jpeg "server.jpg")
 
