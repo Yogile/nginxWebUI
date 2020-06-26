@@ -125,6 +125,6 @@ public class SystemMonitor {
 		SystemMonitor systemMonitor = new SystemMonitor();
 		systemMonitor.init();
 		
-		systemMonitor.printlnCpuInfo(new SystemInfo());
+//		systemMonitor.printlnCpuInfo(new SystemInfo());
 	}
 }
