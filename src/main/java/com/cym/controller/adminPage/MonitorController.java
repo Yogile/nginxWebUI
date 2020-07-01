@@ -18,6 +18,7 @@ import com.cym.model.MonitorInfo;
 import com.cym.service.MonitorService;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
+import com.cym.utils.SystemTool;
 
 import cn.hutool.core.util.NumberUtil;
 
@@ -29,7 +30,13 @@ public class MonitorController extends BaseController {
 
 	@RequestMapping("")
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView) {
-		File[] roots = File.listRoots();// 获取磁盘分区列表
+		File[] roots = null;
+		if (SystemTool.isWindows()) {
+			roots = File.listRoots();
+		} else {
+			roots = new File("/").listFiles();
+		}
+		
 		List<Map<String, String>> list = new ArrayList<>() ;
 		for (File file : roots) {
 			Map<String, String> map = new HashMap<String, String>();

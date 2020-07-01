@@ -7,10 +7,9 @@ $(function(){
 	
 	
 	setInterval(() => {
-		
-		
+		load();
 	}, 1000);
-	load();
+
 })
 
 
