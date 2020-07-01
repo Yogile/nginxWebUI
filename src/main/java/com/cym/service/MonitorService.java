@@ -1,7 +1,11 @@
 package com.cym.service;
 
-import java.io.DataOutput;
+import java.io.File;
 import java.lang.management.ManagementFactory;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -47,13 +51,18 @@ public class MonitorService {
 		Double usedMemory = (osmxb.getTotalPhysicalMemorySize() - osmxb.getFreePhysicalMemorySize()) / gb;
 
 		double cpu = osmxb.getSystemCpuLoad();
-
+		double mem = usedMemory / totalMemorySize;
 		// 构造返回对象
 		MonitorInfo infoBean = new MonitorInfo();
-		infoBean.setFreePhysicalMemorySize(NumberUtil.decimalFormat("#.00GB", freePhysicalMemorySize)  );
+		infoBean.setFreePhysicalMemorySize(NumberUtil.decimalFormat("#.00GB", freePhysicalMemorySize));
 		infoBean.setTotalMemorySize(NumberUtil.decimalFormat("#.00GB", totalMemorySize));
 		infoBean.setUsedMemory(NumberUtil.decimalFormat("#.00GB", usedMemory));
 		infoBean.setCpuRatio(NumberUtil.decimalFormat("#.##%", cpu));
+		infoBean.setMemRatio(NumberUtil.decimalFormat("#.##%", mem));
+
+		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+
+		
 		return infoBean;
 	}
 
@@ -67,13 +76,25 @@ public class MonitorService {
 	 */
 	public static void main(String[] args) throws Exception {
 
-		MonitorService service = new MonitorService();
-		MonitorInfo monitorInfo = service.getMonitorInfo();
+		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
 
-		System.out.println("cpu占有率=" + monitorInfo.getCpuRatio());
+		File[] roots = File.listRoots();// 获取磁盘分区列表
+		for (File file : roots) {
+			Map<String, String> map = new HashMap<String, String>();
 
-		System.out.println("总的物理内存=" + monitorInfo.getTotalMemorySize() + "gb");
-		System.out.println("已使用的物理内存=" + monitorInfo.getUsedMemory() + "gb");
-		System.out.println("剩余物理内存=" + monitorInfo.getFreePhysicalMemorySize() + "gb");
+			long freeSpace = file.getFreeSpace();
+			long totalSpace = file.getTotalSpace();
+			long usableSpace = totalSpace - freeSpace;
+
+			map.put("path", file.getPath());
+			map.put("freeSpace", freeSpace / 1024 / 1024 / 1024 + "G");// 空闲空间
+			map.put("usableSpace", usableSpace / 1024 / 1024 / 1024 + "G");// 可用空间
+			map.put("totalSpace", totalSpace / 1024 / 1024 / 1024 + "G");// 总空间
+			map.put("percent", NumberUtil.decimalFormat("#.##%", (double) usableSpace / (double) totalSpace));// 总空间
+
+			list.add(map);
+		}
+		System.out.println(list);
+
 	}
 }
