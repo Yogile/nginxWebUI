@@ -26,6 +26,8 @@ function load(){
 				element.progress('mem', monitorInfo.memRatio);
 				
 				$("#memContent").html("( 已用"+monitorInfo.usedMemory + " / 总共" + monitorInfo.totalMemorySize + " )");
+				$("#cpuCount").html("( 核心数:" + monitorInfo.cpuCount + " )");
+				
 			}
 		},
 		error : function() {

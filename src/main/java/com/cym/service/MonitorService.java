@@ -49,9 +49,10 @@ public class MonitorService {
 		Double freePhysicalMemorySize = osmxb.getFreePhysicalMemorySize() / gb;
 		// 已使用的物理内存
 		Double usedMemory = (osmxb.getTotalPhysicalMemorySize() - osmxb.getFreePhysicalMemorySize()) / gb;
-
-		double cpu = osmxb.getSystemCpuLoad();
-		double mem = usedMemory / totalMemorySize;
+		
+		Double mem = usedMemory / totalMemorySize;
+		Double cpu = osmxb.getSystemCpuLoad();
+		
 		// 构造返回对象
 		MonitorInfo infoBean = new MonitorInfo();
 		infoBean.setFreePhysicalMemorySize(NumberUtil.decimalFormat("0.00GB", freePhysicalMemorySize));
@@ -59,7 +60,8 @@ public class MonitorService {
 		infoBean.setUsedMemory(NumberUtil.decimalFormat("0.00GB", usedMemory));
 		infoBean.setCpuRatio(NumberUtil.decimalFormat("#.##%", cpu));
 		infoBean.setMemRatio(NumberUtil.decimalFormat("#.##%", mem));
-
+		infoBean.setCpuCount(osmxb.getAvailableProcessors());
+		
 		return infoBean;
 	}
 	

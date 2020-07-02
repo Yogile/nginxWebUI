@@ -26,7 +26,15 @@ public class MonitorInfo {
 	/** 内存使用率. */
 	private String memRatio;
 
+	private Integer cpuCount;
 
+	public Integer getCpuCount() {
+		return cpuCount;
+	}
+
+	public void setCpuCount(Integer cpuCount) {
+		this.cpuCount = cpuCount;
+	}
 
 	public String getMemRatio() {
 		return memRatio;
