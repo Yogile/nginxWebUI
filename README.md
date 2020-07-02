@@ -5,7 +5,7 @@ nginx网页配置工具
 
 QQ技术交流群: 1106758598
 
-官网地址: https://nginxwebui.gitee.io
+官网地址: http://www.nginxwebui.cn
 
 #### 功能说明
 
