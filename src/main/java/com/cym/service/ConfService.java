@@ -111,6 +111,13 @@ public class ConfService {
 					ngxParam.addValue("server " + upstreamController.buildStr(upstreamServer, upstream.getProxyType()));
 					ngxBlockServer.addEntry(ngxParam);
 				}
+				
+				// 自定义参数
+				List<Param> paramList = paramService.getListByTypeId(upstream.getId(), "upstream");
+				for (Param param : paramList) {
+					setSameParam(param, ngxBlockServer);
+				}
+
 				hasHttp = true;
 
 				if (decompose) {
