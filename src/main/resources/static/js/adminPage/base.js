@@ -207,18 +207,24 @@ function autoUpdate(url){
 			},
 			dataType : 'json',
 			success : function(data) {
-				layer.close(loaded);
-				
 				if(!data.success){
+					layer.close(loaded);
 					alert(data.msg);
 					return;
 				}
 				
-				layer.alert("更新完成, 重新登录即可使用最新版本");
+				setTimeout(function(){
+					layer.close(loaded);
+					layer.alert("更新完成, 重新登录即可使用最新版本");
+				},10000)
+				
+				
 			},
 			error : function() {
-				layer.layer.close(loaded);
-				alert("更新完成, 重新登录即可使用最新版本");
+				setTimeout(function(){
+					layer.layer.close(loaded);
+					layer.alert("更新完成, 重新登录即可使用最新版本");
+				},10000)
 			}
 		});
 	}
