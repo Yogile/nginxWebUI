@@ -7,6 +7,7 @@ import java.util.HashMap;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.system.ApplicationHome;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cym.config.InitConfig;
+import com.cym.config.VersionConfig;
 import com.cym.model.Remote;
+import com.cym.model.Version;
 import com.cym.utils.AsyncUtils;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
@@ -31,7 +34,9 @@ import cn.hutool.json.JSONUtil;
 public class MainController extends BaseController {
 	@Autowired
 	AsyncUtils asyncUtils;
-	
+
+
+
 	@RequestMapping("")
 	public ModelAndView index(ModelAndView modelAndView, String keywords) {
 
@@ -74,10 +79,10 @@ public class MainController extends BaseController {
 	@ResponseBody
 	@RequestMapping("/autoUpdate")
 	public JsonResult autoUpdate(String url) {
-		if(!SystemTool.isLinux()) {
+		if (!SystemTool.isLinux()) {
 			return renderError("只有在Linux才能进行自动更新");
 		}
-		
+
 		ApplicationHome home = new ApplicationHome(getClass());
 		File jar = home.getSource();
 		String[] names = url.split("/");
@@ -86,8 +91,9 @@ public class MainController extends BaseController {
 
 		HttpUtil.downloadFile(url, path);
 		asyncUtils.run(path);
-		
+
 		return renderSuccess();
 	}
+
 
 }
