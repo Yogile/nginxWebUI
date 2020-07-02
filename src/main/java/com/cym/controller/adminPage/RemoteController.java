@@ -281,10 +281,11 @@ public class RemoteController extends BaseController {
 				rs.append("<span class='blue'>").append(remote.getIp()).append("> </span>");
 				
 				try {
-					String json = HttpUtil.get(remote.getProtocol() + "://" + remote.getIp() + ":" + remote.getPort() + "/adminPage/conf/" + cmd + "?creditKey=" + remote.getCreditKey(), 500);
+					String json = HttpUtil.get(remote.getProtocol() + "://" + remote.getIp() + ":" + remote.getPort() + "/adminPage/conf/" + cmd + "?creditKey=" + remote.getCreditKey());
+					System.out.println(json);
 					jsonResult = JSONUtil.toBean(json, JsonResult.class);
-				}catch (Exception e) {
-					jsonResult = renderSuccess("更新成功");
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 

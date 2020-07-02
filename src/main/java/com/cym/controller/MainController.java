@@ -2,6 +2,7 @@ package com.cym.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
@@ -25,6 +26,7 @@ import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
 import com.cym.utils.SystemTool;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
@@ -90,8 +92,9 @@ public class MainController extends BaseController {
 		String path = jar.getParent() + "/" + name;
 
 		HttpUtil.downloadFile(url, path);
+		System.out.println(DateUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
 		asyncUtils.run(path);
-
+		System.out.println(DateUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
 		return renderSuccess();
 	}
 
