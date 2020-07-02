@@ -74,7 +74,7 @@ public class MainController extends BaseController {
 	@RequestMapping("/autoUpdate")
 	public JsonResult autoUpdate(String url) {
 		if(!SystemTool.isLinux()) {
-			return renderError("只有在Linux才能进行更新");
+			return renderError("只有在Linux才能进行自动更新");
 		}
 		updateUtils.startUpdate(url);
 		
