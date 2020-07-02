@@ -6,6 +6,9 @@ import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
+
+import com.cym.config.VersionConfig;
+import com.cym.controller.MainController;
 import com.cym.ext.AsycPack;
 import com.cym.ext.Tree;
 import com.cym.model.Group;
@@ -17,6 +20,8 @@ import com.cym.service.SettingService;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
 import com.cym.utils.SystemTool;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,18 +43,21 @@ public class RemoteController extends BaseController {
 	final ConfService confService;
 	final GroupService groupService;
 	final ConfController confController;
+	final MainController mainController;
 
+	
 	@Value("${project.version}")
 	String projectVersion;
 	@Value("${server.port}")
 	Integer port;
 
-	public RemoteController(RemoteService remoteService, SettingService settingService, ConfService confService, GroupService groupService, ConfController confController) {
+	public RemoteController(RemoteService remoteService, SettingService settingService, ConfService confService, GroupService groupService, ConfController confController,MainController mainController) {
 		this.remoteService = remoteService;
 		this.settingService = settingService;
 		this.confService = confService;
 		this.groupService = groupService;
 		this.confController = confController;
+		this.mainController = mainController;
 	}
 
 	@RequestMapping("version")
@@ -264,14 +272,20 @@ public class RemoteController extends BaseController {
 				if (cmd.contentEquals("stop")) {
 					jsonResult = confController.stop(null, null);
 				}
-
+				if (cmd.contentEquals("update")) {
+					jsonResult = confController.update();
+				}
 				rs.append("<span class='blue'>本地> </span>");
 			} else {
 				Remote remote = sqlHelper.findById(id, Remote.class);
 				rs.append("<span class='blue'>").append(remote.getIp()).append("> </span>");
-				String json = HttpUtil.get(remote.getProtocol() + "://" + remote.getIp() + ":" + remote.getPort() + "/adminPage/conf/" + cmd + "?creditKey=" + remote.getCreditKey(), 500);
-				jsonResult = JSONUtil.toBean(json, JsonResult.class);
-
+				
+				try {
+					String json = HttpUtil.get(remote.getProtocol() + "://" + remote.getIp() + ":" + remote.getPort() + "/adminPage/conf/" + cmd + "?creditKey=" + remote.getCreditKey(), 500);
+					jsonResult = JSONUtil.toBean(json, JsonResult.class);
+				}catch (Exception e) {
+					jsonResult = renderSuccess("更新成功");
+				}
 			}
 
 			if (jsonResult != null) {
@@ -286,7 +300,7 @@ public class RemoteController extends BaseController {
 
 		return renderSuccess(rs.toString());
 	}
-
+	
 	@RequestMapping("asyc")
 	@ResponseBody
 	public JsonResult asyc(String fromId, String[] remoteId) {
