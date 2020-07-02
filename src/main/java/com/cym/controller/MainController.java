@@ -2,11 +2,11 @@ package com.cym.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,16 +18,19 @@ import com.cym.config.InitConfig;
 import com.cym.model.Remote;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
+import com.cym.utils.SystemTool;
+import com.cym.utils.UpdateUtils;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.http.HttpUtil;
-import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 
 @RequestMapping("")
 @Controller
 public class MainController extends BaseController {
-
+	@Autowired
+	UpdateUtils updateUtils;
+	
 	@RequestMapping("")
 	public ModelAndView index(ModelAndView modelAndView, String keywords) {
 
@@ -39,7 +42,7 @@ public class MainController extends BaseController {
 	@RequestMapping("/upload")
 	public JsonResult upload(@RequestParam("file") MultipartFile file, HttpSession httpSession) {
 		try {
-			File temp = new File(FileUtil.getTmpDir() + "/" + file.getOriginalFilename()); 
+			File temp = new File(FileUtil.getTmpDir() + "/" + file.getOriginalFilename());
 			file.transferTo(temp);
 
 			// 移动文件
@@ -65,6 +68,17 @@ public class MainController extends BaseController {
 		}
 
 		return renderError();
+	}
+
+	@ResponseBody
+	@RequestMapping("/autoUpdate")
+	public JsonResult autoUpdate(String url) {
+		if(!SystemTool.isLinux()) {
+			return renderError("只有在Linux才能进行更新");
+		}
+		updateUtils.startUpdate(url);
+		
+		return renderSuccess();
 	}
 
 }

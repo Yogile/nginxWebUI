@@ -1,13 +1,16 @@
 package com.cym.utils;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.system.ApplicationHome;
 import org.springframework.stereotype.Component;
 
-import com.cym.model.Version;
-
+import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.http.HttpUtil;
 
@@ -16,9 +19,8 @@ import cn.hutool.http.HttpUtil;
  */
 @Component
 public class UpdateUtils {
-	@Value("${server.port}")
-	String port;
-
+	@Autowired
+	AsyncUtils asyncUtils;
 	// 获取jar路径
 	public File getBaseJarPath() {
 		ApplicationHome home = new ApplicationHome(getClass());
@@ -26,16 +28,15 @@ public class UpdateUtils {
 		return jarFile;
 	}
 
-	public void startUpdate(Version version) {
-
+	public void startUpdate(String url) {
+		System.err.println("-------------startUpdate---------------");
 		File jar = getBaseJarPath();
-		String[] names = version.getUrl().split("/");
+		String[] names = url.split("/");
 		String name = names[names.length - 1];
 		String path = jar.getParent() + "/" + name;
 
-		HttpUtil.downloadFile(version.getUrl(), path);
+		HttpUtil.downloadFile(url, path);
 
-		RuntimeUtil.exec("nohup java -jar -Xmx64m " + path + " --server.port=" + port + " > /del/null &");
-
+		asyncUtils.run(path);
 	}
 }
