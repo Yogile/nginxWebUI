@@ -7,8 +7,9 @@ import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.system.ApplicationHome;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,9 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cym.config.InitConfig;
-import com.cym.config.VersionConfig;
 import com.cym.model.Remote;
-import com.cym.model.Version;
 import com.cym.utils.AsyncUtils;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
@@ -37,7 +36,7 @@ public class MainController extends BaseController {
 	@Autowired
 	AsyncUtils asyncUtils;
 
-
+	private static final Logger LOG = LoggerFactory.getLogger(MainController.class);
 
 	@RequestMapping("")
 	public ModelAndView index(ModelAndView modelAndView, String keywords) {
@@ -90,13 +89,12 @@ public class MainController extends BaseController {
 //		String[] names = url.split("/");
 //		String name = names[names.length - 1];
 		String path = jar.getParent() + "/nginxWebUI.jar.update";
-
+		LOG.info("下载到:" + path);
 		HttpUtil.downloadFile(url, path);
 		System.out.println(DateUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
 		asyncUtils.run(path);
 		System.out.println(DateUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
 		return renderSuccess();
 	}
-
 
 }
