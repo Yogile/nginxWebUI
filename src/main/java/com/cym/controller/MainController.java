@@ -89,7 +89,7 @@ public class MainController extends BaseController {
 		File jar = home.getSource();
 //		String[] names = url.split("/");
 //		String name = names[names.length - 1];
-		String path = jar.getParent() + "/nginxWebUI.jar";
+		String path = jar.getParent() + "/nginxWebUI.jar.update";
 
 		HttpUtil.downloadFile(url, path);
 		System.out.println(DateUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
