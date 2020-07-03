@@ -1,13 +1,9 @@
 package com.cym;
 
-import java.io.File;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.jar.JarFile;
-import java.util.jar.Manifest;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -25,17 +21,7 @@ public class NginxWebUI {
 
 		// 尝试杀掉旧版本
 		if (SystemTool.isLinux()) {
-			try {
-//				String path = NginxWebUI.class.getProtectionDomain().getCodeSource().getLocation().getFile().split("!")[0];
-//				System.out.println(path);
-//				JarFile jar = new JarFile(new File(new URI(path)));
-//				Manifest manifest = jar.getManifest();
-//				kill(manifest.getMainAttributes().getValue("Project-Version"));
-
-				kill();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			kill();
 		}
 
 		SpringApplication.run(NginxWebUI.class, args);
