@@ -85,22 +85,22 @@
 				</configuration>
 			</plugin>
 
-			<plugin>
+		<!-- 	<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 				<configuration>
 					<archive>
 						<manifestEntries>
-							<!-- 项目版本号 -->
+							项目版本号
 							<Project-Version>${project.version}</Project-Version>
-							<!-- buildnumber插件提供的 SCM(git/svn等)版本号 -->
+							buildnumber插件提供的 SCM(git/svn等)版本号
 							<Scm-Version>${buildNumber}</Scm-Version>
-							<!-- 时间戳 -->
+							时间戳
 							<Timestamp>${maven.build.timestamp}</Timestamp>
 						</manifestEntries>
 					</archive>
 				</configuration>
-			</plugin>
+			</plugin> -->
 		</plugins>
 	</build>
 
