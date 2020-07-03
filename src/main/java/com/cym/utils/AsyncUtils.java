@@ -17,8 +17,9 @@ public class AsyncUtils {
 	@Async
 	public void run(String path) {
 		ThreadUtil.safeSleep(2000);
-		
-		String cmd = "nohup java -jar -Xmx64m " + path + " --server.port=" + port + " --project.home=" + home + " > /dev/null &";
+		String cmd = "mv " + path + " " + path.replace(".update", "");
+		cmd += " && nohup java -jar -Xmx64m " + path.replace(".update", "") + " --server.port=" + port + " --project.home=" + home + " > /dev/null &";
+		System.out.println(cmd); 
 		RuntimeUtil.exec(cmd);
 	}
 }
