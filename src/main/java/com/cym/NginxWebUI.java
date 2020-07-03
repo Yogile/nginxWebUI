@@ -26,11 +26,13 @@ public class NginxWebUI {
 		// 尝试杀掉旧版本
 		if (SystemTool.isLinux()) {
 			try {
-				String path = NginxWebUI.class.getProtectionDomain().getCodeSource().getLocation().getFile().split("!")[0];
-				System.out.println(path);
-				JarFile jar = new JarFile(new File(new URI(path)));
-				Manifest manifest = jar.getManifest();
-				kill(manifest.getMainAttributes().getValue("Project-Version"));
+//				String path = NginxWebUI.class.getProtectionDomain().getCodeSource().getLocation().getFile().split("!")[0];
+//				System.out.println(path);
+//				JarFile jar = new JarFile(new File(new URI(path)));
+//				Manifest manifest = jar.getManifest();
+//				kill(manifest.getMainAttributes().getValue("Project-Version"));
+
+				kill();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -39,15 +41,14 @@ public class NginxWebUI {
 		SpringApplication.run(NginxWebUI.class, args);
 	}
 
-	public static void kill(String version) {
-		System.out.println(version);
+	public static void kill() {
 		RuntimeMXBean runtimeMXBean = ManagementFactory.getRuntimeMXBean();
 		String myPid = runtimeMXBean.getName().split("@")[0];
 		List<String> list = RuntimeUtil.execForLines("ps -ef");
 
 		List<String> pids = new ArrayList<String>();
 		for (String line : list) {
-			if (line.contains("nginxWebUI") && !line.contains(version)) {
+			if (line.contains("nginxWebUI")) {
 				String[] strs = line.split("\\s+");
 				if (!strs[1].equals(myPid)) {
 					pids.add(strs[1]);

@@ -221,10 +221,10 @@ function autoUpdate(url){
 				
 			},
 			error : function() {
-				/*setTimeout(function(){
+				setTimeout(function(){
 					layer.layer.close(loaded);
 					layer.alert("更新完成, 重新登录即可使用最新版本");
-				},10000)*/
+				},10000)
 			}
 		});
 	}
