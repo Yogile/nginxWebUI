@@ -499,15 +499,15 @@ public class ConfService {
 
 	public AsycPack getAsycPack() {
 		AsycPack asycPack = new AsycPack();
-		List<Cert> certList = sqlHelper.findAll(Cert.class);
-		for (Cert cert : certList) {
-			if (StrUtil.isNotEmpty(cert.getPem())) {
-				cert.setPemStr(FileUtil.readString(cert.getPem(), StandardCharsets.UTF_8));
-				cert.setKeyStr(FileUtil.readString(cert.getKey(), StandardCharsets.UTF_8));
-			}
-		}
+//		List<Cert> certList = sqlHelper.findAll(Cert.class);
+//		for (Cert cert : certList) {
+//			if (StrUtil.isNotEmpty(cert.getPem())) {
+//				cert.setPemStr(FileUtil.readString(cert.getPem(), StandardCharsets.UTF_8));
+//				cert.setKeyStr(FileUtil.readString(cert.getKey(), StandardCharsets.UTF_8));
+//			}
+//		}
 
-		asycPack.setCertList(certList);
+//		asycPack.setCertList(certList);
 		asycPack.setHttpList(sqlHelper.findAll(Http.class));
 		List<Server> serverList = sqlHelper.findAll(Server.class);
 		for (Server server : serverList) {
@@ -551,8 +551,8 @@ public class ConfService {
 
 	@Transactional
 	public void setAsycPack(AsycPack asycPack) {
-
-		sqlHelper.deleteByQuery(new ConditionAndWrapper(), Cert.class);
+		// 不要同步Cert表
+//		sqlHelper.deleteByQuery(new ConditionAndWrapper(), Cert.class);
 		sqlHelper.deleteByQuery(new ConditionAndWrapper(), Http.class);
 		sqlHelper.deleteByQuery(new ConditionAndWrapper(), Server.class);
 		sqlHelper.deleteByQuery(new ConditionAndWrapper(), Location.class);
@@ -561,7 +561,7 @@ public class ConfService {
 		sqlHelper.deleteByQuery(new ConditionAndWrapper(), Stream.class);
 		sqlHelper.deleteByQuery(new ConditionAndWrapper(), Param.class);
 
-		sqlHelper.insertAll(asycPack.getCertList());
+//		sqlHelper.insertAll(asycPack.getCertList());
 		sqlHelper.insertAll(asycPack.getHttpList());
 		sqlHelper.insertAll(asycPack.getServerList());
 		sqlHelper.insertAll(asycPack.getLocationList());
@@ -570,12 +570,12 @@ public class ConfService {
 		sqlHelper.insertAll(asycPack.getStreamList());
 		sqlHelper.insertAll(asycPack.getParamList());
 
-		for (Cert cert : asycPack.getCertList()) {
-			if (StrUtil.isNotEmpty(cert.getPem())) {
-				FileUtil.writeString(cert.getPemStr(), cert.getPem(), StandardCharsets.UTF_8);
-				FileUtil.writeString(cert.getKeyStr(), cert.getKey(), StandardCharsets.UTF_8);
-			}
-		}
+//		for (Cert cert : asycPack.getCertList()) {
+//			if (StrUtil.isNotEmpty(cert.getPem())) {
+//				FileUtil.writeString(cert.getPemStr(), cert.getPem(), StandardCharsets.UTF_8);
+//				FileUtil.writeString(cert.getKeyStr(), cert.getKey(), StandardCharsets.UTF_8);
+//			}
+//		}
 
 		for (Server server : asycPack.getServerList()) {
 			if (StrUtil.isNotEmpty(server.getPem())) {
