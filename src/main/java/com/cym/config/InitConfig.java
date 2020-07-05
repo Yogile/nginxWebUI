@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import com.cym.model.Http;
 import com.cym.service.SettingService;
+import com.cym.utils.NginxUtils;
 import com.cym.utils.RuntimeTool;
 import com.cym.utils.SystemTool;
 
@@ -44,10 +45,10 @@ public class InitConfig {
 	public void setHome(String home) {
 		InitConfig.home = home;
 	}
-	
+
 	@PostConstruct
 	public void init() throws IOException {
-		
+
 		Long count = sqlHelper.findAllCount(Http.class);
 		if (count == 0) {
 			List<Http> https = new ArrayList<Http>();
@@ -104,7 +105,7 @@ public class InitConfig {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-					
+
 					settingService.set("nginxPath", nginxPath);
 				}
 			}
@@ -133,9 +134,7 @@ public class InitConfig {
 			// 尝试启动nginx
 			logger.info("----------------start nginx--------------");
 			if (nginxExe.equals("nginx")) {
-				String[] command = { "/bin/sh", "-c", "ps -ef|grep nginx" };
-				String rs = RuntimeUtil.execForStr(command);
-				if (!rs.contains("nginx: master process") && !rs.contains("nginx: worker process") && SystemTool.hasNginx()) {
+				if (!NginxUtils.isRun() && SystemTool.hasNginx()) {
 					try {
 						RuntimeUtil.exec("nginx");
 					} catch (Exception e) {
