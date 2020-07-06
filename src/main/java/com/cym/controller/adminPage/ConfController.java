@@ -297,7 +297,7 @@ public class ConfController extends BaseController {
 		String decompose = settingService.get("decompose");
 		ConfExt confExt = confService.buildConf(StrUtil.isNotEmpty(decompose) && decompose.equals("true"));
 
-		if (StrUtil.isNotEmpty(nginxPath) && FileUtil.exist(nginxPath)) {
+		if (StrUtil.isNotEmpty(nginxPath) && FileUtil.exist(nginxPath) && FileUtil.isFile(nginxPath)) {
 			String orgStr = FileUtil.readString(nginxPath, StandardCharsets.UTF_8);
 			confExt.setConf(orgStr);
 
@@ -312,7 +312,7 @@ public class ConfController extends BaseController {
 
 			return renderSuccess(confExt);
 		} else {
-			return renderError("文件不存在");
+			return renderError("nginx.conf文件不存在");
 		}
 
 	}
