@@ -78,6 +78,20 @@ public class InitConfig {
 				}
 
 			}
+			
+
+			// 查找ngx_stream_module模块
+			logger.info("----------------find ngx_stream_module--------------");
+			String module = settingService.get("ngx_stream_module");
+			if (StrUtil.isEmpty(module)) {
+				List<String> list = RuntimeUtil.execForLines(CharsetUtil.systemCharset(), "find / -name ngx_stream_module.so");
+
+				for (String path : list) {
+					if (path.contains("ngx_stream_module.so") && path.length() < 80) {
+						settingService.set("ngx_stream_module", path);
+					}
+				}
+			}
 
 			// 找寻nginx配置文件
 //			logger.info("----------------find nginx.conf--------------");
@@ -118,18 +132,6 @@ public class InitConfig {
 //				}
 //			}
 
-			// 查找ngx_stream_module模块
-			logger.info("----------------find ngx_stream_module--------------");
-			String module = settingService.get("ngx_stream_module");
-			if (StrUtil.isEmpty(module)) {
-				List<String> list = RuntimeUtil.execForLines(CharsetUtil.systemCharset(), "find / -name ngx_stream_module.so");
-
-				for (String path : list) {
-					if (path.contains("ngx_stream_module.so") && path.length() < 80) {
-						settingService.set("ngx_stream_module", path);
-					}
-				}
-			}
 
 //			// docker的话尝试启动nginx
 //			logger.info("----------------start nginx--------------");
