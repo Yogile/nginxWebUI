@@ -1,6 +1,5 @@
 package com.cym.config;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -12,18 +11,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.system.ApplicationHome;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import com.cym.model.Http;
 import com.cym.service.SettingService;
-import com.cym.utils.NginxUtils;
-import com.cym.utils.RuntimeTool;
 import com.cym.utils.SystemTool;
 
 import cn.craccd.sqlHelper.utils.SqlHelper;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.ZipUtil;
@@ -125,9 +122,12 @@ public class InitConfig {
 			logger.info("----------------find ngx_stream_module--------------");
 			String module = settingService.get("ngx_stream_module");
 			if (StrUtil.isEmpty(module)) {
-				module = RuntimeTool.execForOne("find / -name ngx_stream_module.so");
-				if (StrUtil.isNotEmpty(module)) {
-					settingService.set("ngx_stream_module", module);
+				List<String> list = RuntimeUtil.execForLines(CharsetUtil.systemCharset(), "find / -name ngx_stream_module.so");
+
+				for (String path : list) {
+					if (path.contains("ngx_stream_module.so") && path.length() < 80) {
+						settingService.set("ngx_stream_module", path);
+					}
 				}
 			}
 
