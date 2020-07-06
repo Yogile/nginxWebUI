@@ -98,7 +98,7 @@ public class InitConfig {
 			
 			if (StrUtil.isEmpty(nginxPath)) {
 				try {
-					// 判断是否是容器中
+					// 判断是否是容器中 
 					if (FileUtil.exist("/etc/nginx/nginx.conf") && FileUtil.readUtf8String("/etc/nginx/nginx.conf").contains("include " + home + "nginx.conf")) {
 						logger.info("----------------release nginx.conf--------------");
 						// 释放nginxOrg.conf
