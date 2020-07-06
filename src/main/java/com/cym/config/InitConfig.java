@@ -105,8 +105,10 @@ public class InitConfig {
 						ClassPathResource resource = new ClassPathResource("nginxOrg.conf");
 						InputStream inputStream = resource.getInputStream();
 						FileUtil.writeFromStream(inputStream, nginxPath);
-						
 						settingService.set("nginxPath", nginxPath);
+						
+						// 启动nginx
+						RuntimeUtil.exec("nginx");
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
