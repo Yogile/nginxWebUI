@@ -55,7 +55,7 @@ public class InitConfig {
 			sqlHelper.insertAll(https);
 		}
 
-		if (SystemTool.isLinux()) {
+		if (true || SystemTool.isLinux()) {
 			// 初始化acme.sh
 			logger.info("----------------release acme.sh--------------");
 			if (!FileUtil.exist("/root/.acme.sh")) {
@@ -96,7 +96,8 @@ public class InitConfig {
 			logger.info("----------------find nginx.conf--------------");
 			String nginxPath = settingService.get("nginxPath");
 			logger.info("nginxPath:" + nginxPath);
-			if (StrUtil.isEmpty(nginxPath)) {
+			
+			if (StrUtil.isNotEmpty(nginxPath)) {
 				try {
 					// 判断是否是容器中
 					logger.info("FileUtil.exist:" + FileUtil.exist("/etc/nginx/nginx.conf"));
