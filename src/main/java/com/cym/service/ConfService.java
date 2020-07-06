@@ -193,10 +193,10 @@ public class ConfService {
 
 				List<Location> locationList = serverService.getLocationByServerId(server.getId());
 
-				// http参数配置
+				// location参数配置
 				for (Location location : locationList) {
 					NgxBlock ngxBlockLocation = new NgxBlock();
-					if (location.getType() == 0 || location.getType() == 2) { // http或负载均衡
+					if (location.getType() == 0 || location.getType() == 2) { // location或负载均衡
 						// 添加location
 						ngxBlockLocation.addValue("location");
 						ngxBlockLocation.addValue(location.getPath());
@@ -236,17 +236,20 @@ public class ConfService {
 
 						if (location.getPath().equals("/")) {
 							ngxParam = new NgxParam();
-							ngxParam.addValue("root " + location.getValue());
+							ngxParam.addValue("root " + location.getRootPath());
 							ngxBlockLocation.addEntry(ngxParam);
 						} else {
 							ngxParam = new NgxParam();
-							ngxParam.addValue("alias " + location.getValue());
+							ngxParam.addValue("alias " + location.getRootPath());
 							ngxBlockLocation.addEntry(ngxParam);
 						}
 
-						ngxParam = new NgxParam();
-						ngxParam.addValue("index index.html");
-						ngxBlockLocation.addEntry(ngxParam);
+						if(StrUtil.isNotEmpty(location.getRootPage())) {
+							ngxParam = new NgxParam();
+							ngxParam.addValue("index " + location.getRootPage());
+							ngxBlockLocation.addEntry(ngxParam);
+						}
+					
 					}
 
 					// 自定义参数
