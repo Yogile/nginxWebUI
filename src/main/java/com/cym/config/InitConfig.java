@@ -97,7 +97,7 @@ public class InitConfig {
 			String nginxPath = settingService.get("nginxPath");
 			logger.info("nginxPath:" + nginxPath);
 			
-			if (StrUtil.isNotEmpty(nginxPath)) {
+			if (StrUtil.isEmpty(nginxPath)) {
 				try {
 					// 判断是否是容器中
 					logger.info("FileUtil.exist:" + FileUtil.exist("/etc/nginx/nginx.conf"));
