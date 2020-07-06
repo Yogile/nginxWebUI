@@ -78,7 +78,6 @@ public class InitConfig {
 				}
 
 			}
-			
 
 			// 查找ngx_stream_module模块
 			logger.info("----------------find ngx_stream_module--------------");
@@ -94,33 +93,26 @@ public class InitConfig {
 			}
 
 			// 找寻nginx配置文件
-//			logger.info("----------------find nginx.conf--------------");
-//			String nginxPath = settingService.get("nginxPath");
-//			if (StrUtil.isEmpty(nginxPath)) {
-//				// 查找nginx.conf
-//				nginxPath = RuntimeTool.execForOne("find / -name nginx.conf");
-//				if (StrUtil.isNotEmpty(nginxPath)) {
-//					// 判断是否是容器中
-//					String lines = "";
-//					try {
-//						// 读取文件容易报异常
-//						lines = FileUtil.readUtf8String(nginxPath);
-//						if (StrUtil.isNotEmpty(lines) && lines.contains("include " + home)) {
-//							nginxPath = home + "nginx.conf";
-//							logger.info("----------------release nginx.conf--------------");
-//							// 释放nginxOrg.conf
-//							ClassPathResource resource = new ClassPathResource("nginxOrg.conf");
-//							InputStream inputStream = resource.getInputStream();
-//							FileUtil.writeFromStream(inputStream, nginxPath);
-//						}
-//					} catch (Exception e) {
-//						e.printStackTrace();
-//					}
-//
-//					settingService.set("nginxPath", nginxPath);
-//				}
-//			}
-//
+			logger.info("----------------find nginx.conf--------------");
+			String nginxPath = settingService.get("nginxPath");
+			if (StrUtil.isEmpty(nginxPath)) {
+				try {
+					// 判断是否是容器中
+					if (FileUtil.exist("/etc/nginx/nginx.conf") && FileUtil.readUtf8String(nginxPath).contains("include " + home + "nginx.conf")) {
+						logger.info("----------------release nginx.conf--------------");
+						// 释放nginxOrg.conf
+						nginxPath = home + "nginx.conf";
+						ClassPathResource resource = new ClassPathResource("nginxOrg.conf");
+						InputStream inputStream = resource.getInputStream();
+						FileUtil.writeFromStream(inputStream, nginxPath);
+						
+						settingService.set("nginxPath", nginxPath);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+
 //			// 查找nginx执行文件
 //			logger.info("----------------find nginx--------------");
 //			String nginxExe = settingService.get("nginxExe");
@@ -131,7 +123,6 @@ public class InitConfig {
 //					settingService.set("nginxExe", nginxExe);
 //				}
 //			}
-
 
 //			// docker的话尝试启动nginx
 //			logger.info("----------------start nginx--------------");
