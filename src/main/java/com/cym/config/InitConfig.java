@@ -55,7 +55,7 @@ public class InitConfig {
 			sqlHelper.insertAll(https);
 		}
 
-		if (true || SystemTool.isLinux()) {
+		if (SystemTool.isLinux()) {
 			// 初始化acme.sh
 			logger.info("----------------release acme.sh--------------");
 			if (!FileUtil.exist("/root/.acme.sh")) {
@@ -95,15 +95,10 @@ public class InitConfig {
 			// 找寻nginx配置文件
 			logger.info("----------------find nginx.conf--------------");
 			String nginxPath = settingService.get("nginxPath");
-			logger.info("nginxPath:" + nginxPath);
 			
 			if (StrUtil.isEmpty(nginxPath)) {
 				try {
 					// 判断是否是容器中
-					logger.info("FileUtil.exist:" + FileUtil.exist("/etc/nginx/nginx.conf"));
-					logger.info("FileUtil.readUtf8String:" +  FileUtil.readUtf8String("/etc/nginx/nginx.conf"));
-					logger.info("contain:" + "include " + home + "nginx.conf");
-					
 					if (FileUtil.exist("/etc/nginx/nginx.conf") && FileUtil.readUtf8String("/etc/nginx/nginx.conf").contains("include " + home + "nginx.conf")) {
 						logger.info("----------------release nginx.conf--------------");
 						// 释放nginxOrg.conf
@@ -113,6 +108,9 @@ public class InitConfig {
 						FileUtil.writeFromStream(inputStream, nginxPath);
 						settingService.set("nginxPath", nginxPath);
 						
+						// 设置nginx执行文件
+						settingService.set("nginxExe", "nginx");
+						
 						// 启动nginx
 						RuntimeUtil.exec("nginx");
 					}
@@ -121,28 +119,6 @@ public class InitConfig {
 				}
 			}
 
-//			// 查找nginx执行文件
-//			logger.info("----------------find nginx--------------");
-//			String nginxExe = settingService.get("nginxExe");
-//			if (StrUtil.isEmpty(nginxExe)) {
-//				String rs = RuntimeTool.execForOne("which nginx");
-//				if (StrUtil.isNotEmpty(rs)) {
-//					nginxExe = "nginx";
-//					settingService.set("nginxExe", nginxExe);
-//				}
-//			}
-
-//			// docker的话尝试启动nginx
-//			logger.info("----------------start nginx--------------");
-//			if (nginxExe.equals("nginx")) {
-//				if (!NginxUtils.isRun() && SystemTool.hasNginx()) {
-//					try {
-//						RuntimeUtil.exec("nginx");
-//					} catch (Exception e) {
-//						e.printStackTrace();
-//					}
-//				}
-//			}
 
 		}
 	}
