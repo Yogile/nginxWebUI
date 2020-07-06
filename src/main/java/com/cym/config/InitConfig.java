@@ -95,6 +95,7 @@ public class InitConfig {
 			// 找寻nginx配置文件
 			logger.info("----------------find nginx.conf--------------");
 			String nginxPath = settingService.get("nginxPath");
+			logger.info("nginxPath:" + nginxPath);
 			if (StrUtil.isEmpty(nginxPath)) {
 				try {
 					// 判断是否是容器中
