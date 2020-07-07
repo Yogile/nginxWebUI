@@ -411,7 +411,7 @@ public class ConfService {
 		for (NgxEntry ngxEntry : ngxBlock.getEntries()) {
 			if (ngxEntry instanceof NgxParam) {
 				NgxParam ngxParam = (NgxParam) ngxEntry;
-				if (ngxParam.toString().startsWith(param.getName()) && !param.getName().equals("deny") && !param.getName().equals("allow")) {
+				if (ngxParam.toString().startsWith(param.getName()) && !param.getName().startsWith("deny") && !param.getName().startsWith("allow")) {
 					ngxBlock.remove(ngxParam);
 					break;
 				}
