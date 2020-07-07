@@ -216,7 +216,8 @@ function addOver() {
 		location.upstreamId = $(this).find("select[name='upstreamId']").val();
 		location.upstreamPath = $(this).find("input[name='upstreamPath']").val();
 		location.rootPath = $(this).find("input[name='rootPath']").val();
-		location.rootPage = $(this).find("td input[name='rootPage']").val();
+		location.rootPage = $(this).find("input[name='rootPage']").val();
+		location.rootType = $(this).find("select[name='rootType']").val();
 		location.locationParamJson =  $(this).find("input[name='locationParamJson']").val();
 		
 		locations.push(location);
@@ -293,61 +294,17 @@ function edit(id) {
 					var uuid = guid();
 					
 					location.locationParamJson = location.locationParamJson.replace(/,/g,"%2C");
-					var html = `<tr id='${uuid}'>
-								<td>
-									<input type="text" name="path" class="layui-input short" value="${location.path}">
-								</td>
-								<td style="width: 200px;">
-									<div class="layui-input-inline">
-									<select name="type" lang='${uuid}' lay-filter="type">
-										<option ${location.type=='0'?'selected':''} value="0">代理动态http</option>
-										<option ${location.type=='1'?'selected':''} value="1">代理静态html</option>
-										<option ${location.type=='2'?'selected':''} value="2">负载均衡</option>
-									</select>
-									</div>
-								</td>
-								
-								<td>
-									<span name="valueSpan">
-										<input type="text" name="value" id="value_${uuid}" class="layui-input long" value=""  placeholder="例：http://127.0.0.1:8080">
-									</span>
-									
-									<span name="rootPathSpan">
-										<div class="layui-inline" style="width: 150px;">
-											<input type="text" name="rootPath" id="rootPath_${uuid}" class="layui-input" placeholder="例：/root/www">
-										</div>
-											
-										<i class="layui-icon layui-icon-export" lang="value" onclick="selectWww('${uuid}')"></i> 
-											
-										<div class="layui-inline" style="width: 150px;">
-											<input type="text" name="rootPage" id="rootPage_${uuid}" class="layui-input" placeholder="默认页如 index.html">
-										</div>	
-									</span>
-									
-									<span name="upstreamSelectSpan">
-									${upstreamSelect}
-									</span>
-								</td> 
-								<td>
-									<input type="hidden" id="locationParamJson_${uuid}" name="locationParamJson" value='${location.locationParamJson}'>
-									<button type="button" class="layui-btn layui-btn-sm" onclick="locationParam('${uuid}')">设置额外参数</button>
-									<button type="button" class="layui-btn layui-btn-sm layui-btn-danger" onclick="delTr('${uuid}')">删除</button>
-								</td>
-						</tr>`
+					var html = buildHtml(uuid, location, upstreamSelect);
 						
 					$("#itemList").append(html);
 					
-					if(location.type == 0){
-						$("#" + uuid + " input[name='value']").val(location.value);
-					} 
-					if(location.type == 1){
-						$("#" + uuid + " input[name='rootPath']").val(location.rootPath);
-						$("#" + uuid + " input[name='rootPage']").val(location.rootPage);
-					} 
-					if(location.type == 2 ) {
-						$("#" + uuid + " select[name='upstreamId']").val(location.upstreamId);
-						$("#" + uuid + " input[name='upstreamPath']").val(location.upstreamPath);
-					}
+					$("#" + uuid + " input[name='value']").val(location.value);
+					$("#" + uuid + " input[name='rootType']").val(location.rootType);
+					$("#" + uuid + " input[name='rootPath']").val(location.rootPath);
+					$("#" + uuid + " input[name='rootPage']").val(location.rootPage);
+					$("#" + uuid + " select[name='rootType']").val(location.rootType);
+					$("#" + uuid + " select[name='upstreamId']").val(location.upstreamId);
+					$("#" + uuid + " input[name='upstreamPath']").val(location.upstreamPath);
 					
 					checkType(location.type, uuid)
 				}
@@ -363,6 +320,7 @@ function edit(id) {
 		}
 	});
 }
+
 
 function del(id) {
 	if (confirm("确认删除?")) {
@@ -394,51 +352,77 @@ function addItem(){
 	
 	var upstreamSelect = $("#upstreamSelect").html();
 	
-	var html = `<tr id='${uuid}'>
-						<td>
-							<input type="text" name="path" class="layui-input short" value="/">
-						</td>
-			<td style="width: 200px;">
-							<div class="layui-input-inline">
-							<select name="type" lang='${uuid}' lay-filter="type">
-								<option value="0">代理动态http</option>
-								<option value="1">代理静态html</option>
-								<option value="2">负载均衡</option>
-							</select>
-							</div>
-						</td>
-						
-						<td>
-							<span name="valueSpan">
-								<input type="text" name="value" id="value_${uuid}" class="layui-input long" value=""  placeholder="例：http://127.0.0.1:8080">
-							</span>
-							
-							<span name="rootPathSpan">
-								<div class="layui-inline" style="width: 150px;">
-									<input type="text" name="rootPath" id="rootPath_${uuid}" class="layui-input" placeholder="例：/root/www">
-								</div>
-									
-								<i class="layui-icon layui-icon-export" lang="value" onclick="selectWww('${uuid}')"></i> 
-									
-								<div class="layui-inline" style="width: 150px;">
-									<input type="text" name="rootPage" id="rootPage_${uuid}" class="layui-input" placeholder="默认页如 index.html">
-								</div>	
-							</span>
-							
-							<span name="upstreamSelectSpan">
-							${upstreamSelect}
-							</span>
-						</td> 
-						<td>
-							<input type="hidden" id="locationParamJson_${uuid}" name="locationParamJson"  value="">
-							<button type="button" class="layui-btn layui-btn-sm" onclick="locationParam('${uuid}')">设置额外参数</button>
-							<button type="button" class="layui-btn layui-btn-sm layui-btn-danger" onclick="delTr('${uuid}')">删除</button>
-						</td>
-				</tr>`
+	var html = buildHtml(uuid, null, upstreamSelect);
+	
 	$("#itemList").append(html);
 	checkType(0, uuid);
 	form.render();
 	
+}
+
+
+
+function buildHtml(uuid, location, upstreamSelect){
+	if(location == null){
+		location = {
+			path : "",
+			type : "0",
+			locationParamJson : ""
+		};
+	}
+	
+	var str = `<tr id='${uuid}'>
+				<td>
+					<input type="text" name="path" class="layui-input short" value="${location.path}">
+				</td>
+				<td>
+					<div class="layui-input-inline" style="width: 130px;">
+						<select name="type" lang='${uuid}' lay-filter="type">
+							<option ${location.type=='0'?'selected':''} value="0">代理动态http</option>
+							<option ${location.type=='1'?'selected':''} value="1">代理静态html</option>
+							<option ${location.type=='2'?'selected':''} value="2">负载均衡</option>
+						</select>
+					</div>
+				</td>
+				
+				<td>
+					<span name="valueSpan">
+						<div class="layui-inline">
+							<input type="text"  style="width: 315px;" name="value" id="value_${uuid}" class="layui-input long" value=""  placeholder="例：http://127.0.0.1:8080">
+						</div>
+					</span>
+					
+					<span name="rootPathSpan">
+						<div class="layui-inline" style="width: 100px;">
+							<select name="rootType" >
+								<option value="root">root模式</option>
+								<option value="alias">alias模式</option>
+							</select>
+						</div>
+						
+						<div class="layui-inline" style="width: 150px;">
+							<input type="text" name="rootPath" id="rootPath_${uuid}" class="layui-input" placeholder="例：/root/www">
+						</div>
+							
+						<i class="layui-icon layui-icon-export" lang="value" onclick="selectWww('${uuid}')"></i> 
+							
+						<div class="layui-inline" style="width: 150px;">
+							<input type="text" name="rootPage" id="rootPage_${uuid}" class="layui-input" placeholder="默认页如 index.html">
+						</div>	
+					</span>
+					
+					<span name="upstreamSelectSpan">
+					${upstreamSelect}
+					</span>
+				</td> 
+				<td>
+					<input type="hidden" id="locationParamJson_${uuid}" name="locationParamJson" value='${location.locationParamJson}'>
+					<button type="button" class="layui-btn layui-btn-sm" onclick="locationParam('${uuid}')">设置额外参数</button>
+					<button type="button" class="layui-btn layui-btn-sm layui-btn-danger" onclick="delTr('${uuid}')">删除</button>
+				</td>
+			</tr>`
+		
+	return str;
 }
 
 
