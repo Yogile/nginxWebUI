@@ -113,6 +113,7 @@ function search() {
 function add() {
 	$("#id").val("");
 	$("#listen").val("");
+	$("#ip").val("");
 	$("#serverName").val("");
 	$("#ssl option:first").prop("selected", true);
 	$("#rewrite option:first").prop("selected", true);
@@ -185,18 +186,16 @@ function addOver() {
 		return;
 	}
 	
-//	$("input[name='upstreamPath']").each(function(){
-//		if($(this).val() == ''){
-//			$(this).val("is_null");
-//		}
-//	})
-	
 	
 	var server = {};
 	server.id =  $("#id").val();
 	server.proxyType = $("#proxyType").val();
 	server.proxyUpstreamId = $("#proxyUpstreamId").val();
 	server.listen = $("#listen").val();
+	if($("#ip").val() != ''){
+		server.listen = $("#ip").val() + ":" + $("#listen").val();
+	}
+	
 	server.serverName = $("#serverName").val();
 	server.ssl = $("#ssl").val();
 	server.pem = $("#pem").val();
@@ -260,7 +259,14 @@ function edit(id) {
 				
 				var server = data.obj.server;
 				$("#id").val(server.id);
-				$("#listen").val(server.listen);
+				if(server.listen.indexOf(":") > -1){
+					$("#ip").val(server.listen.split(":")[0]);
+					$("#listen").val(server.listen.split(":")[1]);
+				} else {
+					$("#ip").val("");
+					$("#listen").val(server.listen);
+				}
+				
 				$("#serverName").val(server.serverName);
 				$("#ssl").val(server.ssl);
 				$("#pem").val(server.pem);
