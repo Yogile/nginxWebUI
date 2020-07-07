@@ -234,11 +234,11 @@ public class ConfService {
 						ngxBlockLocation.addValue("location");
 						ngxBlockLocation.addValue(location.getPath());
 
-						if (location.getPath().equals("/")) {
+						if (location.getRootType().equals("root")) {
 							ngxParam = new NgxParam();
 							ngxParam.addValue("root " + location.getRootPath());
 							ngxBlockLocation.addEntry(ngxParam);
-						} else {
+						} else if (location.getRootType().equals("alias")) {
 							ngxParam = new NgxParam();
 							ngxParam.addValue("alias " + location.getRootPath());
 							ngxBlockLocation.addEntry(ngxParam);
