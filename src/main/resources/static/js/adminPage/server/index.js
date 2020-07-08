@@ -477,7 +477,7 @@ function selectCertOver(){
 				$("#pem").val(cert.pem);
 				$("#pemPath").html(cert.pem);
 				$("#key").val(cert.key);
-				$("#keyPath").html(cert.pem);
+				$("#keyPath").html(cert.key);
 				
 				layer.close(certIndex);
 			} else {
