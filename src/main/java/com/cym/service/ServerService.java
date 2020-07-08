@@ -149,12 +149,12 @@ public class ServerService {
 
 	}
 
-	public boolean hasListen(String listen, String serverId) {
-		ConditionAndWrapper conditionAndWrapper =  new ConditionAndWrapper().eq("listen", listen);
-		if(StrUtil.isNotEmpty(serverId)) {
-			conditionAndWrapper.ne("id", serverId);
-		}
-		return sqlHelper.findCountByQuery(conditionAndWrapper, Server.class) > 0;
-	}
+//	public boolean hasListen(String listen, String serverId) {
+//		ConditionAndWrapper conditionAndWrapper =  new ConditionAndWrapper().eq("listen", listen);
+//		if(StrUtil.isNotEmpty(serverId)) {
+//			conditionAndWrapper.ne("id", serverId);
+//		}
+//		return sqlHelper.findCountByQuery(conditionAndWrapper, Server.class) > 0;
+//	}
 
 }
