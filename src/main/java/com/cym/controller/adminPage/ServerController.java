@@ -109,10 +109,9 @@ public class ServerController extends BaseController {
 		Server server = JSONUtil.toBean(serverJson, Server.class);
 		List<Location> locations = JSONUtil.toList(JSONUtil.parseArray(locationJson), Location.class);
 
-		if(StrUtil.isEmpty(server.getId()) && serverService.hasListen(server.getListen())){
+		if(serverService.hasListen(server.getListen(), server.getId())){
 			return renderError("该监听ip端口已存在");
-		}
-		
+		} 
 		
 		if (server.getProxyType() == 0) {
 			serverService.addOver(server, serverParamJson, locations);
