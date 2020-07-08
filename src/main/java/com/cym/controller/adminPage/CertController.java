@@ -138,7 +138,7 @@ public class CertController extends BaseController {
 				String domain = cert.getDomain().split(",")[0];
 				String certDir = "/root/.acme.sh/" + domain + "/";
 
-				String dest = InitConfig.home + "cert/" + domain + ".cer";
+				String dest = InitConfig.home + "cert/" + domain + ".fullchain.cer";
 				FileUtil.copy(new File(certDir + "fullchain.cer"), new File(dest), true);
 				cert.setPem(dest);
 
