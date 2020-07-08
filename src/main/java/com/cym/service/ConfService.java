@@ -408,15 +408,16 @@ public class ConfService {
 	}
 
 	private void setSameParam(Param param, NgxBlock ngxBlock) {
-		for (NgxEntry ngxEntry : ngxBlock.getEntries()) {
-			if (ngxEntry instanceof NgxParam) {
-				NgxParam ngxParam = (NgxParam) ngxEntry;
-				if (ngxParam.toString().startsWith(param.getName()) && !param.getName().startsWith("deny") && !param.getName().startsWith("allow")) {
-					ngxBlock.remove(ngxParam);
-					break;
-				}
-			}
-		}
+		// 不再删除相同名称的参数
+//		for (NgxEntry ngxEntry : ngxBlock.getEntries()) {
+//			if (ngxEntry instanceof NgxParam) {
+//				NgxParam ngxParam = (NgxParam) ngxEntry;
+//				if (ngxParam.toString().startsWith(param.getName()) && !param.getName().startsWith("deny") && !param.getName().startsWith("allow")) {
+//					ngxBlock.remove(ngxParam);
+//					break;
+//				}
+//			}
+//		}
 
 		NgxParam ngxParam = new NgxParam();
 		ngxParam.addValue(param.getName().trim() + " " + param.getValue().trim());
