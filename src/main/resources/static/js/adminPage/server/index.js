@@ -253,7 +253,7 @@ function addOver() {
 	});
 }
 
-function edit(id) {
+function edit(id,clone) {
 	$("#id").val(id);
 
 	$.ajax({
@@ -267,7 +267,12 @@ function edit(id) {
 			if (data.success) {
 				
 				var server = data.obj.server;
-				$("#id").val(server.id);
+				if(!clone){
+					$("#id").val(server.id);
+				}else{
+					$("#id").val("");
+				}
+				
 				if(server.listen.indexOf(":") > -1){
 					$("#ip").val(server.listen.split(":")[0]);
 					$("#listen").val(server.listen.split(":")[1]);
@@ -622,7 +627,7 @@ function selectWww(id){
 
 function clone(id){
 	if(confirm("确认进行克隆?")){
-		$.ajax({
+		/*$.ajax({
 			type : 'POST',
 			url : ctx + '/adminPage/server/clone',
 			data : {
@@ -639,7 +644,10 @@ function clone(id){
 			error : function() {
 				alert("出错了,请联系技术人员!");
 			}
-		});
+		});*/
+		
+		edit(id, true);
+		
 	}
 	
 }
