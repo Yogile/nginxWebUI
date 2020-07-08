@@ -150,7 +150,7 @@
 									<input type="checkbox" name="enable" lay-filter="enable" value="${ext.server.id}" lay-text="启用|停用" lay-skin="switch" ${(ext.server.enable)?string('checked','')}>
 								</td>
 								<td>
-									<button type="button" class="layui-btn layui-btn-sm" onclick="edit('${ext.server.id}')">编辑</button>
+									<button type="button" class="layui-btn layui-btn-sm" onclick="edit('${ext.server.id}', false)">编辑</button>
 									<button type="button" class="layui-btn layui-btn-sm" onclick="clone('${ext.server.id}')">克隆</button>
 									<button type="button" class="layui-btn layui-btn-danger layui-btn-sm" onclick="del('${ext.server.id}')">删除</button>
 									
