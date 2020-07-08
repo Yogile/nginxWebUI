@@ -250,6 +250,11 @@ public class ConfService {
 							ngxBlockLocation.addEntry(ngxParam);
 						}
 					
+					} else if (location.getType() == 3) { // 空白location
+						
+						ngxBlockLocation.addValue("location");
+						ngxBlockLocation.addValue(location.getPath());
+						
 					}
 
 					// 自定义参数
