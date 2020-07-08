@@ -95,6 +95,8 @@ public class ServerController extends BaseController {
 					str.add("<span class='path'>" + location.getPath() + "</span><span class='value'>http://" + upstream.getName()
 							+ (location.getUpstreamPath() != null ? location.getUpstreamPath() : "") + "</span>");
 				}
+			} else if (location.getType() == 3) {
+				str.add("<span class='path'>" + location.getPath() + "</span>");
 			}
 
 		}
