@@ -385,7 +385,7 @@ function addItem(){
 function buildHtml(uuid, location, upstreamSelect){
 	if(location == null){
 		location = {
-			path : "",
+			path : "/",
 			type : "0",
 			locationParamJson : ""
 		};
