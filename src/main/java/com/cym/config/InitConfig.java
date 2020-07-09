@@ -50,10 +50,10 @@ public class InitConfig {
 		Long count = sqlHelper.findAllCount(Basic.class);
 		if (count == 0) {
 			List<Basic> basics = new ArrayList<Basic>();
-			basics.add(new Basic("worker_processes", "auto"));
+			basics.add(new Basic("worker_processes", "auto", 0));
 			basics.add(new Basic("events", "{\r\n" + 
 					"    worker_connections  1024;\r\n" + 
-					"}"));
+					"}", 1));
 
 			sqlHelper.insertAll(basics);
 		}

@@ -101,3 +101,26 @@ function del(id){
 		});
 	}
 }
+
+
+function setOrder(id, count){
+	$.ajax({
+		type : 'POST',
+		url : ctx + '/adminPage/basic/setOrder',
+		data : {
+			id : id,
+			count : count
+		},
+		dataType : 'json',
+		success : function(data) {
+			if (data.success) {
+				location.reload();
+			}else{
+				layer.msg(data.msg)
+			}
+		},
+		error : function() {
+			alert("出错了,请联系技术人员!");
+		}
+	});
+}

@@ -70,7 +70,7 @@ public class ConfService {
 			NgxConfig ngxConfig = new NgxConfig();
 
 			// 获取基本参数
-			List<Basic> basicList = sqlHelper.findAll(new Sort("name", Direction.DESC), Basic.class);
+			List<Basic> basicList = sqlHelper.findAll(new Sort("seq", Direction.ASC), Basic.class);
 			for (Basic basic : basicList) {
 				NgxParam ngxParam = new NgxParam();
 				ngxParam.addValue(basic.getName().trim() + " " + basic.getValue().trim());
