@@ -1,30 +1,36 @@
 package com.cym.model;
 
 import cn.craccd.sqlHelper.bean.BaseModel;
+import cn.craccd.sqlHelper.config.InitValue;
 import cn.craccd.sqlHelper.config.Table;
 
 @Table
 public class Basic extends BaseModel {
 	String name;
 	String value;
-	String unit;
+	@InitValue("0")
+	Integer seq;
+
 
 	public Basic() {
 
 	}
 
-	public Basic(String name, String value) {
+	public Basic(String name, String value, Integer seq) {
 		this.name = name;
 		this.value = value;
+		this.seq = seq;
 	}
 
-	public String getUnit() {
-		return unit;
+
+	public Integer getSeq() {
+		return seq;
 	}
 
-	public void setUnit(String unit) {
-		this.unit = unit;
+	public void setSeq(Integer seq) {
+		this.seq = seq;
 	}
+
 
 	public String getName() {
 		return name;

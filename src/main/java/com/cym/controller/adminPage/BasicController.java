@@ -9,19 +9,22 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cym.model.Basic;
-import com.cym.service.SettingService;
+import com.cym.service.BasicService;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
+
+import cn.craccd.sqlHelper.bean.Sort;
+import cn.craccd.sqlHelper.bean.Sort.Direction;
 
 @Controller
 @RequestMapping("/adminPage/basic")
 public class BasicController extends BaseController {
 	@Autowired
-	SettingService settingService;
+	BasicService basicService;
 
 	@RequestMapping("")
 	public ModelAndView index(ModelAndView modelAndView) {
-		List<Basic> basicList = sqlHelper.findAll(Basic.class);
+		List<Basic> basicList = sqlHelper.findAll(new Sort("seq", Direction.ASC), Basic.class);
 
 		modelAndView.addObject("basicList", basicList);
 		modelAndView.setViewName("/adminPage/basic/index");
@@ -31,14 +34,21 @@ public class BasicController extends BaseController {
 	@RequestMapping("addOver")
 	@ResponseBody
 	public JsonResult addOver(Basic base) {
-//		if (StrUtil.isEmpty(base.getId()) && baseService.hasName(base.getName())) {
-//			return renderError("名称已存在");
-//		}
+		base.setSeq(basicService.buildOrder());
+		
 		sqlHelper.insertOrUpdate(base);
 
 		return renderSuccess();
 	}
 
+	@RequestMapping("setOrder")
+	@ResponseBody
+	public JsonResult setOrder(String id, Integer count) {
+		basicService.setSeq(id, count);
+
+		return renderSuccess();
+	}
+	
 	@RequestMapping("detail")
 	@ResponseBody
 	public JsonResult detail(String id) {
