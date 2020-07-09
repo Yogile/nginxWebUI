@@ -61,7 +61,7 @@ public class ScheduleTask {
 	}
 
 	// 分隔日志,每天
-	@Scheduled(cron = "0 0 0 * * ?")
+	@Scheduled(cron = "0 55 23 * * ?")
 	public void diviLog() {
 		if (FileUtil.exist(InitConfig.home + "log/access.log")) {
 
