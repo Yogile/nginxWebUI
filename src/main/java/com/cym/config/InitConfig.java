@@ -95,11 +95,11 @@ public class InitConfig {
 			// 找寻nginx配置文件
 			logger.info("----------------find nginx.conf--------------");
 			String nginxPath = settingService.get("nginxPath");
-			
+
 			if (StrUtil.isEmpty(nginxPath)) {
 				try {
-					// 判断是否是容器中 
-					if (FileUtil.exist("/etc/nginx/nginx.conf") && FileUtil.readUtf8String("/etc/nginx/nginx.conf").contains("include " + home + "nginx.conf")) {
+					// 判断是否是容器中
+					if (inDocker()) {
 						logger.info("----------------release nginx.conf--------------");
 						// 释放nginxOrg.conf
 						nginxPath = home + "nginx.conf";
@@ -107,19 +107,29 @@ public class InitConfig {
 						InputStream inputStream = resource.getInputStream();
 						FileUtil.writeFromStream(inputStream, nginxPath);
 						settingService.set("nginxPath", nginxPath);
-						
+
 						// 设置nginx执行文件
 						settingService.set("nginxExe", "nginx");
-						
-						// 启动nginx
-						RuntimeUtil.exec("nginx");
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 
-
+			// 在容器中,尝试启动nginx;
+			if (inDocker()) {
+				// 启动nginx
+				RuntimeUtil.exec("nginx");
+			}
 		}
 	}
+
+	/**
+	 * 是否在docker中
+	 * @return
+	 */
+	private Boolean inDocker() {
+		return FileUtil.exist("/etc/nginx/nginx.conf") && FileUtil.readUtf8String("/etc/nginx/nginx.conf").contains("include " + home + "nginx.conf");
+	}
+
 }
