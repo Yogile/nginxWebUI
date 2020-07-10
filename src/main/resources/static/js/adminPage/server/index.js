@@ -212,8 +212,8 @@ function addOver() {
 	server.rewrite = $("#rewrite").val();
 	server.http2 = $("#http2").val();
 	
-	var serverParamJson =  $("#serverParamJson").val();
-
+	var serverParamJson = $("#serverParamJson").val();
+	
 	var locations = [];
 	
 	$(".itemList").children().each(function(){
@@ -226,7 +226,7 @@ function addOver() {
 		location.rootPath = $(this).find("input[name='rootPath']").val();
 		location.rootPage = $(this).find("input[name='rootPage']").val();
 		location.rootType = $(this).find("select[name='rootType']").val();
-		location.locationParamJson =  $(this).find("input[name='locationParamJson']").val();
+		location.locationParamJson =  $(this).find("textarea[name='locationParamJson']").val();
 		
 		locations.push(location);
 	})
@@ -289,7 +289,7 @@ function edit(id,clone) {
 				$("#keyPath").html(server.key);
 				$("#proxyType").val(server.proxyType);
 				$("#proxyUpstreamId").val(server.proxyUpstreamId);
-				$("#serverParamJson").val(data.obj.paramJson.replace(/,/g,"%2C"));
+				$("#serverParamJson").val(data.obj.paramJson);
 				
 				if(server.rewrite != null){
 					$("#rewrite").val(server.rewrite);
@@ -313,7 +313,7 @@ function edit(id,clone) {
 					var location = list[i];
 					var uuid = guid();
 					
-					location.locationParamJson = location.locationParamJson.replace(/,/g,"%2C");
+					location.locationParamJson = location.locationParamJson;
 					var html = buildHtml(uuid, location, upstreamSelect);
 						
 					$("#itemList").append(html);
@@ -391,6 +391,7 @@ function buildHtml(uuid, location, upstreamSelect){
 		};
 	}
 	
+	
 	var str = `<tr id='${uuid}'>
 				<td>
 					<input type="text" name="path" class="layui-input short" value="${location.path}">
@@ -441,7 +442,7 @@ function buildHtml(uuid, location, upstreamSelect){
 					</span>
 				</td> 
 				<td>
-					<input type="hidden" id="locationParamJson_${uuid}" name="locationParamJson" value='${location.locationParamJson}'>
+					<textarea style="display: none;" id="locationParamJson_${uuid}" name="locationParamJson" >${location.locationParamJson}</textarea>
 					<button type="button" class="layui-btn layui-btn-sm" onclick="locationParam('${uuid}')">设置额外参数</button>
 					<button type="button" class="layui-btn layui-btn-sm layui-btn-danger" onclick="delTr('${uuid}')">删除</button>
 				</td>
@@ -516,7 +517,7 @@ function selectKey(){
 function serverParam(){
 	var json = $("#serverParamJson").val();
 	$("#targertId").val("serverParamJson");
-	var params = json!=''?JSON.parse(json.replace(/%2C/g,",")):[];
+	var params = json!=''?JSON.parse(json):[];
 	fillTable(params);
 	
 }
@@ -524,7 +525,7 @@ function serverParam(){
 function locationParam(uuid){
 	var json = $("#locationParamJson_" + uuid).val();
 	$("#targertId").val("locationParamJson_" + uuid);
-	var params = json!=''?JSON.parse(json.replace(/%2C/g,",")):[];
+	var params = json!=''?JSON.parse(json):[];
 	fillTable(params);
 }
 
@@ -584,6 +585,7 @@ function addParam(){
 
 
 function addParamOver(){
+	
 	var targertId = $("#targertId").val();
 	var params = [];
 	$("tr[name='param']").each(function(){
@@ -593,7 +595,7 @@ function addParamOver(){
 		
 		params.push(param);
 	})
-	$("#" + targertId).val(JSON.stringify(params).replace(/,/g,"%2C"));
+	$("#" + targertId).val(JSON.stringify(params));
 	
 	layer.close(paramIndex);
 }
@@ -627,27 +629,7 @@ function selectWww(id){
 
 function clone(id){
 	if(confirm("确认进行克隆?")){
-		/*$.ajax({
-			type : 'POST',
-			url : ctx + '/adminPage/server/clone',
-			data : {
-				id : id
-			},
-			dataType : 'json',
-			success : function(data) {
-				if (data.success) {
-					location.reload();
-				} else {
-					layer.msg(data.msg)
-				}
-			},
-			error : function() {
-				alert("出错了,请联系技术人员!");
-			}
-		});*/
-		
 		edit(id, true);
-		
 	}
 	
 }

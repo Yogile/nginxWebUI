@@ -124,7 +124,7 @@ function edit(id) {
 				$("#name").val(ext.upstream.name);
 				$("#tactics").val(ext.upstream.tactics);
 				$("#proxyType").val(ext.upstream.proxyType);
-				$("#upstreamParamJson").val(ext.paramJson.replace(/,/g,"%2C"));
+				$("#upstreamParamJson").val(ext.paramJson);
 				
 				var html = ``;
 				for(let i=0;i<list.length;i++){
@@ -217,7 +217,7 @@ function delTr(id){
 function upstreamParam(){
 	var json = $("#upstreamParamJson").val();
 	$("#targertId").val("upstreamParamJson");
-	var params = json!=''?JSON.parse(json.replace(/%2C/g,",")):[];
+	var params = json!=''?JSON.parse(json):[];
 	fillTable(params);
 }
 
@@ -286,7 +286,7 @@ function addParamOver(){
 		
 		params.push(param);
 	})
-	$("#" + targertId).val(JSON.stringify(params).replace(/,/g,"%2C"));
+	$("#" + targertId).val(JSON.stringify(params));
 	
 	layer.close(paramIndex);
 }

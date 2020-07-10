@@ -24,6 +24,7 @@ import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
 
 import cn.craccd.sqlHelper.bean.Page;
+import cn.hutool.core.util.EscapeUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 
@@ -56,7 +57,6 @@ public class ServerController extends BaseController {
 				serverExt.setLocationStr("负载均衡: " + (upstream != null ? upstream.getName() : ""));
 			}
 
-
 			exts.add(serverExt);
 		}
 		page.setRecords(exts);
@@ -75,7 +75,7 @@ public class ServerController extends BaseController {
 		modelAndView.addObject("wwwList", sqlHelper.findAll(Www.class));
 		modelAndView.addObject("sort", sort);
 		modelAndView.addObject("direction", direction);
-		
+
 		modelAndView.addObject("keywords", keywords);
 		modelAndView.setViewName("/adminPage/server/index");
 		return modelAndView;
@@ -109,10 +109,6 @@ public class ServerController extends BaseController {
 		Server server = JSONUtil.toBean(serverJson, Server.class);
 		List<Location> locations = JSONUtil.toList(JSONUtil.parseArray(locationJson), Location.class);
 
-//		if(serverService.hasListen(server.getListen(), server.getId())){
-//			return renderError("该监听ip端口已存在");
-//		} 
-		
 		if (server.getProxyType() == 0) {
 			serverService.addOver(server, serverParamJson, locations);
 		} else {
@@ -138,10 +134,12 @@ public class ServerController extends BaseController {
 		serverExt.setServer(server);
 		List<Location> list = serverService.getLocationByServerId(id);
 		for (Location location : list) {
-			location.setLocationParamJson(paramService.getJsonByTypeId(location.getId(), "location"));
+			String json =  paramService.getJsonByTypeId(location.getId(), "location");
+			location.setLocationParamJson(json != null ? json : null);
 		}
 		serverExt.setLocationList(list);
-		serverExt.setParamJson(paramService.getJsonByTypeId(server.getId(), "server"));
+		String json = paramService.getJsonByTypeId(server.getId(), "server");
+		serverExt.setParamJson(json != null ? json : null);
 
 		return renderSuccess(serverExt);
 	}
