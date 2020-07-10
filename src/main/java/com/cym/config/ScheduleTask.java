@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -38,6 +39,9 @@ import cn.hutool.json.JSONUtil;
 @EnableScheduling // 2.开启定时任务
 public class ScheduleTask {
 
+	@Value("${server.port}")
+	Integer port;
+
 	final SqlHelper sqlHelper;
 	final CertController certController;
 	final SettingService settingService;
@@ -55,11 +59,6 @@ public class ScheduleTask {
 		this.logInfoService = logInfoService;
 		this.remoteController = remoteController;
 		this.smCloudUtils = smCloudUtils;
-	}
-
-	@PostConstruct
-	public void runTest() {
-
 	}
 
 	// 使用TimeUnit.DAYS.toMillis()进行时间粒度转换。Modified by Sai on 2020-6-17.
@@ -138,7 +137,7 @@ public class ScheduleTask {
 
 			Map<String, Object> map = remoteController.version();
 			if ((Integer) map.get("nginx") == 0) {
-				names.add(0, "本地(127.0.0.1:8080)");
+				names.add(0, "本地(127.0.0.1:" + port + ")");
 			}
 
 			if (names.size() > 0) {
