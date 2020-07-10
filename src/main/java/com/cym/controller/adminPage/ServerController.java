@@ -5,7 +5,10 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import cn.hutool.core.io.FileUtil;
+import com.cym.service.SettingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -36,6 +39,10 @@ public class ServerController extends BaseController {
 	UpstreamService upstreamService;
 	@Autowired
 	ParamService paramService;
+	@Autowired
+	SettingService settingService;
+	@Autowired
+	private Environment env;
 
 	@RequestMapping("")
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView, Page page, String sort, String direction, String keywords) {
@@ -114,7 +121,11 @@ public class ServerController extends BaseController {
 //		} 
 		
 		if (server.getProxyType() == 0) {
-			serverService.addOver(server, serverParamJson, locations);
+			try {
+				serverService.addOver(server, serverParamJson, locations);
+			} catch (Exception e) {
+				return renderError(e.getMessage());
+			}
 		} else {
 			serverService.addOverTcp(server, serverParamJson);
 		}
@@ -162,4 +173,28 @@ public class ServerController extends BaseController {
 		return renderSuccess();
 	}
 
+	@RequestMapping("importServer")
+	@ResponseBody
+	public JsonResult importServer(String nginxPath) {
+
+		if ("dev".equals(env.getActiveProfiles()[0])) {
+			nginxPath= "C:\\Users\\pain\\Desktop\\default";
+		}
+
+		if (nginxPath == null) {
+			nginxPath = settingService.get("nginxPath");
+		}
+		if (!FileUtil.exist(nginxPath)) {
+			return renderError("目标文件不存在");
+		}
+
+		try {
+			serverService.importServer(nginxPath);
+			return renderSuccess("导入成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+
+			return renderError("导入失败:" + e.getMessage());
+		}
+	}
 }
