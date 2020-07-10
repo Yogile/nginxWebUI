@@ -56,8 +56,8 @@ public class ServerService {
 	public void addOver(Server server, String serverParamJson, List<Location> locations) {
 		sqlHelper.insertOrUpdate(server);
 		List<Param> paramList = new ArrayList<Param>();
-		if (StrUtil.isNotEmpty(serverParamJson) && JSONUtil.isJson(serverParamJson.replace("%2C", ","))) {
-			paramList = JSONUtil.toList(JSONUtil.parseArray(serverParamJson.replace("%2C", ",")), Param.class);
+		if (StrUtil.isNotEmpty(serverParamJson) && JSONUtil.isJson(serverParamJson)) {
+			paramList = JSONUtil.toList(JSONUtil.parseArray(serverParamJson), Param.class);
 		}
 		List<String> locationIds = sqlHelper.findIdsByQuery(new ConditionAndWrapper().eq("serverId", server.getId()), Location.class);
 		sqlHelper.deleteByQuery(new ConditionOrWrapper().eq("serverId", server.getId()).in("locationId", locationIds), Param.class);
@@ -81,8 +81,8 @@ public class ServerService {
 				sqlHelper.insert(location);
 
 				paramList = new ArrayList<Param>();
-				if (StrUtil.isNotEmpty(location.getLocationParamJson()) && JSONUtil.isJson(location.getLocationParamJson().replace("%2C", ","))) {
-					paramList = JSONUtil.toList(JSONUtil.parseArray(location.getLocationParamJson().replace("%2C", ",")), Param.class);
+				if (StrUtil.isNotEmpty(location.getLocationParamJson()) && JSONUtil.isJson(location.getLocationParamJson())) {
+					paramList = JSONUtil.toList(JSONUtil.parseArray(location.getLocationParamJson()), Param.class);
 				}
 				
 				 // 反向插入,保证列表与输入框对应
@@ -102,8 +102,8 @@ public class ServerService {
 		List<String> locationIds = sqlHelper.findIdsByQuery(new ConditionAndWrapper().eq("serverId", server.getId()), Location.class);
 		sqlHelper.deleteByQuery(new ConditionOrWrapper().eq("serverId", server.getId()).in("locationId", locationIds), Param.class);
 		List<Param> paramList = new ArrayList<Param>();
-		if (StrUtil.isNotEmpty(serverParamJson) && JSONUtil.isJson(serverParamJson.replace("%2C", ","))) {
-			paramList = JSONUtil.toList(JSONUtil.parseArray(serverParamJson.replace("%2C", ",")), Param.class);
+		if (StrUtil.isNotEmpty(serverParamJson) && JSONUtil.isJson(serverParamJson)) {
+			paramList = JSONUtil.toList(JSONUtil.parseArray(serverParamJson), Param.class);
 		}
 
 		for (Param param : paramList) {

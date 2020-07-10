@@ -53,8 +53,8 @@ public class UpstreamService {
 		sqlHelper.insertOrUpdate(upstream);
 		
 		List<Param> paramList = new ArrayList<Param>();
-		if (StrUtil.isNotEmpty(upstreamParamJson) && JSONUtil.isJson(upstreamParamJson.replace("%2C", ","))) {
-			paramList = JSONUtil.toList(JSONUtil.parseArray(upstreamParamJson.replace("%2C", ",")), Param.class);
+		if (StrUtil.isNotEmpty(upstreamParamJson) && JSONUtil.isJson(upstreamParamJson)) {
+			paramList = JSONUtil.toList(JSONUtil.parseArray(upstreamParamJson), Param.class);
 		}
 		sqlHelper.deleteByQuery(new ConditionAndWrapper().eq("upstreamId", upstream.getId()), Param.class);
 		 // 反向插入,保证列表与输入框对应
