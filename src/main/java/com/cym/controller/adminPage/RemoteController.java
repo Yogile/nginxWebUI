@@ -30,6 +30,7 @@ import com.cym.utils.JsonResult;
 import com.cym.utils.NginxUtils;
 import com.cym.utils.SystemTool;
 
+import cn.craccd.sqlHelper.utils.ConditionAndWrapper;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.TypeReference;
 import cn.hutool.core.util.StrUtil;
@@ -45,7 +46,7 @@ public class RemoteController extends BaseController {
 	final GroupService groupService;
 	final ConfController confController;
 	final MainController mainController;
-	
+
 	@Value("${project.version}")
 	String projectVersion;
 	@Value("${server.port}")
@@ -123,6 +124,7 @@ public class RemoteController extends BaseController {
 		remoteLocal.setPort(port);
 		remoteLocal.setStatus(1);
 		remoteLocal.setType(0);
+		remoteLocal.setMonitor(Integer.parseInt(settingService.get("monitorLocal"))); 
 		remoteLocal.setSystem(SystemTool.getSystem());
 		remoteList.add(0, remoteLocal);
 
@@ -440,14 +442,27 @@ public class RemoteController extends BaseController {
 		return renderSuccess(map);
 	}
 
-	
 	@RequestMapping("nginxOver")
 	@ResponseBody
 	public JsonResult nginxOver(String mail, String nginxMonitor) {
 		settingService.set("mail", mail);
 		settingService.set("nginxMonitor", nginxMonitor);
-		
-		
+
+		return renderSuccess();
+	}
+
+	@RequestMapping("setMonitor")
+	@ResponseBody
+	public JsonResult setMonitor(String id, Integer monitor) {
+		if (!"本地".equals(id)) {
+			Remote remote = new Remote();
+			remote.setId(id);
+			remote.setMonitor(monitor);
+			sqlHelper.updateById(remote);
+		} else {
+			settingService.set("monitorLocal", monitor.toString());
+		}
+
 		return renderSuccess();
 	}
 
