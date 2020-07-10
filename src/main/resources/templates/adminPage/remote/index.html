@@ -34,6 +34,8 @@
 							<button type="button" class="layui-btn" onclick="cmdGroup()">批量命令</button>
 							
 							<button type="button" class="layui-btn layui-btn-normal" onclick="asycSelect()">同步服务器配置</button>
+							
+							<button type="button" class="layui-btn layui-btn-normal" onclick="nginxMonitor()">开启nginx监控</button>
 						</div>
 						
 						<div class="layui-inline">
@@ -178,6 +180,32 @@
 				</div>
 			</form>
 		</div>
+		
+		
+		<div class="layui-form" id="nginxDiv" style="padding: 15px; display: none">
+			<div class="layui-form-item">
+				<label class="layui-form-label">通知发送邮箱</label>
+				<div class="layui-input-block">
+					<input type="text" name="mail" id="mail" class="layui-input">
+				</div>
+			</div>
+			
+			<div class="layui-form-item">
+				<label class="layui-form-label">nginx服务监控</label>
+				<div class="layui-input-block">
+					<select name="nginxMonitor" id="nginxMonitor">
+						<option value="false">关闭</option>
+						<option value="true">开启</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<button type="button" class="layui-btn layui-btn-normal" onclick="nginxOver()">确定</button>
+				<button type="button" class="layui-btn" onclick="layer.closeAll()">关闭</button>
+			</div>
+		</div>
+		
 
 
 		<div class="layui-form" id="cmdDiv" style="padding: 15px; display: none">
