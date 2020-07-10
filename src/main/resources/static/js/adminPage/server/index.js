@@ -649,5 +649,46 @@ function clone(id){
 		edit(id, true);
 		
 	}
-	
+}
+
+
+function importServer() {
+	var formData = new FormData();
+	formData.append("nginxPath", $("#nginxPath").val());
+	$.ajax({
+		type : 'POST',
+		url : ctx + '/adminPage/server/importServer',
+		// data : {nginxPath : "/etc/nginx/nginx.conf"},
+		data : formData,
+		dataType : 'json',
+		processData: false,
+		contentType: false,
+		success : function(data) {
+			if (data.success) {
+				location.reload();
+			} else {
+				layer.msg(data.msg);
+			}
+		},
+		error : function() {
+			alert("出错了,请联系技术人员!");
+		}
+	});
+}
+
+var importIndex;
+function openImport() {
+	importIndex = layer.open({
+		type : 1,
+		title : "导入conf",
+		area : [ '500px', '300px' ], // 宽高
+		content : $('#importDiv')
+	});
+}
+// 选择系统文件
+function selectRootCustom(inputId){
+	rootSelect.selectOne(function callBack(val){
+		$("#" + inputId).val(val);
+		// saveCmd();
+	});
 }
