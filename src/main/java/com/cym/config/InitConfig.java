@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
+import com.cym.model.Basic;
 import com.cym.model.Http;
 import com.cym.service.SettingService;
 import com.cym.utils.SystemTool;
@@ -45,8 +46,20 @@ public class InitConfig {
 
 	@PostConstruct
 	public void init() throws IOException {
+		// 初始化base值
+		Long count = sqlHelper.findAllCount(Basic.class);
+		if (count == 0) {
+			List<Basic> basics = new ArrayList<Basic>();
+			basics.add(new Basic("worker_processes", "auto", 0));
+			basics.add(new Basic("events", "{\r\n" + 
+					"    worker_connections  1024;\r\n" + 
+					"}", 1));
 
-		Long count = sqlHelper.findAllCount(Http.class);
+			sqlHelper.insertAll(basics);
+		}
+				
+		// 初始化http值
+		count = sqlHelper.findAllCount(Http.class);
 		if (count == 0) {
 			List<Http> https = new ArrayList<Http>();
 			https.add(new Http("include", "mime.types"));
