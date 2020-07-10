@@ -59,4 +59,8 @@ public class RemoteService {
 		return sqlHelper.findListByQuery(conditionAndWrapper, Remote.class);
 	}
 
+	public List<Remote> getMonitorRemoteList() {
+		return sqlHelper.findListByQuery(new ConditionAndWrapper().eq("monitor", 1), Remote.class);
+	}
+
 }

@@ -22,6 +22,7 @@ import com.cym.controller.adminPage.RemoteController;
 import com.cym.model.Cert;
 import com.cym.model.Remote;
 import com.cym.service.LogService;
+import com.cym.service.RemoteService;
 import com.cym.service.SettingService;
 import com.cym.utils.SendCloudUtils;
 
@@ -47,12 +48,14 @@ public class ScheduleTask {
 	final SettingService settingService;
 	final ConfController confController;
 	final RemoteController remoteController;
+	final RemoteService remoteService;
 	final LogService logInfoService;
 	final SendCloudUtils smCloudUtils;
 
-	public ScheduleTask(SendCloudUtils smCloudUtils, RemoteController remoteController, SqlHelper sqlHelper, CertController certController, SettingService settingService,
+	public ScheduleTask(RemoteService remoteService, SendCloudUtils smCloudUtils, RemoteController remoteController, SqlHelper sqlHelper, CertController certController, SettingService settingService,
 			ConfController confController, LogService logInfoService) {
 		this.sqlHelper = sqlHelper;
+		this.remoteService = remoteService;
 		this.certController = certController;
 		this.settingService = settingService;
 		this.confController = confController;
@@ -117,7 +120,7 @@ public class ScheduleTask {
 		String nginxMonitor = settingService.get("nginxMonitor");
 		if ("true".equals(nginxMonitor) && StrUtil.isNotEmpty(mail) && (StrUtil.isEmpty(lastSend) || System.currentTimeMillis() - Long.parseLong(lastSend) > TimeUnit.HOURS.toMillis(1))) {
 
-			List<Remote> remoteList = sqlHelper.findAll(Remote.class);
+			List<Remote> remoteList = remoteService.getMonitorRemoteList();
 
 			List<String> names = new ArrayList<>();
 			for (Remote remote : remoteList) {
@@ -131,14 +134,17 @@ public class ScheduleTask {
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
-					names.add(remote.getDescr() + "(" + remote.getIp() + ":" + remote.getPort() + ")");
 				}
 			}
 
-			Map<String, Object> map = remoteController.version();
-			if ((Integer) map.get("nginx") == 0) {
-				names.add(0, "本地(127.0.0.1:" + port + ")");
+			// 监控本地
+			if("1".equals(settingService.get("monitorLocal"))) {
+				Map<String, Object> map = remoteController.version();
+				if ((Integer) map.get("nginx") == 0) {
+					names.add(0, "本地(127.0.0.1:" + port + ")");
+				}
 			}
+			
 
 			if (names.size() > 0) {
 				smCloudUtils.sendMail(mail, StrUtil.join(" ", names));

@@ -35,7 +35,7 @@
 							
 							<button type="button" class="layui-btn layui-btn-normal" onclick="asycSelect()">同步服务器配置</button>
 							
-							<button type="button" class="layui-btn layui-btn-normal" onclick="nginxMonitor()">开启nginx监控</button>
+							<button type="button" class="layui-btn layui-btn-normal" onclick="nginxMonitor()">nginx监控服务</button>
 						</div>
 						
 						<div class="layui-inline">
@@ -47,7 +47,7 @@
 				</form>
 
 
-				<table class="layui-table" id="tree-table">
+				<table class="layui-table layui-form" id="tree-table">
 
 				</table>
 
@@ -108,6 +108,7 @@
 						<input type="password" name="pass" id="pass" class="layui-input">
 					</div>
 				</div>
+				
 
 				<div class="layui-form-item">
 					<label class="layui-form-label">分组</label>
@@ -191,7 +192,7 @@
 			</div>
 			
 			<div class="layui-form-item">
-				<label class="layui-form-label">nginx服务监控</label>
+				<label class="layui-form-label">nginx监控服务</label>
 				<div class="layui-input-block">
 					<select name="nginxMonitor" id="nginxMonitor">
 						<option value="false">关闭</option>
