@@ -165,7 +165,8 @@ public class ConfService {
 						ngxBlockServer.addEntry(ngxParam);
 
 						ngxParam = new NgxParam();
-						ngxParam.addValue("ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3");
+//						ngxParam.addValue("ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3");
+						ngxParam.addValue("ssl_protocols TLSv1 TLSv1.1 TLSv1.2");
 						ngxBlockServer.addEntry(ngxParam);
 					}
 
@@ -413,7 +414,7 @@ public class ConfService {
 	}
 
 	private void setSameParam(Param param, NgxBlock ngxBlock) {
-		// 不再删除相同名称的参数
+		//不再删除相同名称的参数
 //		for (NgxEntry ngxEntry : ngxBlock.getEntries()) {
 //			if (ngxEntry instanceof NgxParam) {
 //				NgxParam ngxParam = (NgxParam) ngxEntry;
