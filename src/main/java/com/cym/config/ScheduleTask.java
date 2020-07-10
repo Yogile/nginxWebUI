@@ -42,11 +42,12 @@ public class ScheduleTask {
 
 	@PostConstruct
 	public void runTest() {
+
 	}
 
 	// 使用TimeUnit.DAYS.toMillis()进行时间粒度转换。Modified by Sai on 2020-6-17.
 	@Scheduled(cron = "0 0 2 * * ?")
-	public void mongodbTasks() {
+	public void certTasks() {
 		List<Cert> certList = sqlHelper.findAll(Cert.class);
 
 		System.out.println("检查需要续签的证书");
@@ -88,6 +89,12 @@ public class ScheduleTask {
 		})
 
 		);
+	}
+	
+	// 检查nginx运行
+	@Scheduled(cron = "0 0/5 * * * ?")
+	public void nginxTasks() {
+		
 	}
 
 }
