@@ -667,3 +667,61 @@ function delGroup(id){
 	}
 	
 }
+
+
+function nginxMonitor(){
+	
+	$.ajax({
+		type : 'POST',
+		url : ctx + '/adminPage/remote/nginxStatus',
+		dataType : 'json',
+		success : function(data) {
+			if (data.success) {
+				$("#mail").val(data.obj.mail);
+				$("#nginxMonitor").val(data.obj.nginxMonitor);
+				
+				form.render();
+				layer.open({
+					type : 1,
+					title : "nginx运行监控",
+					area : [ '500px', '300px' ], // 宽高
+					content : $('#nginxDiv')
+				});
+			}else{
+				layer.msg(data.msg)
+			}
+		},
+		error : function() {
+			layer.closeAll();
+			alert("出错了,请联系技术人员!");
+		}
+	});
+}
+
+function nginxOver(){
+		if($("#mail").val() == ''){
+			alert("邮箱未填写");
+			return;
+		}
+		
+		$.ajax({
+		type : 'POST',
+		url : ctx + '/adminPage/remote/nginxOver',
+		data : {
+			mail : $("#mail").val(),
+			nginxMonitor : $("#nginxMonitor").val()
+		},
+		dataType : 'json',
+		success : function(data) {
+			if (data.success) {
+				location.reload();
+			}else{
+				layer.msg(data.msg)
+			}
+		},
+		error : function() {
+			layer.closeAll();
+			alert("出错了,请联系技术人员!");
+		}
+	});
+}

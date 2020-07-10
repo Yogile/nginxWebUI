@@ -109,8 +109,9 @@ public class ScheduleTask {
 	}
 
 	// 检查nginx运行
-	@Scheduled(cron = "0 0/5 * * * ?")
+	@Scheduled(cron = "0 * * * * ?")
 	public void nginxTasks() {
+		System.err.println("检查nginx运行");
 
 		String lastSend = settingService.get("lastSend");
 		String mail = settingService.get("mail");
@@ -137,10 +138,13 @@ public class ScheduleTask {
 
 			Map<String, Object> map = remoteController.version();
 			if ((Integer) map.get("nginx") == 0) {
-				names.add("本机");
+				names.add(0, "本地(127.0.0.1:8080)");
 			}
 
-			smCloudUtils.sendMail(mail, StrUtil.join(" ", names));
+			if (names.size() > 0) {
+				smCloudUtils.sendMail(mail, StrUtil.join(" ", names));
+				settingService.set("lastSend", String.valueOf(System.currentTimeMillis()));
+			}
 		}
 
 	}
