@@ -39,18 +39,20 @@
 						</div>
 
 						<button type="button" class="layui-btn" onclick="search()">搜索</button>
-
+						
+						<button type="button" class="layui-btn layui-btn-normal" onclick="upstreamMonitor()">负载节点监控服务</button>
 						<input type="hidden" name="curr" value="${page.curr}">
 					</div>
 				</form>
 
-				<table class="layui-table">
+				<table class="layui-table layui-form">
 					<thead>
 						<tr>
 							<th>转发类型</th>
 							<th>名称</th>
 							<th>策略</th>
 							<th>负载</th>
+							<th>加入监控</th>
 							<th>操作</th>
 						</tr>
 					</thead>
@@ -69,6 +71,7 @@
 								<#if ext.upstream.tactics=="least_time"> 最短时间(least_time) </#if>
 							</td>
 							<td>${ext.serverStr}</td>
+							<td><input type="checkbox" name="switch" lay-filter="monitor" value="${ext.upstream.id}" ${(ext.upstream.monitor==1)?string('checked','')}  lay-text="开启|关闭" lay-skin="switch" ></td>
 							<td>
 								<button class="layui-btn layui-btn-sm" onclick="edit('${ext.upstream.id}')">编辑</button>
 								<button class="layui-btn layui-btn-danger layui-btn-sm" onclick="del('${ext.upstream.id}')">删除</button>
@@ -151,6 +154,31 @@
 				</div>
 			</form>
 		</div>
+		
+		<div class="layui-form" id="monitorDiv" style="padding: 15px; display: none">
+			<div class="layui-form-item">
+				<label class="layui-form-label">通知发送邮箱</label>
+				<div class="layui-input-block">
+					<input type="text" name="mail" id="mail" class="layui-input">
+				</div>
+			</div>
+			
+			<div class="layui-form-item">
+				<label class="layui-form-label">负载节点监控</label>
+				<div class="layui-input-block">
+					<select name="upstreamMonitor" id="upstreamMonitor">
+						<option value="false">关闭</option>
+						<option value="true">开启</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<button type="button" class="layui-btn layui-btn-normal" onclick="upstreamOver()">确定</button>
+				<button type="button" class="layui-btn" onclick="layer.closeAll()">关闭</button>
+			</div>
+		</div>
+		
 		
 		<div id="paramJsonDiv" style="display: none;padding: 15px;"> 
 			<div class="layui-form-item">

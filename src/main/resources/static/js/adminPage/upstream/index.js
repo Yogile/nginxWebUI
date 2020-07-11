@@ -1,5 +1,27 @@
 $(function(){
-
+	form.on('switch(monitor)', function(data){
+		  $.ajax({
+				type : 'POST',
+				url : ctx + '/adminPage/upstream/setMonitor',
+				data : {
+					id : data.value,
+					monitor : data.elem.checked?1:0
+				},
+				dataType : 'json',
+				success : function(data) {
+				
+					if (data.success) {
+						//location.reload();
+					} else {
+						layer.msg(data.msg);
+					}
+				},
+				error : function() {
+					alert("出错了,请联系技术人员!");
+				}
+		});
+	});   
+	
 })
 
 
@@ -289,4 +311,65 @@ function addParamOver(){
 	$("#" + targertId).val(JSON.stringify(params));
 	
 	layer.close(paramIndex);
+}
+
+
+
+function upstreamMonitor(){
+	
+	$.ajax({
+		type : 'POST',
+		url : ctx + '/adminPage/upstream/upstreamStatus',
+		dataType : 'json',
+		success : function(data) {
+			if (data.success) {
+				$("#mail").val(data.obj.mail);
+				$("#upstreamMonitor").val(data.obj.upstreamMonitor);
+				
+				form.render();
+				layer.open({
+					type : 1,
+					title : "负载节点监控服务",
+					area : [ '500px', '300px' ], // 宽高
+					content : $('#monitorDiv')
+				});
+			}else{
+				layer.msg(data.msg)
+			}
+		},
+		error : function() {
+			layer.closeAll();
+			alert("出错了,请联系技术人员!");
+		}
+	});
+}
+
+
+function upstreamOver(){
+		var myreg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;                
+		if ($("#mail").val() == '' || !myreg.test($("#mail").val())) {                    
+			alert("邮箱格式不正确");               
+			return;                
+		}
+		
+		$.ajax({
+		type : 'POST',
+		url : ctx + '/adminPage/upstream/upstreamOver',
+		data : {
+			mail : $("#mail").val(),
+			upstreamMonitor : $("#upstreamMonitor").val()
+		},
+		dataType : 'json',
+		success : function(data) {
+			if (data.success) {
+				location.reload();
+			}else{
+				layer.msg(data.msg)
+			}
+		},
+		error : function() {
+			layer.closeAll();
+			alert("出错了,请联系技术人员!");
+		}
+	});
 }

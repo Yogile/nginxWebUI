@@ -1,7 +1,9 @@
 package com.cym.controller.adminPage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -15,6 +17,7 @@ import com.cym.ext.UpstreamExt;
 import com.cym.model.Upstream;
 import com.cym.model.UpstreamServer;
 import com.cym.service.ParamService;
+import com.cym.service.SettingService;
 import com.cym.service.UpstreamService;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
@@ -30,7 +33,9 @@ public class UpstreamController extends BaseController {
 	UpstreamService upstreamService;
 	@Autowired
 	ParamService paramService;
-
+	@Autowired
+	SettingService settingService;
+	
 	@RequestMapping("")
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView, Page page, String keywords) {
 		page = upstreamService.search(page, keywords);
@@ -75,9 +80,8 @@ public class UpstreamController extends BaseController {
 	@ResponseBody
 	public JsonResult addOver(String upstreamJson, String upstreamParamJson, String upstreamServerJson) {
 		Upstream upstream = JSONUtil.toBean(upstreamJson, Upstream.class);
-		List<UpstreamServer> upstreamServers = JSONUtil.toList( JSONUtil.parseArray(upstreamServerJson), UpstreamServer.class);
-		
-		
+		List<UpstreamServer> upstreamServers = JSONUtil.toList(JSONUtil.parseArray(upstreamServerJson), UpstreamServer.class);
+
 		if (StrUtil.isEmpty(upstream.getId())) {
 			Long count = upstreamService.getCountByName(upstream.getName());
 			if (count > 0) {
@@ -112,4 +116,36 @@ public class UpstreamController extends BaseController {
 		return renderSuccess();
 	}
 
+	@RequestMapping("setMonitor")
+	@ResponseBody
+	public JsonResult setMonitor(String id, Integer monitor) {
+		Upstream upstream = new Upstream();
+		upstream.setId(id);
+		upstream.setMonitor(monitor);
+		sqlHelper.updateById(upstream);
+
+		return renderSuccess();
+	}
+
+	
+	@RequestMapping("upstreamStatus")
+	@ResponseBody
+	public JsonResult upstreamStatus(HttpSession httpSession) {
+		Map<String, String> map = new HashMap<>();
+		map.put("mail", settingService.get("mail"));
+
+		String upstreamMonitor = settingService.get("upstreamMonitor");
+		map.put("upstreamMonitor", upstreamMonitor != null ? upstreamMonitor : "false");
+
+		return renderSuccess(map);
+	}
+
+	@RequestMapping("upstreamOver")
+	@ResponseBody
+	public JsonResult upstreamOver(String mail, String upstreamMonitor) {
+		settingService.set("mail", mail);
+		settingService.set("upstreamMonitor", upstreamMonitor);
+
+		return renderSuccess();
+	}
 }
