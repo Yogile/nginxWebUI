@@ -80,10 +80,6 @@ public class ScheduleTask {
 		}
 	}
 	
-	@PostConstruct
-	public void main() {
-		diviLog();
-	}
 
 	// 分隔日志,每天
 	@Scheduled(cron = "0 55 23 * * ?")
