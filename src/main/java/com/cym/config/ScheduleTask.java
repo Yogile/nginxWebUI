@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
+import javax.xml.crypto.Data;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -79,7 +80,6 @@ public class ScheduleTask {
 			}
 		}
 	}
-	
 
 	// 分隔日志,每天
 	@Scheduled(cron = "0 55 23 * * ?")
@@ -102,7 +102,14 @@ public class ScheduleTask {
 		long time = System.currentTimeMillis();
 		File dir = new File(InitConfig.home + "log/");
 		Optional.ofNullable(dir.listFiles()).ifPresent(fileList -> Arrays.stream(fileList).filter(file -> file.getName().contains("access") && file.getName().endsWith(".zip")).forEach(file -> {
-			DateTime date = DateUtil.parse(file.getName().replace("access.", "").replace(".zip", ""), "yyyy-MM-dd_HH-mm-ss");
+			String dateStr = file.getName().replace("access.", "").replace(".zip", "");
+			DateTime date = null;
+			if (dateStr.length() == 19) {
+				date = DateUtil.parse(dateStr, "yyyy-MM-dd_HH-mm-ss");
+			} else {
+				date = DateUtil.parse(dateStr, "yyyy-MM-dd");
+			}
+
 			if (time - date.getTime() > TimeUnit.DAYS.toMillis(8)) {
 				FileUtil.del(file);
 			}
@@ -139,13 +146,12 @@ public class ScheduleTask {
 			}
 
 			// 监控本地
-			if("1".equals(settingService.get("monitorLocal"))) {
+			if ("1".equals(settingService.get("monitorLocal"))) {
 				Map<String, Object> map = remoteController.version();
 				if ((Integer) map.get("nginx") == 0) {
 					names.add(0, "本地(127.0.0.1:" + port + ")");
 				}
 			}
-			
 
 			if (names.size() > 0) {
 				smCloudUtils.sendMail(mail, StrUtil.join(" ", names));
