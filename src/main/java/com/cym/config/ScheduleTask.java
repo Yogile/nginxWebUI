@@ -102,8 +102,7 @@ public class ScheduleTask {
 			String dateStr = file.getName().replace("access.", "").replace(".zip", "");
 			DateTime date = null;
 			if (dateStr.length() != 10) {
-				FileUtil.del(file);
-				return;
+				date = DateUtil.parse(dateStr, "yyyy-MM-dd_HH-mm-ss");
 			} else {
 				date = DateUtil.parse(dateStr, "yyyy-MM-dd");
 			}
