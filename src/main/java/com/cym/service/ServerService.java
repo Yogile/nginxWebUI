@@ -39,8 +39,8 @@ public class ServerService {
 	@Autowired
 	SqlHelper sqlHelper;
 
-	@Value("${project.home}")
-	private String tmpPath;
+//	@Value("${project.home}")
+//	private String tmpPath;
 
 	public Page search(Page page, String sortColum, String direction, String keywords) {
 		ConditionAndWrapper conditionAndWrapper = new ConditionAndWrapper();
@@ -188,13 +188,14 @@ public class ServerService {
 //		return sqlHelper.findCountByQuery(conditionAndWrapper, Server.class) > 0;
 //	}
 
-	public void importServer(String nginxPath) {
+	public void importServer(String nginxPath) throws Exception {
 		String initNginxPath = initNginx(nginxPath);
 		NgxConfig conf = null;
 		try {
 			conf = NgxConfig.read(initNginxPath);
 		} catch (IOException e) {
-			System.out.println("文件读取失败");
+			e.printStackTrace();
+			throw new Exception("文件读取失败");
 		}
 		assert conf != null;
 		List<NgxEntry> servers;
@@ -297,7 +298,7 @@ public class ServerService {
 	 */
 	private String initNginx(String nginxPath) {
 		//删除一行内容（java本身没有删除的方法，本方法通过先读取文件的内容（需删除的行数除外），放到list中，在重新写入）
-		String initNginxPath = tmpPath + UUID.randomUUID().toString();
+		String initNginxPath = FileUtil.getTmpDirPath() + UUID.randomUUID().toString();
 		BufferedReader br = null;
 		try {
 			br = new BufferedReader(new FileReader(nginxPath));

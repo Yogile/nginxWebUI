@@ -10,8 +10,8 @@ server:
 spring:
   application:
     name: nginxWebUI
-  profiles:
-    active: prod
+  #profiles:
+    #active: prod
   session:
     store-type: jdbc
     jdbc:
