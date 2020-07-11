@@ -640,7 +640,6 @@ function importServer() {
 	$.ajax({
 		type : 'POST',
 		url : ctx + '/adminPage/server/importServer',
-		// data : {nginxPath : "/etc/nginx/nginx.conf"},
 		data : formData,
 		dataType : 'json',
 		processData: false,
@@ -671,6 +670,5 @@ function openImport() {
 function selectRootCustom(inputId){
 	rootSelect.selectOne(function callBack(val){
 		$("#" + inputId).val(val);
-		// saveCmd();
 	});
 }

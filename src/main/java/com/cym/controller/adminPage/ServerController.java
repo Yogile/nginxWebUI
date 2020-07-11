@@ -175,13 +175,13 @@ public class ServerController extends BaseController {
 	@ResponseBody
 	public JsonResult importServer(String nginxPath) {
 
-		if ("dev".equals(env.getActiveProfiles()[0])) {
-			nginxPath= "C:\\Users\\pain\\Desktop\\default";
-		}
-
-		if (nginxPath == null) {
-			nginxPath = settingService.get("nginxPath");
-		}
+//		if ("dev".equals(env.getActiveProfiles()[0])) {
+//			nginxPath= "C:\\Users\\pain\\Desktop\\default";
+//		}
+//
+//		if (nginxPath == null) {
+//			nginxPath = settingService.get("nginxPath");
+//		}
 		if (!FileUtil.exist(nginxPath)) {
 			return renderError("目标文件不存在");
 		}
@@ -192,7 +192,7 @@ public class ServerController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 
-			return renderError("导入失败:" + e.getMessage());
+			return renderError("导入失败：" + e.getMessage());
 		}
 	}
 }

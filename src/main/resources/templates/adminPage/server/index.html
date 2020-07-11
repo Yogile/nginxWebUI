@@ -87,7 +87,7 @@
 							<button type="button" class="layui-btn layui-btn-normal" onclick="add()">添加反向代理</button>
 						</div>
 						<div class="layui-inline">
-							<button type="button" class="layui-btn layui-btn-normal layui-input-inline" onclick="openImport()">导入反向代理</button>
+							<button type="button" class="layui-btn layui-input-inline" onclick="openImport()">导入反向代理</button>
 						</div>
 						<div class="layui-inline">
 							<input type="text" name="keywords" class="layui-input" value="${keywords}">
@@ -385,23 +385,21 @@
 				</div>
 			</div>
 		</div>
-		<div style="height: 0px; width: 0px; overflow: hidden;">
-	<!-- 选择导入文件弹出框 -->
-	<div class="layui-form" id="importDiv" style="padding: 15px; display: none">
-		<div class="layui-form-item">
-			<div class="layui-input-inline" style="width: 260px">
-				<input type="text" id="nginxPath" name="nginxPath" class="layui-input" style="width: 300px;" value="${nginxPath}" oninput="saveCmd()">
+		<!-- 选择导入文件弹出框 -->
+		<div class="layui-form" id="importDiv" style="padding: 15px; display: none">
+			<div class="layui-form-item">
+				<div class="layui-input-inline">
+					<input type="text" id="nginxPath" name="nginxPath" class="layui-input" placeholder="文件路径" >
+				</div>
+				<div class="layui-input-inline">
+					<i class="layui-icon layui-icon-export" onclick="selectRootCustom('nginxPath')"></i>
+				</div>
 			</div>
-			<div class="layui-input-inline">
-				<i class="layui-icon layui-icon-export" onclick="selectRootCustom('nginxPath')"></i>
+			<div class="layui-form-item">
+				<button type="button" class="layui-btn layui-btn-normal" onclick="importServer()">导入反向代理</button>
+				<button type="button" class="layui-btn" onclick="layer.close(importIndex)">关闭</button>
 			</div>
 		</div>
-		<div class="layui-form-item">
-			<button type="button" class="layui-btn layui-btn-normal" onclick="importServer()">导入反向代理</button>
-			<button type="button" class="layui-btn" onclick="layer.close(importIndex)">关闭</button>
-		</div>
-	</div>
-</div>
 	</div>
 
 	<#include '/adminPage/script.html'/>
