@@ -98,21 +98,37 @@ public class ScheduleTask {
 		// 删掉7天前日志文件(zip)
 		long time = System.currentTimeMillis();
 		File dir = new File(InitConfig.home + "log/");
-		Optional.ofNullable(dir.listFiles()).ifPresent(fileList -> Arrays.stream(fileList).filter(file -> file.getName().contains("access.") && file.getName().endsWith(".zip")).forEach(file -> {
-			String dateStr = file.getName().replace("access.", "").replace(".zip", "");
-			DateTime date = null;
-			if (dateStr.length() != 10) {
-				date = DateUtil.parse(dateStr, "yyyy-MM-dd_HH-mm-ss");
-			} else {
-				date = DateUtil.parse(dateStr, "yyyy-MM-dd");
-			}
+		
+//		Optional.ofNullable(dir.listFiles()).ifPresent(fileList -> Arrays.stream(fileList).filter(file -> file.getName().contains("access.") && file.getName().endsWith(".zip")).forEach(file -> {
+//			String dateStr = file.getName().replace("access.", "").replace(".zip", "");
+//			DateTime date = null;
+//			if (dateStr.length() != 10) {
+//				date = DateUtil.parse(dateStr, "yyyy-MM-dd_HH-mm-ss");
+//			} else {
+//				date = DateUtil.parse(dateStr, "yyyy-MM-dd");
+//			}
+//
+//			if (time - date.getTime() > TimeUnit.DAYS.toMillis(8)) {
+//				FileUtil.del(file);
+//			}
+//		})
+//
+//		);
 
-			if (time - date.getTime() > TimeUnit.DAYS.toMillis(8)) {
-				FileUtil.del(file);
+		for (File file : dir.listFiles()) {
+			if (file.getName().contains("access.") && file.getName().endsWith(".zip")) {
+				String dateStr = file.getName().replace("access.", "").replace(".zip", "");
+				DateTime date = null;
+				if (dateStr.length() != 10) {
+					FileUtil.del(file);
+				} else {
+					date = DateUtil.parse(dateStr, "yyyy-MM-dd");
+					if (time - date.getTime() > TimeUnit.DAYS.toMillis(8)) {
+						FileUtil.del(file);
+					}
+				}
 			}
-		})
-
-		);
+		}
 	}
 
 	// 检查nginx运行

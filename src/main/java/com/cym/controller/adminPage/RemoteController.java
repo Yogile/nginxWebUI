@@ -363,7 +363,12 @@ public class RemoteController extends BaseController {
 	@RequestMapping("addOver")
 	@ResponseBody
 	public JsonResult addOver(Remote remote) {
-
+		remote.setIp(remote.getIp().trim());
+		
+		if(remoteService.hasSame(remote)) {
+			return renderError("已存在相同ip端口");
+		}
+		
 		remoteService.getCreditKey(remote);
 
 		if (StrUtil.isNotEmpty(remote.getCreditKey())) {
