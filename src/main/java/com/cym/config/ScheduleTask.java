@@ -101,7 +101,7 @@ public class ScheduleTask {
 		// 删掉7天前日志文件(zip)
 		long time = System.currentTimeMillis();
 		File dir = new File(InitConfig.home + "log/");
-		Optional.ofNullable(dir.listFiles()).ifPresent(fileList -> Arrays.stream(fileList).filter(file -> file.getName().contains("access") && file.getName().endsWith(".zip")).forEach(file -> {
+		Optional.ofNullable(dir.listFiles()).ifPresent(fileList -> Arrays.stream(fileList).filter(file -> file.getName().contains("access.") && file.getName().endsWith(".zip")).forEach(file -> {
 			String dateStr = file.getName().replace("access.", "").replace(".zip", "");
 			DateTime date = null;
 			if (dateStr.length() == 19) {
