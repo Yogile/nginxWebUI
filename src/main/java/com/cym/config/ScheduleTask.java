@@ -79,19 +79,24 @@ public class ScheduleTask {
 			}
 		}
 	}
+	
+	@PostConstruct
+	public void main() {
+		diviLog();
+	}
 
 	// 分隔日志,每天
 	@Scheduled(cron = "0 55 23 * * ?")
 	public void diviLog() {
 		if (FileUtil.exist(InitConfig.home + "log/access.log")) {
 
-			String date = DateUtil.format(new Date(System.currentTimeMillis() - TimeUnit.DAYS.toMillis(1)), "yyyy-MM-dd_HH-mm-ss");
+			String date = DateUtil.format(new Date(), "yyyy-MM-dd");
 			// 分隔日志
 			File dist = new File(InitConfig.home + "log/access." + date + ".log");
 			FileUtil.move(new File(InitConfig.home + "log/access.log"), dist, true);
 			ZipUtil.zip(dist); // 打包
 			FileUtil.del(dist); // 删除原文件
-			// 重启Nginx。
+			// 重载Nginx。
 			confController.reload(null, null, null);
 			// 马上解析分隔出来的日志
 			logInfoService.buildDataGroup(InitConfig.home + "log/access." + date + ".zip");
