@@ -9,9 +9,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-import javax.annotation.PostConstruct;
-import javax.xml.crypto.Data;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -104,8 +101,9 @@ public class ScheduleTask {
 		Optional.ofNullable(dir.listFiles()).ifPresent(fileList -> Arrays.stream(fileList).filter(file -> file.getName().contains("access.") && file.getName().endsWith(".zip")).forEach(file -> {
 			String dateStr = file.getName().replace("access.", "").replace(".zip", "");
 			DateTime date = null;
-			if (dateStr.length() == 19) {
-				date = DateUtil.parse(dateStr, "yyyy-MM-dd_HH-mm-ss");
+			if (dateStr.length() != 10) {
+				FileUtil.del(file);
+				return;
 			} else {
 				date = DateUtil.parse(dateStr, "yyyy-MM-dd");
 			}
