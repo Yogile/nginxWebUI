@@ -330,7 +330,7 @@ function upstreamMonitor(){
 				layer.open({
 					type : 1,
 					title : "负载节点监控服务",
-					area : [ '500px', '300px' ], // 宽高
+					area : [ '600px', '300px' ], // 宽高
 					content : $('#monitorDiv')
 				});
 			}else{
@@ -372,4 +372,32 @@ function upstreamOver(){
 			alert("出错了,请联系技术人员!");
 		}
 	});
+}
+
+var loadIndex;
+function testMail(){
+	if(confirm("是否就行测试发送?")){
+		loadIndex = layer.load();
+		$.ajax({
+			type: 'POST',
+			url: ctx + 'adminPage/admin/testMail',
+			data: {
+				mail: $("#mail").val(),
+			},
+			dataType: 'json',
+			success: function(data) {
+				layer.close(loadIndex);
+				if (data.success) {
+					layer.msg("发送成功");
+				} else {
+					layer.msg(data.msg);
+				}
+			},
+			error: function() {
+				alert("出错了,请联系技术人员!");
+			}
+		});
+	}
+	
+	
 }
