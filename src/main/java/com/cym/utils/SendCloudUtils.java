@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
@@ -22,7 +23,7 @@ public class SendCloudUtils {
 	public static String apiUser = "nginxWebUI";
 	public static String apiKey = "5G8MAnKjINCBjAsX";
 
-	public void sendMail(String to, String name) {
+	public void sendMail(String to, String name,String templateName) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("apiUser", apiUser);
 		map.put("apiKey", apiKey);
@@ -40,7 +41,7 @@ public class SendCloudUtils {
 
 		map.put("xsmtpapi", JSONUtil.toJsonStr(xsmtpapi));
 
-		map.put("templateInvokeName", "nginx_stop");
+		map.put("templateInvokeName", templateName);
 
 		String rs = HttpUtil.post("https://api.sendcloud.net/apiv2/mail/sendtemplate", map);
 
@@ -67,8 +68,6 @@ public class SendCloudUtils {
 		
 		return ret.toStringPretty();
 	}
+	
 
-	public static void main(String[] args) {
-		new SendCloudUtils().sendMail("cym1102@qq.com", "长春服务器");
-	}
 }

@@ -2,11 +2,9 @@ package com.cym.config;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -19,10 +17,14 @@ import com.cym.controller.adminPage.ConfController;
 import com.cym.controller.adminPage.RemoteController;
 import com.cym.model.Cert;
 import com.cym.model.Remote;
+import com.cym.model.Upstream;
+import com.cym.model.UpstreamServer;
 import com.cym.service.LogService;
 import com.cym.service.RemoteService;
 import com.cym.service.SettingService;
+import com.cym.service.UpstreamService;
 import com.cym.utils.SendCloudUtils;
+import com.cym.utils.TelnetUtils;
 
 import cn.craccd.sqlHelper.utils.SqlHelper;
 import cn.hutool.core.date.DateTime;
@@ -47,12 +49,14 @@ public class ScheduleTask {
 	final ConfController confController;
 	final RemoteController remoteController;
 	final RemoteService remoteService;
+	final UpstreamService upstreamService;
 	final LogService logInfoService;
 	final SendCloudUtils smCloudUtils;
 
-	public ScheduleTask(RemoteService remoteService, SendCloudUtils smCloudUtils, RemoteController remoteController, SqlHelper sqlHelper, CertController certController, SettingService settingService,
-			ConfController confController, LogService logInfoService) {
+	public ScheduleTask(UpstreamService upstreamService, RemoteService remoteService, SendCloudUtils smCloudUtils, RemoteController remoteController, SqlHelper sqlHelper,
+			CertController certController, SettingService settingService, ConfController confController, LogService logInfoService) {
 		this.sqlHelper = sqlHelper;
+		this.upstreamService = upstreamService;
 		this.remoteService = remoteService;
 		this.certController = certController;
 		this.settingService = settingService;
@@ -98,7 +102,7 @@ public class ScheduleTask {
 		// 删掉7天前日志文件(zip)
 		long time = System.currentTimeMillis();
 		File dir = new File(InitConfig.home + "log/");
-		
+
 //		Optional.ofNullable(dir.listFiles()).ifPresent(fileList -> Arrays.stream(fileList).filter(file -> file.getName().contains("access.") && file.getName().endsWith(".zip")).forEach(file -> {
 //			String dateStr = file.getName().replace("access.", "").replace(".zip", "");
 //			DateTime date = null;
@@ -132,7 +136,7 @@ public class ScheduleTask {
 	}
 
 	// 检查nginx运行
-	@Scheduled(cron = "0 * * * * ?")
+	@Scheduled(cron = "0 0/5 * * * ?")
 	public void nginxTasks() {
 		System.err.println("检查nginx运行");
 
@@ -167,11 +171,36 @@ public class ScheduleTask {
 			}
 
 			if (names.size() > 0) {
-				smCloudUtils.sendMail(mail, StrUtil.join(" ", names));
+				smCloudUtils.sendMail(mail, StrUtil.join(" ", names), "nginx_stop");
 				settingService.set("lastSend", String.valueOf(System.currentTimeMillis()));
 			}
 		}
 
 	}
 
+	// 检查节点情况
+	@Scheduled(cron = "0 0/5 * * * ?")
+	public void nodeTasks() {
+		System.err.println("检查节点情况");
+		
+		String lastSend = settingService.get("lastSend");
+		String mail = settingService.get("mail");
+		String upstreamMonitor = settingService.get("upstreamMonitor");
+		if ("true".equals(upstreamMonitor) && StrUtil.isNotEmpty(mail) && (StrUtil.isEmpty(lastSend) || System.currentTimeMillis() - Long.parseLong(lastSend) > TimeUnit.HOURS.toMillis(1))) {
+
+			List<UpstreamServer> upstreamServers = upstreamService.getServerListByMonitor(1);
+
+			List<String> ips = new ArrayList<>();
+			for (UpstreamServer upstreamServer : upstreamServers) {
+				if (!TelnetUtils.isRunning(upstreamServer.getServer(), upstreamServer.getPort())) {
+					ips.add(upstreamServer.getServer() + ":" + upstreamServer.getPort());
+				}
+			}
+
+			if (ips.size() > 0) {
+				smCloudUtils.sendMail(mail, StrUtil.join(" ", ips), "server_stop");
+				settingService.set("lastSend", String.valueOf(System.currentTimeMillis()));
+			}
+		}
+	}
 }

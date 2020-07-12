@@ -97,4 +97,11 @@ public class UpstreamService {
 		return sqlHelper.findCountByQuery(new ConditionAndWrapper().eq("name", name), Upstream.class);
 	}
 
+
+	public List<UpstreamServer> getServerListByMonitor(int monitor) {
+		List<String> upstreamIds = sqlHelper.findIdsByQuery(new ConditionAndWrapper().eq("monitor", monitor), Upstream.class);
+		
+		return sqlHelper.findListByQuery(new ConditionAndWrapper().in("upstreamId", upstreamIds), UpstreamServer.class);
+	}
+
 }
