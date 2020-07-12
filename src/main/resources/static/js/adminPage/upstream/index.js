@@ -351,27 +351,28 @@ function upstreamOver(){
 			alert("邮箱格式不正确");               
 			return;                
 		}
-		
+		loadIndex = layer.load();
 		$.ajax({
-		type : 'POST',
-		url : ctx + '/adminPage/upstream/upstreamOver',
-		data : {
-			mail : $("#mail").val(),
-			upstreamMonitor : $("#upstreamMonitor").val()
-		},
-		dataType : 'json',
-		success : function(data) {
-			if (data.success) {
-				location.reload();
-			}else{
-				layer.msg(data.msg)
+			type : 'POST',
+			url : ctx + '/adminPage/upstream/upstreamOver',
+			data : {
+				mail : $("#mail").val(),
+				upstreamMonitor : $("#upstreamMonitor").val()
+			},
+			dataType : 'json',
+			success : function(data) {
+				layer.close(loadIndex);
+				if (data.success) {
+					location.reload();
+				}else{
+					layer.msg(data.msg)
+				}
+			},
+			error : function() {
+				layer.close(loadIndex);
+				alert("出错了,请联系技术人员!");
 			}
-		},
-		error : function() {
-			layer.closeAll();
-			alert("出错了,请联系技术人员!");
-		}
-	});
+		});
 }
 
 var loadIndex;
@@ -394,6 +395,7 @@ function testMail(){
 				}
 			},
 			error: function() {
+				layer.close(loadIndex);
 				alert("出错了,请联系技术人员!");
 			}
 		});

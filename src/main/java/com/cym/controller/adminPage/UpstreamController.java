@@ -61,6 +61,20 @@ public class UpstreamController extends BaseController {
 		}
 		page.setRecords(list);
 
+//		if ("true".equals(settingService.get("upstreamMonitor"))) {
+//			// 马上检测一次
+//			List<UpstreamServer> upstreamServers = upstreamService.getAllServer();
+//			for (UpstreamServer upstreamServer : upstreamServers) {
+//				if (!TelnetUtils.isRunning(upstreamServer.getServer(), upstreamServer.getPort())) {
+//					upstreamServer.setMonitorStatus(0);
+//				} else {
+//					upstreamServer.setMonitorStatus(1);
+//				}
+//
+//				sqlHelper.updateById(upstreamServer);
+//			}
+//		}
+
 		modelAndView.addObject("page", page);
 		modelAndView.addObject("keywords", keywords);
 		modelAndView.setViewName("/adminPage/upstream/index");
@@ -73,21 +87,20 @@ public class UpstreamController extends BaseController {
 			status = upstreamServer.getStatus();
 		}
 
-		
 		String monitorStatus = "";
-		
+
 		String upstreamMonitor = settingService.get("upstreamMonitor");
-		if("true".equals(upstreamMonitor)) {
+		if ("true".equals(upstreamMonitor)) {
 			monitorStatus += "<td>";
-			if(upstreamServer.getMonitorStatus() == 1) {
+			if (upstreamServer.getMonitorStatus() == 1) {
 				monitorStatus += "<span class='green'>正常</span>";
 			} else {
 				monitorStatus += "<span class='red'>异常</span>";
 			}
 			monitorStatus += "</td>";
 		}
-	
-		
+		System.err.println(upstreamServer.getServer()+ ":" +upstreamServer.getMonitorStatus()); 
+
 		return "<tr><td>" + upstreamServer.getServer() + ":" + upstreamServer.getPort() + "</td>"//
 				+ "<td>weight=" + upstreamServer.getWeight() + "</td>"//
 				+ "<td>fail_timeout=" + upstreamServer.getFailTimeout() + "s</td>"//
@@ -145,21 +158,6 @@ public class UpstreamController extends BaseController {
 		upstream.setMonitor(monitor);
 		sqlHelper.updateById(upstream);
 
-		
-		if(monitor == 1) {
-			// 马上检测一次
-			List<UpstreamServer> upstreamServers = upstreamService.getAllServer();
-			for (UpstreamServer upstreamServer : upstreamServers) {
-				if (!TelnetUtils.isRunning(upstreamServer.getServer(), upstreamServer.getPort())) {
-					upstreamServer.setMonitorStatus(0);
-				} else {
-					upstreamServer.setMonitorStatus(1);
-				}
-
-				sqlHelper.updateById(upstreamServer);
-			}
-		}
-		
 		return renderSuccess();
 	}
 
@@ -181,6 +179,19 @@ public class UpstreamController extends BaseController {
 		settingService.set("mail", mail);
 		settingService.set("upstreamMonitor", upstreamMonitor);
 
+		if (upstreamMonitor.equals("true")) {
+			// 马上检测一次
+			List<UpstreamServer> upstreamServers = upstreamService.getAllServer();
+			for (UpstreamServer upstreamServer : upstreamServers) {
+				if (!TelnetUtils.isRunning(upstreamServer.getServer(), upstreamServer.getPort())) {
+					upstreamServer.setMonitorStatus(0);
+				} else {
+					upstreamServer.setMonitorStatus(1);
+				}
+
+				sqlHelper.updateById(upstreamServer);
+			}
+		}
 		return renderSuccess();
 	}
 }
