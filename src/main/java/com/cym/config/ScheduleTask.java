@@ -124,10 +124,10 @@ public class ScheduleTask {
 	public void nginxTasks() {
 		System.err.println("检查nginx运行");
 
-		String lastSend = settingService.get("lastSend");
+		String lastNginxSend = settingService.get("lastNginxSend");
 		String mail = settingService.get("mail");
 		String nginxMonitor = settingService.get("nginxMonitor");
-		if ("true".equals(nginxMonitor) && StrUtil.isNotEmpty(mail) && (StrUtil.isEmpty(lastSend) || System.currentTimeMillis() - Long.parseLong(lastSend) > TimeUnit.HOURS.toMillis(1))) {
+		if ("true".equals(nginxMonitor) && StrUtil.isNotEmpty(mail) && (StrUtil.isEmpty(lastNginxSend) || System.currentTimeMillis() - Long.parseLong(lastNginxSend) > TimeUnit.MINUTES.toMillis(30))) {
 
 			List<Remote> remoteList = remoteService.getMonitorRemoteList();
 
@@ -139,7 +139,7 @@ public class ScheduleTask {
 					}.getType(), false);
 
 					if ((Integer) map.get("nginx") == 0) {
-						names.add(remote.getDescr() + remote.getIp() + ":" + remote.getPort());
+						names.add(remote.getDescr() + "[" + remote.getIp() + ":" + remote.getPort() + "]");
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -150,13 +150,13 @@ public class ScheduleTask {
 			if ("1".equals(settingService.get("monitorLocal"))) {
 				Map<String, Object> map = remoteController.version();
 				if ((Integer) map.get("nginx") == 0) {
-					names.add(0, "本地(127.0.0.1:" + port + ")");
+					names.add(0, "本地[127.0.0.1:" + port + "]");
 				}
 			}
 
 			if (names.size() > 0) {
-				sendMailUtils.sendMailSmtp(mail, "nginx或nginxWebUI出现异常", "以下服务器出现异常请检查: " + StrUtil.join(" ", names));
-				settingService.set("lastSend", String.valueOf(System.currentTimeMillis()));
+				sendMailUtils.sendMailSmtp(mail, "nginx或nginxWebUI出现异常", "以下nginx服务器出现异常请检查: " + StrUtil.join(" ", names));
+				settingService.set("lastNginxSend", String.valueOf(System.currentTimeMillis()));
 			}
 		}
 
@@ -167,7 +167,7 @@ public class ScheduleTask {
 	public void nodeTasks() {
 		System.err.println("检查节点情况");
 
-		String lastSend = settingService.get("lastSend");
+		String lastUpstreamSend = settingService.get("lastUpstreamSend");
 		String mail = settingService.get("mail");
 		String upstreamMonitor = settingService.get("upstreamMonitor");
 		if ("true".equals(upstreamMonitor)) {
@@ -178,7 +178,7 @@ public class ScheduleTask {
 			for (UpstreamServer upstreamServer : upstreamServers) {
 				if (!TelnetUtils.isRunning(upstreamServer.getServer(), upstreamServer.getPort())) {
 					Upstream upstream = sqlHelper.findById(upstreamServer.getUpstreamId(), Upstream.class);
-					if (upstream.getMonitor() == 1 && StrUtil.isNotEmpty(mail) && (StrUtil.isEmpty(lastSend) || System.currentTimeMillis() - Long.parseLong(lastSend) > TimeUnit.HOURS.toMillis(1))) {
+					if (upstream.getMonitor() == 1 && StrUtil.isNotEmpty(mail) && (StrUtil.isEmpty(lastUpstreamSend) || System.currentTimeMillis() - Long.parseLong(lastUpstreamSend) > TimeUnit.MINUTES.toMillis(30))) {
 						ips.add(upstreamServer.getServer() + ":" + upstreamServer.getPort());
 					}
 					upstreamServer.setMonitorStatus(0);
@@ -190,8 +190,8 @@ public class ScheduleTask {
 			}
 
 			if (ips.size() > 0) {
-				sendMailUtils.sendMailSmtp(mail, "负载节点出现异常", "以下服务器出现异常请检查: " + StrUtil.join(" ", ips));
-				settingService.set("lastSend", String.valueOf(System.currentTimeMillis()));
+				sendMailUtils.sendMailSmtp(mail, "负载节点出现异常", "以下负载节点出现异常请检查: " + StrUtil.join(" ", ips));
+				settingService.set("lastUpstreamSend", String.valueOf(System.currentTimeMillis()));
 			}
 		}
 	}
