@@ -1,5 +1,6 @@
 package com.cym.controller.adminPage;
 
+import java.sql.Struct;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +26,7 @@ import com.cym.service.ServerService;
 import com.cym.service.UpstreamService;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
+import com.cym.utils.TelnetUtils;
 
 import cn.craccd.sqlHelper.bean.Page;
 import cn.hutool.core.util.EscapeUtil;
@@ -145,7 +147,7 @@ public class ServerController extends BaseController {
 		serverExt.setServer(server);
 		List<Location> list = serverService.getLocationByServerId(id);
 		for (Location location : list) {
-			String json =  paramService.getJsonByTypeId(location.getId(), "location");
+			String json = paramService.getJsonByTypeId(location.getId(), "location");
 			location.setLocationParamJson(json != null ? json : null);
 		}
 		serverExt.setLocationList(list);
@@ -195,4 +197,35 @@ public class ServerController extends BaseController {
 			return renderError("导入失败：" + e.getMessage());
 		}
 	}
+
+	@RequestMapping("testPort")
+	@ResponseBody
+	public JsonResult testPort() {
+		List<Server> servers = sqlHelper.findAll(Server.class);
+
+		List<String> ips = new ArrayList<>();
+		for (Server server : servers) {
+			String ip = "";
+			String port = "";
+			if (server.getListen().contains(":")) {
+				ip = server.getListen().split(":")[0];
+				port = server.getListen().split(":")[1];
+			} else {
+				ip = "127.0.0.1";
+				port = server.getListen();
+			}
+
+			if (TelnetUtils.isRunning(ip, Integer.parseInt(port)) && !ips.contains(server.getListen())) {
+				ips.add(server.getListen());
+			}
+		}
+
+		if (ips.size() == 0) {
+			return renderSuccess();
+		} else {
+			return renderError("以下端口被占用: " + StrUtil.join(" , ", ips));
+		}
+
+	}
+
 }

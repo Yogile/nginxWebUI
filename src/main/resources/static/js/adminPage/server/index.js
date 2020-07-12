@@ -672,3 +672,29 @@ function selectRootCustom(inputId){
 		$("#" + inputId).val(val);
 	});
 }
+
+function testPort(){
+	if(confirm("是否测试全部监听的端口?")){
+		layer.load();
+		$.ajax({
+			type : 'POST',
+			url : ctx + '/adminPage/server/testPort',
+			dataType : 'json',
+			processData: false,
+			contentType: false,
+			success : function(data) {
+				layer.closeAll();
+				if (data.success) {
+					layer.msg("没有端口被占用");
+				} else {
+					layer.alert(data.msg);
+				}
+			},
+			error : function() {
+				layer.closeAll();
+				alert("出错了,请联系技术人员!");
+			}
+		});
+	}
+	
+}
