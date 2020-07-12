@@ -19,6 +19,7 @@ import com.cym.utils.JsonResult;
 import com.cym.utils.SendMailUtils;
 
 import cn.craccd.sqlHelper.bean.Page;
+import cn.hutool.core.util.StrUtil;
 
 @Controller
 @RequestMapping("/adminPage/admin")
@@ -97,6 +98,9 @@ public class AdminController extends BaseController {
 	@RequestMapping("testMail")
 	@ResponseBody
 	public JsonResult testMail(String mail) {
+		if(StrUtil.isEmpty(mail)) {
+			return renderError("邮箱为空");
+		}
 		try {
 			sendCloudUtils.sendMailSmtp(mail, "nginxWebUI测试邮件", "nginxWebUI测试邮件");
 			return renderSuccess();
