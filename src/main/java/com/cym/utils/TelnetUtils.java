@@ -13,7 +13,7 @@ public class TelnetUtils {
 		try {
 			SocketAddress saAdd = new InetSocketAddress(host.trim(), port);
 			sClient = new Socket();
-			sClient.connect(saAdd, 3000); // 设置超时 3s
+			sClient.connect(saAdd, 1000); // 设置超时 1s
 		} catch (UnknownHostException e) {
 			return false;
 		} catch (SocketTimeoutException e) {
