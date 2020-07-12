@@ -103,22 +103,6 @@ public class ScheduleTask {
 		long time = System.currentTimeMillis();
 		File dir = new File(InitConfig.home + "log/");
 
-//		Optional.ofNullable(dir.listFiles()).ifPresent(fileList -> Arrays.stream(fileList).filter(file -> file.getName().contains("access.") && file.getName().endsWith(".zip")).forEach(file -> {
-//			String dateStr = file.getName().replace("access.", "").replace(".zip", "");
-//			DateTime date = null;
-//			if (dateStr.length() != 10) {
-//				date = DateUtil.parse(dateStr, "yyyy-MM-dd_HH-mm-ss");
-//			} else {
-//				date = DateUtil.parse(dateStr, "yyyy-MM-dd");
-//			}
-//
-//			if (time - date.getTime() > TimeUnit.DAYS.toMillis(8)) {
-//				FileUtil.del(file);
-//			}
-//		})
-//
-//		);
-
 		for (File file : dir.listFiles()) {
 			if (file.getName().contains("access.") && file.getName().endsWith(".zip")) {
 				String dateStr = file.getName().replace("access.", "").replace(".zip", "");
@@ -182,19 +166,27 @@ public class ScheduleTask {
 	@Scheduled(cron = "0 0/2 * * * ?")
 	public void nodeTasks() {
 		System.err.println("检查节点情况");
-		
+
 		String lastSend = settingService.get("lastSend");
 		String mail = settingService.get("mail");
 		String upstreamMonitor = settingService.get("upstreamMonitor");
-		if ("true".equals(upstreamMonitor) && StrUtil.isNotEmpty(mail) && (StrUtil.isEmpty(lastSend) || System.currentTimeMillis() - Long.parseLong(lastSend) > TimeUnit.HOURS.toMillis(1))) {
+		if ("true".equals(upstreamMonitor)) {
 
-			List<UpstreamServer> upstreamServers = upstreamService.getServerListByMonitor(1);
+			List<UpstreamServer> upstreamServers = upstreamService.getAllServer();
 
 			List<String> ips = new ArrayList<>();
 			for (UpstreamServer upstreamServer : upstreamServers) {
 				if (!TelnetUtils.isRunning(upstreamServer.getServer(), upstreamServer.getPort())) {
-					ips.add(upstreamServer.getServer() + ":" + upstreamServer.getPort());
+					Upstream upstream = sqlHelper.findById(upstreamServer.getUpstreamId(), Upstream.class);
+					if (upstream.getMonitor() == 1 && StrUtil.isNotEmpty(mail) && (StrUtil.isEmpty(lastSend) || System.currentTimeMillis() - Long.parseLong(lastSend) > TimeUnit.HOURS.toMillis(1))) {
+						ips.add(upstreamServer.getServer() + ":" + upstreamServer.getPort());
+					}
+					upstreamServer.setMonitorStatus(0);
+				} else {
+					upstreamServer.setMonitorStatus(1);
 				}
+
+				sqlHelper.updateById(upstreamServer);
 			}
 
 			if (ips.size() > 0) {

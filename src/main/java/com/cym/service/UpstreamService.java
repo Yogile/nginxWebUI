@@ -104,4 +104,8 @@ public class UpstreamService {
 		return sqlHelper.findListByQuery(new ConditionAndWrapper().in("upstreamId", upstreamIds), UpstreamServer.class);
 	}
 
+	public List<UpstreamServer> getAllServer() {
+		return sqlHelper.findAll(UpstreamServer.class);
+	}
+
 }
