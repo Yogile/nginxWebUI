@@ -11,7 +11,10 @@ function showSelectMail() {
 				$("#mail_host").val(data.obj.mail_host)
 				$("#mail_port").val(data.obj.mail_port)
 				$("#mail_from").val(data.obj.mail_from)
-				$("#mail_ssl").val(data.obj.mail_ssl)
+				if(data.obj.mail_ssl != null){
+					$("#mail_ssl").val(data.obj.mail_ssl)
+				}
+			
 				$("#mail_user").val(data.obj.mail_user)
 				$("#mail_pass").val(data.obj.mail_pass)
 

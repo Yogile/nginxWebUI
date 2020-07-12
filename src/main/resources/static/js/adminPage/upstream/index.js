@@ -378,6 +378,12 @@ function upstreamOver(){
 var loadIndex;
 function testMail(){
 	if(confirm("是否就行测试发送?")){
+		var myreg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;                
+		if ($("#mail").val() == '' || !myreg.test($("#mail").val())) {                    
+			alert("邮箱格式不正确");               
+			return;                
+		}
+		
 		loadIndex = layer.load();
 		$.ajax({
 			type: 'POST',
