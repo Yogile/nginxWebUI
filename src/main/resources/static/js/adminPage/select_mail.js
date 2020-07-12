@@ -1,15 +1,5 @@
 var mailIndex;
 
-$(function() {
-	form.on('select(mailType)', function(data) {
-		if (data.value == 'sendCloud') {
-			$("#mailSmtp").hide();
-		} else {
-			$("#mailSmtp").show();
-		}
-	});
-})
-
 function showSelectMail() {
 
 	$.ajax({
@@ -18,7 +8,6 @@ function showSelectMail() {
 		dataType: 'json',
 		success: function(data) {
 			if (data.success) {
-				$("#mailType").val(data.obj.mailType);
 				$("#mail_host").val(data.obj.mail_host)
 				$("#mail_port").val(data.obj.mail_port)
 				$("#mail_from").val(data.obj.mail_from)
@@ -50,18 +39,15 @@ function showSelectMail() {
 
 function selectMailOver() {
 
-	if($("#mailType").val() == 'smtp'){
-		if($("#mail_host").val() == '' || $("#mail_port").val() == '' || $("#mail_from").val() == '' || $("#mail_user").val() == '' || $("#mail_pass").val() == ''){
-			layer.msg("未填写完成");
-			return;
-		}
+	if($("#mail_host").val() == '' || $("#mail_port").val() == '' || $("#mail_from").val() == '' || $("#mail_user").val() == '' || $("#mail_pass").val() == ''){
+		layer.msg("未填写完成");
+		return;
 	}
 	
 	$.ajax({
 		type: 'POST',
 		url: ctx + 'adminPage/admin/updateMailSetting',
 		data: {
-			mailType: $("#mailType").val(),
 			mail_host: $("#mail_host").val(),
 			mail_port: $("#mail_port").val(),
 			mail_ssl: $("#mail_ssl").val(),

@@ -16,10 +16,9 @@ import com.cym.service.AdminService;
 import com.cym.service.SettingService;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
-import com.cym.utils.SendCloudUtils;
+import com.cym.utils.SendMailUtils;
 
 import cn.craccd.sqlHelper.bean.Page;
-import cn.hutool.core.util.StrUtil;
 
 @Controller
 @RequestMapping("/adminPage/admin")
@@ -29,7 +28,7 @@ public class AdminController extends BaseController {
 	@Autowired
 	SettingService settingService;
 	@Autowired
-	SendCloudUtils sendCloudUtils;
+	SendMailUtils sendCloudUtils;
 
 	@RequestMapping("")
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView, Page page) {
@@ -72,28 +71,26 @@ public class AdminController extends BaseController {
 			settingService.set("mailType", "sendCloud");
 		}
 
-		map.put("mailType", settingService.get("mailType"));
 		map.put("mail_host", settingService.get("mail_host"));
 		map.put("mail_port", settingService.get("mail_port"));
 		map.put("mail_from", settingService.get("mail_from"));
 		map.put("mail_user", settingService.get("mail_user"));
 		map.put("mail_pass", settingService.get("mail_pass"));
 		map.put("mail_ssl", settingService.get("mail_ssl"));
-		
+
 		return renderSuccess(map);
 	}
 
 	@RequestMapping("updateMailSetting")
 	@ResponseBody
-	public JsonResult updateMailSetting(String mailType, String mail_user, String mail_host, String mail_port, String mail_from, String mail_pass,String mail_ssl) {
-		settingService.set("mailType", mailType);
+	public JsonResult updateMailSetting(String mailType, String mail_user, String mail_host, String mail_port, String mail_from, String mail_pass, String mail_ssl) {
 		settingService.set("mail_host", mail_host);
 		settingService.set("mail_port", mail_port);
 		settingService.set("mail_user", mail_user);
 		settingService.set("mail_from", mail_from);
 		settingService.set("mail_pass", mail_pass);
 		settingService.set("mail_ssl", mail_ssl);
-		
+
 		return renderSuccess();
 	}
 
@@ -101,11 +98,7 @@ public class AdminController extends BaseController {
 	@ResponseBody
 	public JsonResult testMail(String mail) {
 		try {
-			if (settingService.get("mailType").equals("sendCloud")) {
-				sendCloudUtils.sendMail(mail, "测试邮件", "test");
-			} else {
-				sendCloudUtils.sendMailSmtp(mail, "nginxWebUI测试邮件", "nginxWebUI测试邮件");
-			}
+			sendCloudUtils.sendMailSmtp(mail, "nginxWebUI测试邮件", "nginxWebUI测试邮件");
 			return renderSuccess();
 		} catch (Exception e) {
 			e.printStackTrace();
