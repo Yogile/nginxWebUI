@@ -61,19 +61,6 @@ public class UpstreamController extends BaseController {
 		}
 		page.setRecords(list);
 
-//		if ("true".equals(settingService.get("upstreamMonitor"))) {
-//			// 马上检测一次
-//			List<UpstreamServer> upstreamServers = upstreamService.getAllServer();
-//			for (UpstreamServer upstreamServer : upstreamServers) {
-//				if (!TelnetUtils.isRunning(upstreamServer.getServer(), upstreamServer.getPort())) {
-//					upstreamServer.setMonitorStatus(0);
-//				} else {
-//					upstreamServer.setMonitorStatus(1);
-//				}
-//
-//				sqlHelper.updateById(upstreamServer);
-//			}
-//		}
 
 		modelAndView.addObject("page", page);
 		modelAndView.addObject("keywords", keywords);
