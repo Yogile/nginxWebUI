@@ -23,7 +23,7 @@ import com.cym.service.LogService;
 import com.cym.service.RemoteService;
 import com.cym.service.SettingService;
 import com.cym.service.UpstreamService;
-import com.cym.utils.SendCloudUtils;
+import com.cym.utils.SendMailUtils;
 import com.cym.utils.TelnetUtils;
 
 import cn.craccd.sqlHelper.utils.SqlHelper;
@@ -51,9 +51,9 @@ public class ScheduleTask {
 	final RemoteService remoteService;
 	final UpstreamService upstreamService;
 	final LogService logInfoService;
-	final SendCloudUtils smCloudUtils;
+	final SendMailUtils sendMailUtils;
 
-	public ScheduleTask(UpstreamService upstreamService, RemoteService remoteService, SendCloudUtils smCloudUtils, RemoteController remoteController, SqlHelper sqlHelper,
+	public ScheduleTask(UpstreamService upstreamService, RemoteService remoteService, SendMailUtils sendMailUtils, RemoteController remoteController, SqlHelper sqlHelper,
 			CertController certController, SettingService settingService, ConfController confController, LogService logInfoService) {
 		this.sqlHelper = sqlHelper;
 		this.upstreamService = upstreamService;
@@ -63,7 +63,7 @@ public class ScheduleTask {
 		this.confController = confController;
 		this.logInfoService = logInfoService;
 		this.remoteController = remoteController;
-		this.smCloudUtils = smCloudUtils;
+		this.sendMailUtils = sendMailUtils;
 	}
 
 	// 使用TimeUnit.DAYS.toMillis()进行时间粒度转换。Modified by Sai on 2020-6-17.
@@ -139,7 +139,7 @@ public class ScheduleTask {
 					}.getType(), false);
 
 					if ((Integer) map.get("nginx") == 0) {
-						names.add(remote.getDescr() + "(" + remote.getIp() + ":" + remote.getPort() + ")");
+						names.add(remote.getDescr() + remote.getIp() + ":" + remote.getPort());
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -155,7 +155,7 @@ public class ScheduleTask {
 			}
 
 			if (names.size() > 0) {
-				smCloudUtils.sendMail(mail, StrUtil.join(" ", names), "nginx_stop");
+				sendMailUtils.sendMailSmtp(mail, "nginx或nginxWebUI出现异常", "以下服务器出现异常请检查: " + StrUtil.join(" ", names));
 				settingService.set("lastSend", String.valueOf(System.currentTimeMillis()));
 			}
 		}
@@ -190,7 +190,7 @@ public class ScheduleTask {
 			}
 
 			if (ips.size() > 0) {
-				smCloudUtils.sendMail(mail, StrUtil.join(" ", ips), "server_stop");
+				sendMailUtils.sendMailSmtp(mail, "负载节点出现异常", "以下服务器出现异常请检查: " + StrUtil.join(" ", ips));
 				settingService.set("lastSend", String.valueOf(System.currentTimeMillis()));
 			}
 		}
