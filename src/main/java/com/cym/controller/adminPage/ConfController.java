@@ -33,7 +33,6 @@ import cn.hutool.json.JSONUtil;
 @Controller
 @RequestMapping("/adminPage/conf")
 public class ConfController extends BaseController {
-	final UpstreamController upstreamController;
 	final UpstreamService upstreamService;
 	final SettingService settingService;
 	final ServerService serverService;
@@ -45,9 +44,8 @@ public class ConfController extends BaseController {
 	@Value("${project.version}")
 	String currentVersion;
 
-	public ConfController(UpstreamController upstreamController, UpstreamService upstreamService, SettingService settingService, ServerService serverService, ConfService confService,
+	public ConfController( UpstreamService upstreamService, SettingService settingService, ServerService serverService, ConfService confService,
 			MainController mainController) {
-		this.upstreamController = upstreamController;
 		this.upstreamService = upstreamService;
 		this.settingService = settingService;
 		this.serverService = serverService;
