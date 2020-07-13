@@ -120,7 +120,7 @@ public class ScheduleTask {
 	}
 
 	// 检查nginx运行
-	@Scheduled(cron = "0 0/2 * * * ?")
+	@Scheduled(cron = "0 * * * * ?")
 	public void nginxTasks() {
 		System.err.println("检查nginx运行");
 
@@ -163,7 +163,7 @@ public class ScheduleTask {
 	}
 
 	// 检查节点情况
-	@Scheduled(cron = "0 0/2 * * * ?")
+	@Scheduled(cron = "0 * * * * ?")
 	public void nodeTasks() {
 		System.err.println("检查节点情况");
 

@@ -10,6 +10,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cym.config.InitConfig;
 import com.cym.controller.adminPage.UpstreamController;
 import com.cym.ext.AsycPack;
 import com.cym.ext.ConfExt;
@@ -467,14 +468,15 @@ public class ConfService {
 	public void replace(String nginxPath, String nginxContent, List<String> subContent, List<String> subName) {
 		String date = DateUtil.format(new Date(), "yyyy-MM-dd_HH-mm-ss");
 		// 备份主文件
-		FileUtil.copy(nginxPath, nginxPath + date + ".bak", true);
+		FileUtil.copy(nginxPath, InitConfig.home + "bak/nginx.conf."  + date + ".bak", true);
 		// 备份conf.d文件夹
 		String confd = nginxPath.replace("nginx.conf", "conf.d/");
 		if (!FileUtil.exist(confd)) {
 			FileUtil.mkdir(confd);
 		}
-		ZipUtil.zip(confd, nginxPath + date + ".zip");
+		ZipUtil.zip(confd, InitConfig.home + "bak/nginx.conf."  + date + ".zip");
 
+		
 		// 写入主文件
 		FileUtil.writeString(nginxContent, nginxPath, StandardCharsets.UTF_8);
 		String decompose = settingService.get("decompose");
