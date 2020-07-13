@@ -39,7 +39,6 @@ import cn.hutool.core.util.ZipUtil;
 
 @Service
 public class ConfService {
-	final UpstreamController upstreamController;
 	final UpstreamService upstreamService;
 	final SettingService settingService;
 	final ServerService serverService;
@@ -47,9 +46,8 @@ public class ConfService {
 	final ParamService paramService;
 	final SqlHelper sqlHelper;
 
-	public ConfService(UpstreamController upstreamController, UpstreamService upstreamService, SettingService settingService, ServerService serverService, LocationService locationService,
+	public ConfService(UpstreamService upstreamService, SettingService settingService, ServerService serverService, LocationService locationService,
 			ParamService paramService, SqlHelper sqlHelper) {
-		this.upstreamController = upstreamController;
 		this.upstreamService = upstreamService;
 		this.settingService = settingService;
 		this.serverService = serverService;
@@ -328,7 +326,7 @@ public class ConfService {
 				List<UpstreamServer> upstreamServers = upstreamService.getUpstreamServers(upstream.getId());
 				for (UpstreamServer upstreamServer : upstreamServers) {
 					ngxParam = new NgxParam();
-					ngxParam.addValue("server " + upstreamController.buildStr(upstreamServer, upstream.getProxyType()));
+					ngxParam.addValue("server " + buildNodeStr(upstreamServer, upstream.getProxyType()));
 					ngxBlockServer.addEntry(ngxParam);
 				}
 
