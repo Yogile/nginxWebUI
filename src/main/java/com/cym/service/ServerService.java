@@ -70,22 +70,25 @@ public class ServerService {
 
 	@Transactional
 	public void addOver(Server server, String serverParamJson, List<Location> locations) throws Exception {
-		Server tmpServer = sqlHelper.findOneByQuery(new ConditionOrWrapper().eq("serverName", server.getServerName()), Server.class);
-		if (!StringUtils.isEmpty(server.getId())) {
-			if (tmpServer != null) {
-				if (!server.getId().equals(tmpServer.getId())) {
-					throw new Exception("serverName:" + tmpServer.getServerName() + " 已经存在");
-				}
-			}
-			// 修改操作
-			sqlHelper.insertOrUpdate(server);
-		} else {
-			// 新增
-			if (tmpServer != null) {
-				throw new Exception("serverName:" + tmpServer.getServerName() + " 已经存在");
-			}
-			sqlHelper.insertOrUpdate(server);
-		}
+//		Server tmpServer = sqlHelper.findOneByQuery(new ConditionOrWrapper().eq("serverName", server.getServerName()), Server.class);
+//		if (!StringUtils.isEmpty(server.getId())) {
+//			if (tmpServer != null) {
+//				if (!server.getId().equals(tmpServer.getId())) {
+//					throw new Exception("serverName:" + tmpServer.getServerName() + " 已经存在");
+//				}
+//			}
+//			// 修改操作
+//			sqlHelper.insertOrUpdate(server);
+//		} else {
+//			// 新增
+//			if (tmpServer != null) {
+//				throw new Exception("serverName:" + tmpServer.getServerName() + " 已经存在");
+//			}
+//			sqlHelper.insertOrUpdate(server);
+//		}
+		
+		sqlHelper.insertOrUpdate(server);
+		
 		List<Param> paramList = new ArrayList<Param>();
 		if (StrUtil.isNotEmpty(serverParamJson) && JSONUtil.isJson(serverParamJson)) {
 			paramList = JSONUtil.toList(JSONUtil.parseArray(serverParamJson), Param.class);
