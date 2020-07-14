@@ -113,6 +113,11 @@ public class UpstreamController extends BaseController {
 			if (count > 0) {
 				return renderError("与已有负载均衡重名");
 			}
+		}else {
+			Long count = upstreamService.getCountByNameWithOutId(upstream.getName(), upstream.getId());
+			if (count > 0) {
+				return renderError("与已有负载均衡重名");
+			}
 		}
 
 		upstreamService.addOver(upstream, upstreamServers, upstreamParamJson);
