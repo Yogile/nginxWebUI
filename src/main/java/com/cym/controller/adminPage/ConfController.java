@@ -99,7 +99,10 @@ public class ConfController extends BaseController {
 		if (!FileUtil.exist(nginxPath)) {
 			return renderError("目标文件不存在");
 		}
-
+		if (FileUtil.isDirectory(nginxPath)) {
+			return renderError("目标文件是文件夹，请重新选择");
+		}
+		
 		try {
 			confService.replace(nginxPath, nginxContent, subContent, subName);
 			return renderSuccess("替换成功，原文件已备份");
@@ -291,7 +294,10 @@ public class ConfController extends BaseController {
 	@RequestMapping(value = "loadOrg")
 	@ResponseBody
 	public JsonResult loadOrg(String nginxPath) {
-
+		if (FileUtil.isDirectory(nginxPath)) {
+			return renderError("目标文件是文件夹，请重新选择");
+		}
+		
 		String decompose = settingService.get("decompose");
 		ConfExt confExt = confService.buildConf(StrUtil.isNotEmpty(decompose) && decompose.equals("true"));
 
