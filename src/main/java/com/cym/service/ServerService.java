@@ -185,13 +185,6 @@ public class ServerService {
 
 	}
 
-//	public boolean hasListen(String listen, String serverId) {
-//		ConditionAndWrapper conditionAndWrapper =  new ConditionAndWrapper().eq("listen", listen);
-//		if(StrUtil.isNotEmpty(serverId)) {
-//			conditionAndWrapper.ne("id", serverId);
-//		}
-//		return sqlHelper.findCountByQuery(conditionAndWrapper, Server.class) > 0;
-//	}
 
 	public void importServer(String nginxPath) throws Exception {
 		String initNginxPath = initNginx(nginxPath);
@@ -202,13 +195,6 @@ public class ServerService {
 			e.printStackTrace();
 			throw new Exception("文件读取失败");
 		}
-
-//		List<NgxEntry> servers;
-//		if (nginxPath.contains("/etc/nginx/conf.d") || nginxPath.contains("/etc/nginx/sites-available") || nginxPath.contains("default")) {
-//			servers = conf.findAll(NgxConfig.BLOCK, "server");
-//		} else {
-//			servers = conf.findAll(NgxConfig.BLOCK, "http", "server");
-//		}
 
 		List<NgxEntry> servers = conf.findAll(NgxConfig.BLOCK, "server");
 		servers.addAll(conf.findAll(NgxConfig.BLOCK, "http", "server"));
