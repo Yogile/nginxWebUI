@@ -13,7 +13,6 @@ $(function(){
 				layer.close(load);
 				// 上传完毕回调
 				if (res.success) {
-					debugger
 					var path = res.obj.split('/');
 					if(path[path.length-1].indexOf('.zip')==-1){
 						alert("只能上传zip文件");
