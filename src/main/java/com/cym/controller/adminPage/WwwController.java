@@ -1,5 +1,6 @@
 package com.cym.controller.adminPage;
 
+import java.io.File;
 import java.nio.charset.Charset;
 
 import javax.servlet.http.HttpSession;
@@ -56,9 +57,14 @@ public class WwwController extends BaseController {
 				FileUtil.del(www.getDir());
 				www.setDir(dir);
 			} else {
-				www.setDir(null);
+				// 修改名称, 也要修改文件夹名
+				Www wwwOrg = sqlHelper.findById(www.getId(), Www.class);
+				FileUtil.rename(new File(wwwOrg.getDir()),  InitConfig.home + "wwww/" + www.getName(), true);
+				
+				www.setDir( InitConfig.home + "wwww/" + www.getName());
 			}
 			sqlHelper.insertOrUpdate(www);
+			
 			return renderSuccess();
 
 		} catch (Exception e) {
