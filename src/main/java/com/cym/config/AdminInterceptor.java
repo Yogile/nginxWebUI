@@ -140,11 +140,7 @@ public class AdminInterceptor implements HandlerInterceptor {
 	private String buildUrl(String ctx, HttpServletRequest request, Remote remote) {
 		String url = request.getRequestURL().toString().replace(ctx, remote.getProtocol() + "://" + remote.getIp() + ":" + remote.getPort() + "/");
 
-//		url += "?creditKey=" + remote.getCreditKey();
-//		if (StrUtil.isNotEmpty(request.getQueryString())) {
-//			url += "&" + request.getQueryString();
-//		}
-		return url;
+		return url + "?jsrandom=" + System.currentTimeMillis();
 	}
 
 	private static String getCtx(String url) {
