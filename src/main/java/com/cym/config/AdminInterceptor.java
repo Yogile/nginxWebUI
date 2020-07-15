@@ -85,12 +85,12 @@ public class AdminInterceptor implements HandlerInterceptor {
 			try {
 				String rs = HttpUtil.post(url, body);
 
-				rs = rs.replace(remote.getIp(), request.getServerName()).replace(":" + remote.getPort().toString(), ":" + request.getServerPort());
+				rs = rs.replace("//" + remote.getIp() + ":" + remote.getPort() , "//" + request.getServerName() + ":" + request.getServerPort());
 
 				response.setCharacterEncoding("utf-8");
 				response.setContentType("text/html;charset=utf-8");
-				
-				if(JSONUtil.isJson(rs)) {
+
+				if (JSONUtil.isJson(rs)) {
 					String date = DateUtil.format(new Date(), "yyyy-MM-dd_HH-mm-ss");
 					response.addHeader("Content-Type", "application/octet-stream");
 					response.setHeader("content-disposition", "attachment;filename=" + URLEncoder.encode(date + ".json", "UTF-8")); // 设置文件名
@@ -107,7 +107,6 @@ public class AdminInterceptor implements HandlerInterceptor {
 					PrintWriter out = response.getWriter();
 					out.append(rs);
 				}
-		
 
 			} catch (Exception e) {
 				e.printStackTrace();
