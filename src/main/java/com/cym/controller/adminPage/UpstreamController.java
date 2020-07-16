@@ -176,9 +176,6 @@ public class UpstreamController extends BaseController {
 		settingService.set("mail", mail);
 		settingService.set("upstreamMonitor", upstreamMonitor);
 
-		if ("true".equals(upstreamMonitor)) {
-			testNode();
-		}
 		return renderSuccess();
 	}
 
