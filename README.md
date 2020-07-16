@@ -54,7 +54,7 @@ wget http://www.nginxwebui.cn/download/nginxWebUI-1.6.6.jar
 3.启动程序
 
 ```
-nohup java -jar -Xmx64m nginxWebUI-1.6.6.jar --server.port=8080 --project.home=/home/nginxWebUI/ > /del/null &
+nohup java -jar -Xmx64m nginxWebUI-1.6.6.jar --server.port=8080 --project.home=/home/nginxWebUI/ > /dev/null &
 ```
 
 参数说明(都是非必填)
