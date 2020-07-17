@@ -43,6 +43,9 @@ public class HttpController extends BaseController {
 	@RequestMapping("addOver")
 	@ResponseBody
 	public JsonResult addOver(Http http) {
+		if (StrUtil.isEmpty(http.getId())) {
+			http.setSeq(httpService.buildOrder());
+		}
 		sqlHelper.insertOrUpdate(http);
 
 		return renderSuccess();
@@ -64,7 +67,7 @@ public class HttpController extends BaseController {
 
 	@RequestMapping("addGiudeOver")
 	@ResponseBody
-	public JsonResult addGiudeOver(String json, Boolean logStatus,Boolean webSocket) {
+	public JsonResult addGiudeOver(String json, Boolean logStatus, Boolean webSocket) {
 		List<Http> https = JSONUtil.toList(JSONUtil.parseArray(json), Http.class);
 
 		if (logStatus) {
@@ -85,15 +88,11 @@ public class HttpController extends BaseController {
 		if (webSocket) {
 			Http http = new Http();
 			http.setName("map");
-			http.setValue("$http_upgrade $connection_upgrade {\r\n" + 
-					"    default upgrade;\r\n" + 
-					"    '' close;\r\n" + 
-					"}\r\n" + 
-					"");
+			http.setValue("$http_upgrade $connection_upgrade {\r\n" + "    default upgrade;\r\n" + "    '' close;\r\n" + "}\r\n" + "");
 			http.setUnit("");
 			https.add(http);
 		}
-		
+
 		httpService.setAll(https);
 
 		return renderSuccess();
@@ -116,7 +115,7 @@ public class HttpController extends BaseController {
 
 		return JSONUtil.toJsonStr(logInfo);
 	}
-	
+
 	@RequestMapping("setOrder")
 	@ResponseBody
 	public JsonResult setOrder(String id, Integer count) {

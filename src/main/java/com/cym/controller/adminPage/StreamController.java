@@ -37,7 +37,9 @@ public class StreamController extends BaseController {
 	@RequestMapping("addOver")
 	@ResponseBody
 	public JsonResult addOver(Stream stream) {
-		stream.setSeq(streamService.buildOrder());
+		if (StrUtil.isEmpty(stream.getId())) {
+			stream.setSeq(streamService.buildOrder());
+		}
 		sqlHelper.insertOrUpdate(stream);
 
 		return renderSuccess();
