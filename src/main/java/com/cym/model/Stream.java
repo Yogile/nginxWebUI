@@ -11,19 +11,6 @@ public class Stream extends BaseModel {
 
 	Long seq;
 
-	public Long getSeq() {
-		return seq;
-	}
-
-	public void setSeq(Long seq) {
-		this.seq = seq;
-	}
-
-	public Stream(String name, String value) {
-		this.name = name;
-		this.value = value;
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -39,5 +26,14 @@ public class Stream extends BaseModel {
 	public void setValue(String value) {
 		this.value = value;
 	}
+
+	public Long getSeq() {
+		return seq;
+	}
+
+	public void setSeq(Long seq) {
+		this.seq = seq;
+	}
+
 
 }
