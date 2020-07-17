@@ -33,7 +33,7 @@ public class HttpController extends BaseController {
 
 	@RequestMapping("")
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView) {
-		List<Http> httpList = sqlHelper.findAll(new Sort("name", Direction.DESC), Http.class);
+		List<Http> httpList = sqlHelper.findAll(new Sort("seq", Direction.ASC), Http.class);
 
 		modelAndView.addObject("httpList", httpList);
 		modelAndView.setViewName("/adminPage/http/index");
@@ -116,5 +116,12 @@ public class HttpController extends BaseController {
 
 		return JSONUtil.toJsonStr(logInfo);
 	}
+	
+	@RequestMapping("setOrder")
+	@ResponseBody
+	public JsonResult setOrder(String id, Integer count) {
+		httpService.setSeq(id, count);
 
+		return renderSuccess();
+	}
 }
