@@ -48,7 +48,7 @@ public class MonitorService {
 		if (SystemTool.isWindows()) {
 			freePhysicalMemorySize = osmxb.getFreePhysicalMemorySize();
 		} else {
-			freePhysicalMemorySize = getLinuxFreeMem2();
+			freePhysicalMemorySize = getLinuxFreeMem();
 		}
 
 		// 已使用的物理内存
@@ -69,22 +69,8 @@ public class MonitorService {
 		return infoBean;
 	}
 
+
 	private Long getLinuxFreeMem() {
-		try {
-			String line = RuntimeUtil.execForStr("free");
-
-			if (StrUtil.isNotEmpty(line)) {
-				String rs = line.replaceAll(" + ", " ").split(" ")[12].split("\n")[0];
-				System.out.println("freeMem:" + Long.parseLong(rs));
-				return Long.parseLong(rs) * 1024;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return osmxb.getFreePhysicalMemorySize();
-	}
-
-	private Long getLinuxFreeMem2() {
 		try {
 			String line = RuntimeUtil.execForStr("cat /proc/meminfo");
 
