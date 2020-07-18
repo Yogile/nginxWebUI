@@ -79,9 +79,9 @@ public class MonitorService {
 		String line = RuntimeUtil.execForStr("free -m");
 		
 		if (StrUtil.isNotEmpty(line)) {
-			String[] rs = line.replaceAll(" + ", " ").split(" ");
-			System.out.println("freeMem:" + Double.parseDouble(rs[12]));
-			return Double.parseDouble(rs[12]);
+			String rs = line.replaceAll(" + ", " ").split(" ")[12].split("\n")[0];
+			System.out.println("freeMem:" + Double.parseDouble(rs));
+			return Double.parseDouble(rs);
 		}
 
 		return osmxb.getFreePhysicalMemorySize() / gb;
