@@ -76,9 +76,10 @@ public class MonitorService {
 	private Double getLinuxFreeMem() {
 		System.out.println("--------------getLinuxFreeMem----------------------");
 		List<String> lines = RuntimeUtil.execForLines("free -m");
-		System.out.println(lines);
 		
+		System.out.println(lines.size());
 		if (lines != null && lines.size() >= 2) {
+			System.out.println(lines.get(1));
 			String[] rs = lines.get(1).replaceAll(" + ", " ").split(" ");
 
 			return Double.parseDouble(rs[rs.length-1]);
