@@ -53,11 +53,11 @@ public class MonitorService {
 		if (SystemTool.isWindows()) {
 			freePhysicalMemorySize = osmxb.getFreePhysicalMemorySize() / gb;
 		} else {
-			freePhysicalMemorySize = getLinuxFreeMem();
+			freePhysicalMemorySize = getLinuxFreeMem() / gb ;
 		}
 
 		// 已使用的物理内存
-		Double usedMemory = (osmxb.getTotalPhysicalMemorySize() - osmxb.getFreePhysicalMemorySize()) / gb;
+		Double usedMemory = (osmxb.getTotalPhysicalMemorySize() - freePhysicalMemorySize) / gb;
 
 		Double mem = usedMemory / totalMemorySize;
 		Double cpu = osmxb.getSystemCpuLoad();
@@ -74,17 +74,17 @@ public class MonitorService {
 		return infoBean;
 	}
 
-	private Double getLinuxFreeMem() {
+	private Long getLinuxFreeMem() {
 		
-		String line = RuntimeUtil.execForStr("free -m");
+		String line = RuntimeUtil.execForStr("free");
 		
 		if (StrUtil.isNotEmpty(line)) {
 			String rs = line.replaceAll(" + ", " ").split(" ")[12].split("\n")[0];
 			System.out.println("freeMem:" + Double.parseDouble(rs));
-			return Double.parseDouble(rs);
+			return Long.parseLong(rs);
 		}
 
-		return osmxb.getFreePhysicalMemorySize() / gb;
+		return osmxb.getFreePhysicalMemorySize() ;
 	}
 
 }
