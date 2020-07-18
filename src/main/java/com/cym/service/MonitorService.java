@@ -92,7 +92,7 @@ public class MonitorService {
 				String[] lines = line.split("\n");
 				for (String rs : lines) {
 					if (rs.contains("MemAvailable")) {
-						return Long.parseLong(rs.replace("MemAvailable:", "").replace("kb", "")) * 1024;
+						return Long.parseLong(rs.replace("MemAvailable:", "").replace("kB", "")) * 1024;
 					}
 				}
 			}
