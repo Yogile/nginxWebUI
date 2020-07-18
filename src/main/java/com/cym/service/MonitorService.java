@@ -1,11 +1,6 @@
 package com.cym.service;
 
-import java.io.File;
 import java.lang.management.ManagementFactory;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -18,7 +13,6 @@ import com.sun.management.OperatingSystemMXBean;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.system.SystemUtil;
 
 /** */
 /**
@@ -48,13 +42,13 @@ public class MonitorService {
 	public MonitorInfo getMonitorInfo() {
 		// 总的物理内存
 		Double totalMemorySize = osmxb.getTotalPhysicalMemorySize() / gb;
-		
+
 		// 剩余的物理内存
 		Long freePhysicalMemorySize = 0l;
 		if (SystemTool.isWindows()) {
 			freePhysicalMemorySize = osmxb.getFreePhysicalMemorySize();
 		} else {
-			freePhysicalMemorySize = getLinuxFreeMem() * 1024;
+			freePhysicalMemorySize = getLinuxFreeMem2();
 		}
 
 		// 已使用的物理内存
@@ -76,15 +70,35 @@ public class MonitorService {
 	}
 
 	private Long getLinuxFreeMem() {
+		try {
+			String line = RuntimeUtil.execForStr("free");
 
-		String line = RuntimeUtil.execForStr("free");
-
-		if (StrUtil.isNotEmpty(line)) {
-			String rs = line.replaceAll(" + ", " ").split(" ")[12].split("\n")[0];
-			System.out.println("freeMem:" + Long.parseLong(rs));
-			return Long.parseLong(rs);
+			if (StrUtil.isNotEmpty(line)) {
+				String rs = line.replaceAll(" + ", " ").split(" ")[12].split("\n")[0];
+				System.out.println("freeMem:" + Long.parseLong(rs));
+				return Long.parseLong(rs) * 1024;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		return osmxb.getFreePhysicalMemorySize();
+	}
 
+	private Long getLinuxFreeMem2() {
+		try {
+			String line = RuntimeUtil.execForStr("cat /proc/meminfo");
+
+			if (StrUtil.isNotEmpty(line)) {
+				String[] lines = line.split("\n");
+				for (String rs : lines) {
+					if (rs.contains("MemAvailable")) {
+						return Long.parseLong(rs.replace("MemAvailable:", "").replace("kb", "")) * 1024;
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return osmxb.getFreePhysicalMemorySize();
 	}
 
