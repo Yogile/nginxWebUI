@@ -31,7 +31,7 @@ public class MonitorService {
 
 	OperatingSystemMXBean osmxb;
 	Double gb = Double.valueOf(1024 * 1024 * 1024);
-	
+
 	@PostConstruct
 	private void init() {
 		osmxb = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
@@ -48,12 +48,13 @@ public class MonitorService {
 	public MonitorInfo getMonitorInfo() {
 		// 总的物理内存
 		Double totalMemorySize = osmxb.getTotalPhysicalMemorySize() / gb;
+		
 		// 剩余的物理内存
-		Double freePhysicalMemorySize = 0d;
+		Long freePhysicalMemorySize = 0l;
 		if (SystemTool.isWindows()) {
-			freePhysicalMemorySize = osmxb.getFreePhysicalMemorySize() / gb;
+			freePhysicalMemorySize = osmxb.getFreePhysicalMemorySize();
 		} else {
-			freePhysicalMemorySize = getLinuxFreeMem() / gb ;
+			freePhysicalMemorySize = getLinuxFreeMem() * 1024;
 		}
 
 		// 已使用的物理内存
@@ -75,16 +76,16 @@ public class MonitorService {
 	}
 
 	private Long getLinuxFreeMem() {
-		
+
 		String line = RuntimeUtil.execForStr("free");
-		
+
 		if (StrUtil.isNotEmpty(line)) {
 			String rs = line.replaceAll(" + ", " ").split(" ")[12].split("\n")[0];
-			System.out.println("freeMem:" + Double.parseDouble(rs));
+			System.out.println("freeMem:" + Long.parseLong(rs));
 			return Long.parseLong(rs);
 		}
 
-		return osmxb.getFreePhysicalMemorySize() ;
+		return osmxb.getFreePhysicalMemorySize();
 	}
 
 }
