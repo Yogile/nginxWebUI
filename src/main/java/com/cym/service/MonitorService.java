@@ -12,9 +12,12 @@ import javax.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 
 import com.cym.model.MonitorInfo;
+import com.cym.utils.SystemTool;
 import com.sun.management.OperatingSystemMXBean;
 
 import cn.hutool.core.util.NumberUtil;
+import cn.hutool.core.util.RuntimeUtil;
+import cn.hutool.system.SystemUtil;
 
 /** */
 /**
@@ -26,7 +29,8 @@ import cn.hutool.core.util.NumberUtil;
 public class MonitorService {
 
 	OperatingSystemMXBean osmxb;
-
+	Double gb = Double.valueOf(1024 * 1024 * 1024);
+	
 	@PostConstruct
 	private void init() {
 		osmxb = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
@@ -41,18 +45,22 @@ public class MonitorService {
 	 * @author amg * Creation date: 2008-4-25 - 上午10:45:08
 	 */
 	public MonitorInfo getMonitorInfo() {
-		Double gb = Double.valueOf(1024 * 1024 * 1024);
-
 		// 总的物理内存
 		Double totalMemorySize = osmxb.getTotalPhysicalMemorySize() / gb;
 		// 剩余的物理内存
-		Double freePhysicalMemorySize = osmxb.getFreePhysicalMemorySize() / gb;
+		Double freePhysicalMemorySize = 0d;
+		if (SystemTool.isWindows()) {
+			freePhysicalMemorySize = osmxb.getFreePhysicalMemorySize() / gb;
+		} else {
+			freePhysicalMemorySize = getLinuxFreeMem();
+		}
+
 		// 已使用的物理内存
 		Double usedMemory = (osmxb.getTotalPhysicalMemorySize() - osmxb.getFreePhysicalMemorySize()) / gb;
-		
+
 		Double mem = usedMemory / totalMemorySize;
 		Double cpu = osmxb.getSystemCpuLoad();
-		
+
 		// 构造返回对象
 		MonitorInfo infoBean = new MonitorInfo();
 		infoBean.setFreePhysicalMemorySize(NumberUtil.decimalFormat("0.00GB", freePhysicalMemorySize));
@@ -61,9 +69,19 @@ public class MonitorService {
 		infoBean.setCpuRatio(NumberUtil.decimalFormat("#.##%", cpu));
 		infoBean.setMemRatio(NumberUtil.decimalFormat("#.##%", mem));
 		infoBean.setCpuCount(osmxb.getAvailableProcessors());
-		
+
 		return infoBean;
 	}
-	
+
+	private Double getLinuxFreeMem() {
+		List<String> lines = RuntimeUtil.execForLines("free -m");
+		if (lines != null && lines.size() >= 2) {
+			String[] rs = lines.get(1).replaceAll(" + ", " ").split(" ");
+
+			return Double.parseDouble(rs[rs.length-1]);
+		}
+
+		return osmxb.getFreePhysicalMemorySize() / gb;
+	}
 
 }
