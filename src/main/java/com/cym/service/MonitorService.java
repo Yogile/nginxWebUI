@@ -17,6 +17,7 @@ import com.sun.management.OperatingSystemMXBean;
 
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.RuntimeUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.system.SystemUtil;
 
 /** */
@@ -74,14 +75,12 @@ public class MonitorService {
 	}
 
 	private Double getLinuxFreeMem() {
-		System.out.println("--------------getLinuxFreeMem----------------------");
-		List<String> lines = RuntimeUtil.execForLines("free -m");
 		
-		System.out.println(lines.size());
-		if (lines != null && lines.size() >= 2) {
-			System.out.println(lines.get(1));
-			String[] rs = lines.get(1).replaceAll(" + ", " ").split(" ");
-
+		String line = RuntimeUtil.execForStr("free -m");
+		
+		if (StrUtil.isNotEmpty(line)) {
+			String[] rs = line.replaceAll(" + ", " ").split(" ");
+			System.out.println("freeMem:" + Double.parseDouble(rs[rs.length-1]));
 			return Double.parseDouble(rs[rs.length-1]);
 		}
 
