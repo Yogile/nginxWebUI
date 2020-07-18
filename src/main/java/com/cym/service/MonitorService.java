@@ -80,8 +80,8 @@ public class MonitorService {
 		
 		if (StrUtil.isNotEmpty(line)) {
 			String[] rs = line.replaceAll(" + ", " ").split(" ");
-			System.out.println("freeMem:" + Double.parseDouble(rs[rs.length-1]));
-			return Double.parseDouble(rs[rs.length-1]);
+			System.out.println("freeMem:" + Double.parseDouble(rs[12]));
+			return Double.parseDouble(rs[12]);
 		}
 
 		return osmxb.getFreePhysicalMemorySize() / gb;
