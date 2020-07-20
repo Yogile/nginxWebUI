@@ -20,10 +20,13 @@
 }
 
 .server td {
-	padding: 5px;
 	text-align: center;
 	width: 16.66%;
-	height: 38px;
+	height: 30px;
+}
+
+.layui-table td{
+	padding: 5px 15px;
 }
 </style>
 </head>
@@ -57,6 +60,7 @@
 
 						<button type="button" class="layui-btn layui-btn-normal" onclick="upstreamMonitor()">负载节点监控服务</button>
 						<input type="hidden" name="curr" value="${page.curr}">
+						<input type="hidden" name="limit" value="${page.limit}">
 					</div>
 				</form>
 
