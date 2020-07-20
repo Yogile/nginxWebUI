@@ -55,16 +55,6 @@ public class InitConfig {
 		if (count == 0) {
 			List<Basic> basics = new ArrayList<Basic>();
 
-			// 查找ngx_stream_module模块
-			if (SystemTool.isLinux()) {
-				List<String> list = RuntimeUtil.execForLines(CharsetUtil.systemCharset(), "find / -name ngx_stream_module.so");
-				for (String path : list) {
-					if (path.contains("ngx_stream_module.so") && path.length() < 80) {
-						basics.add(new Basic("load_module", path, 0l));
-					}
-				}
-			}
-			
 			basics.add(new Basic("worker_processes", "auto", 1l));
 			basics.add(new Basic("events", "{\r\n" + "    worker_connections  1024;\r\n" + "}", 2l));
 
@@ -104,6 +94,19 @@ public class InitConfig {
 				}
 
 			}
+
+			// 查找ngx_stream_module模块
+			if(!basicService.contain("ngx_stream_module.so")) {
+				List<String> list = RuntimeUtil.execForLines(CharsetUtil.systemCharset(), "find / -name ngx_stream_module.so");
+				for (String path : list) {
+					if (path.contains("ngx_stream_module.so") && path.length() < 80) {
+						Basic basic = new Basic("load_module", path, -10l);
+						sqlHelper.insert(basic);
+						break;
+					}
+				}
+			}
+			
 
 			// 找寻nginx配置文件
 			logger.info("----------------find nginx.conf--------------");
