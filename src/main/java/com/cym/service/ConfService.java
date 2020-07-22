@@ -398,17 +398,6 @@ public class ConfService {
 
 			String conf = new NgxDumper(ngxConfig).dump().replace("};", "  }");
 
-			// 装载ngx_stream_module模块
-//			if (hasStream && SystemTool.isLinux()) {
-//				String module = settingService.get("ngx_stream_module");
-//
-//				// 不在生成conf的方法中查找ngx_stream_module, 放到InitConfig中查找, 只在项目启动时运行一次
-//				if (StrUtil.isNotEmpty(module) /* && FileUtil.exist(module) */ ) {
-//					settingService.set("ngx_stream_module", module);
-//					conf = "load_module " + module + ";\n" + conf;
-//				}
-//			}
-
 			confExt.setConf(conf);
 
 			return confExt;
@@ -462,7 +451,7 @@ public class ConfService {
 		NgxConfig ngxConfig = new NgxConfig();
 		ngxConfig.addEntry(ngxBlockServer);
 
-		return new NgxDumper(ngxConfig).dump();
+		return new NgxDumper(ngxConfig).dump().replace("};", "  }");
 	}
 
 	public void replace(String nginxPath, String nginxContent, List<String> subContent, List<String> subName) {
