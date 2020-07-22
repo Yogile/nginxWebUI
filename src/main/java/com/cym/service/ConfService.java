@@ -63,8 +63,6 @@ public class ConfService {
 
 		String nginxPath = settingService.get("nginxPath");
 		try {
-//			ClassPathResource resource = new ClassPathResource("nginxOrg.conf");
-//			InputStream inputStream = resource.getInputStream();
 
 			NgxConfig ngxConfig = new NgxConfig();
 
@@ -222,21 +220,23 @@ public class ConfService {
 							}
 						}
 
-						ngxParam = new NgxParam();
-						ngxParam.addValue("proxy_set_header Host $host");
-						ngxBlockLocation.addEntry(ngxParam);
-
-						ngxParam = new NgxParam();
-						ngxParam.addValue("proxy_set_header X-Real-IP $remote_addr");
-						ngxBlockLocation.addEntry(ngxParam);
-
-						ngxParam = new NgxParam();
-						ngxParam.addValue("proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for");
-						ngxBlockLocation.addEntry(ngxParam);
-
-						ngxParam = new NgxParam();
-						ngxParam.addValue("proxy_set_header X-Forwarded-Proto $scheme");
-						ngxBlockLocation.addEntry(ngxParam);
+						if (location.getHeader() == 1) { // 设置header
+							ngxParam = new NgxParam();
+							ngxParam.addValue("proxy_set_header Host $host");
+							ngxBlockLocation.addEntry(ngxParam);
+	
+							ngxParam = new NgxParam();
+							ngxParam.addValue("proxy_set_header X-Real-IP $remote_addr");
+							ngxBlockLocation.addEntry(ngxParam);
+	
+							ngxParam = new NgxParam();
+							ngxParam.addValue("proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for");
+							ngxBlockLocation.addEntry(ngxParam);
+	
+							ngxParam = new NgxParam();
+							ngxParam.addValue("proxy_set_header X-Forwarded-Proto $scheme");
+							ngxBlockLocation.addEntry(ngxParam);
+						}
 
 					} else if (location.getType() == 1) { // 静态html
 						ngxBlockLocation.addValue("location");
