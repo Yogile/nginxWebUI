@@ -454,7 +454,7 @@ function buildHtml(uuid, location, upstreamSelect){
 					
 					<span  name="headerSpan">
 						<div class="layui-inline">
-							<input type="checkbox" name="header" title="header添加Host参数" lay-skin="primary"> 
+							<input type="checkbox" name="header" title="header添加Host参数" lay-skin="primary" checked> 
 						</div>
 					</span>
 				</td> 
