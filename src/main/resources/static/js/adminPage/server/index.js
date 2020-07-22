@@ -72,24 +72,28 @@ function checkType(type,id){
 		$("#" + id + " span[name='rootPathSpan']").hide();
 		$("#" + id + " span[name='upstreamSelectSpan']").hide();
 		$("#" + id + " span[name='blankSpan']").hide();
+		$("#" + id + " span[name='headerSpan']").show();
 	} 
 	if (type == 1) {
 		$("#" + id + " span[name='valueSpan']").hide();
 		$("#" + id + " span[name='rootPathSpan']").show();
 		$("#" + id + " span[name='upstreamSelectSpan']").hide();
 		$("#" + id + " span[name='blankSpan']").hide();
+		$("#" + id + " span[name='headerSpan']").hide();
 	}
 	if (type == 2) {
 		$("#" + id + " span[name='valueSpan']").hide();
 		$("#" + id + " span[name='rootPathSpan']").hide();
 		$("#" + id + " span[name='upstreamSelectSpan']").show();
 		$("#" + id + " span[name='blankSpan']").hide();
+		$("#" + id + " span[name='headerSpan']").show();
 	} 
 	if (type == 3) {
 		$("#" + id + " span[name='valueSpan']").hide();
 		$("#" + id + " span[name='rootPathSpan']").hide();
 		$("#" + id + " span[name='upstreamSelectSpan']").hide();
 		$("#" + id + " span[name='blankSpan']").show();
+		$("#" + id + " span[name='headerSpan']").hide();
 	} 
 }
 
@@ -227,6 +231,7 @@ function addOver() {
 		location.rootPage = $(this).find("input[name='rootPage']").val();
 		location.rootType = $(this).find("select[name='rootType']").val();
 		location.locationParamJson =  $(this).find("textarea[name='locationParamJson']").val();
+		location.header =  $(this).find("input[name='header']").prop("checked")?1:0;
 		
 		locations.push(location);
 	})
@@ -325,6 +330,12 @@ function edit(id,clone) {
 					$("#" + uuid + " select[name='rootType']").val(location.rootType);
 					$("#" + uuid + " select[name='upstreamId']").val(location.upstreamId);
 					$("#" + uuid + " input[name='upstreamPath']").val(location.upstreamPath);
+					
+					if(location.header == 1){
+						$("#" + uuid + " input[name='header']").prop("checked", true);
+					}else{
+						$("#" + uuid + " input[name='header']").prop("checked", false);
+					}
 					
 					checkType(location.type, uuid)
 				}
@@ -434,11 +445,17 @@ function buildHtml(uuid, location, upstreamSelect){
 					</span>
 					
 					<span name="upstreamSelectSpan">
-					${upstreamSelect}
+						${upstreamSelect}
 					</span>
 					
 					<span name="blankSpan">
 					
+					</span>
+					
+					<span  name="headerSpan">
+						<div class="layui-inline">
+							<input type="checkbox" name="header" title="header添加Host参数" lay-skin="primary"> 
+						</div>
 					</span>
 				</td> 
 				<td>
