@@ -35,7 +35,7 @@ function selectTemplate(id){
 	templateIndex = layer.open({
 		type: 1,
 		title: "选择参数模板",
-		area: ['400px', '300px'], // 宽高
+		area: ['450px', '350px'], // 宽高
 		content: $('#templateSelectDiv')
 	});
 }
@@ -63,6 +63,7 @@ function selectTemplateOver(){
 						<td  style="width: 60%;">
 							${ext.template.name}
 							<input type="hidden" name="templateValue" value="${ext.template.id}">
+							<input type="hidden" name="templateName" value="${ext.template.name}">
 						</td>
 						<td>
 							<button type="button" class="layui-btn layui-btn-sm layui-btn-danger" onclick="delTr('${uuid}')">删除</button>

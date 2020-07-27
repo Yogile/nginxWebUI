@@ -553,20 +553,37 @@ function fillTable(params){
 		var param = params[i];
 		
 		var uuid = guid();
-		
-		html += `
-		<tr name="param" id=${uuid}>
-			<td>
-				<textarea  name="name" class="layui-textarea">${param.name}</textarea>
-			</td>
-			<td  style="width: 60%;">
-				<textarea  name="value" class="layui-textarea">${param.value}</textarea>
-			</td>
-			<td>
-				<button type="button" class="layui-btn layui-btn-sm layui-btn-danger" onclick="delTr('${uuid}')">删除</button>
-			</td>
-		</tr>
-		`;
+		if(param.templateValue == null){
+			html += `
+			<tr name="param" id=${uuid}>
+				<td>
+					<textarea  name="name" class="layui-textarea">${param.name}</textarea>
+				</td>
+				<td  style="width: 60%;">
+					<textarea  name="value" class="layui-textarea">${param.value}</textarea>
+				</td>
+				<td>
+					<button type="button" class="layui-btn layui-btn-sm layui-btn-danger" onclick="delTr('${uuid}')">删除</button>
+				</td>
+			</tr>
+			`;
+		} else {
+			html += `
+			<tr name="param" id="${uuid}">
+				<td>
+					模板
+				</td>
+				<td  style="width: 60%;">
+					${param.templateName}
+					<input type="hidden" name="templateValue" value="${param.templateValue}">
+					<input type="hidden" name="templateName" value="${param.templateName}">
+				</td>
+				<td>
+					<button type="button" class="layui-btn layui-btn-sm layui-btn-danger" onclick="delTr('${uuid}')">删除</button>
+				</td>
+			</tr>
+			`;
+		}
 	}
 	
 	$("#paramList").html(html);
@@ -607,9 +624,13 @@ function addParamOver(){
 	var params = [];
 	$("tr[name='param']").each(function(){
 		var param = {};
-		param.name = $(this).find("textarea[name='name']").val();
-		param.value = $(this).find("textarea[name='value']").val();
-		
+		if ($(this).find("input[name='templateValue']").val() == null) {
+			param.name = $(this).find("textarea[name='name']").val();
+			param.value = $(this).find("textarea[name='value']").val();
+		} else {
+			param.templateValue = $(this).find("input[name='templateValue']").val();
+			param.templateName = $(this).find("input[name='templateName']").val();
+		}
 		params.push(param);
 	})
 	$("#" + targertId).val(JSON.stringify(params));

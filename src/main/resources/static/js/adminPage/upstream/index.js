@@ -274,6 +274,7 @@ function fillTable(params) {
 				<td  style="width: 60%;">
 					${param.templateName}
 					<input type="hidden" name="templateValue" value="${param.templateValue}">
+					<input type="hidden" name="templateName" value="${param.templateName}">
 				</td>
 				<td>
 					<button type="button" class="layui-btn layui-btn-sm layui-btn-danger" onclick="delTr('${uuid}')">删除</button>
@@ -326,10 +327,10 @@ function addParamOver() {
 			param.value = $(this).find("textarea[name='value']").val();
 		} else {
 			param.templateValue = $(this).find("input[name='templateValue']").val();
+			param.templateName = $(this).find("input[name='templateName']").val();
 		}
 		params.push(param);
 	})
-	alert(JSON.stringify(params));
 	$("#" + targertId).val(JSON.stringify(params));
 
 	layer.close(paramIndex);
