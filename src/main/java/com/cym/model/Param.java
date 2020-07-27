@@ -9,9 +9,19 @@ public class Param extends BaseModel {
 	String serverId;
 	String locationId;
 	String upstreamId;
+	String templateId;
+	
 	String name;
 	String value;
 
+
+	public String getTemplateId() {
+		return templateId;
+	}
+
+	public void setTemplateId(String templateId) {
+		this.templateId = templateId;
+	}
 
 	public String getUpstreamId() {
 		return upstreamId;
