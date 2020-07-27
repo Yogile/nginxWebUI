@@ -19,6 +19,7 @@ import com.cym.service.TemplateService;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 
 @Controller
@@ -50,6 +51,19 @@ public class TemplateController extends BaseController {
 	@RequestMapping("addOver")
 	@ResponseBody
 	public JsonResult addOver(Template template,String paramJson) {
+		
+		if (StrUtil.isEmpty(template.getId())) {
+			Long count = templateService.getCountByName(template.getName());
+			if (count > 0) {
+				return renderError("与已有参数模板重名");
+			}
+		}else {
+			Long count = templateService.getCountByNameWithOutId(template.getName(), template.getId());
+			if (count > 0) {
+				return renderError("与已有参数模板重名");
+			}
+		}
+		
 		List<Param> params = JSONUtil.toList(JSONUtil.parseArray(paramJson), Param.class);
 		
 		templateService.addOver(template, params);
@@ -77,5 +91,13 @@ public class TemplateController extends BaseController {
 		templateService.del(id);
 		return renderSuccess();
 	}
+	
+	@RequestMapping("getTemplate")
+	@ResponseBody
+	public JsonResult getTemplate() {
+
+		return renderSuccess(sqlHelper.findAll(Template.class));
+	}
+	
 
 }
