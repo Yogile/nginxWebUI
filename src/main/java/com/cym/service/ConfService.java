@@ -1,17 +1,14 @@
 package com.cym.service;
 
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cym.config.InitConfig;
-import com.cym.controller.adminPage.UpstreamController;
 import com.cym.ext.AsycPack;
 import com.cym.ext.ConfExt;
 import com.cym.ext.ConfFile;
@@ -23,7 +20,6 @@ import com.cym.model.Server;
 import com.cym.model.Stream;
 import com.cym.model.Upstream;
 import com.cym.model.UpstreamServer;
-import com.cym.utils.SystemTool;
 import com.github.odiszapc.nginxparser.NgxBlock;
 import com.github.odiszapc.nginxparser.NgxConfig;
 import com.github.odiszapc.nginxparser.NgxDumper;
@@ -46,15 +42,16 @@ public class ConfService {
 	final LocationService locationService;
 	final ParamService paramService;
 	final SqlHelper sqlHelper;
-
-	public ConfService(UpstreamService upstreamService, SettingService settingService, ServerService serverService, LocationService locationService,
-			ParamService paramService, SqlHelper sqlHelper) {
+	final TemplateService templateService;
+	
+	public ConfService(TemplateService templateService,UpstreamService upstreamService, SettingService settingService, ServerService serverService, LocationService locationService, ParamService paramService, SqlHelper sqlHelper) {
 		this.upstreamService = upstreamService;
 		this.settingService = settingService;
 		this.serverService = serverService;
 		this.locationService = locationService;
 		this.paramService = paramService;
 		this.sqlHelper = sqlHelper;
+		this.templateService = templateService;
 	}
 
 	public synchronized ConfExt buildConf(Boolean decompose) {
@@ -224,15 +221,15 @@ public class ConfService {
 							ngxParam = new NgxParam();
 							ngxParam.addValue("proxy_set_header Host $host");
 							ngxBlockLocation.addEntry(ngxParam);
-	
+
 							ngxParam = new NgxParam();
 							ngxParam.addValue("proxy_set_header X-Real-IP $remote_addr");
 							ngxBlockLocation.addEntry(ngxParam);
-	
+
 							ngxParam = new NgxParam();
 							ngxParam.addValue("proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for");
 							ngxBlockLocation.addEntry(ngxParam);
-	
+
 							ngxParam = new NgxParam();
 							ngxParam.addValue("proxy_set_header X-Forwarded-Proto $scheme");
 							ngxBlockLocation.addEntry(ngxParam);
@@ -423,10 +420,18 @@ public class ConfService {
 	}
 
 	private void setSameParam(Param param, NgxBlock ngxBlock) {
-		NgxParam ngxParam = new NgxParam();
-		ngxParam.addValue(param.getName().trim() + " " + param.getValue().trim());
-		ngxBlock.addEntry(ngxParam);
-
+		if (StrUtil.isEmpty(param.getTemplateValue())) {
+			NgxParam ngxParam = new NgxParam();
+			ngxParam.addValue(param.getName().trim() + " " + param.getValue().trim());
+			ngxBlock.addEntry(ngxParam);
+		} else {
+			List<Param> params = templateService.getParamList(param.getTemplateValue());
+			for(Param paramSub:params) {
+				NgxParam ngxParam = new NgxParam();
+				ngxParam.addValue(paramSub.getName().trim() + " " + paramSub.getValue().trim());
+				ngxBlock.addEntry(ngxParam);
+			}
+		}
 	}
 
 	private void addConfFile(ConfExt confExt, String name, NgxBlock ngxBlockServer) {
@@ -458,15 +463,14 @@ public class ConfService {
 		String date = DateUtil.format(new Date(), "yyyy-MM-dd_HH-mm-ss");
 		// 备份主文件
 		FileUtil.mkdir(InitConfig.home + "bak");
-		FileUtil.copy(nginxPath, InitConfig.home + "bak/nginx.conf."  + date + ".bak", true);
+		FileUtil.copy(nginxPath, InitConfig.home + "bak/nginx.conf." + date + ".bak", true);
 		// 备份conf.d文件夹
 		String confd = nginxPath.replace("nginx.conf", "conf.d/");
 		if (!FileUtil.exist(confd)) {
 			FileUtil.mkdir(confd);
 		}
-		ZipUtil.zip(confd, InitConfig.home + "bak/nginx.conf."  + date + ".zip");
+		ZipUtil.zip(confd, InitConfig.home + "bak/nginx.conf." + date + ".zip");
 
-		
 		// 写入主文件
 		FileUtil.writeString(nginxContent, nginxPath, StandardCharsets.UTF_8);
 		String decompose = settingService.get("decompose");

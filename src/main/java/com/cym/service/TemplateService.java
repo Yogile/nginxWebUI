@@ -41,6 +41,7 @@ public class TemplateService {
 	public void del(String id) {
 		sqlHelper.deleteById(id, Template.class);
 		sqlHelper.deleteByQuery(new ConditionAndWrapper().eq("templateId", id), Param.class);
+		sqlHelper.deleteByQuery(new ConditionAndWrapper().eq("templateValue", id), Param.class);
 	}
 
 	public Long getCountByName(String name) {
