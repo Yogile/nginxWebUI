@@ -62,7 +62,7 @@ function selectTemplateOver(){
 						</td>
 						<td  style="width: 60%;">
 							${ext.template.name}
-							<input type="hidden" name="templateId" value="${ext.template.id}">
+							<input type="hidden" name="templateValue" value="${ext.template.id}">
 						</td>
 						<td>
 							<button type="button" class="layui-btn layui-btn-sm layui-btn-danger" onclick="delTr('${uuid}')">删除</button>
