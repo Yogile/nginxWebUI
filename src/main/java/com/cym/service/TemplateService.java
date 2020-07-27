@@ -27,6 +27,9 @@ public class TemplateService {
 			param.setTemplateId(template.getId());
 			sqlHelper.insertOrUpdate(param);
 		}
+		
+		
+		
 
 	}
 
