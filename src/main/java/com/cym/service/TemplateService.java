@@ -20,15 +20,24 @@ public class TemplateService {
 	@Transactional
 	public void addOver(Template template, List<Param> params) {
 		sqlHelper.insertOrUpdate(template);
-		
-		sqlHelper.deleteByQuery(new ConditionAndWrapper().eq("templateId", template.getId()), Template.class);
-		
-		for(Param param:params) {
+
+		sqlHelper.deleteByQuery(new ConditionAndWrapper().eq("templateId", template.getId()), Param.class);
+
+		for (Param param : params) {
 			param.setTemplateId(template.getId());
 			sqlHelper.insertOrUpdate(param);
 		}
-		
+
 	}
-	
-	
+
+	public List<Param> getParamList(String templateId) {
+		return sqlHelper.findListByQuery(new ConditionAndWrapper().eq("templateId", templateId), Param.class);
+	}
+
+	@Transactional
+	public void del(String id) {
+		sqlHelper.deleteById(id, Template.class);
+		sqlHelper.deleteByQuery(new ConditionAndWrapper().eq("templateId", id), Param.class);
+	}
+
 }

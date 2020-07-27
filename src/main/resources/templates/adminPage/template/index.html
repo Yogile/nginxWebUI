@@ -42,16 +42,18 @@ input[name='param']{
 					<thead>
 						<tr>
 							<th>名称</th>
+							<th>参数数量</th>
 							<th>操作</th>
 						</tr>
 					</thead>
 					<tbody>
-						<#list templateList as template>
+						<#list templateList as ext>
 						<tr>
-							<td>${template.name}</td>
+							<td>${ext.template.name}</td>
+							<td>${ext.count}</td>
 							<td>
-								<button class="layui-btn layui-btn-sm" onclick="edit('${template.id}')">编辑</button>
-								<button class="layui-btn layui-btn-danger layui-btn-sm" onclick="del('${template.id}')">删除</button>
+								<button class="layui-btn layui-btn-sm" onclick="edit('${ext.template.id}')">编辑</button>
+								<button class="layui-btn layui-btn-danger layui-btn-sm" onclick="del('${ext.template.id}')">删除</button>
 							</td>
 						</tr>
 						</#list>
@@ -63,12 +65,22 @@ input[name='param']{
 
 	<div style="height: 0px; width: 0px; overflow: hidden;">
 		<!-- 弹出框 -->
-		<div id="paramJsonDiv" style="display: none;padding: 15px;"> 
+		<div id="windowDiv" style="display: none;padding: 15px;"> 
+			<input type="hidden" id="id" name="id">
+		
+			<div class="layui-form-item">
+				<label class="layui-form-label">模板名称</label>
+				<div class="layui-input-inline">
+					<input type="text" name="name" id="name" class="layui-input">
+				</div>
+			</div>
+			
 			<div class="layui-form-item">
 				<button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="addParam()">添加参数</button>
 			</div>
+			
+			
 			<div class="layui-form-item">
-				<input type="hidden" id="targertId" >
 				<table class="layui-table">
 					<thead>
 						<tr>
@@ -84,8 +96,8 @@ input[name='param']{
 			</div>
 
 			<div class="layui-form-item">
-				<button type="button" class="layui-btn layui-btn-normal" onclick="addParamOver()">提交</button>
-				<button type="button" class="layui-btn" onclick="layer.close(paramIndex)">关闭</button>
+				<button type="button" class="layui-btn layui-btn-normal" onclick="addOver()">提交</button>
+				<button type="button" class="layui-btn" onclick="layer.closeAll()">关闭</button>
 			</div>
 		</div>
 		

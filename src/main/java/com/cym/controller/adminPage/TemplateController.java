@@ -1,5 +1,6 @@
 package com.cym.controller.adminPage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cym.ext.TemplateExt;
 import com.cym.model.Location;
 import com.cym.model.Param;
 import com.cym.model.Template;
@@ -29,7 +31,18 @@ public class TemplateController extends BaseController {
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView) {
 		List<Template> templateList = sqlHelper.findAll(Template.class);
 
-		modelAndView.addObject("templateList", templateList);
+		List<TemplateExt> extList = new ArrayList<>();
+		for(Template template:templateList) {
+			TemplateExt templateExt = new TemplateExt();
+			templateExt.setTemplate(template);
+			
+			templateExt.setParamList(templateService.getParamList(template.getId()));
+			templateExt.setCount(templateExt.getParamList().size()); 
+			
+			extList.add(templateExt);
+		}
+		
+		modelAndView.addObject("templateList", extList);
 		modelAndView.setViewName("/adminPage/template/index");
 		return modelAndView;
 	}
@@ -47,14 +60,21 @@ public class TemplateController extends BaseController {
 	@RequestMapping("detail")
 	@ResponseBody
 	public JsonResult detail(String id) {
-		return renderSuccess(sqlHelper.findById(id, Template.class));
+		Template template = sqlHelper.findById(id, Template.class);
+		TemplateExt templateExt = new TemplateExt();
+		templateExt.setTemplate(template);
+		
+		templateExt.setParamList(templateService.getParamList(template.getId()));
+		templateExt.setCount(templateExt.getParamList().size()); 
+		
+		return renderSuccess(templateExt);
 	}
 
 	@RequestMapping("del")
 	@ResponseBody
 	public JsonResult del(String id) {
-		sqlHelper.deleteById(id, Template.class);
 
+		templateService.del(id);
 		return renderSuccess();
 	}
 
