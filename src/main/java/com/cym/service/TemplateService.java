@@ -40,4 +40,12 @@ public class TemplateService {
 		sqlHelper.deleteByQuery(new ConditionAndWrapper().eq("templateId", id), Param.class);
 	}
 
+	public Long getCountByName(String name) {
+		return sqlHelper.findCountByQuery(new ConditionAndWrapper().eq("name", name), Template.class);
+	}
+
+	public Long getCountByNameWithOutId(String name, String id) {
+		return sqlHelper.findCountByQuery(new ConditionAndWrapper().eq("name", name).ne("id", id), Template.class);
+	}
+
 }

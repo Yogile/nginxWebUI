@@ -68,9 +68,6 @@ public class AdminController extends BaseController {
 	public JsonResult getMailSetting() {
 		Map<String, String> map = new HashMap<>();
 
-		if (settingService.get("mailType") == null) {
-			settingService.set("mailType", "sendCloud");
-		}
 
 		map.put("mail_host", settingService.get("mail_host"));
 		map.put("mail_port", settingService.get("mail_port"));
