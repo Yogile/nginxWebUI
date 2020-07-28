@@ -42,7 +42,10 @@ function selectTemplate(id){
 
 function selectTemplateOver(){
 	var templateId = 	$("#selectTemplateId").val();
-	
+	if(templateId == null){
+		layer.msg("未选中项");
+		return;
+	}
 	$.ajax({
 		type: 'GET',
 		url: ctx + '/adminPage/template/detail',
