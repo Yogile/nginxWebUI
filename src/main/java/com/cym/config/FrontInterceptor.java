@@ -66,6 +66,7 @@ public class FrontInterceptor implements HandlerInterceptor {
 	}
 
 	private static String getIP(String url) {
+		System.err.println(url);
 		URI effectiveURI = null;
 
 		try {

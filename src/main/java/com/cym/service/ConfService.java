@@ -219,7 +219,7 @@ public class ConfService {
 
 						if (location.getHeader() == 1) { // 设置header
 							ngxParam = new NgxParam();
-							ngxParam.addValue("proxy_set_header Host $host");
+							ngxParam.addValue("proxy_set_header Host $host:$server_port");
 							ngxBlockLocation.addEntry(ngxParam);
 
 							ngxParam = new NgxParam();
