@@ -97,7 +97,7 @@ docker run -itd -v /home/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--server.p
 
 3. -e BOOT_OPTIONS 参数可填充java启动参数, 可以靠此项参数修改端口号
 
---server.port 占用端口, 默认以8080端口启动
+--server.port 占用端口, 不填默认以8080端口启动
 
 4. 日志默认存放在/home/nginxWebUI/log/nginxWebUI.log
 
