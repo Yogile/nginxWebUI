@@ -86,7 +86,7 @@ docker pull registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.7.3
 3. 启动容器: 
 
 ```
-docker run -itd -v /home/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--变量名=变量值 --变量名2=变量值2" --privileged=true --net=host  registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.7.3 /bin/bash
+docker run -itd -v /home/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--server.port=8080 --project.home=/home/nginxWebUI/" --privileged=true --net=host  registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.7.3 /bin/bash
 ```
 
 注意: 
@@ -95,7 +95,11 @@ docker run -itd -v /home/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--变量�
 
 2. 容器需要映射路径/home/nginxWebUI:/home/nginxWebUI, 此路径下存放项目所有数据文件, 包括数据库, nginx配置文件, 日志, 证书等, 升级镜像时, 此目录可保证项目数据不丢失. 请注意备份.
 
-3. -e BOOT_OPTIONS 参数可填充java启动参数, jar安装教程中的参数均可使用, 可以靠此项参数修改端口号等
+3. -e BOOT_OPTIONS 参数可填充java启动参数, 可以靠此项参数修改端口号
+
+--server.port 占用端口, 默认以8080端口启动
+
+--project.home 项目配置文件目录，存放数据库文件，证书文件，日志等, 默认为/home/nginxWebUI/
 
 4. 日志默认存放在/home/nginxWebUI/log/nginxWebUI.log
 
