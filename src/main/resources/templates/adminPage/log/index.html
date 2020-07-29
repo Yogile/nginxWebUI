@@ -25,7 +25,9 @@
 
 				<form action="${ctx}/adminPage/log" id="searchForm" method="post">
 					<div class="layui-inline">
-						<button type="button" class="layui-btn layui-btn-normal" onclick="delAll()">清空日志</button>
+						<button type="button" class="layui-btn layui-btn-danger" onclick="delAll()">清空日志</button>
+						
+						<button type="button" class="layui-btn" onclick="analysis()">立即解析当日日志</button>
 					</div>
 					<input type="hidden" name="curr" value="${page.curr}">
 					<input type="hidden" name="limit" value="${page.limit}">

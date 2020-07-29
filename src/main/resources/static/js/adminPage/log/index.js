@@ -235,3 +235,25 @@ function showContent(dataGroup) {
 	});
 }
 
+
+function analysis(){
+	if(confirm("开始解析当日日志?")){
+		$.ajax({
+			type : 'GET',
+			url : ctx + '/adminPage/log/analysis',
+			dataType : 'json',
+			success : function(data) {
+				if (data.success) {
+					location.reload();
+				} else {
+					layer.msg(data.msg);
+				}
+			},
+			error : function() {
+				layer.closeAll();
+				alert("出错了,请联系技术人员!");
+			}
+		});
+	}
+	
+}
