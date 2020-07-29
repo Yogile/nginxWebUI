@@ -86,7 +86,7 @@ docker pull registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.7.4
 3. 启动容器: 
 
 ```
-docker run -itd -v /home/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--server.port=8080 --project.home=/home/nginxWebUI/" --privileged=true --net=host  registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.7.4 /bin/bash
+docker run -itd -v /home/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--server.port=8080" --privileged=true --net=host  registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.7.4 /bin/bash
 ```
 
 注意: 
@@ -98,8 +98,6 @@ docker run -itd -v /home/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--server.p
 3. -e BOOT_OPTIONS 参数可填充java启动参数, 可以靠此项参数修改端口号
 
 --server.port 占用端口, 默认以8080端口启动
-
---project.home 项目配置文件目录，存放数据库文件，证书文件，日志等, 默认为/home/nginxWebUI/
 
 4. 日志默认存放在/home/nginxWebUI/log/nginxWebUI.log
 
