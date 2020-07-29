@@ -86,7 +86,7 @@ docker pull registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.7.4
 3. 启动容器: 
 
 ```
-docker run -itd -v /home/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--server.port=8080 --project.home=/home/nginxWebUI/" --privileged=true --net=host  registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.7.3 /bin/bash
+docker run -itd -v /home/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--server.port=8080 --project.home=/home/nginxWebUI/" --privileged=true --net=host  registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.7.4 /bin/bash
 ```
 
 注意: 
