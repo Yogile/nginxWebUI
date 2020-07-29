@@ -46,7 +46,7 @@ apt install nginx
 2.下载最新版发行包jar
 
 ```
-wget http://www.nginxwebui.cn/download/nginxWebUI-1.7.3.jar
+wget http://www.nginxwebui.cn/download/nginxWebUI-1.7.4.jar
 ```
 
 有新版本只需要修改路径中的版本即可
@@ -54,7 +54,7 @@ wget http://www.nginxwebui.cn/download/nginxWebUI-1.7.3.jar
 3.启动程序
 
 ```
-nohup java -jar -Xmx64m nginxWebUI-1.7.3.jar --server.port=8080 --project.home=/home/nginxWebUI/ > /dev/null &
+nohup java -jar -Xmx64m nginxWebUI-1.7.4.jar --server.port=8080 --project.home=/home/nginxWebUI/ > /dev/null &
 ```
 
 参数说明(都是非必填)
@@ -80,7 +80,7 @@ apt install docker.io
 2.下载镜像: 
 
 ```
-docker pull registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.7.3
+docker pull registry.cn-hangzhou.aliyuncs.com/cym1102/nginxwebui:1.7.4
 ```
 
 3. 启动容器: 
