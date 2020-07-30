@@ -471,6 +471,10 @@ public class ConfService {
 		}
 		ZipUtil.zip(confd, InitConfig.home + "bak/nginx.conf." + date + ".zip");
 
+		// 删除conf.d下全部文件
+		FileUtil.del(confd);
+		FileUtil.mkdir(confd);
+					
 		// 写入主文件
 		FileUtil.writeString(nginxContent, nginxPath, StandardCharsets.UTF_8);
 		String decompose = settingService.get("decompose");
@@ -483,10 +487,6 @@ public class ConfService {
 					FileUtil.writeString(subContent.get(i), tagert, StandardCharsets.UTF_8); // 清空
 				}
 			}
-		} else {
-			// 删除conf.d下全部文件
-			FileUtil.del(confd);
-			FileUtil.mkdir(confd);
 		}
 
 	}
