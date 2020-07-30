@@ -43,7 +43,18 @@ public class AdminController extends BaseController {
 	@RequestMapping("addOver")
 	@ResponseBody
 	public JsonResult addOver(Admin admin) {
-
+		if (StrUtil.isEmpty(admin.getId())) {
+			Long count = adminService.getCountByName(admin.getName());
+			if (count > 0) {
+				return renderError("与已有用户重名");
+			}
+		}else {
+			Long count = adminService.getCountByNameWithOutId(admin.getName(), admin.getId());
+			if (count > 0) {
+				return renderError("与已有用户重名");
+			}
+		}
+		
 		sqlHelper.insertOrUpdate(admin);
 
 		return renderSuccess();
