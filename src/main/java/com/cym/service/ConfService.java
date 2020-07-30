@@ -240,7 +240,7 @@ public class ConfService {
 						if (server.getRewrite() == 1) { // redirect http转https
 							ngxParam = new NgxParam();
 							ngxParam.addValue("proxy_redirect http:// https://");
-							ngxBlockServer.addEntry(ngxParam);
+							ngxBlockLocation.addEntry(ngxParam);
 						}
 
 					} else if (location.getType() == 1) { // 静态html
