@@ -237,7 +237,7 @@ public class ConfService {
 							ngxBlockLocation.addEntry(ngxParam);
 						}
 						
-						if (server.getRewrite() == 1) {
+						if (server.getRewrite() == 1) { // redirect http转https
 							ngxParam = new NgxParam();
 							ngxParam.addValue("proxy_redirect http:// https://");
 							ngxBlockServer.addEntry(ngxParam);
