@@ -156,7 +156,7 @@ public class ConfService {
 				ngxBlockServer.addEntry(ngxParam);
 
 				// ssl配置
-				if (server.getSsl() != null && server.getSsl() == 1) {
+				if (server.getSsl() == 1) {
 					if (StrUtil.isNotEmpty(server.getPem()) && StrUtil.isNotEmpty(server.getKey())) {
 						ngxParam = new NgxParam();
 						ngxParam.addValue("ssl_certificate " + server.getPem());
@@ -237,7 +237,7 @@ public class ConfService {
 							ngxBlockLocation.addEntry(ngxParam);
 						}
 						
-						if (server.getRewrite() == 1) { // redirect http转https
+						if ( server.getSsl() == 1 && server.getRewrite() == 1) { // redirect http转https
 							ngxParam = new NgxParam();
 							ngxParam.addValue("proxy_redirect http:// https://");
 							ngxBlockLocation.addEntry(ngxParam);
