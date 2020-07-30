@@ -179,12 +179,14 @@ public class ConfService {
 						ngxBlockServer.addEntry(ngxParam);
 
 						NgxBlock ngxBlock = new NgxBlock();
-						ngxBlock.addValue("if ($server_port = 80)");
+						ngxBlock.addValue("if ($scheme = http)");
 						ngxParam = new NgxParam();
-						ngxParam.addValue("rewrite ^(.*) https://$server_name$1 permanent");
+//						ngxParam.addValue("rewrite ^(.*) https://$server_name$1 permanent");
+						ngxParam.addValue("return 301 https://$host$request_uri"); 
 						ngxBlock.addEntry(ngxParam);
 
 						ngxBlockServer.addEntry(ngxBlock);
+					
 					}
 				}
 
@@ -233,6 +235,12 @@ public class ConfService {
 							ngxParam = new NgxParam();
 							ngxParam.addValue("proxy_set_header X-Forwarded-Proto $scheme");
 							ngxBlockLocation.addEntry(ngxParam);
+						}
+						
+						if (server.getRewrite() == 1) {
+							ngxParam = new NgxParam();
+							ngxParam.addValue("proxy_redirect http:// https://");
+							ngxBlockServer.addEntry(ngxParam);
 						}
 
 					} else if (location.getType() == 1) { // 静态html
