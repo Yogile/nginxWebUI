@@ -126,6 +126,7 @@ function search() {
 function add() {
 	$("#id").val("");
 	$("#listen").val("");
+	$("#def").prop("checked", false);
 	$("#ip").val("");
 	$("#serverName").val("");
 	$("#ssl option:first").prop("selected", true);
@@ -208,7 +209,7 @@ function addOver() {
 	if($("#ip").val() != ''){
 		server.listen = $("#ip").val() + ":" + $("#listen").val();
 	}
-	
+	server.def = $("#def").prop("checked")?"1":"0";
 	server.serverName = $("#serverName").val();
 	server.ssl = $("#ssl").val();
 	server.pem = $("#pem").val();
@@ -286,6 +287,7 @@ function edit(id,clone) {
 					$("#listen").val(server.listen);
 				}
 				
+				$("#def").prop("checked", server.def == 1);
 				$("#serverName").val(server.serverName);
 				$("#ssl").val(server.ssl);
 				$("#pem").val(server.pem);
