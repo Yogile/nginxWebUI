@@ -146,6 +146,10 @@ public class ConfService {
 				// 监听端口
 				ngxParam = new NgxParam();
 				String value = "listen " + server.getListen();
+				if(server.getDef() == 1) {
+					value += " default";
+				}
+				
 				if (server.getSsl() != null && server.getSsl() == 1) {
 					value += " ssl";
 					if (server.getHttp2() != null && server.getHttp2() == 1) {
