@@ -173,11 +173,17 @@ public class LogService {
 	}
 
 	private void addSum(List<KeyValue> keyValuesOrg, List<KeyValue> keyValues) {
-		for (KeyValue keyValueOrg : keyValuesOrg) {
-			for (KeyValue keyValue : keyValues) {
+		for (KeyValue keyValue : keyValues) {
+			boolean hasSame = false;
+			for (KeyValue keyValueOrg : keyValuesOrg) {
 				if (keyValueOrg.getName().equals(keyValue.getName())) {
 					keyValueOrg.setValue(keyValueOrg.getValue() + keyValue.getValue());
+					hasSame = true;
 				}
+			}
+
+			if (!hasSame) {
+				keyValuesOrg.add(keyValue);
 			}
 		}
 	}
