@@ -130,19 +130,26 @@ function showContent(dataGroup) {
 	for (var i = 0; i < 24; i++) {
 		hour.push(i);
 
+		var hasPv = false;
 		for (var j = 0; j < dataGroup.pv.length; j++) {
 			if (parseInt(dataGroup.pv[j].name) == i) {
 				pv.push(dataGroup.pv[j].value);
-			} else {
-				pv.push(0);
-			}
+				hasPv = true;
+			} 
 		}
+		if(!hasPv){
+			pv.push(0);
+		}
+		
+		var hasUv = false;
 		for (var j = 0; j < dataGroup.uv.length; j++) {
 			if (parseInt(dataGroup.uv[j].name) == i) {
 				uv.push(dataGroup.uv[j].value);
-			} else {
-				uv.push(0);
+				hasUv = true;
 			}
+		}
+		if(!hasUv){
+			uv.push(0);
 		}
 	}
 
