@@ -2,32 +2,26 @@ package com.cym.config;
 
 import java.util.Locale;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.util.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.LocaleResolver;
 
-public class MyLocaleResolver implements LocaleResolver {
+import com.cym.service.SettingService;
 
+@Component
+public class MyLocaleResolver implements LocaleResolver {
+	@Autowired
+	SettingService settingService;
+	
 	@Override
 	public Locale resolveLocale(HttpServletRequest httpServletRequest) {
-		String l = httpServletRequest.getParameter("l");
-		Cookie[] cookies = httpServletRequest.getCookies();
 
-		if (!StringUtils.isEmpty(l)) {
-			String[] split = l.split("_");
-			return new Locale(split[0], split[1]);
-		} else if (cookies != null && cookies.length > 0) {
-			for (Cookie cookie : cookies) {
-				if (cookie.getName().equals("l")) {
-					String[] split = cookie.getName().split("_");
-					return new Locale(split[0], split[1]);
-				}
-			}
-		}
-
+		if (settingService.get("lang") != null && settingService.get("lang").equals("en_US")) {
+			return new Locale("en","US");
+		} 
 		return Locale.getDefault();
 	}
 

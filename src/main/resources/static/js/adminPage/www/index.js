@@ -117,7 +117,7 @@ function copy(str){
     document.execCommand("Copy"); // 执行浏览器复制命令
     oInput.className = 'oInput';
     oInput.style.display='none';
-    alert('复制成功');
+    layer.msg('复制成功');
 }
 
 function edit(id){

@@ -11,6 +11,8 @@ import cn.craccd.sqlHelper.utils.SqlHelper;
 public class BaseController {
 	@Autowired
 	protected SqlHelper sqlHelper;
+	@Autowired
+	protected MessageUtils messageUtils;
 	
 	protected JsonResult renderError() {
 		JsonResult result = new JsonResult();
