@@ -128,7 +128,7 @@ public class LoginController extends BaseController {
 		String localType = (String) httpSession.getAttribute("localType");
 		if (StrUtil.isNotEmpty(localType)) {
 			if ("本地".equals(localType)) {
-				return renderSuccess("本地");
+				return renderSuccess(messageUtils.get("loginStr.local"));
 			} else {
 				Remote remote = (Remote) httpSession.getAttribute("remote");
 				if (StrUtil.isNotEmpty(remote.getDescr())) {
