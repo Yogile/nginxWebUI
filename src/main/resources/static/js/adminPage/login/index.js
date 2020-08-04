@@ -96,3 +96,21 @@ function refreshCode(id) {
 	$("#" + id).attr("src", ctx + "adminPage/login/getCode?t=" + (new Date()).getTime());
 }
 
+function changeLang() {
+	$.ajax({
+		type: 'POST',
+		url: ctx + '/adminPage/login/changeLang',
+		data: $("#adminForm").serialize(),
+		dataType: 'json',
+		success: function(data) {
+			if (data.success) {
+				location.reload();
+			} else {
+				layer.msg(data.msg);
+			}
+		},
+		error: function() {
+			alert(commonStr.error);
+		}
+	});
+}
