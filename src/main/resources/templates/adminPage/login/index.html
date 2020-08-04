@@ -11,26 +11,26 @@
 			<form id="loginForm">
 				<input type="hidden" name="id" id="id">
 				<div class="layui-form-item">
-					<label class="layui-form-label">用户名</label>
+					<label class="layui-form-label"><@spring.message code="login.name"/></label>
 					<div class="layui-input-block">
 						<input type="text" name="name" id="name" class="layui-input" value="">
 					</div>
 				</div>
 				<div class="layui-form-item">
-					<label class="layui-form-label">密码</label>
+					<label class="layui-form-label"><@spring.message code="login.pass"/></label>
 					<div class="layui-input-block">
 						<input type="password" name="pass" id="pass" class="layui-input" value="" onkeyup="getKey()">
 					</div>
 				</div>
 				<div class="layui-form-item">
-					<label class="layui-form-label">验证码</label>
+					<label class="layui-form-label"><@spring.message code="login.code"/></label>
 					<div class="layui-input-inline" style="width: 240px;">
 						<input type="text" name="code" class="layui-input" style="width: 100px;display: inline-block;" onkeyup="getKey()">
 						<img src="${ctx}/adminPage/login/getCode?t=${jsrandom}" id="codeImg" onclick="refreshCode('codeImg')">
 					</div>
 				</div>
 				<div class="layui-form-item" style="text-align: center;">
-					<button type="button" class="layui-btn layui-btn-normal" onclick="login()">登录</button>
+					<button type="button" class="layui-btn layui-btn-normal" onclick="login()"><@spring.message code="login.login"/></button>
 				</div>
 			</form>
 		</div>
@@ -39,26 +39,26 @@
 		<div class="layui-form" id="addUserDiv" style="padding: 15px; display: none;">
 			<form id="adminForm">
 				<div class="layui-form-item">
-					<label class="layui-form-label">用户名</label>
+					<label class="layui-form-label"><@spring.message code="login.name"/></label>
 					<div class="layui-input-block">
 						<input type="text" name="name" id="adminName" class="layui-input" value="">
 					</div>
 				</div>
 				<div class="layui-form-item">
-					<label class="layui-form-label">密码</label>
+					<label class="layui-form-label"><@spring.message code="login.pass"/></label>
 					<div class="layui-input-block">
 						<input type="password" name="pass" id="adminPass" class="layui-input" value="" >
 					</div>
 				</div>
 				<div class="layui-form-item">
-					<label class="layui-form-label">再次输入</label>
+					<label class="layui-form-label"><@spring.message code="login.repeatPass"/></label>
 					<div class="layui-input-block">
 						<input type="password" id="repeatPass" class="layui-input" value="" >
-						<div class="layui-form-mid layui-word-aux">密码至少8位,包含大写小写和数字</div>
+						<div class="layui-form-mid layui-word-aux"><@spring.message code="login.tips"/></div>
 					</div>
 				</div>
 				<div class="layui-form-item" style="text-align: center;">
-					<button type="button" class="layui-btn layui-btn-normal" onclick="addAdmin()">添加</button>
+					<button type="button" class="layui-btn layui-btn-normal" onclick="addAdmin()"><@spring.message code="login.add"/></button>
 
 				</div>
 			</form>
