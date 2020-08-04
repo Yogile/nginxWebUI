@@ -70,7 +70,7 @@ public class LoginController extends BaseController {
 	public JsonResult submitLogin(String name, String pass,String code, HttpSession httpSession) {
 		String imgCode = (String) httpSession.getAttribute("imgCode");
 		if (StrUtil.isNotEmpty(imgCode) && !imgCode.equalsIgnoreCase(code)) {
-			return renderError("验证码不正确");
+			return renderError(messageUtils.get("loginStr.backError1"));
 		}
 
 		if (adminService.login(name, pass)) {
@@ -83,7 +83,7 @@ public class LoginController extends BaseController {
 			
 			return renderSuccess();
 		} else {
-			return renderError("用户名密码错误");
+			return renderError(messageUtils.get("loginStr.backError2"));
 		}
 	}
 
@@ -108,7 +108,7 @@ public class LoginController extends BaseController {
 			map.put("system", SystemTool.getSystem());
 			return renderSuccess(map);
 		} else {
-			return renderError("授权失败");
+			return renderError(messageUtils.get("loginStr.backError3"));
 		}
 
 	}
@@ -139,12 +139,12 @@ public class LoginController extends BaseController {
 
 		Long adminCount = sqlHelper.findCountByQuery(new ConditionAndWrapper(), Admin.class);
 		if (adminCount > 0) {
-			return renderError("管理员已初始化, 不能再次初始化");
+			return renderError(messageUtils.get("loginStr.backError4"));
 		}
 
-		if (!(PwdCheckUtil.checkContainUpperCase(pass) && PwdCheckUtil.checkContainLowerCase(pass) && PwdCheckUtil.checkContainDigit(pass) && PwdCheckUtil.checkPasswordLength(pass, "8", "100"))) {
-			return renderError("密码复杂度太低");
-		}
+//		if (!(PwdCheckUtil.checkContainUpperCase(pass) && PwdCheckUtil.checkContainLowerCase(pass) && PwdCheckUtil.checkContainDigit(pass) && PwdCheckUtil.checkPasswordLength(pass, "8", "100"))) {
+//			return renderError("密码复杂度太低");
+//		}
 		
 
 		Admin admin = new Admin();
