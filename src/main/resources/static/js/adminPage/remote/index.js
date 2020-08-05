@@ -60,7 +60,7 @@ $(function(){
 				}
 			},
 			error : function() {
-				alert("出错了,请联系技术人员!");
+				alert(commonStr.errorInfo);
 			}
 		});
 	})
@@ -83,7 +83,7 @@ $(function(){
 					}
 				},
 				error : function() {
-					alert("出错了,请联系技术人员!");
+					alert(commonStr.errorInfo);
 				}
 		});
 	});   
@@ -262,7 +262,7 @@ function contentLocal(){
 			}
 		},
 		error : function() {
-			alert("出错了,请联系技术人员!");
+			alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -293,7 +293,7 @@ function content(id) {
 			}
 		},
 		error : function() {
-			alert("出错了,请联系技术人员!");
+			alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -322,7 +322,7 @@ function addOver() {
 		},
 		error : function() {
 			layer.close(load);
-			alert("出错了,请联系技术人员!");
+			alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -357,7 +357,7 @@ function edit(id) {
 			}
 		},
 		error : function() {
-			alert("出错了,请联系技术人员!");
+			alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -379,7 +379,7 @@ function del(id){
 				}
 			},
 			error : function() {
-				alert("出错了,请联系技术人员!");
+				alert(commonStr.errorInfo);
 			}
 		});
 	}
@@ -404,7 +404,7 @@ function change(id){
 				}
 			},
 			error : function() {
-				alert("出错了,请联系技术人员!");
+				alert(commonStr.errorInfo);
 			}
 		});
 	}
@@ -484,7 +484,7 @@ function asycSelect(){
 		},
 		error : function() {
 			layer.closeAll();
-			alert("出错了,请联系技术人员!");
+			alert(commonStr.errorInfo);
 		}
 	});
 	
@@ -509,7 +509,7 @@ function asycOver(){
 		},
 		error : function() {
 			layer.closeAll();
-			alert("出错了,请联系技术人员!");
+			alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -564,7 +564,7 @@ function cmdGroup(){
 		},
 		error : function() {
 			layer.closeAll();
-			alert("出错了,请联系技术人员!");
+			alert(commonStr.errorInfo);
 		}
 	});
 	
@@ -594,7 +594,7 @@ function cmdOver(){
 		},
 		error : function() {
 			layer.closeAll();
-			alert("出错了,请联系技术人员!");
+			alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -644,7 +644,7 @@ function editGroup(id) {
 			}
 		},
 		error : function() {
-			alert("出错了,请联系技术人员!");
+			alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -665,7 +665,7 @@ function addGroupOver(){
 		},
 		error : function() {
 			layer.closeAll();
-			alert("出错了,请联系技术人员!");
+			alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -689,7 +689,7 @@ function delGroup(id){
 			},
 			error : function() {
 				layer.closeAll();
-				alert("出错了,请联系技术人员!");
+				alert(commonStr.errorInfo);
 			}
 		});
 	}
@@ -721,7 +721,7 @@ function nginxMonitor(){
 		},
 		error : function() {
 			layer.closeAll();
-			alert("出错了,请联系技术人员!");
+			alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -750,7 +750,7 @@ function nginxOver(){
 		},
 		error : function() {
 			layer.closeAll();
-			alert("出错了,请联系技术人员!");
+			alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -783,7 +783,7 @@ function testMail(){
 				}
 			},
 			error: function() {
-				alert("出错了,请联系技术人员!");
+				alert(commonStr.errorInfo);
 			}
 		});
 	}
