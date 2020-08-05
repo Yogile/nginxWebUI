@@ -8,7 +8,7 @@ function add() {
 	$("#name").val(""); 
 	$("#pass").val(""); 
 	
-	showWindow("添加管理员");
+	showWindow(adminStr.add);
 }
 
 
@@ -58,7 +58,7 @@ function edit(id) {
 				$("#name").val(admin.name);
 				
 				form.render();
-				showWindow("编辑admin");
+				showWindow(commonStr.edit);
 			}else{
 				layer.msg(data.msg);
 			}
@@ -70,7 +70,7 @@ function edit(id) {
 }
 
 function del(id){
-	if(confirm("确认删除?")){
+	if(confirm(commonStr.confirmDel)){
 		$.ajax({
 			type : 'POST',
 			url : ctx + '/adminPage/admin/del',
