@@ -40,7 +40,7 @@ function login() {
 			}
 		},
 		error: function() {
-			alert(commonStr.error);
+			alert(commonStr.errorInfo);
 		}
 	});
 
@@ -80,7 +80,7 @@ function addAdmin() {
 			}
 		},
 		error: function() {
-			alert(commonStr.error);
+			alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -110,7 +110,7 @@ function changeLang() {
 			}
 		},
 		error: function() {
-			alert(commonStr.error);
+			alert(commonStr.errorInfo);
 		}
 	});
 }
