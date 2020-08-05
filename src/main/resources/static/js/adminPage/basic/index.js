@@ -8,7 +8,7 @@ function add() {
 	$("#name").val(""); 
 	$("#value").val(""); 
 	
-	showWindow("添加基本参数配置");
+	showWindow(commonStr.add);
 }
 
 
@@ -23,11 +23,11 @@ function showWindow(title){
 
 function addOver() {
 	if ($("#name").val() == "") {
-		layer.msg("名称为空");
+		layer.msg(basicStr.nameNotice);
 		return;
 	}
 	if ($("#value").val() == "") {
-		layer.msg("值为空");
+		layer.msg(basicStr.valueNotice);
 		return;
 	}
 	
@@ -68,7 +68,7 @@ function edit(id) {
 				$("#name").val(http.name);
 				
 				form.render();
-				showWindow("编辑基本参数配置");
+				showWindow(commonStr.edit);
 			}else{
 				layer.msg(data.msg);
 			}
