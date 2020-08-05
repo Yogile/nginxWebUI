@@ -67,7 +67,7 @@
 							</td>
 							<td>
 								<#if cert.type == 0>
-									<input type="checkbox" name="switch" lay-filter="autoRenew" value="${cert.id}" lay-text="开启|关闭" lay-skin="switch" ${(cert.autoRenew==1)?string('checked','')}>
+									<input type="checkbox" name="switch" lay-filter="autoRenew" value="${cert.id}" lay-text="ON|OFF" lay-skin="switch" ${(cert.autoRenew==1)?string('checked','')}>
 								</#if>
 							</td>
 							<td>
