@@ -27,7 +27,7 @@
 					<thead>
 						<tr>
 							<th>${bakStr.path}</th>
-							<th>${bakStr.createTime}</th>
+							<th>${commonStr.createTime}</th>
 							<th>${commonStr.operation}</th>
 						</tr>
 					</thead>
@@ -39,7 +39,7 @@
 							<td>
 								<button class="layui-btn layui-btn-sm" onclick="content('${bak.path}')">${bakStr.content}</button>
 								<button class="layui-btn layui-btn-sm layui-btn-normal" onclick="replace('${bak.path}')">${bakStr.restore}</button>
-								<button class="layui-btn layui-btn-sm layui-btn-danger" onclick="del('${bak.path}')">${commonStr.restore}</button>
+								<button class="layui-btn layui-btn-sm layui-btn-danger" onclick="del('${bak.path}')">${commonStr.del}</button>
 							</td>
 						</tr>
 						</#list>
