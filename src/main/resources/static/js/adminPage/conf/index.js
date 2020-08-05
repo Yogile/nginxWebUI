@@ -20,7 +20,7 @@ $(function() {
 					}
 				},
 				error : function() {
-					alert("出错了,请联系技术人员!");
+					alert(commonStr.errorInfo);
 				}
 		});
 	});   
@@ -82,7 +82,7 @@ function replace() {
 			}
 		},
 		error : function() {
-			alert("出错了,请联系技术人员!");
+			alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -123,7 +123,7 @@ function loadConf() {
 		},
 		error : function() {
 			//layer.closeAll();
-			alert("出错了,请联系技术人员!");
+			alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -158,7 +158,7 @@ function loadOrg() {
 			}
 		},
 		error : function() {
-			alert("出错了,请联系技术人员!");
+			alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -219,7 +219,7 @@ function check() {
 		},
 		error : function() {
 			layer.closeAll();
-			alert("出错了,请联系技术人员!");
+			alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -270,7 +270,7 @@ function reload() {
 		},
 		error : function() {
 			layer.closeAll();
-			alert("出错了,请联系技术人员!");
+			alert(commonStr.errorInfo);
 		}
 	});
 
@@ -327,7 +327,7 @@ function start(){
 			},
 			error : function() {
 				layer.closeAll();
-				alert("出错了,请联系技术人员!");
+				alert(commonStr.errorInfo);
 			}
 		});
 	}
@@ -382,7 +382,7 @@ function stop(){
 			},
 			error : function() {
 				layer.closeAll();
-				alert("出错了,请联系技术人员!");
+				alert(commonStr.errorInfo);
 			}
 		});
 	}

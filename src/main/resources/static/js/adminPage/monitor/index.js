@@ -40,7 +40,7 @@ function load(){
 			}
 		},
 		error : function() {
-			//alert("出错了,请联系技术人员!");
+			//alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -72,7 +72,7 @@ function addNginxGiudeOver(){
 			}
 		},
 		error : function() {
-			alert("出错了,请联系技术人员!");
+			alert(commonStr.errorInfo);
 		}
 	});
 }

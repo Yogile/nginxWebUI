@@ -13,7 +13,7 @@ $(function() {
 					
 				},
 				error : function() {
-					alert("出错了,请联系技术人员!");
+					alert(commonStr.errorInfo);
 				}
 		});
 	});   
@@ -254,7 +254,7 @@ function addOver() {
 			}
 		},
 		error : function() {
-			alert("出错了,请联系技术人员!");
+			alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -349,7 +349,7 @@ function edit(id,clone) {
 			}
 		},
 		error : function() {
-			alert("出错了,请联系技术人员!");
+			alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -372,7 +372,7 @@ function del(id) {
 				}
 			},
 			error : function() {
-				alert("出错了,请联系技术人员!");
+				alert(commonStr.errorInfo);
 			}
 		});
 	}
@@ -510,7 +510,7 @@ function selectCertOver(){
 			}
 		},
 		error : function() {
-			alert("出错了,请联系技术人员!");
+			alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -678,7 +678,7 @@ function importServer() {
 			}
 		},
 		error : function() {
-			alert("出错了,请联系技术人员!");
+			alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -718,7 +718,7 @@ function testPort(){
 			},
 			error : function() {
 				layer.closeAll();
-				alert("出错了,请联系技术人员!");
+				alert(commonStr.errorInfo);
 			}
 		});
 	}

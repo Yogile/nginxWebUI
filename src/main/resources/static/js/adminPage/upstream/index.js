@@ -17,7 +17,7 @@ $(function() {
 				}
 			},
 			error: function() {
-				alert("出错了,请联系技术人员!");
+				alert(commonStr.errorInfo);
 			}
 		});
 	});
@@ -123,7 +123,7 @@ function addOver() {
 			}
 		},
 		error: function() {
-			alert("出错了,请联系技术人员!");
+			alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -178,7 +178,7 @@ function edit(id) {
 			}
 		},
 		error: function() {
-			alert("出错了,请联系技术人员!");
+			alert(commonStr.errorInfo);
 		}
 	});
 
@@ -202,7 +202,7 @@ function del(id) {
 				}
 			},
 			error: function() {
-				alert("出错了,请联系技术人员!");
+				alert(commonStr.errorInfo);
 			}
 		});
 	}
@@ -349,7 +349,7 @@ function upstreamMonitor() {
 		},
 		error: function() {
 			layer.closeAll();
-			alert("出错了,请联系技术人员!");
+			alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -380,7 +380,7 @@ function upstreamOver() {
 		},
 		error: function() {
 			layer.close(loadIndex);
-			alert("出错了,请联系技术人员!");
+			alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -412,7 +412,7 @@ function testMail() {
 			},
 			error: function() {
 				layer.close(loadIndex);
-				alert("出错了,请联系技术人员!");
+				alert(commonStr.errorInfo);
 			}
 		});
 	}

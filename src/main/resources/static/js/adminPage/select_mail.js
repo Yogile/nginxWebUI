@@ -30,7 +30,7 @@ function showSelectMail() {
 			}
 		},
 		error: function() {
-			alert("出错了,请联系技术人员!");
+			alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -60,7 +60,7 @@ function selectMailOver() {
 			}
 		},
 		error: function() {
-			alert("出错了,请联系技术人员!");
+			alert(commonStr.errorInfo);
 		}
 	});
 
