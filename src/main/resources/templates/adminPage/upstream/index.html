@@ -94,7 +94,7 @@
 								<table class="server">${ext.serverStr}
 								</table>
 							</td>
-							<td><input type="checkbox" name="switch" lay-filter="monitor" value="${ext.upstream.id}" ${(ext.upstream.monitor==1)?string( 'checked','')}  lay-text="开启|关闭" lay-skin="switch"></td>
+							<td><input type="checkbox" name="switch" lay-filter="monitor" value="${ext.upstream.id}" ${(ext.upstream.monitor==1)?string( 'checked','')}  lay-text="ON|OFF" lay-skin="switch"></td>
 							<td>
 								<button class="layui-btn layui-btn-sm" onclick="edit('${ext.upstream.id}')">编辑</button>
 								<button class="layui-btn layui-btn-danger layui-btn-sm" onclick="del('${ext.upstream.id}')">删除</button>

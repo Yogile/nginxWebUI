@@ -48,7 +48,7 @@ function nginxStatus() {
 
 function replace() {
 	if ($("#nginxPath").val() == '') {
-		alert("nginx配置文件路径为空");
+		layer.msg(confStr.jserror2);
 		return;
 	}
 
@@ -175,18 +175,18 @@ function showHide(id){
 
 function check() {
 	if ($("#nginxPath").val() == '') {
-		alert("conf配置文件路径为空");
+		layer.msg(confStr.jserror2);
 		return;
 	}
 	
 	if ($("#nginxExe").val() == '') {
-		alert("nginx执行文件路径为空");
+		layer.msg(confStr.jserror3);
 		return;
 	}
 	
 	if($("#nginxExe").val().indexOf('/') > -1 || $("#nginxExe").val().indexOf('\\') > -1){
 		if ($("#nginxDir").val() == '') {
-			alert("你使用了绝对路径执行命令，请填写nginx目录");
+			layer.msg(confStr.jserror4);
 			return;
 		}
 	}
@@ -226,18 +226,18 @@ function check() {
 
 function reload() {
 	if ($("#nginxPath").val() == '') {
-		alert("conf配置文件路径为空");
+		layer.msg(confStr.jserror2);
 		return;
 	}
 	
 	if ($("#nginxExe").val() == '') {
-		alert("nginx执行文件路径为空");
+		layer.msg(confStr.jserror3);
 		return;
 	}
 	
 	if($("#nginxExe").val().indexOf('/') > -1 || $("#nginxExe").val().indexOf('\\') > -1){
 		if ($("#nginxDir").val() == '') {
-			alert("你使用了绝对路径执行命令，请填写nginx目录");
+			layer.msg(confStr.jserror4);
 			return;
 		}
 	}
@@ -278,23 +278,23 @@ function reload() {
 
 function start(){
 	if ($("#nginxPath").val() == '') {
-		alert("conf配置文件路径为空");
+		layer.msg(confStr.jserror2);
 		return;
 	}
 	
 	if ($("#nginxExe").val() == '') {
-		alert("nginx执行文件路径为空");
+		layer.msg(confStr.jserror3);
 		return;
 	}
 	
 	if($("#nginxExe").val().indexOf('/') > -1 || $("#nginxExe").val().indexOf('\\') > -1){
 		if ($("#nginxDir").val() == '') {
-			alert("你使用了绝对路径执行命令，请填写nginx目录");
+			layer.msg(confStr.jserror4);
 			return;
 		}
 	}
 	
-	if(confirm("确认启动?")){
+	if(confirm(confStr.confirmStart)){
 		layer.load();
 		$.ajax({
 			type : 'POST',
@@ -337,19 +337,19 @@ function start(){
 
 function stop(){
 	if ($("#nginxExe").val() == '') {
-		alert("nginx执行文件路径为空");
+		layer.msg(confStr.jserror3);
 		return;
 	}
 	
 	if($("#nginxExe").val().indexOf('/') > -1 || $("#nginxExe").val().indexOf('\\') > -1){
 		if ($("#nginxDir").val() == '') {
-			alert("你使用了绝对路径执行命令，请填写nginx目录");
+			layer.msg(confStr.jserror4);
 			return;
 		}
 	}
 	
 	
-	if(confirm("确认停止?")){
+	if(confirm(confStr.confirmStop)){
 		layer.load();
 		$.ajax({
 			type : 'POST',

@@ -165,7 +165,7 @@ $(function(){
 								template : function(remote) {
 									if(remote.type == 0){
 										var checked = remote.monitor==1?'checked':'';
-										return `<input type="checkbox" name="switch" lay-filter="monitor" value="${remote.id}" lay-text="开启|关闭" lay-skin="switch" ${checked}>`;
+										return `<input type="checkbox" name="switch" lay-filter="monitor" value="${remote.id}" lay-text="ON|OFF" lay-skin="switch" ${checked}>`;
 									}
 									return "";
 								}
