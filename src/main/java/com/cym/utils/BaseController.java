@@ -12,7 +12,7 @@ public class BaseController {
 	@Autowired
 	protected SqlHelper sqlHelper;
 	@Autowired
-	protected MessageUtils messageUtils;
+	protected MessageUtils m;
 	
 	protected JsonResult renderError() {
 		JsonResult result = new JsonResult();

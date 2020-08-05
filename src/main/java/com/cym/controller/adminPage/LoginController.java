@@ -79,7 +79,7 @@ public class LoginController extends BaseController {
 	public JsonResult submitLogin(String name, String pass, String code, HttpSession httpSession) {
 		String imgCode = (String) httpSession.getAttribute("imgCode");
 		if (StrUtil.isNotEmpty(imgCode) && !imgCode.equalsIgnoreCase(code)) {
-			return renderError(messageUtils.get("loginStr.backError1"));
+			return renderError(m.get("loginStr.backError1"));
 		}
 
 		if (adminService.login(name, pass)) {
@@ -92,7 +92,7 @@ public class LoginController extends BaseController {
 
 			return renderSuccess();
 		} else {
-			return renderError(messageUtils.get("loginStr.backError2"));
+			return renderError(m.get("loginStr.backError2"));
 		}
 	}
 
@@ -117,7 +117,7 @@ public class LoginController extends BaseController {
 			map.put("system", SystemTool.getSystem());
 			return renderSuccess(map);
 		} else {
-			return renderError(messageUtils.get("loginStr.backError3"));
+			return renderError(m.get("loginStr.backError3"));
 		}
 
 	}
@@ -128,7 +128,7 @@ public class LoginController extends BaseController {
 		String localType = (String) httpSession.getAttribute("localType");
 		if (StrUtil.isNotEmpty(localType)) {
 			if ("本地".equals(localType)) {
-				return renderSuccess(messageUtils.get("loginStr.local"));
+				return renderSuccess(m.get("loginStr.local"));
 			} else {
 				Remote remote = (Remote) httpSession.getAttribute("remote");
 				if (StrUtil.isNotEmpty(remote.getDescr())) {
@@ -160,7 +160,7 @@ public class LoginController extends BaseController {
 
 		Long adminCount = sqlHelper.findCountByQuery(new ConditionAndWrapper(), Admin.class);
 		if (adminCount > 0) {
-			return renderError(messageUtils.get("loginStr.backError4"));
+			return renderError(m.get("loginStr.backError4"));
 		}
 
 //		if (!(PwdCheckUtil.checkContainUpperCase(pass) && PwdCheckUtil.checkContainLowerCase(pass) && PwdCheckUtil.checkContainDigit(pass) && PwdCheckUtil.checkPasswordLength(pass, "8", "100"))) {

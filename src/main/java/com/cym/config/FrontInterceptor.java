@@ -2,20 +2,19 @@ package com.cym.config;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -80,7 +79,7 @@ public class FrontInterceptor implements HandlerInterceptor {
 			}
 		}
 
-		// js国际化
+		// 读取配置文件
 		Properties properties = null;
 		String l = request.getParameter("l");
 		if (StrUtil.isNotEmpty(l) && l.equals("en_US") || settingService.get("lang") != null && settingService.get("lang").equals("en_US")) {
@@ -91,6 +90,7 @@ public class FrontInterceptor implements HandlerInterceptor {
 			properties = propertiesUtils.getPropertis("messages.properties");
 		}
 
+		// js国际化
 		Set<String> messageHeaders = new HashSet<>();
 		List<Message> messages = new ArrayList<>();
 		for (String key : properties.stringPropertyNames()) {
@@ -104,6 +104,18 @@ public class FrontInterceptor implements HandlerInterceptor {
 
 		request.setAttribute("messageHeaders", messageHeaders);
 		request.setAttribute("messages", messages);
+
+		// html国际化
+		for (String key : messageHeaders) {
+			Map<String, String> map = new HashMap<>();
+			for (Message message : messages) {
+				if (message.getKey().split("\\.")[0].equals(key)) {
+					map.put(message.getKey().split("\\.")[1], message.getValue());
+				}
+			}
+
+			request.setAttribute(key, map);
+		}
 
 		return true;
 	}
