@@ -14,13 +14,13 @@
 			<!-- 内容主体区域 -->
 			<div style="padding: 15px">
 				<fieldset class="layui-elem-field layui-field-title">
-					<legend><@spring.message code="menuStr.admin"/></legend>
+					<legend>${menuStr.admin}</legend>
 				</fieldset>
 
 				<form action="${ctx}/adminPage/admin" id="searchForm" method="post">
 					<div class="layui-form">
 						<div class="layui-inline">
-							<button type="button" class="layui-btn layui-btn-normal" onclick="add()"><@spring.message code="adminStr.add"/></button>
+							<button type="button" class="layui-btn layui-btn-normal" onclick="add()">${adminStr.add}</button>
 						</div>
 
 						<input type="hidden" name="curr" value="${page.curr}">
@@ -31,9 +31,9 @@
 				<table class="layui-table">
 					<thead>
 						<tr>
-							<th><@spring.message code="adminStr.name"/></th>
+							<th>${adminStr.name}</th>
 
-							<th><@spring.message code="commonStr.operation"/></th>
+							<th>${commonStr.operation}</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -41,8 +41,8 @@
 						<tr>
 							<td>${admin.name}</td>
 							<td>
-								<button class="layui-btn layui-btn-sm" onclick="edit('${admin.id}')"><@spring.message code="commonStr.edit"/></button>
-								<button class="layui-btn layui-btn-danger layui-btn-sm" onclick="del('${admin.id}')"><@spring.message code="commonStr.del"/></button>
+								<button class="layui-btn layui-btn-sm" onclick="edit('${admin.id}')">${commonStr.edit}</button>
+								<button class="layui-btn layui-btn-danger layui-btn-sm" onclick="del('${admin.id}')">${commonStr.del}</button>
 							</td>
 						</tr>
 						</#list>
@@ -60,22 +60,22 @@
 				<input type="hidden" name="id" id="id">
 
 				<div class="layui-form-item">
-					<label class="layui-form-label"><@spring.message code="adminStr.name"/></label>
+					<label class="layui-form-label">${adminStr.name}</label>
 					<div class="layui-input-block">
 						<input type="text" name="name" id="name" class="layui-input">
 					</div>
 				</div>
 
 				<div class="layui-form-item">
-					<label class="layui-form-label"><@spring.message code="adminStr.pass"/></label>
+					<label class="layui-form-label">${adminStr.pass}</label>
 					<div class="layui-input-block">
 						<input type="password" name="pass" id="pass" class="layui-input">
 					</div>
 				</div>
 
 				<div class="layui-form-item">
-					<button type="button" class="layui-btn layui-btn-normal" onclick="addOver()"><@spring.message code="commonStr.submit"/></button>
-					<button type="button" class="layui-btn" onclick="layer.closeAll()"><@spring.message code="commonStr.close"/></button>
+					<button type="button" class="layui-btn layui-btn-normal" onclick="addOver()">${commonStr.submit}</button>
+					<button type="button" class="layui-btn" onclick="layer.closeAll()">${commonStr.close}</button>
 				</div>
 			</form>
 		</div>
