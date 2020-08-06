@@ -30,7 +30,7 @@ function dImportOver() {
 				dataType : 'json',
 				success : function(data) {
 					if (data.success) {
-						layer.msg("导入成功");
+						layer.msg(exportStr.importSuccess);
 					} else {
 						layer.msg(data.msg);
 					}
