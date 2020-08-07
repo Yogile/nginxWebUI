@@ -125,7 +125,7 @@
 								<th>开启ssl</th>
 								<th>ssl选项</th>
 								<th>代理目标</th>
-								<th>启用</th>
+								<th>停用启用</th>
 								<th>操作</th>
 							</tr>
 						</thead>
@@ -163,7 +163,7 @@
 								</td>
 	
 								<td>
-									<input type="checkbox" name="enable" lay-filter="enable" value="${ext.server.id}" lay-text="启用|停用" lay-skin="switch" ${(ext.server.enable)?string('checked','')}>
+									<input type="checkbox" name="enable" lay-filter="enable" value="${ext.server.id}" lay-text="ON|OFF" lay-skin="switch" ${(ext.server.enable)?string('checked','')}>
 								</td>
 								<td>
 									<button type="button" class="layui-btn layui-btn-sm" onclick="edit('${ext.server.id}', false)">编辑</button>
