@@ -184,7 +184,7 @@ $(function(){
 										if(remote.id != '本地'){
 											// 本地
 											if(remote.status == 1){
-												html += `<button class="layui-btn layui-btn-sm" onclick="content('${remote.id}')">查看conf</button>`;
+												html += `<button class="layui-btn layui-btn-sm" onclick="content('${remote.id}')">查看 conf</button>`;
 											}
 											
 											html += `
@@ -212,10 +212,7 @@ $(function(){
 		});
 })
 
-/*function search() {
-	$("input[name='curr']").val(1);
-	$("#searchForm").submit();
-}*/
+
 
 function add() {
 	$("#id").val(""); 
@@ -729,7 +726,7 @@ function nginxMonitor(){
 function nginxOver(){
 		var myreg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;                
 		if ($("#mail").val() == '' || !myreg.test($("#mail").val())) {                    
-			alert("邮箱格式不正确");               
+			layer.alert("邮箱格式不正确");               
 			return;                
 		}
 		
@@ -759,7 +756,7 @@ function nginxOver(){
 
 var loadIndex;
 function testMail(){
-	if(confirm("是否就行测试发送?")){
+	if(confirm("是否进行测试发送?")){
 		var myreg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;                
 		if ($("#mail").val() == '' || !myreg.test($("#mail").val())) {                    
 			alert("邮箱格式不正确");               
