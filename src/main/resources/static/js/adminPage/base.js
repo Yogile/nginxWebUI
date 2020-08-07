@@ -20,7 +20,7 @@ $(function() {
 	laypage.render({
 		elem : 'pageInfo', // 渲染节点
 		count : page.count, // 总记录数
-		curr : page.curr, // 起始页
+		curr : page.current, // 起始页
 		limit : page.limit, // 每页记录数
 		layout : ['count', 'prev', 'page', 'next',  'skip' ,'limit'],
 		jump : function(obj, first) {
