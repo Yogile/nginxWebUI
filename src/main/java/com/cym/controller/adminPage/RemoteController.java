@@ -318,11 +318,9 @@ public class RemoteController extends BaseController {
 
 		for (String remoteToId : remoteId) {
 			if (remoteToId.equals("本地")) {
-				System.out.println("同步到本地");
 				setAsycPack(json);
 			} else {
 				Remote remoteTo = sqlHelper.findById(remoteToId, Remote.class);
-				System.out.println("同步到" + remoteTo.getIp());
 				try {
 					String version = HttpUtil.get(remoteTo.getProtocol() + "://" + remoteTo.getIp() + ":" + remoteTo.getPort() + "/adminPage/remote/version?creditKey=" + remoteTo.getCreditKey(),
 							1000);
@@ -352,7 +350,6 @@ public class RemoteController extends BaseController {
 	@RequestMapping("setAsycPack")
 	@ResponseBody
 	public JsonResult setAsycPack(String json) {
-		System.err.println("收到同步信息:" + json);
 		AsycPack asycPack = JSONUtil.toBean(json, AsycPack.class);
 
 		confService.setAsycPack(asycPack);
