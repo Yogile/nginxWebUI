@@ -9,7 +9,7 @@ $(function(){
 		layer.open({
 			type : 1,
 			closeBtn  :0,
-			title : "初始化nginx配置",
+			title : monitorStr.init,
 			area : [ '750px', '400px' ], //宽高
 			content : $('#nginxGuideDiv')
 		});
@@ -34,8 +34,8 @@ function load(){
 				element.progress('cpu', monitorInfo.cpuRatio);
 				element.progress('mem', monitorInfo.memRatio);
 				
-				$("#memContent").html("( 已用"+monitorInfo.usedMemory + " / 总共" + monitorInfo.totalMemorySize + " )");
-				$("#cpuCount").html("( 核心数:" + monitorInfo.cpuCount + " )");
+				$("#memContent").html("( " + monitorStr.used + ":" + monitorInfo.usedMemory + " / "+ monitorStr.total + ":" + monitorInfo.totalMemorySize + " )");
+				$("#cpuCount").html("( " + monitorStr.coreCount + ":" + monitorInfo.cpuCount + " )");
 				
 			}
 		},
@@ -48,10 +48,10 @@ function load(){
 
 function addNginxGiudeOver(){
 	if($("#nginxPath").val() == ''){
-		alert("nginx.conf路径未填写");
+		layer.alert(monitorStr.pathAlert);
 	}
 	if($("#nginxExe").val() == ''){
-		alert("nginx执行命令未填写");
+		layer.alert(monitorStr.exeAlert);
 	}
 	
 	
