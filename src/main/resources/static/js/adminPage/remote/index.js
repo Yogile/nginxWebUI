@@ -137,13 +137,13 @@ $(function(){
 								title : 'nginx',
 								template : function(remote) {
 									if(remote.nginx == 2){
-										return `<span class="black">未知</span>`
+										return `<span class="black">${remoteStr.unknown}</span>`
 									}
 									if(remote.nginx == 1){
-										return `<span class="green">运行中</span>`
+										return `<span class="green">${remoteStr.running}</span>`
 									}
 									if(remote.nginx == 0){
-										return `<span class="red">未运行</span>`
+										return `<span class="red">${remoteStr.stopped}</span>`
 									}
 									
 									return "";
