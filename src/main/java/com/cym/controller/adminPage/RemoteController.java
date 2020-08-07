@@ -179,7 +179,7 @@ public class RemoteController extends BaseController {
 		fillTree(groups, treeList);
 
 		Tree tree = new Tree();
-		tree.setName("--无分组--");
+		tree.setName(m.get("remoteStr.noGroup"));
 		tree.setValue("");
 
 		treeList.add(0, tree);
@@ -279,7 +279,6 @@ public class RemoteController extends BaseController {
 
 				try {
 					String json = HttpUtil.get(remote.getProtocol() + "://" + remote.getIp() + ":" + remote.getPort() + "/adminPage/conf/" + cmd + "?creditKey=" + remote.getCreditKey());
-					System.out.println(json);
 					jsonResult = JSONUtil.toBean(json, JsonResult.class);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -303,8 +302,8 @@ public class RemoteController extends BaseController {
 	@ResponseBody
 	public JsonResult asyc(String fromId, String[] remoteId) {
 		if (StrUtil.isEmpty(fromId) || remoteId == null || remoteId.length == 0) {
-			return renderSuccess("未选择服务器");
-		}
+			return renderSuccess(m.get("remoteStr.noChoice"));
+		} 
 
 		Remote remoteFrom = sqlHelper.findById(fromId, Remote.class);
 		String json;
@@ -363,7 +362,7 @@ public class RemoteController extends BaseController {
 		remote.setIp(remote.getIp().trim());
 		
 		if(remoteService.hasSame(remote)) {
-			return renderError("已存在相同ip端口");
+			return renderError(m.get("remoteStr.sameIp"));
 		}
 		
 		remoteService.getCreditKey(remote);
@@ -372,7 +371,7 @@ public class RemoteController extends BaseController {
 			sqlHelper.insertOrUpdate(remote);
 			return renderSuccess();
 		} else {
-			return renderError("远程授权未通过,请检查");
+			return renderError(m.get("remoteStr.noAuth"));
 		}
 
 	}
@@ -411,7 +410,7 @@ public class RemoteController extends BaseController {
 		if (FileUtil.exist(nginxPath)) {
 			return FileUtil.readString(nginxPath, StandardCharsets.UTF_8);
 		} else {
-			return "文件不存在";
+			return m.get("remoteStr.noFile");
 		}
 
 	}
