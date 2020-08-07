@@ -15,7 +15,7 @@ $(function(){
 				if (res.success) {
 					var path = res.obj.split('/');
 					if(path[path.length-1].indexOf('.zip')==-1){
-						alert("只能上传zip文件");
+						layer.alert("只能上传zip文件");
 						return;
 					}
 						
@@ -48,7 +48,7 @@ function add() {
 	
 	 $("#action").val("addOver");
 
-	showWindow("添加zip包");
+	showWindow(wwwStr.add);
 }
 
 
@@ -63,7 +63,7 @@ function showWindow(title){
 
 function addOver() {
 	if($("#id").val() == '' && ($("#name").val() == '' || $("#dir").val() == '')){
-		alert("未填写完整");
+		layer.alert(wwwStr.noFile);
 		return;
 	}
 	
@@ -87,7 +87,7 @@ function addOver() {
 
 
 function del(id){
-	if(confirm("确认删除?")){
+	if(confirm(commonStr.confirmDel)){
 		$.ajax({
 			type : 'POST',
 			url : ctx + '/adminPage/www/del',
@@ -117,7 +117,7 @@ function copy(str){
     document.execCommand("Copy"); // 执行浏览器复制命令
     oInput.className = 'oInput';
     oInput.style.display='none';
-    layer.msg('复制成功');
+    layer.msg(wwwStr.cpoySuccess);
 }
 
 function edit(id){
@@ -141,7 +141,7 @@ function edit(id){
 				$("#zipDiv").hide();
 				
 				$("#action").val("rename");
-				showWindow("编辑");
+				showWindow(commonStr.edit);
 			}else{
 				layer.msg(data.msg)
 			}
@@ -174,7 +174,7 @@ function update(id){
 				
 					
 				$("#action").val("update");
-				showWindow("更新");
+				showWindow(commonStr.update);
 			}else{
 				layer.msg(data.msg)
 			}
