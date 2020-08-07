@@ -43,7 +43,7 @@ public class WwwController extends BaseController {
 	@ResponseBody
 	public JsonResult addOver(Www www) {
 		if (wwwService.hasName(www.getName())) {
-			return renderError("名称重复");
+			return renderError(m.get("wwwStr.sameName"));
 		}
 
 		try {
@@ -72,14 +72,14 @@ public class WwwController extends BaseController {
 			e.printStackTrace();
 		}
 
-		return renderError("解压错误，请确认压缩包为zip格式");
+		return renderError(m.get("wwwStr.zipError"));
 	}
 
 	@RequestMapping("rename")
 	@ResponseBody
 	public JsonResult rename(Www www) {
 		if (wwwService.hasName(www.getName())) {
-			return renderError("名称重复");
+			return renderError(m.get("wwwStr.sameName"));
 		}
 
 		// 修改名称, 也要修改文件夹名
@@ -117,7 +117,7 @@ public class WwwController extends BaseController {
 			e.printStackTrace();
 		}
 
-		return renderError("解压错误，请确认压缩包为zip格式");
+		return renderError(m.get("wwwStr.zipError"));
 	}
 
 	@RequestMapping("del")
