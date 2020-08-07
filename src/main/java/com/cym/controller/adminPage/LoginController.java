@@ -163,9 +163,9 @@ public class LoginController extends BaseController {
 			return renderError(m.get("loginStr.backError4"));
 		}
 
-//		if (!(PwdCheckUtil.checkContainUpperCase(pass) && PwdCheckUtil.checkContainLowerCase(pass) && PwdCheckUtil.checkContainDigit(pass) && PwdCheckUtil.checkPasswordLength(pass, "8", "100"))) {
-//			return renderError("密码复杂度太低");
-//		}
+		if (!(PwdCheckUtil.checkContainUpperCase(pass) && PwdCheckUtil.checkContainLowerCase(pass) && PwdCheckUtil.checkContainDigit(pass) && PwdCheckUtil.checkPasswordLength(pass, "8", "100"))) {
+			return renderError(m.get("loginStr.tips"));
+		}
 
 		Admin admin = new Admin();
 		admin.setName(name);
