@@ -23,7 +23,7 @@ function showSelectMail() {
 
 				mailIndex = layer.open({
 					type: 1,
-					title: "配置邮件smtp",
+					title: remoteStr.setSmtp,
 					area: ['400px', '500px'], // 宽高
 					content: $('#mailSelectDiv')
 				});
@@ -38,7 +38,7 @@ function showSelectMail() {
 function selectMailOver() {
 
 	if($("#mail_host").val() == '' || $("#mail_port").val() == '' || $("#mail_from").val() == '' || $("#mail_user").val() == '' || $("#mail_pass").val() == ''){
-		layer.msg("未填写完成");
+		layer.msg(mailStr.noFill);
 		return;
 	}
 	
