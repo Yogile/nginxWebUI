@@ -77,8 +77,8 @@
 						<tr>
 							<th>${upstreamStr.proxyType}</th>
 							<th>${commonStr.name}</th>
-							<th>${upstreamStr.tactics}</th>
-							<th>${upstreamStr.load}</th>
+							<th>${upstreamStr.strategy}</th>
+							<th>${upstreamStr.server}</th>
 							<th>${upstreamStr.joinMonitor}</th>
 							<th>${commonStr.operation}</th>
 						</tr>
@@ -86,7 +86,9 @@
 					<tbody>
 						<#list page.records as ext>
 						<tr>
-							<td><#if ext.upstream.proxyType==0>http</#if> <#if ext.upstream.proxyType==1>TCP</#if></td>
+							<td><#if ext.upstream.proxyType==0>http</#if> 
+								<#if ext.upstream.proxyType==1>TCP</#if>
+							</td>
 							<td>${ext.upstream.name}</td>
 							<td>
 								<#if ext.upstream.tactics==""> ${upstreamStr.default} </#if> 
@@ -148,7 +150,7 @@
 				</div>
 
 				<div class="layui-form-item">
-					<button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="addItem()">${upstreamStr.addItem}</button>
+					<button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="addItem()">${upstreamStr.addServer}</button>
 
 					<button type="button" class="layui-btn layui-btn-sm" onclick="upstreamParam()">${upstreamStr.extParam}</button>
 					<textarea style="display: none;" id="upstreamParamJson" name="upstreamParamJson"></textarea>
