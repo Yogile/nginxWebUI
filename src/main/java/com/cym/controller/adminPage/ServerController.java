@@ -58,7 +58,7 @@ public class ServerController extends BaseController {
 				serverExt.setLocationStr(buildLocationStr(server.getId()));
 			} else {
 				Upstream upstream = sqlHelper.findById(server.getProxyUpstreamId(), Upstream.class);
-				serverExt.setLocationStr("负载均衡: " + (upstream != null ? upstream.getName() : ""));
+				serverExt.setLocationStr(m.get("serverStr.server") + ": " + (upstream != null ? upstream.getName() : ""));
 			}
 
 			exts.add(serverExt);
@@ -173,16 +173,16 @@ public class ServerController extends BaseController {
 	public JsonResult importServer(String nginxPath) {
 
 		if (!FileUtil.exist(nginxPath)) {
-			return renderError("目标文件不存在");
+			return renderError(m.get("serverStr.fileNotExist"));
 		}
 
 		try {
 			serverService.importServer(nginxPath);
-			return renderSuccess("导入成功");
+			return renderSuccess(m.get("serverStr.importSuccess"));
 		} catch (Exception e) {
 			e.printStackTrace();
 
-			return renderError("导入失败：" + e.getMessage());
+			return renderError(m.get("serverStr.importFail") + "：" + e.getMessage());
 		}
 	}
 
@@ -211,7 +211,7 @@ public class ServerController extends BaseController {
 		if (ips.size() == 0) {
 			return renderSuccess();
 		} else {
-			return renderError("以下端口被占用: " + StrUtil.join(" , ", ips));
+			return renderError(m.get("serverStr.portUserdList") + ": " + StrUtil.join(" , ", ips));
 		}
 
 	}
