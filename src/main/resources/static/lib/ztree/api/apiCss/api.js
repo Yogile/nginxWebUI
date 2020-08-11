@@ -590,7 +590,7 @@ var apiContent = {
 				node.isAjax = false;
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown) {
-				layer.alert(ajaxMsg)
+				alert(ajaxMsg)
 				if (apiContent.tmpDiv) apiContent.tmpDiv.empty();
 				node.isAjax = false;
 			}
