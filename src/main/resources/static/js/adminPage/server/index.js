@@ -423,7 +423,7 @@ function buildHtml(uuid, location, upstreamSelect){
 				<td>
 					<span name="valueSpan">
 						<div class="layui-inline">
-							<input type="text"  style="width: 250px;" name="value" id="value_${uuid}" class="layui-input long" value=""  placeholder="${serverStr.example}：http://127.0.0.1:8080">
+							<input type="text"  style="width: 315px;" name="value" id="value_${uuid}" class="layui-input long" value=""  placeholder="${serverStr.example}：http://127.0.0.1:8080">
 						</div>
 					</span>
 					
