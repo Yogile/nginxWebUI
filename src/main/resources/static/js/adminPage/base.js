@@ -72,7 +72,7 @@ $(function() {
 			} 
 		},
 		error : function() {
-			alert(commonStr.errorInfo);
+			layer.alert(commonStr.errorInfo);
 		}
 	});
 	
@@ -215,7 +215,7 @@ function autoUpdate(url){
 			success : function(data) {
 				if(!data.success){
 					layer.close(loaded);
-					alert(data.msg);
+					layer.alert(data.msg);
 					return;
 				}
 				
@@ -235,4 +235,24 @@ function autoUpdate(url){
 		});
 	}
 	
+}
+
+
+function changeLang() {
+	$.ajax({
+		type: 'POST',
+		url: ctx + '/adminPage/login/changeLang',
+		data: $("#adminForm").serialize(),
+		dataType: 'json',
+		success: function(data) {
+			if (data.success) {
+				location.reload();
+			} else {
+				layer.msg(data.msg);
+			}
+		},
+		error: function() {
+			layer.alert(commonStr.errorInfo);
+		}
+	});
 }

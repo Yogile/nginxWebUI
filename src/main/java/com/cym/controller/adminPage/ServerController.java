@@ -172,7 +172,7 @@ public class ServerController extends BaseController {
 	@ResponseBody
 	public JsonResult importServer(String nginxPath) {
 
-		if (!FileUtil.exist(nginxPath)) {
+		if (StrUtil.isEmpty(nginxPath) ||  !FileUtil.exist(nginxPath)) {
 			return renderError(m.get("serverStr.fileNotExist"));
 		}
 

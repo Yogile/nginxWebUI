@@ -22,7 +22,7 @@ function delAll() {
 			},
 			error: function() {
 				layer.closeAll();
-				alert(commonStr.errorInfo);
+				layer.alert(commonStr.errorInfo);
 			}
 		});
 	}
@@ -46,7 +46,7 @@ function detail(id) {
 		},
 		error: function() {
 			layer.closeAll();
-			alert(commonStr.errorInfo);
+			layer.alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -70,7 +70,7 @@ function del(id) {
 			},
 			error: function() {
 				layer.closeAll();
-				alert(commonStr.errorInfo);
+				layer.alert(commonStr.errorInfo);
 			}
 		});
 	}
@@ -267,7 +267,7 @@ function analysis() {
 			},
 			error: function() {
 				layer.closeAll();
-				alert(commonStr.errorInfo);
+				layer.alert(commonStr.errorInfo);
 			}
 		});
 	}

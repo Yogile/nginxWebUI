@@ -33,7 +33,7 @@ function content(path) {
 			}
 		},
 		error : function() {
-			alert(commonStr.errorInfo);
+			layer.alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -55,7 +55,7 @@ function del(path){
 				}
 			},
 			error : function() {
-				alert(commonStr.errorInfo);
+				layer.alert(commonStr.errorInfo);
 			}
 		});
 	}
@@ -80,7 +80,7 @@ function replace(path){
 				}
 			},
 			error : function() {
-				alert(commonStr.errorInfo);
+				layer.alert(commonStr.errorInfo);
 			}
 		});
 	}
@@ -102,7 +102,7 @@ function delAll(){
 			},
 			error : function() {
 				layer.closeAll();
-				alert(commonStr.errorInfo);
+				layer.alert(commonStr.errorInfo);
 			}
 		});
 	}

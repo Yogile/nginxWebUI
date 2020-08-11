@@ -35,7 +35,7 @@ function addOver() {
 			}
 		},
 		error : function() {
-			alert(commonStr.errorInfo);
+			layer.alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -64,7 +64,7 @@ function edit(id) {
 			}
 		},
 		error : function() {
-			alert(commonStr.errorInfo);
+			layer.alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -86,7 +86,7 @@ function del(id){
 				}
 			},
 			error : function() {
-				alert(commonStr.errorInfo);
+				layer.alert(commonStr.errorInfo);
 			}
 		});
 	}

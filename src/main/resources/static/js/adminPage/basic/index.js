@@ -8,7 +8,7 @@ function add() {
 	$("#name").val(""); 
 	$("#value").val(""); 
 	
-	showWindow(commonStr.add);
+	showWindow(basicStr.add);
 }
 
 
@@ -45,7 +45,7 @@ function addOver() {
 			}
 		},
 		error : function() {
-			alert(commonStr.errorInfo);
+			layer.alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -68,19 +68,19 @@ function edit(id) {
 				$("#name").val(http.name);
 				
 				form.render();
-				showWindow(commonStr.edit);
+				showWindow(basicStr.edit);
 			}else{
 				layer.msg(data.msg);
 			}
 		},
 		error : function() {
-			alert(commonStr.errorInfo);
+			layer.alert(commonStr.errorInfo);
 		}
 	});
 }
 
 function del(id){
-	if(confirm("确认删除?")){
+	if(confirm(commonStr.confirmDel)){
 		$.ajax({
 			type : 'POST',
 			url : ctx + '/adminPage/basic/del',
@@ -96,7 +96,7 @@ function del(id){
 				}
 			},
 			error : function() {
-				alert(commonStr.errorInfo);
+				layer.alert(commonStr.errorInfo);
 			}
 		});
 	}
@@ -120,7 +120,7 @@ function setOrder(id, count){
 			}
 		},
 		error : function() {
-			alert(commonStr.errorInfo);
+			layer.alert(commonStr.errorInfo);
 		}
 	});
 }

@@ -63,11 +63,6 @@ public class LoginController extends BaseController {
 	@RequestMapping("")
 	public ModelAndView admin(ModelAndView modelAndView) {
 
-		if (settingService.get("lang") != null && settingService.get("lang").equals("en_US")) {
-			modelAndView.addObject("langType", "切换到中文");
-		} else {
-			modelAndView.addObject("langType", "Switch to English");
-		}
 
 		modelAndView.addObject("adminCount", sqlHelper.findCountByQuery(new ConditionAndWrapper(), Admin.class));
 		modelAndView.setViewName("/adminPage/login/index");

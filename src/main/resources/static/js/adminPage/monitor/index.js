@@ -10,7 +10,7 @@ $(function(){
 			type : 1,
 			closeBtn  :0,
 			title : monitorStr.init,
-			area : [ '750px', '400px' ], //宽高
+			area : [ '800px', '400px' ], //宽高
 			content : $('#nginxGuideDiv')
 		});
 	}
@@ -40,7 +40,7 @@ function load(){
 			}
 		},
 		error : function() {
-			//alert(commonStr.errorInfo);
+			//layer.alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -68,11 +68,11 @@ function addNginxGiudeOver(){
 			if (data.success) {
 				location.reload();
 			}else{
-				alert(obj.msg);
+				layer.alert(obj.msg);
 			}
 		},
 		error : function() {
-			alert(commonStr.errorInfo);
+			layer.alert(commonStr.errorInfo);
 		}
 	});
 }
