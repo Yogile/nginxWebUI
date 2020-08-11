@@ -26,10 +26,10 @@ function addOver() {
 		layer.msg(stream.noname);
 		return;
 	}
-	if ($("#value").val() == "") {
+	/*if ($("#value").val() == "") {
 		layer.msg(stream.novalue);
 		return;
-	}
+	}*/
 	
 	
 	$.ajax({
