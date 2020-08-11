@@ -21,7 +21,7 @@ $(function(){
 				}
 			},
 			error : function() {
-				alert(commonStr.errorInfo);
+				layer.alert(commonStr.errorInfo);
 			}
 		});
 })
@@ -82,7 +82,7 @@ function selectTemplateOver(){
 			}
 		},
 		error: function() {
-			alert(commonStr.errorInfo);
+			layer.alert(commonStr.errorInfo);
 		}
 	});
 }

@@ -30,7 +30,7 @@ function showSelectMail() {
 			}
 		},
 		error: function() {
-			alert(commonStr.errorInfo);
+			layer.alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -60,7 +60,7 @@ function selectMailOver() {
 			}
 		},
 		error: function() {
-			alert(commonStr.errorInfo);
+			layer.alert(commonStr.errorInfo);
 		}
 	});
 

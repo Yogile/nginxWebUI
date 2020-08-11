@@ -40,11 +40,11 @@
 	
 }
 .liteBtn{
-	width: 90px;
+	width: 100px;
 }
 .blk{
 	display: inline-block;
-	width: 85px;
+	width: 100px;
 }
 .blk2{
 	display: inline-block;
@@ -166,7 +166,7 @@
 									<input type="checkbox" name="enable" lay-filter="enable" value="${ext.server.id}" lay-text="ON|OFF" lay-skin="switch" ${(ext.server.enable)?string('checked','')}>
 								</td>
 								<td>
-									<button type="button" class="layui-btn layui-btn-sm" onclick="edit('${ext.server.id}', false)">${serverStr.edit}</button>
+									<button type="button" class="layui-btn layui-btn-sm" onclick="edit('${ext.server.id}', false)">${commonStr.edit}</button>
 									<button type="button" class="layui-btn layui-btn-sm" onclick="clone('${ext.server.id}')">${commonStr.clone}</button>
 									<button type="button" class="layui-btn layui-btn-danger layui-btn-sm" onclick="del('${ext.server.id}')">${commonStr.del}</button>
 									
@@ -216,7 +216,7 @@
 						<div class="proxyHttp">
 							<label class="layui-form-label">&nbsp;</label>
 							<div class="layui-input-block">
-								<button style="margin-left: 5px;" type="button" class="layui-btn layui-btn-sm layui-btn-normal liteBtn" onclick="selectCert()">${serverStr.selectCert}</button>
+								<button style="margin-left: 5px;" type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="selectCert()">${serverStr.selectCert}</button>
 								<div class="layui-form-mid layui-word-aux"></div>
 							</div>
 						</div>
@@ -234,7 +234,7 @@
 									<input type="text" name="ip" id="ip" class="layui-input" style="width: 125px;display: inline-block;" placeholder="${serverStr.ipDefault}">
 									<input type="text" name="listen" id="listen" style="width: 60px;display: inline-block;" class="layui-input" placeholder="${serverStr.port}">
 									
-									<input type="checkbox" name="def" id="def" title="默认匹配" lay-skin="primary"> 
+									<input type="checkbox" name="def" id="def" title="${serverStr.default}" lay-skin="primary"> 
 								</div>
 							</div>
 							
@@ -272,7 +272,7 @@
 									</div>
 								</div>
 								<div class="layui-form-item">
-									<label class="layui-form-label">key文件路径</label>
+									<label class="layui-form-label">${serverStr.keyPath}</label>
 									<div class="layui-input-block">
 										<button type="button" class="layui-btn layui-btn-sm liteBtn" id="keyBtn">${serverStr.uploadKey}</button>
 										
@@ -407,7 +407,7 @@
 		<div class="layui-form" id="importDiv" style="padding: 15px; display: none">
 			<div class="layui-form-item">
 				<div class="layui-input-inline">
-					<input type="text" id="nginxPath" name="nginxPath" class="layui-input" placeholder="${commonStr.path}" >
+					<input type="text" id="nginxPath" name="nginxPath" class="layui-input" placeholder="${commonStr.filePath}" >
 				</div>
 				<div class="layui-input-inline">
 					<i class="layui-icon layui-icon-export" onclick="selectRootCustom('nginxPath')"></i>
@@ -415,7 +415,7 @@
 			</div>
 			<div class="layui-form-item">
 				<button type="button" class="layui-btn layui-btn-normal" onclick="importServer()">${serverStr.importServer}</button>
-				<button type="button" class="layui-btn" onclick="layer.close(importIndex)">${serverStr.close}</button>
+				<button type="button" class="layui-btn" onclick="layer.close(importIndex)">${commonStr.close}</button>
 			</div>
 		</div>
 	</div>

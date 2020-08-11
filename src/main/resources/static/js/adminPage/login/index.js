@@ -40,7 +40,7 @@ function login() {
 			}
 		},
 		error: function() {
-			alert(commonStr.errorInfo);
+			layer.alert(commonStr.errorInfo);
 		}
 	});
 
@@ -80,7 +80,7 @@ function addAdmin() {
 			}
 		},
 		error: function() {
-			alert(commonStr.errorInfo);
+			layer.alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -94,23 +94,4 @@ function getKey() {
 
 function refreshCode(id) {
 	$("#" + id).attr("src", ctx + "adminPage/login/getCode?t=" + (new Date()).getTime());
-}
-
-function changeLang() {
-	$.ajax({
-		type: 'POST',
-		url: ctx + '/adminPage/login/changeLang',
-		data: $("#adminForm").serialize(),
-		dataType: 'json',
-		success: function(data) {
-			if (data.success) {
-				location.reload();
-			} else {
-				layer.msg(data.msg);
-			}
-		},
-		error: function() {
-			alert(commonStr.errorInfo);
-		}
-	});
 }

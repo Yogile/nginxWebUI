@@ -13,7 +13,7 @@ $(function() {
 					
 				},
 				error : function() {
-					alert(commonStr.errorInfo);
+					layer.alert(commonStr.errorInfo);
 				}
 		});
 	});   
@@ -254,7 +254,7 @@ function addOver() {
 			}
 		},
 		error : function() {
-			alert(commonStr.errorInfo);
+			layer.alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -349,7 +349,7 @@ function edit(id,clone) {
 			}
 		},
 		error : function() {
-			alert(commonStr.errorInfo);
+			layer.alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -372,7 +372,7 @@ function del(id) {
 				}
 			},
 			error : function() {
-				alert(commonStr.errorInfo);
+				layer.alert(commonStr.errorInfo);
 			}
 		});
 	}
@@ -423,7 +423,7 @@ function buildHtml(uuid, location, upstreamSelect){
 				<td>
 					<span name="valueSpan">
 						<div class="layui-inline">
-							<input type="text"  style="width: 315px;" name="value" id="value_${uuid}" class="layui-input long" value=""  placeholder="${serverStr.example}：http://127.0.0.1:8080">
+							<input type="text"  style="width: 250px;" name="value" id="value_${uuid}" class="layui-input long" value=""  placeholder="${serverStr.example}：http://127.0.0.1:8080">
 						</div>
 					</span>
 					
@@ -456,7 +456,7 @@ function buildHtml(uuid, location, upstreamSelect){
 					
 					<span  name="headerSpan">
 						<div class="layui-inline">
-							<input type="checkbox" name="header" title="header添加Host参数" lay-skin="primary" checked> 
+							<input type="checkbox" name="header" title="${serverStr.headerAddHost}" lay-skin="primary" checked> 
 						</div>
 					</span>
 				</td> 
@@ -510,7 +510,7 @@ function selectCertOver(){
 			}
 		},
 		error : function() {
-			alert(commonStr.errorInfo);
+			layer.alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -678,7 +678,7 @@ function importServer() {
 			}
 		},
 		error : function() {
-			alert(commonStr.errorInfo);
+			layer.alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -718,7 +718,7 @@ function testPort(){
 			},
 			error : function() {
 				layer.closeAll();
-				alert(commonStr.errorInfo);
+				layer.alert(commonStr.errorInfo);
 			}
 		});
 	}

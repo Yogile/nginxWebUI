@@ -116,6 +116,12 @@ public class FrontInterceptor implements HandlerInterceptor {
 
 			request.setAttribute(key, map);
 		}
+		
+		if (settingService.get("lang") != null && settingService.get("lang").equals("en_US")) {
+			request.setAttribute("langType", "切换到中文");
+		} else {
+			request.setAttribute("langType", "Switch to English");
+		}
 
 		return true;
 	}

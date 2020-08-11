@@ -14,7 +14,7 @@ function dImport() {
 function dImportOver() {
 	var files = $('#file').prop('files');// 获取到文件列表
 	if (files.length == 0) {
-		alert('请选择文件');
+		layer.alert(exportStr.selectFile);
 	} else {
 		var reader = new FileReader();// 新建一个FileReader
 		reader.readAsText(files[0], "UTF-8");// 读取文件
@@ -36,7 +36,7 @@ function dImportOver() {
 					}
 				},
 				error : function() {
-					alert(commonStr.errorInfo);
+					layer.alert(commonStr.errorInfo);
 				}
 			});
 		}

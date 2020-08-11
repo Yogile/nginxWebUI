@@ -56,7 +56,7 @@ function showWindow(title){
 	layer.open({
 		type : 1,
 		title : title,
-		area : [ '550px', '300px' ], // 宽高
+		area : [ '550px', '350px' ], // 宽高
 		content : $('#windowDiv')
 	});
 }
@@ -80,7 +80,7 @@ function addOver() {
 			}
 		},
 		error : function() {
-			alert(commonStr.errorInfo);
+			layer.alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -103,7 +103,7 @@ function del(id){
 				}
 			},
 			error : function() {
-				alert(commonStr.errorInfo);
+				layer.alert(commonStr.errorInfo);
 			}
 		});
 	}
@@ -147,7 +147,7 @@ function edit(id){
 			}
 		},
 		error : function() {
-			alert(commonStr.errorInfo);
+			layer.alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -180,7 +180,7 @@ function update(id){
 			}
 		},
 		error : function() {
-			alert(commonStr.errorInfo);
+			layer.alert(commonStr.errorInfo);
 		}
 	});
 }

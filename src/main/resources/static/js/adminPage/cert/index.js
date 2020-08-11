@@ -17,7 +17,7 @@ $(function(){
 					}
 				},
 				error : function() {
-					alert(commonStr.errorInfo);
+					layer.alert(commonStr.errorInfo);
 				}
 		});
 	});   
@@ -146,7 +146,7 @@ function edit(id) {
 			}
 		},
 		error : function() {
-			alert(commonStr.errorInfo);
+			layer.alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -155,7 +155,7 @@ function showWindow(title){
 	layer.open({
 		type : 1,
 		title : title,
-		area : [ '700px', '400px' ], // 宽高
+		area : [ '700px', '450px' ], // 宽高
 		content : $('#windowDiv')
 	});
 }
@@ -195,7 +195,7 @@ function addOver() {
 			}
 		},
 		error : function() {
-			alert(commonStr.errorInfo);
+			layer.alert(commonStr.errorInfo);
 		}
 	});
 }
@@ -218,7 +218,7 @@ function del(id){
 				}
 			},
 			error : function() {
-				alert(commonStr.errorInfo);
+				layer.alert(commonStr.errorInfo);
 			}
 		});
 	}
@@ -240,7 +240,7 @@ function issue(id){
 			success : function(data) {
 				layer.closeAll();
 				if (data.success) {
-					alert("申请成功!");
+					layer.alert(certStr.applySuccess);
 					location.reload();
 				} else {
 					layer.open({
@@ -252,7 +252,7 @@ function issue(id){
 			},
 			error : function() {
 				layer.closeAll();
-				alert(commonStr.errorInfo);
+				layer.alert(commonStr.errorInfo);
 			}
 		});
 	}
@@ -274,7 +274,7 @@ function renew(id){
 			success : function(data) {
 				layer.closeAll();
 				if (data.success) {
-					alert("续签成功!");
+					layer.alert(certStr.renewSuccess);
 					location.reload();
 				} else {
 					layer.open({
@@ -286,7 +286,7 @@ function renew(id){
 			},
 			error : function() {
 				layer.closeAll();
-				alert(commonStr.errorInfo);
+				layer.alert(commonStr.errorInfo);
 			}
 		});
 	}
