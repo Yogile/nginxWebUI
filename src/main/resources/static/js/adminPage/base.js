@@ -95,7 +95,7 @@ function gohref(url) {
 
 // 退出登录
 function loginOut() {
-	if (confirm("是否退出登录?")) {
+	if (confirm(baseStr.exit)) {
 		location.href = ctx + "/adminPage/login/loginOut";
 	}
 }
@@ -171,13 +171,13 @@ function downloadFile(url, name) {
 
 function showUpdate(version, url, docker,update){
 	var str = `
-		<div style="font-size: 16px; font-weight: bolder;">有新版本发布 ${version}</div>
-		<div>更新内容: ${update}</div>
-		<div>jar下载地址: <span class='green'>${url}</span></div>
-		<div>docker地址: <span class='green'>${docker}</span></div>
+		<div style="font-size: 16px; font-weight: bolder;">${commonStr.newVersion} ${version}</div>
+		<div>${baseStr.updateContent}: ${update}</div>
+		<div>${baseStr.jar}: <span class='green'>${url}</span></div>
+		<div>${baseStr.docker}: <span class='green'>${docker}</span></div>
 		<div>&nbsp;</div>
 		<div>
-			<button type="button" class="layui-btn layui-btn-sm" onclick="autoUpdate('${url}')">点击自动更新</button>
+			<button type="button" class="layui-btn layui-btn-sm" onclick="autoUpdate('${url}')">${baseStr.click}</button>
 		</div>
 	`;
 	
@@ -203,7 +203,7 @@ function form2JsonString(formId) {
 
 var loaded;
 function autoUpdate(url){
-	if(confirm("是否进行自动更新?")){
+	if(confirm(baseStr.confirmUpdate)){
 		loaded =	layer.load();
 		$.ajax({
 			type : 'POST',
@@ -221,7 +221,7 @@ function autoUpdate(url){
 				
 				setTimeout(function(){
 					layer.close(loaded);
-					layer.alert("更新完成, 重新登录即可使用最新版本");
+					layer.alert(baseStr.updateOver);
 				},10000)
 				
 				
@@ -229,7 +229,7 @@ function autoUpdate(url){
 			error : function() {
 				setTimeout(function(){
 					layer.layer.close(loaded);
-					layer.alert("更新完成, 重新登录即可使用最新版本");
+					layer.alert(baseStr.updateOver);
 				},10000)
 			}
 		});
