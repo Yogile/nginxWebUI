@@ -56,7 +56,7 @@ public class MainTest {
 //		jdbcTemplate.execute("vacuum;");
 		
 		String mail = settingService.get("mail");
-		sendMailUtils.sendMailSmtp(mail, m.get("mailStr.nginxFail"), m.get("mailStr.nginxTips") + StrUtil.join(" ", "127.0.0.1"));
+		sendMailUtils.sendMailSmtp(mail, m.get("mailStr.upstreamFail"), m.get("mailStr.upstreamFail") + StrUtil.join(" ", "127.0.0.1"));
 	}
 
 	@AfterAll
