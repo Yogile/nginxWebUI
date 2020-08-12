@@ -428,7 +428,7 @@ function buildHtml(uuid, location, upstreamSelect){
 					</span>
 					
 					<span name="rootPathSpan">
-						<div class="layui-inline" style="width: 100px;">
+						<div class="layui-inline" style="width: 150px;">
 							<select name="rootType" >
 								<option value="root">${serverStr.rootModel}</option>
 								<option value="alias">${serverStr.aliasModel}</option>
@@ -441,7 +441,7 @@ function buildHtml(uuid, location, upstreamSelect){
 							
 						<i class="layui-icon layui-icon-export" lang="value" onclick="selectWww('${uuid}')"></i> 
 							
-						<div class="layui-inline" style="width: 150px;">
+						<div class="layui-inline" style="width: 120px;">
 							<input type="text" name="rootPage" id="rootPage_${uuid}" class="layui-input" placeholder="${serverStr.defaultPage}">
 						</div>	
 					</span>
