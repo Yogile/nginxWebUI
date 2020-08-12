@@ -120,9 +120,9 @@ $(function(){
 									}
 								}
 							},{
-								title : '地址',
+								title : remoteStr.addr,
 								template : function(remote) {
-									if(remote.type == 0 && remote.id!='本地'){
+									if(remote.type == 0 && remote.id!='local'){
 										return remote.protocol + "://" + remote.ip + ":" + remote.port;
 									}
 									return "";
@@ -181,7 +181,7 @@ $(function(){
 											html += `<button class="layui-btn layui-btn-sm layui-btn-normal" onclick="change('${remote.id}')">${remoteStr.changeTo}</button>`;
 										}
 										
-										if(remote.id != '本地'){
+										if(remote.id != 'local'){
 											// 本地
 											if(remote.status == 1){
 												html += `<button class="layui-btn layui-btn-sm" onclick="content('${remote.id}')">${remoteStr.see} conf</button>`;
