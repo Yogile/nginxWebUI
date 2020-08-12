@@ -59,7 +59,7 @@ public class MonitorController extends BaseController {
 
 				for (int i = 1; i < lines.size(); i++) {
 					String line = lines.get(i);
-					if (line.contains("/")) {
+					if (line.contains(File.separator)) {
 						while (line.contains("  ")) {
 							line = line.replace("  ", " ");
 						}
