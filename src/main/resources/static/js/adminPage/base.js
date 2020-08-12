@@ -183,6 +183,11 @@ function showUpdate(version, url, docker,update){
 	
 	layer.open({
 		  type: 0, 
+		  title : commonStr.update,
+		  btn: [commonStr.close],
+		  yes: function(index, layero){
+		       layer.closeAll();
+		  },
 		  area : [ '600px', '400px' ],
 		  content: str
 	});
