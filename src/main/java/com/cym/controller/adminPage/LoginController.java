@@ -79,7 +79,7 @@ public class LoginController extends BaseController {
 
 		if (adminService.login(name, pass)) {
 
-			httpSession.setAttribute("localType", "本地");
+			httpSession.setAttribute("localType", "local");
 			httpSession.setAttribute("isLogin", true);
 
 			// 检查更新
@@ -122,8 +122,8 @@ public class LoginController extends BaseController {
 	public JsonResult getLocalType(HttpSession httpSession) {
 		String localType = (String) httpSession.getAttribute("localType");
 		if (StrUtil.isNotEmpty(localType)) {
-			if ("本地".equals(localType)) {
-				return renderSuccess(m.get("loginStr.local"));
+			if ("local".equals(localType)) {
+				return renderSuccess("local");
 			} else {
 				Remote remote = (Remote) httpSession.getAttribute("remote");
 				if (StrUtil.isNotEmpty(remote.getDescr())) {

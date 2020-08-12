@@ -125,7 +125,7 @@ public class ScheduleTask {
 	// 检查nginx运行
 	@Scheduled(cron = "0/30 * * * * ?")
 	public void nginxTasks() {
-		System.err.println("检查nginx运行");
+		//System.err.println("检查nginx运行");
 
 		String lastNginxSend = settingService.get("lastNginxSend");
 		String mail = settingService.get("mail");
@@ -153,7 +153,7 @@ public class ScheduleTask {
 			if ("1".equals(settingService.get("monitorLocal"))) {
 				Map<String, Object> map = remoteController.version();
 				if ((Integer) map.get("nginx") == 0) {
-					names.add(0, "本地[127.0.0.1:" + port + "]");
+					names.add(0, m.get("remoteStr.local") + "[127.0.0.1:" + port + "]");
 				}
 			}
 
@@ -168,7 +168,7 @@ public class ScheduleTask {
 	// 检查节点情况
 	@Scheduled(cron = "0/30 * * * * ?")
 	public void nodeTasks() {
-		System.err.println("检查节点情况");
+		//System.err.println("检查节点情况");
 
 		String lastUpstreamSend = settingService.get("lastUpstreamSend");
 		String mail = settingService.get("mail");

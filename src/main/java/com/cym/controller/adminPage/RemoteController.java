@@ -113,11 +113,11 @@ public class RemoteController extends BaseController {
 		}
 
 		Remote remoteLocal = new Remote();
-		remoteLocal.setId("本地");
+		remoteLocal.setId("local");
 		remoteLocal.setIp("");
 		remoteLocal.setProtocol("");
 		remoteLocal.setParentId("");
-		remoteLocal.setDescr("本地");
+		remoteLocal.setDescr(m.get("remoteStr.local"));
 		Map<String, Object> map = version();
 		remoteLocal.setVersion((String) map.get("version"));
 		remoteLocal.setNginx((Integer) map.get("nginx"));
@@ -213,8 +213,8 @@ public class RemoteController extends BaseController {
 		fillTreeRemote(groups, remotes, treeList);
 
 		Tree tree = new Tree();
-		tree.setName("本地");
-		tree.setValue("本地");
+		tree.setName(m.get("remoteStr.local"));
+		tree.setValue(m.get("remoteStr.local"));
 
 		treeList.add(0, tree);
 
@@ -256,7 +256,7 @@ public class RemoteController extends BaseController {
 		StringBuilder rs = new StringBuilder();
 		for (String id : remoteId) {
 			JsonResult jsonResult = null;
-			if (id.equals("本地")) {
+			if (id.equals("local")) {
 				if (cmd.contentEquals("check")) {
 					jsonResult = confController.check(null, null, null);
 				}
@@ -270,9 +270,9 @@ public class RemoteController extends BaseController {
 					jsonResult = confController.stop(null, null);
 				}
 				if (cmd.contentEquals("update")) {
-					jsonResult = renderError("不允许对本地进行远程更新");
+					jsonResult = renderError(m.get("remoteStr.notAllow"));
 				}
-				rs.append("<span class='blue'>本地> </span>");
+				rs.append("<span class='blue'>" + m.get("remoteStr.local") + "> </span>");
 			} else {
 				Remote remote = sqlHelper.findById(id, Remote.class);
 				rs.append("<span class='blue'>").append(remote.getIp()).append("> </span>");
@@ -303,7 +303,7 @@ public class RemoteController extends BaseController {
 	public JsonResult asyc(String fromId, String[] remoteId) {
 		if (StrUtil.isEmpty(fromId) || remoteId == null || remoteId.length == 0) {
 			return renderSuccess(m.get("remoteStr.noChoice"));
-		} 
+		}
 
 		Remote remoteFrom = sqlHelper.findById(fromId, Remote.class);
 		String json;
@@ -316,7 +316,7 @@ public class RemoteController extends BaseController {
 		}
 
 		for (String remoteToId : remoteId) {
-			if (remoteToId.equals("本地")) {
+			if (remoteToId.equals("local")) {
 				setAsycPack(json);
 			} else {
 				Remote remoteTo = sqlHelper.findById(remoteToId, Remote.class);
@@ -360,11 +360,11 @@ public class RemoteController extends BaseController {
 	@ResponseBody
 	public JsonResult addOver(Remote remote) {
 		remote.setIp(remote.getIp().trim());
-		
-		if(remoteService.hasSame(remote)) {
+
+		if (remoteService.hasSame(remote)) {
 			return renderError(m.get("remoteStr.sameIp"));
 		}
-		
+
 		remoteService.getCreditKey(remote);
 
 		if (StrUtil.isNotEmpty(remote.getCreditKey())) {
@@ -421,10 +421,10 @@ public class RemoteController extends BaseController {
 		Remote remote = sqlHelper.findById(id, Remote.class);
 
 		if (remote == null) {
-			httpSession.setAttribute("localType", "本地");
+			httpSession.setAttribute("localType", "local");
 			httpSession.removeAttribute("remote");
 		} else {
-			httpSession.setAttribute("localType", "远程");
+			httpSession.setAttribute("localType", "remote");
 			httpSession.setAttribute("remote", remote);
 		}
 
@@ -455,7 +455,7 @@ public class RemoteController extends BaseController {
 	@RequestMapping("setMonitor")
 	@ResponseBody
 	public JsonResult setMonitor(String id, Integer monitor) {
-		if (!"本地".equals(id)) {
+		if (!"local".equals(id)) {
 			Remote remote = new Remote();
 			remote.setId(id);
 			remote.setMonitor(monitor);
