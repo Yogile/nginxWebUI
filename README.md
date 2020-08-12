@@ -5,6 +5,8 @@ nginx网页配置工具
 
 QQ技术交流群: 1106758598
 
+邮箱: cym1102@qq.com
+
 官网地址: http://www.nginxwebui.cn
 
 #### 功能说明
@@ -26,8 +28,6 @@ nginx本身功能复杂, 本项目并不能涵盖nginx所有功能, 只能配置
 > sqlHelper是一个可以像mongodb一样使用sql数据库的orm, 解放开发者对sql数据库表结构的维护工作, 支持sqlite, mysql, postgresql三种数据库, 有兴趣的可以了解一下 https://gitee.com/cym1102/sqlHelper
 
 本系统通过Let's encrypt申请证书, 使用acme.sh脚本进行自动化申请和续签, 开启续签的证书将在每天凌晨2点进行续签, 只有超过60天的证书才会进行续签. 只支持在linux下签发证书.
-
-因为申请证书必须要使用80端口, 因此在申请和续签的时候nginx将会短暂关闭，请注意。
 
 添加tcp/ip转发配置支持时, 一些低版本的nginx可能需要重新编译，通过添加–with-stream参数指定安装stream模块才能使用, 但在ubuntu 18.04下, 官方软件库中的nginx已经带有stream模块, 不需要重新编译. 本系统如果配置了tcp转发项的话, 会自动引入ngx_stream_module.so的配置项, 如果没有开启则不引入, 最大限度优化ngnix配置文件. 
 
