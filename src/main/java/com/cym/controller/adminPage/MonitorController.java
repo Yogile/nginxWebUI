@@ -59,7 +59,7 @@ public class MonitorController extends BaseController {
 
 				for (int i = 1; i < lines.size(); i++) {
 					String line = lines.get(i);
-					if (line.contains(File.separator)) {
+					if (line.startsWith(File.separator)) {
 						while (line.contains("  ")) {
 							line = line.replace("  ", " ");
 						}
@@ -99,6 +99,7 @@ public class MonitorController extends BaseController {
 		modelAndView.setViewName("/adminPage/monitor/index");
 		return modelAndView;
 	}
+	
 
 	@RequestMapping("check")
 	@ResponseBody
