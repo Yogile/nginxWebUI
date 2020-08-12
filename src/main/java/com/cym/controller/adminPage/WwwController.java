@@ -108,7 +108,12 @@ public class WwwController extends BaseController {
 			}
 
 			FileUtil.del(www.getDir());
-			www.setDir(dir);
+			if (!SystemTool.isWindows()) {
+				www.setDir(dir);
+			} else {
+				String classPath = getClassPath();
+				www.setDir(classPath.split(":")[0] + ":" + dir);
+			}
 			sqlHelper.insertOrUpdate(www);
 
 			return renderSuccess();
