@@ -50,11 +50,6 @@ public class InitConfig {
 
 	@PostConstruct
 	public void init() throws IOException {
-		// 建立数据文件夹
-		if(!FileUtil.exist(InitConfig.home)) {
-			FileUtil.mkdir(InitConfig.home);
-		}
-		
 		// 初始化base值
 		Long count = sqlHelper.findAllCount(Basic.class);
 		if (count == 0) {
