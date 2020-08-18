@@ -425,7 +425,7 @@ function addBatch(){
 	$("#batchIp").val("");
 	batchIndex = layer.open({
 		type: 1,
-		title: "批量添加ip端口",
+		title: upstreamStr.addServerBatch,
 		area: ['800px', '500px'], // 宽高
 		content: $('#batchDiv')
 	});
