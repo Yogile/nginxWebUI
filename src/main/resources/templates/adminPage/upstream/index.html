@@ -151,7 +151,7 @@
 
 				<div class="layui-form-item">
 					<button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="addItem()">${upstreamStr.addServer}</button>
-					<button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="addBatch()">批量添加ip端口</button>
+					<button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="addBatch()">${upstreamStr.addServerBatch}</button>
 					
 					<button type="button" class="layui-btn layui-btn-sm" onclick="upstreamParam()">${upstreamStr.extParam}</button>
 					<textarea style="display: none;" id="upstreamParamJson" name="upstreamParamJson"></textarea>
@@ -188,9 +188,9 @@
 		
 		<div class="layui-form" id="batchDiv" style="padding: 15px; display: none">
 			<div class="layui-form-item">
-				<label class="layui-form-label">批量ip端口</label>
+				<label class="layui-form-label">${upstreamStr.ipPort}</label>
 				<div class="layui-input-block">
-					<textarea type="text" style="width: 100%;height: 300px;" name="batchIp" id="batchIp" class="layui-textarea" placeholder="添加示例: 10.10.10.1:1000,10.10.10.2:1000 用逗号分隔开"></textarea>
+					<textarea type="text" style="width: 100%;height: 300px;" name="batchIp" id="batchIp" class="layui-textarea" placeholder="${upstreamStr.example}"></textarea>
 				</div>
 			</div>
 
