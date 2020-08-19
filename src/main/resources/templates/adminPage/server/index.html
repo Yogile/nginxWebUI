@@ -216,7 +216,7 @@
 						<div class="proxyHttp">
 							<label class="layui-form-label">&nbsp;</label>
 							<div class="layui-input-block">
-								<button type="button" class="layui-btn layui-btn-sm layui-btn-normal" style="margin-left: 5px;" onclick="selectCert()">${serverStr.selectCert}</button>
+								<button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="selectCert()">${serverStr.selectCert}</button>
 								<div class="layui-form-mid layui-word-aux"></div>
 							</div>
 						</div>
@@ -267,7 +267,7 @@
 										<button type="button" class="layui-btn layui-btn-sm layui-btn-normal liteBtn" onclick="selectPem()">${commonStr.selectPath}</button>
 										
 										<input type="hidden" name="pem" id="pem" class="layui-input">
-										<div class="layui-form-mid layui-word-aux" id="pemPath"></div>
+										<div class="layui-form-mid layui-word-aux ellipsis" id="pemPath"></div>
 										
 									</div>
 								</div>
@@ -279,7 +279,7 @@
 										<button type="button" class="layui-btn layui-btn-sm layui-btn-normal liteBtn" onclick="selectKey()">${commonStr.selectPath}</button>
 										
 										<input type="hidden" name="key" id="key" class="layui-input">
-										<div class="layui-form-mid layui-word-aux" id="keyPath"></div>
+										<div class="layui-form-mid layui-word-aux ellipsis" id="keyPath" ></div>
 									</div>
 								</div>
 
