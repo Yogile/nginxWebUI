@@ -162,7 +162,7 @@ function showContent(dataGroup) {
 			trigger: 'axis',
 			formatter(params) {
 				return `
-	            	${params[0].name}时<br>
+	            	${params[0].name}logStr.hour<br>  //这里建议引用多国语言，英文Hour，
 	            	pv: ${params[0].value}<br>
 	            	uv: ${params[1].value}
 	            `;
@@ -220,6 +220,7 @@ function showContent(dataGroup) {
 			}
 		},
 		xAxis: {
+            name: 次, //这里的域名统计，应该在x轴显示“次”，英文times
 			type: 'value'
 		},
 		yAxis: {
@@ -227,7 +228,7 @@ function showContent(dataGroup) {
 			data: names
 		},
 		grid: { // 控制图的大小，调整下面这些值就可以，
-			x: 150// x的值可以空值y轴与label标签的距离，效果如下图：
+			x: 150// x的值可以空值y轴与label标签的距离
 		},
 		series: [{
 			data: values,
