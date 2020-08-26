@@ -20,14 +20,14 @@ $(function() {
 	laypage.render({
 		elem : 'pageInfo', // 渲染节点
 		count : page.count, // 总记录数
-		curr : page.current, // 起始页
+		curr : page.curr, // 起始页
 		limit : page.limit, // 每页记录数
 		layout : ['count', 'prev', 'page', 'next',  'skip' ,'limit'],
 		jump : function(obj, first) {
 			// 首次不执行
 			if (!first) {
 				// do something
-				$("input[name='current']").val(obj.curr);
+				$("input[name='curr']").val(obj.curr);
 				$("input[name='limit']").val(obj.limit);
 				$("#searchForm").submit();
 			}
