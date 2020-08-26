@@ -274,3 +274,12 @@ function  setParamOrder(id, seq){
 		$("#" + id).before(next);
 	}
 }
+
+// 显示载入框
+var loadIndex;
+function showLoad() {
+	loadIndex = layer.load();
+}
+function closeLoad() {
+	layer.close(loadIndex);
+}
