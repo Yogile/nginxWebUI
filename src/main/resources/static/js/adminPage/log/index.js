@@ -88,7 +88,7 @@ function showContent(dataGroup) {
 			trigger: 'item',
 			formatter(params) {
 				const item = params.data;
-				return item.name + commonStr.status + ": " + item.value;
+				return item.name + " " + commonStr.status + ": " + item.value;
 			},
 		},
 		series: [{
@@ -96,7 +96,7 @@ function showContent(dataGroup) {
 			radius: '55%',
 			data: dataGroup.status,
 			label: {
-				formatter: '{b}' + commonStr.status + ' : {c} ({d}%)'
+				formatter: '{b} ' + commonStr.status + ' : {c} ({d}%)'
 			}
 		}]
 	};
@@ -162,7 +162,7 @@ function showContent(dataGroup) {
 			trigger: 'axis',
 			formatter(params) {
 				return `
-	            	${params[0].name}logStr.hour<br>  //这里建议引用多国语言，英文Hour，
+	            	${params[0].name} ${logStr.hour}<br>
 	            	pv: ${params[0].value}<br>
 	            	uv: ${params[1].value}
 	            `;
@@ -220,7 +220,7 @@ function showContent(dataGroup) {
 			}
 		},
 		xAxis: {
-            name: 次, //这里的域名统计，应该在x轴显示“次”，英文times
+            name: logStr.times, //这里的域名统计，应该在x轴显示“次”，英文times
 			type: 'value'
 		},
 		yAxis: {
@@ -260,6 +260,7 @@ function analysis() {
 			url: ctx + '/adminPage/log/analysis',
 			dataType: 'json',
 			success: function(data) {
+				layer.closeAll();
 				if (data.success) {
 					location.reload();
 				} else {
