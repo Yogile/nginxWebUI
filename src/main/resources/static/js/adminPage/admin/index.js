@@ -93,3 +93,7 @@ function del(id){
 		});
 	}
 }
+
+function downApk(){
+	window.open("https://www.wandoujia.com/apps/32913");
+}
