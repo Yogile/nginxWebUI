@@ -57,7 +57,9 @@
 								</#if>
 							</td>
 							<td>
-								${admin.key}
+								<#if admin.auth>
+									${admin.key}
+								</#if>
 							</td>
 							<td>
 								<button class="layui-btn layui-btn-sm" onclick="edit('${admin.id}')">${commonStr.edit}</button>
