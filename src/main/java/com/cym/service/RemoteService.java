@@ -23,12 +23,12 @@ public class RemoteService {
 	@Autowired
 	SqlHelper sqlHelper;
 
-	public void getCreditKey(Remote remote) {
+	public void getCreditKey(Remote remote, String code) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 
 		paramMap.put("name", remote.getName());
 		paramMap.put("pass", remote.getPass());
-
+		paramMap.put("code", code);
 		try {
 			String rs = HttpUtil.post(remote.getProtocol() + "://" + remote.getIp() + ":" + remote.getPort() + "/adminPage/login/getCredit", paramMap, 2000);
 
