@@ -384,16 +384,21 @@ public class RemoteController extends BaseController {
 	@RequestMapping("getAuth")
 	@ResponseBody
 	public JsonResult getAuth(Remote remote) {
-		String rs = HttpUtil.get(remote.getProtocol() + "://" + remote.getIp() + ":" + remote.getPort() + "/adminPage/login/getAuth?name=" + remote.getName());
+		try {
+			String rs = HttpUtil.get(remote.getProtocol() + "://" + remote.getIp() + ":" + remote.getPort() + "/adminPage/login/getAuth?name=" + remote.getName(), 3000);
 
-		if (StrUtil.isNotEmpty(rs)) {
-			JsonResult jsonResult = JSONUtil.toBean(rs, JsonResult.class);
-			if (jsonResult.isSuccess()) {
-				return renderSuccess(jsonResult.getObj());
+			if (StrUtil.isNotEmpty(rs)) {
+				JsonResult jsonResult = JSONUtil.toBean(rs, JsonResult.class);
+				if (jsonResult.isSuccess()) {
+					return renderSuccess(jsonResult.getObj());
+				} else {
+					return renderError(jsonResult.getMsg());
+				}
 			} else {
-				return renderError(jsonResult.getMsg());
+				return renderError(m.get("remoteStr.noAuth"));
 			}
-		} else {
+		} catch (Exception e) {
+			e.printStackTrace();
 			return renderError(m.get("remoteStr.noAuth"));
 		}
 	}

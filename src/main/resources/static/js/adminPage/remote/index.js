@@ -766,13 +766,14 @@ function addOver() {
 		layer.msg(remoteStr.notFill);
 		return;
 	}
-	
+	load = layer.load();
 	$.ajax({
 		type : 'POST',
 		url : ctx + '/adminPage/remote/getAuth',
 		data : $('#addForm').serialize(),
 		dataType : 'json',
 		success : function(data) {
+			layer.close(load);
 			if (data.success) {
 				if(data.obj.auth){
 					$("#authCode").show();
@@ -794,6 +795,7 @@ function addOver() {
 			}
 		},
 		error : function() {
+			layer.close(load);
 			layer.alert(commonStr.errorInfo);
 		}
 	});
