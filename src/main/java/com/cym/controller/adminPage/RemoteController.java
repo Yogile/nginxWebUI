@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,9 @@ import com.cym.utils.NginxUtils;
 import com.cym.utils.SystemTool;
 
 import cn.craccd.sqlHelper.utils.ConditionAndWrapper;
+import cn.hutool.captcha.CaptchaUtil;
+import cn.hutool.captcha.ShearCaptcha;
+import cn.hutool.captcha.generator.RandomGenerator;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.TypeReference;
 import cn.hutool.core.util.StrUtil;
@@ -356,16 +361,17 @@ public class RemoteController extends BaseController {
 		return renderSuccess();
 	}
 
+	
 	@RequestMapping("addOver")
 	@ResponseBody
-	public JsonResult addOver(Remote remote) {
+	public JsonResult addOver(Remote remote,String code) {
 		remote.setIp(remote.getIp().trim());
 
 		if (remoteService.hasSame(remote)) {
 			return renderError(m.get("remoteStr.sameIp"));
 		}
 
-		remoteService.getCreditKey(remote);
+		remoteService.getCreditKey(remote, code);
 
 		if (StrUtil.isNotEmpty(remote.getCreditKey())) {
 			sqlHelper.insertOrUpdate(remote);

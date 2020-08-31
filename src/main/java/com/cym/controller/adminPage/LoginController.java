@@ -63,7 +63,6 @@ public class LoginController extends BaseController {
 	@RequestMapping("")
 	public ModelAndView admin(ModelAndView modelAndView) {
 
-
 		modelAndView.addObject("adminCount", sqlHelper.findCountByQuery(new ConditionAndWrapper(), Admin.class));
 		modelAndView.setViewName("/adminPage/login/index");
 		return modelAndView;
@@ -73,7 +72,8 @@ public class LoginController extends BaseController {
 	@ResponseBody
 	public JsonResult submitLogin(String name, String pass, String code, HttpSession httpSession) {
 		String imgCode = (String) httpSession.getAttribute("imgCode");
-		if (StrUtil.isNotEmpty(imgCode) && !imgCode.equalsIgnoreCase(code)) {
+
+		if (StrUtil.isEmpty(imgCode) || StrUtil.isNotEmpty(imgCode) && !imgCode.equalsIgnoreCase(code)) {
 			return renderError(m.get("loginStr.backError1"));
 		}
 
@@ -105,7 +105,12 @@ public class LoginController extends BaseController {
 
 	@ResponseBody
 	@RequestMapping("getCredit")
-	public JsonResult getCredit(String name, String pass) {
+	public JsonResult getCredit(String name, String pass, String code) {
+		String imgCode = settingService.get("remoteCode");
+		if (StrUtil.isEmpty(imgCode) || StrUtil.isNotEmpty(imgCode) && !imgCode.equalsIgnoreCase(code)) {
+			return renderError(m.get("loginStr.backError1"));
+		}
+
 		if (adminService.login(name, pass)) {
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("creditKey", creditService.make());
@@ -178,6 +183,17 @@ public class LoginController extends BaseController {
 
 		String createText = captcha.getCode();
 		httpServletRequest.getSession().setAttribute("imgCode", createText);
+
+		captcha.write(httpServletResponse.getOutputStream());
+	}
+
+	@RequestMapping("/getRemoteCode")
+	public void getRemoteCode(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws Exception {
+		ShearCaptcha captcha = CaptchaUtil.createShearCaptcha(100, 40);
+		captcha.setGenerator(new RandomGenerator("0123456789", 4));
+
+		String createText = captcha.getCode();
+		settingService.set("remoteCode", createText);
 
 		captcha.write(httpServletResponse.getOutputStream());
 	}

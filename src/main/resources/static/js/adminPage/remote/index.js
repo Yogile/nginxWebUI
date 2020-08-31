@@ -295,35 +295,6 @@ function content(id) {
 	});
 }
 
-var load;
-function addOver() {
-	if($("#ip").val().trim() == '' || $("#port").val().trim() == '' || $("#name").val().trim() == '' || $("#pass").val().trim() == ''){
-		layer.msg(remoteStr.notFill);
-		return;
-	}
-	
-	load = layer.load();
-	$.ajax({
-		type : 'POST',
-		url : ctx + '/adminPage/remote/addOver',
-		data : $('#addForm').serialize(),
-		dataType : 'json',
-		success : function(data) {
-			layer.close(load);
-			if (data.success) {
-				location.reload();
-			} else {
-				
-				layer.msg(data.msg);
-			}
-		},
-		error : function() {
-			layer.close(load);
-			layer.alert(commonStr.errorInfo);
-		}
-	});
-}
-
 function edit(id) {
 	$("#id").val(id); 
 	
@@ -784,4 +755,53 @@ function testMail(){
 			}
 		});
 	}
+}
+
+
+
+
+function addOver() {
+	if($("#ip").val().trim() == '' || $("#port").val().trim() == '' || $("#name").val().trim() == '' || $("#pass").val().trim() == ''){
+		layer.msg(remoteStr.notFill);
+		return;
+	}
+	
+	
+	codeIndex = layer.open({
+		type : 1,
+		title : loginStr.code,
+		area : [ '500px', '200px' ], // 宽高
+		content : $('#codeDiv')
+	});
+	refreshCode();
+}
+
+function addOverSubmit(){
+	var code = $("#codeInput").val()
+	$("#code").val(code);
+	
+	load = layer.load();
+	$.ajax({
+		type : 'POST',
+		url : ctx + '/adminPage/remote/addOver',
+		data : $('#addForm').serialize(),
+		dataType : 'json',
+		success : function(data) {
+			layer.close(load);
+			if (data.success) {
+				location.reload();
+			} else {
+				layer.msg(data.msg);
+			}
+		},
+		error : function() {
+			layer.close(load);
+			layer.alert(commonStr.errorInfo);
+		}
+	});
+}
+
+function refreshCode(){
+	var src = $("#protocol").val() + "://" + $("#ip").val() + ":" + $("#port").val() + "/adminPage/login/getRemoteCode?t=" + guid();
+	$("#codeImg").attr("src", src)
 }
