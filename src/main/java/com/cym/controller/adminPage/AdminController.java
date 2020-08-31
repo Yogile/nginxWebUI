@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.cym.model.Admin;
 import com.cym.service.AdminService;
 import com.cym.service.SettingService;
+import com.cym.utils.AuthUtils;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
 import com.cym.utils.SendMailUtils;
@@ -30,6 +31,8 @@ public class AdminController extends BaseController {
 	SettingService settingService;
 	@Autowired
 	SendMailUtils sendCloudUtils;
+	@Autowired
+	AuthUtils authUtils;
 
 	@RequestMapping("")
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView, Page page) {
@@ -48,13 +51,19 @@ public class AdminController extends BaseController {
 			if (count > 0) {
 				return renderError(m.get("adminStr.nameRepetition"));
 			}
-		}else {
+		} else {
 			Long count = adminService.getCountByNameWithOutId(admin.getName(), admin.getId());
 			if (count > 0) {
 				return renderError(m.get("adminStr.nameRepetition"));
 			}
 		}
-		
+
+		if (admin.getAuth()) {
+			admin.setKey(authUtils.makeKey());
+		} else {
+			admin.setKey("");
+		}
+
 		sqlHelper.insertOrUpdate(admin);
 
 		return renderSuccess();
@@ -78,7 +87,6 @@ public class AdminController extends BaseController {
 	@ResponseBody
 	public JsonResult getMailSetting() {
 		Map<String, String> map = new HashMap<>();
-
 
 		map.put("mail_host", settingService.get("mail_host"));
 		map.put("mail_port", settingService.get("mail_port"));
@@ -106,7 +114,7 @@ public class AdminController extends BaseController {
 	@RequestMapping("testMail")
 	@ResponseBody
 	public JsonResult testMail(String mail) {
-		if(StrUtil.isEmpty(mail)) {
+		if (StrUtil.isEmpty(mail)) {
 			return renderError(m.get("adminStr.emailEmpty"));
 		}
 		try {

@@ -32,7 +32,8 @@
 					<thead>
 						<tr>
 							<th>${adminStr.name}</th>
-
+							<th>谷歌两步验证</th>
+							<th>秘钥</th>
 							<th>${commonStr.operation}</th>
 						</tr>
 					</thead>
@@ -40,6 +41,17 @@
 						<#list page.records as admin>
 						<tr>
 							<td>${admin.name}</td>
+							<td>
+								<#if admin.auth>
+									是
+								</#if>
+								<#if !admin.auth>
+									否
+								</#if>
+							</td>
+							<td>
+								${admin.key}
+							</td>
 							<td>
 								<button class="layui-btn layui-btn-sm" onclick="edit('${admin.id}')">${commonStr.edit}</button>
 								<button class="layui-btn layui-btn-danger layui-btn-sm" onclick="del('${admin.id}')">${commonStr.del}</button>
@@ -71,6 +83,17 @@
 					<div class="layui-input-block">
 						<input type="password" name="pass" id="pass" class="layui-input">
 					</div>
+				</div>
+				
+				<div class="layui-form-item">
+					<label class="layui-form-label">谷歌验证</label>
+					<div class="layui-input-block">
+						<select id="auth" name="auth">
+							<option value="false">否</option>
+							<option value="true">是</option>
+						</select>
+					</div>
+					<!-- <div class="layui-form-mid layui-word-aux">注意：开启谷歌两步验证后，该账户不可用于连接远程服务器</div> -->
 				</div>
 
 				<div class="layui-form-item">
