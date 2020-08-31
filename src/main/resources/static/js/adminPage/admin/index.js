@@ -7,6 +7,7 @@ function add() {
 	$("#id").val(""); 
 	$("#name").val(""); 
 	$("#pass").val(""); 
+	$("#auth").val("false"); 
 	
 	showWindow(adminStr.add);
 }
@@ -56,6 +57,7 @@ function edit(id) {
 				$("#id").val(admin.id); 
 				$("#pass").val(admin.pass); 
 				$("#name").val(admin.name);
+				$("#auth").val(admin.auth + "");
 				
 				form.render();
 				showWindow(commonStr.edit);
