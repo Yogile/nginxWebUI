@@ -45,7 +45,11 @@
 			<artifactId>sqlHelper</artifactId>
 			<version>0.2.7</version>
 		</dependency>
-
+		<dependency>
+			<groupId>com.warrenstrange</groupId>
+			<artifactId>googleauth</artifactId>
+			<version>1.1.5</version>
+		</dependency>
 		<dependency>
 			<groupId>cn.hutool</groupId>
 			<artifactId>hutool-all</artifactId>
