@@ -218,6 +218,7 @@ function add() {
 	$("#id").val(""); 
 	$("#ip").val(""); 
 	$("#port").val(""); 
+	$("#descr").val(""); 
 	$("#protocol").val("http"); 
 	$("#name").val(""); 
 	$("#pass").val(""); 
@@ -766,20 +767,42 @@ function addOver() {
 		return;
 	}
 	
-	
-	codeIndex = layer.open({
-		type : 1,
-		title : loginStr.code,
-		area : [ '500px', '200px' ], // 宽高
-		content : $('#codeDiv')
+	$.ajax({
+		type : 'POST',
+		url : ctx + '/adminPage/remote/getAuth',
+		data : $('#addForm').serialize(),
+		dataType : 'json',
+		success : function(data) {
+			if (data.success) {
+				if(data.obj.auth){
+					$("#authCode").show();
+					$("#imgCode").hide();
+				} else {
+					$("#authCode").hide();
+					$("#imgCode").show();
+				}
+				
+				refreshCode();
+				codeIndex = layer.open({
+					type : 1,
+					title : loginStr.code,
+					area : [ '500px', '200px' ], // 宽高
+					content : $('#codeDiv')
+				});
+			} else {
+				layer.msg(data.msg);
+			}
+		},
+		error : function() {
+			layer.alert(commonStr.errorInfo);
+		}
 	});
-	refreshCode();
+	
 }
 
 function addOverSubmit(){
-	var code = $("#codeInput").val()
-	$("#code").val(code);
-	
+	$("#code").val($("#codeInput").val());
+	$("#auth").val($("#authInput").val());
 	load = layer.load();
 	$.ajax({
 		type : 'POST',

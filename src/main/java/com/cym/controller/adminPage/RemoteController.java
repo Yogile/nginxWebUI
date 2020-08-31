@@ -361,17 +361,16 @@ public class RemoteController extends BaseController {
 		return renderSuccess();
 	}
 
-	
 	@RequestMapping("addOver")
 	@ResponseBody
-	public JsonResult addOver(Remote remote,String code) {
+	public JsonResult addOver(Remote remote, String code, String auth) {
 		remote.setIp(remote.getIp().trim());
 
 		if (remoteService.hasSame(remote)) {
 			return renderError(m.get("remoteStr.sameIp"));
 		}
 
-		remoteService.getCreditKey(remote, code);
+		remoteService.getCreditKey(remote, code, auth);
 
 		if (StrUtil.isNotEmpty(remote.getCreditKey())) {
 			sqlHelper.insertOrUpdate(remote);
@@ -380,6 +379,23 @@ public class RemoteController extends BaseController {
 			return renderError(m.get("remoteStr.noAuth"));
 		}
 
+	}
+
+	@RequestMapping("getAuth")
+	@ResponseBody
+	public JsonResult getAuth(Remote remote) {
+		String rs = HttpUtil.get(remote.getProtocol() + "://" + remote.getIp() + ":" + remote.getPort() + "/adminPage/login/getAuth?name=" + remote.getName());
+
+		if (StrUtil.isNotEmpty(rs)) {
+			JsonResult jsonResult = JSONUtil.toBean(rs, JsonResult.class);
+			if (jsonResult.isSuccess()) {
+				return renderSuccess(jsonResult.getObj());
+			} else {
+				return renderError(jsonResult.getMsg());
+			}
+		} else {
+			return renderError(m.get("remoteStr.noAuth"));
+		}
 	}
 
 	@RequestMapping("detail")

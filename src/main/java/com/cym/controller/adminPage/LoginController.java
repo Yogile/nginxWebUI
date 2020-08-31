@@ -118,7 +118,7 @@ public class LoginController extends BaseController {
 
 	@ResponseBody
 	@RequestMapping("getCredit")
-	public JsonResult getCredit(String name, String pass, String code) {
+	public JsonResult getCredit(String name, String pass, String code, String auth) {
 		Admin admin = adminService.login(name, pass);
 		if (admin == null) {
 			return renderError(m.get("loginStr.backError3"));
@@ -130,7 +130,7 @@ public class LoginController extends BaseController {
 				return renderError(m.get("loginStr.backError1"));
 			}
 		} else {
-			if (!authUtils.testKey(admin.getKey(), code)) {
+			if (!authUtils.testKey(admin.getKey(), auth)) {
 				return renderError(m.get("loginStr.backError6"));
 			}
 		}
