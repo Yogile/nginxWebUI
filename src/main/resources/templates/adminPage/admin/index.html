@@ -22,6 +22,10 @@
 						<div class="layui-inline">
 							<button type="button" class="layui-btn layui-btn-normal" onclick="add()">${adminStr.add}</button>
 						</div>
+						
+						<div class="layui-inline">
+							<button type="button" class="layui-btn" onclick="downApk()">${adminStr.downApk}</button>
+						</div>
 
 						<input type="hidden" name="curr" value="${page.curr}">
 						<input type="hidden" name="limit" value="${page.limit}">
@@ -32,8 +36,8 @@
 					<thead>
 						<tr>
 							<th>${adminStr.name}</th>
-							<th>谷歌两步验证</th>
-							<th>秘钥</th>
+							<th>${adminStr.googleAuthenticator}</th>
+							<th>${adminStr.privateKey}</th>
 							<th>${commonStr.operation}</th>
 						</tr>
 					</thead>
@@ -43,10 +47,10 @@
 							<td>${admin.name}</td>
 							<td>
 								<#if admin.auth>
-									是
+									${commonStr.yes}
 								</#if>
 								<#if !admin.auth>
-									否
+									${commonStr.no}
 								</#if>
 							</td>
 							<td>
