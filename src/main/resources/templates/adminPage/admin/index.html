@@ -28,6 +28,11 @@
 						</div>
 						
 						<div class="layui-inline">
+							<button type="button" class="layui-btn" onclick="readme()">${adminStr.readme}</button>
+						</div>
+						
+						
+						<div class="layui-inline">
 							<div class="layui-form-mid layui-word-aux">${adminStr.notice}</div>
 						</div>
 						<input type="hidden" name="curr" value="${page.curr}">
@@ -59,6 +64,7 @@
 							<td>
 								<#if admin.auth>
 									${admin.key}
+									<a href="javascript:qr('${admin.name}','${admin.key}')" style="color: blue;" >${adminStr.qr}</a>
 								</#if>
 							</td>
 							<td>
@@ -110,6 +116,13 @@
 					<button type="button" class="layui-btn" onclick="layer.closeAll()">${commonStr.close}</button>
 				</div>
 			</form>
+		</div>
+		
+		
+		<div class="layui-form" id="qrDiv" style="padding: 15px;text-align:center; display: none">
+
+			<img id="qrImg" src="">
+
 		</div>
 
 	</div>
