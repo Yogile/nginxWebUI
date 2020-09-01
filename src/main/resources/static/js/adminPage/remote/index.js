@@ -786,7 +786,7 @@ function addOver() {
 				refreshCode();
 				codeIndex = layer.open({
 					type : 1,
-					title : loginStr.code,
+					title : loginStr.googleAuth,
 					area : [ '500px', '200px' ], // 宽高
 					content : $('#codeDiv')
 				});
