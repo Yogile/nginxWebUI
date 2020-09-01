@@ -371,7 +371,7 @@ public class ConfService {
 				ngxParam = new NgxParam();
 				String value = "listen " + server.getListen();
 				if(server.getProxyType() == 2) {
-					value += " udp";
+					value += " udp reuseport";
 				}
 				ngxParam.addValue(value);
 				ngxBlockServer.addEntry(ngxParam);
