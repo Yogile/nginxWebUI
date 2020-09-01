@@ -1,8 +1,12 @@
 package com.cym.controller.adminPage;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +22,12 @@ import com.cym.utils.AuthUtils;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
 import com.cym.utils.SendMailUtils;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
 
 import cn.craccd.sqlHelper.bean.Page;
 import cn.hutool.core.util.StrUtil;
@@ -123,6 +133,38 @@ public class AdminController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return renderError(e.getMessage());
+		}
+	}
+	
+
+	@RequestMapping(value = "qr")
+	public void getqcode(HttpServletResponse resp, String url, Integer w, Integer h) throws IOException {
+		if (url != null && !"".equals(url)) {
+			ServletOutputStream stream = null;
+
+			if (w == null) {
+				w = 300;
+			}
+			if (h == null) {
+				h = 300;
+			}
+			try {
+				stream = resp.getOutputStream();
+
+				Hashtable<EncodeHintType, Object> hints = new Hashtable<EncodeHintType, Object>();
+				hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
+				hints.put(EncodeHintType.MARGIN, 0);
+
+				BitMatrix matrix = new MultiFormatWriter().encode(url, BarcodeFormat.QR_CODE, w, h, hints);
+				MatrixToImageWriter.writeToStream(matrix, "png", stream);
+			} catch (WriterException e) {
+				e.printStackTrace();
+			} finally {
+				if (stream != null) {
+					stream.flush();
+					stream.close();
+				}
+			}
 		}
 	}
 }
