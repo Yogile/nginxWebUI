@@ -4,7 +4,7 @@ if [ ! -f "/home/nginxWebUI/nginxWebUI-${version}.jar" ]; then
     if [ ! -d "/home/nginxWebUI/" ]; then
        mkdir /home/nginxWebUI/
     fi
-       mv /home/nginxWebUI-${version}.jar /home/nginxWebUI/
+    mv /home/nginxWebUI-*.jar /home/nginxWebUI/
 fi
 
 echo "执行文件：$0";
