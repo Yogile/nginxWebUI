@@ -146,7 +146,11 @@ public class LoginController extends BaseController {
 
 	@ResponseBody
 	@RequestMapping("getAuth")
-	public JsonResult getAuth(String name, String code, HttpSession httpSession) {
+	public JsonResult getAuth(String name,String pass, String code, HttpSession httpSession) {
+		if (adminService.login(name, pass) == null) {
+			return renderError(m.get("loginStr.backError2"));
+		}
+		
 		String imgCode = (String) httpSession.getAttribute("imgCode");
 		if (StrUtil.isEmpty(imgCode) || StrUtil.isNotEmpty(imgCode) && !imgCode.equalsIgnoreCase(code)) {
 			return renderError(m.get("loginStr.backError1"));
