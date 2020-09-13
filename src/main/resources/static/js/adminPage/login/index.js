@@ -53,6 +53,7 @@ function getAuth() {
 		url: ctx + '/adminPage/login/getAuth',
 		data: {
 			name : $("#name").val(),
+			pass : $("#pass").val(),
 			code  :  $("#code").val()
 		},
 		dataType: 'json',
