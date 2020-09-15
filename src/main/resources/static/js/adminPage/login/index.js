@@ -38,7 +38,6 @@ function login() {
 				layer.msg(data.msg);
 			}
 			
-			refreshCode("codeImg");
 		},
 		error: function() {
 			layer.alert(commonStr.errorInfo);
@@ -73,7 +72,6 @@ function getAuth() {
 			} else {
 				layer.msg(data.msg);
 			}
-			
 			
 		},
 		error: function() {
