@@ -23,6 +23,7 @@ import com.cym.model.UpstreamServer;
 import com.github.odiszapc.nginxparser.NgxBlock;
 import com.github.odiszapc.nginxparser.NgxConfig;
 import com.github.odiszapc.nginxparser.NgxDumper;
+import com.github.odiszapc.nginxparser.NgxEntry;
 import com.github.odiszapc.nginxparser.NgxParam;
 
 import cn.craccd.sqlHelper.bean.Sort;
@@ -287,6 +288,7 @@ public class ConfService {
 				// 是否需要分解
 				if (decompose) {
 					String name = "all";
+
 					if (StrUtil.isNotEmpty(server.getServerName())) {
 						name = server.getServerName();
 					}
@@ -295,7 +297,10 @@ public class ConfService {
 
 					ngxParam = new NgxParam();
 					ngxParam.addValue("include " + nginxPath.replace("nginx.conf", "conf.d/" + name + ".conf"));
-					ngxBlockHttp.addEntry(ngxParam);
+
+					if (noContain(ngxBlockHttp, ngxParam)) {
+						ngxBlockHttp.addEntry(ngxParam);
+					}
 
 				} else {
 					ngxBlockHttp.addEntry(ngxBlockServer);
@@ -418,6 +423,23 @@ public class ConfService {
 		}
 
 		return null;
+	}
+
+	/**
+	 * include防止重复
+	 * 
+	 * @param ngxBlockHttp
+	 * @param ngxParam
+	 * @return
+	 */
+	private boolean noContain(NgxBlock ngxBlockHttp, NgxParam ngxParam) {
+		for (NgxEntry ngxEntry : ngxBlockHttp.getEntries()) {
+			if (ngxEntry.toString().equals(ngxParam.toString())) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	public String buildNodeStr(UpstreamServer upstreamServer) {
@@ -565,7 +587,7 @@ public class ConfService {
 		sqlHelper.deleteByQuery(new ConditionAndWrapper(), Stream.class);
 		sqlHelper.deleteByQuery(new ConditionAndWrapper(), Param.class);
 
-		sqlHelper.insertAll(asycPack.getBasicList()); 
+		sqlHelper.insertAll(asycPack.getBasicList());
 		sqlHelper.insertAll(asycPack.getHttpList());
 		sqlHelper.insertAll(asycPack.getServerList());
 		sqlHelper.insertAll(asycPack.getLocationList());
