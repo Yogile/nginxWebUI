@@ -15,6 +15,7 @@ import com.cym.model.UpstreamServer;
 import cn.craccd.sqlHelper.bean.Page;
 import cn.craccd.sqlHelper.bean.Sort;
 import cn.craccd.sqlHelper.bean.Sort.Direction;
+import cn.craccd.sqlHelper.bean.Update;
 import cn.craccd.sqlHelper.utils.ConditionAndWrapper;
 import cn.craccd.sqlHelper.utils.ConditionOrWrapper;
 import cn.craccd.sqlHelper.utils.SqlHelper;
@@ -111,11 +112,13 @@ public class UpstreamService {
 	}
 
 	public void resetMonitorStatus() {
-		List<UpstreamServer> list = sqlHelper.findAll(UpstreamServer.class);
-		for (UpstreamServer upstreamServer : list) {
-			upstreamServer.setMonitorStatus(-1);
-			sqlHelper.updateById(upstreamServer);
-		}
+//		List<UpstreamServer> list = sqlHelper.findAll(UpstreamServer.class);
+//		for (UpstreamServer upstreamServer : list) {
+//			upstreamServer.setMonitorStatus(-1);
+//			sqlHelper.updateById(upstreamServer);
+//		}
+
+		sqlHelper.updateMulti(new ConditionAndWrapper(), new Update().set("monitorStatus", -1), UpstreamServer.class);
 	}
 
 }
