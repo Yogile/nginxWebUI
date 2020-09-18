@@ -31,7 +31,15 @@ public class Server extends BaseModel {
 	
 	String descr; // 描述
 	
+	String protocols; // 加密协议
 	
+	
+	public String getProtocols() {
+		return protocols;
+	}
+	public void setProtocols(String protocols) {
+		this.protocols = protocols;
+	}
 	public String getDescr() {
 		return descr;
 	}
