@@ -155,7 +155,7 @@ public class RemoteController extends BaseController {
 	@RequestMapping("addGroupOver")
 	@ResponseBody
 	public JsonResult addGroupOver(Group group) {
-		if(group.getId().equals(group.getParentId())) {
+		if(StrUtil.isNotEmpty(group.getParentId()) && StrUtil.isNotEmpty(group.getId()) &&  group.getId().equals(group.getParentId())) {
 			return renderError("父分组不可为自身");
 		}
 		sqlHelper.insertOrUpdate(group);
