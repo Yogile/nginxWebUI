@@ -401,14 +401,24 @@
 		</div>
 		<!-- 选择导入文件弹出框 -->
 		<div class="layui-form" id="importDiv" style="padding: 15px; display: none">
+			
+			<div class="layui-form-item">	
+				<div class="layui-input-inline"  style="width: 400px;">
+					<div class="layui-form-mid layui-word-aux">${serverStr.importMsg}</div>
+				</div>
+			</div>
+			
 			<div class="layui-form-item">
 				<div class="layui-input-inline">
 					<input type="text" id="nginxPath" name="nginxPath" class="layui-input" placeholder="${commonStr.filePath}">
 				</div>
+				
 				<div class="layui-input-inline">
 					<i class="layui-icon layui-icon-export" onclick="selectRootCustom('nginxPath')"></i>
 				</div>
 			</div>
+			
+
 			<div class="layui-form-item">
 				<button type="button" class="layui-btn layui-btn-normal" onclick="importServer()">${serverStr.importServer}</button>
 				<button type="button" class="layui-btn" onclick="layer.close(importIndex)">${commonStr.close}</button>
