@@ -210,7 +210,11 @@ function addOver() {
 	server.proxyUpstreamId = $("#proxyUpstreamId").val();
 	server.listen = $("#listen").val();
 	if ($("#ip").val() != '') {
-		server.listen = $("#ip").val() + ":" + $("#listen").val();
+		var ip =  $("#ip").val();
+		if(ip.indexOf(":") > -1){
+			ip = `[${ip}]`;
+		}
+		server.listen = ip + ":" + $("#listen").val();
 	}
 	server.def = $("#def").prop("checked") ? "1" : "0";
 	server.serverName = $("#serverName").val();
@@ -292,8 +296,10 @@ function edit(id, clone) {
 				}
 
 				if (server.listen.indexOf(":") > -1) {
-					$("#ip").val(server.listen.split(":")[0]);
-					$("#listen").val(server.listen.split(":")[1]);
+					var listens = server.listen.split(":");
+					
+					$("#ip").val(server.listen.replace(":" + listens[listens.length - 1] , "").replace("[","").replace("]",""));
+					$("#listen").val(listens[listens.length - 1]);
 				} else {
 					$("#ip").val("");
 					$("#listen").val(server.listen);
