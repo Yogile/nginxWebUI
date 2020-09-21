@@ -329,17 +329,19 @@ function edit(id, clone) {
 				}
 				
 				$(".protocols").prop("checked",false);
-				if(server.protocols!=null){
-					if(server.protocols.indexOf("TLSv1") > -1){
+				if(server.protocols != null){
+					var protocols = server.protocols.split(" ");
+					
+					if(protocols.indexOf("TLSv1") > -1){
 						$("#TLSv1").prop("checked",true);
 					}
-					if(server.protocols.indexOf("TLSv1.1") > -1){
+					if(protocols.indexOf("TLSv1.1") > -1){
 						$("#TLSv1_1").prop("checked",true);
 					}
-					if(server.protocols.indexOf("TLSv1.2") > -1){
+					if(protocols.indexOf("TLSv1.2") > -1){
 						$("#TLSv1_2").prop("checked",true);
 					}
-					if(server.protocols.indexOf("TLSv1.3") > -1){
+					if(protocols.indexOf("TLSv1.3") > -1){
 						$("#TLSv1_3").prop("checked",true);
 					}
 				}
