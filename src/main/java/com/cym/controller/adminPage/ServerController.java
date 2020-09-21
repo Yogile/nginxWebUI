@@ -182,7 +182,7 @@ public class ServerController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			
-			return renderError(m.get("serverStr.importFail") + "：" + e.getMessage());
+			return renderError(m.get("serverStr.importFail"));
 		}
 	}
 
