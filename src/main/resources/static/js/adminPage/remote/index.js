@@ -775,7 +775,7 @@ function addOver() {
 		success : function(data) {
 			layer.close(load);
 			if (data.success) {
-				if(data.obj.auth){
+				if(String(data.obj.auth) == 'true'){
 					$("#authCode").show();
 					$("#imgCode").hide();
 				} else {
@@ -786,7 +786,7 @@ function addOver() {
 				refreshCode();
 				codeIndex = layer.open({
 					type : 1,
-					title : loginStr.googleAuth,
+					title : remoteStr.verify,
 					area : [ '500px', '200px' ], // 宽高
 					content : $('#codeDiv')
 				});
