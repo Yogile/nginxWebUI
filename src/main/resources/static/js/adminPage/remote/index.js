@@ -827,6 +827,7 @@ function addOverSubmit(){
 }
 
 function refreshCode(){
-	var src = $("#protocol").val() + "://" + $("#ip").val() + ":" + $("#port").val() + "/adminPage/login/getRemoteCode?t=" + guid();
-	$("#codeImg").attr("src", src)
+	var src = encodeURIComponent($("#protocol").val() + "://" + $("#ip").val() + ":" + $("#port").val() + "/adminPage/login/getRemoteCode?t=" + guid());
+	
+	$("#codeImg").attr("src", ctx + "/adminPage/remote/src?url=" + src)
 }
