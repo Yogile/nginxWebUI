@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -107,7 +108,7 @@ public class CertController extends BaseController {
 		String rs = "";
 		try {
 			// 设置dns账号
-			setEnv(cert);
+//			setEnv(cert);
 
 			String cmd = "";
 			if (type.equals("issue") || StrUtil.isEmpty(cert.getPem())) {
@@ -129,8 +130,23 @@ public class CertController extends BaseController {
 			}
 			logger.info(cmd);
 
-			rs = RuntimeUtil.execForStr(cmd);
-
+			List<String> list = new ArrayList<>();
+			if (cert.getDnsType().equals("ali")) {
+				list.add("Ali_Key='" + cert.getAliKey() + "'");
+				list.add("Ali_Secret='" + cert.getAliSecret() + "'");
+			}
+			if (cert.getDnsType().equals("dp")) {
+				list.add("DP_Id='" + cert.getDpId() + "'");
+				list.add("DP_Key='" + cert.getDpKey() + "'");
+			}
+			if (cert.getDnsType().equals("cf")) {
+				list.add("CF_Email='" + cert.getCfEmail() + "'");
+				list.add("CF_Key='" + cert.getCfKey() + "'");
+			}
+			String[] envp =  list.toArray(new String[list.size()]);
+			Process process = RuntimeUtil.exec(envp, cmd);
+			rs = RuntimeUtil.getResult(process);
+			
 			logger.info(rs);
 
 		} catch (Exception e) {
