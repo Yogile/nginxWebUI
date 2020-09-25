@@ -95,7 +95,7 @@ function del(id){
 }
 
 function downApk(){
-	window.open("https://www.wandoujia.com/apps/32913");
+	window.open("https://www.wandoujia.com/apps/8092183");
 }
 
 function readme(){
