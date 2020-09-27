@@ -100,7 +100,7 @@ function downApk(){
 	layer.open({
 		type : 1,
 		title : adminStr.downApk,
-		area : [ '700px', '450px' ], // 宽高
+		area : [ '600px', '350px' ], // 宽高
 		content : $('#downDiv')
 	});
 }
