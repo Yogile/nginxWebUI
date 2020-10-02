@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.RuntimeUtil;
 
@@ -18,7 +19,7 @@ public class AsyncUtils {
 	private static final Logger LOG = LoggerFactory.getLogger(AsyncUtils.class);
 
 	@Async
-	public void run(String path) {
+	public void run(String path, String jar) {
 		ThreadUtil.safeSleep(2000);
 		String cmd = "mv " + path + " " + path.replace(".update", "");
 		LOG.info(cmd);
@@ -27,5 +28,7 @@ public class AsyncUtils {
 		cmd = "nohup java -jar -Xmx64m " + path.replace(".update", "") + " --server.port=" + port + " --project.home=" + home + " > /dev/null &";
 		LOG.info(cmd);
 		RuntimeUtil.exec(cmd);
+		
+		FileUtil.del(jar);
 	}
 }
