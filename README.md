@@ -103,6 +103,16 @@ docker run -itd -v /home/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--server.p
 
 4. 日志默认存放在/home/nginxWebUI/log/nginxWebUI.log
 
+#### 编译说明
+
+1. 使用maven编译打包
+
+mvn clean package
+
+2. 使用docker构建镜像
+
+docker build -t nginxwebui:2.1.2 .
+
 #### 使用说明
 
 打开 http://xxx.xxx.xxx.xxx:8080 进入主页
