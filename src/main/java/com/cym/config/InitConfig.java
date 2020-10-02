@@ -75,11 +75,14 @@ public class InitConfig {
 		String nginxPath = settingService.get("nginxPath");
 
 		if (StrUtil.isEmpty(nginxPath)) {
-			// 释放nginxOrg.conf
+			// 释放nginx.conf,mime.types
 			nginxPath = home + "nginx.conf";
-			ClassPathResource resource = new ClassPathResource("nginxOrg.conf");
-			InputStream inputStream = resource.getInputStream();
-			FileUtil.writeFromStream(inputStream, nginxPath);
+			ClassPathResource resource = new ClassPathResource("nginx.conf");
+			FileUtil.writeFromStream(resource.getInputStream(), nginxPath);
+
+			resource = new ClassPathResource("mime.types");
+			FileUtil.writeFromStream(resource.getInputStream(), home + "mime.types");
+
 			// 设置nginx.conf路径
 			settingService.set("nginxPath", nginxPath);
 		}
@@ -153,7 +156,13 @@ public class InitConfig {
 	 * @return
 	 */
 	private Boolean inDocker() {
-		return FileUtil.exist("/etc/nginx/nginx.conf") && FileUtil.readUtf8String("/etc/nginx/nginx.conf").contains("include " + home + "nginx.conf");
+		List<String> rs = RuntimeUtil.execForLines("cat /proc/1/cgroup");
+		for (String str : rs) {
+			if (str.startsWith("1:name") && str.contains("docker")) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

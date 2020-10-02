@@ -84,7 +84,7 @@
 		
 			<div id="selectForm" >
 				<div class="layui-form-item">
-					<label class="layui-form-label long">nginx安装方式</label>
+					<label class="layui-form-label long">${monitorStr.install}</label>
 					<div class="layui-input-inline">
 						<input type="radio" name="install" id="check0" value="0" title="${monitorStr.install0}" checked>
       					<input type="radio" name="install" id="check1" value="1" title="${monitorStr.install1}" >
@@ -117,7 +117,7 @@
 					<div class="layui-input-inline short">
 						<i class="layui-icon layui-icon-export" onclick="selectRoot('nginxExe')"></i>   
 					</div>
-					<div class="layui-form-mid layui-word-aux">${monitorStr.exeTips}</div>
+					<!-- <div class="layui-form-mid layui-word-aux">${monitorStr.exeTips}</div> -->
 				</div>
 	
 				<div class="layui-form-item">
@@ -128,10 +128,11 @@
 					<div class="layui-input-inline short">
 						<i class="layui-icon layui-icon-export" onclick="selectRoot('nginxDir')"></i>   
 					</div>
-					<div class="layui-form-mid layui-word-aux">${monitorStr.dirTips}</div>
+					<!-- <div class="layui-form-mid layui-word-aux">${monitorStr.dirTips}</div> -->
 				</div>
 	
 				<div class="layui-form-item" style="text-align: center;">
+					<button type="button" class="layui-btn" style="width: 100px;" onclick="back()">${commonStr.back}</button>
 					<button type="button" class="layui-btn layui-btn-normal" style="width: 100px;" onclick="addNginxGiudeOver()">${commonStr.submit}</button>
 				</div>
 			</div>
