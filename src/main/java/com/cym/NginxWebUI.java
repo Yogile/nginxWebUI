@@ -59,13 +59,12 @@ public class NginxWebUI {
 		ApplicationHome home = new ApplicationHome(NginxWebUI.class);
 		File jar = home.getSource();
 
-		System.out.println(jar);
-		String[] list = jar.getParentFile().list();
-		for (String file : list) {
+		File[] list = jar.getParentFile().listFiles();
+		for (File file : list) {
 			System.out.println(file);
-			if (file.startsWith("nginxWebUI") && file.endsWith(".jar") && !file.equals(jar.getName())) {
-				System.err.println("del " + file);
-				FileUtil.del(file);
+			if (file.getName().startsWith("nginxWebUI") && file.getName().endsWith(".jar") && !file.getName().equals(jar.getName())) {
+				boolean rs = FileUtil.del(file);
+				System.err.println("del " + file + " " + rs);
 			}
 		}
 	}
