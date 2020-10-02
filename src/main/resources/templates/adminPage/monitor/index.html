@@ -81,8 +81,24 @@
 
 	<div style="height: 0px; width: 0px; overflow: hidden;">
 		<div class="layui-form" id="nginxGuideDiv" style="padding: 15px; display: none">
-			<form id="addForm">
+		
+			<div id="selectForm" >
 				<div class="layui-form-item">
+					<label class="layui-form-label long">nginx安装方式</label>
+					<div class="layui-input-inline">
+						<input type="radio" name="install" id="check0" value="0" title="apt yum安装" checked>
+      					<input type="radio" name="install" id="check1" value="1" title="源码编译安装" >
+					</div>
+				</div>
+	
+				<div class="layui-form-item" style="text-align: center;">
+					<button type="button" class="layui-btn layui-btn-normal" style="width: 100px;" onclick="selectNginxGiudeOver()">${commonStr.submit}</button>
+				</div>
+			</div>
+			
+			
+			<div id="addForm" style="display: none;">
+				<!-- <div class="layui-form-item">
 					<label class="layui-form-label long">nginx.conf ${commonStr.path}</label>
 					<div class="layui-input-inline">
 						<input type="text" id="nginxPath" class="layui-input" value="${nginxPath}">
@@ -91,7 +107,7 @@
 						<i class="layui-icon layui-icon-export" onclick="selectRoot('nginxPath')"></i>   
 					</div>
 					<div class="layui-form-mid layui-word-aux">nginx.conf ${commonStr.path}</div>
-				</div>
+				</div> -->
 	
 				<div class="layui-form-item">
 					<label class="layui-form-label long">nginx ${monitorStr.exe}</label>
@@ -118,7 +134,7 @@
 				<div class="layui-form-item" style="text-align: center;">
 					<button type="button" class="layui-btn layui-btn-normal" style="width: 100px;" onclick="addNginxGiudeOver()">${commonStr.submit}</button>
 				</div>
-			</form>
+			</div>
 		</div>
 	
 	</div>

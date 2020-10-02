@@ -6,6 +6,9 @@ $(function(){
 	});
 
 	if($("#isInit").val() == 'false'){
+		$("#selectForm").show();
+		$("#addForm").hide();
+		
 		layer.open({
 			type : 1,
 			closeBtn  :0,
@@ -46,20 +49,58 @@ function load(){
 }
 
 
-function addNginxGiudeOver(){
-	if($("#nginxPath").val() == ''){
-		layer.alert(monitorStr.pathAlert);
+function selectNginxGiudeOver(){
+	var checkType = 0;
+	if($("#check0").prop("checked")){
+		checkType = 0;
 	}
+	if($("#check1").prop("checked")){
+		checkType = 1;
+	}
+	
+	if(checkType == 0){
+		$.ajax({
+			type : 'POST',
+			url : ctx + '/adminPage/monitor/addNginxGiudeOver',
+			data :{
+				//nginxPath : "",
+				nginxExe : "nginx",
+				nginxDir : ""
+			},
+			dataType : 'json',
+			success : function(data) {
+				if (data.success) {
+					location.reload();
+				}else{
+					layer.alert(obj.msg);
+				}
+			},
+			error : function() {
+				layer.alert(commonStr.errorInfo);
+			}
+		});
+	} else {
+		$("#selectForm").hide();
+		$("#addForm").show();
+	}
+}
+
+function addNginxGiudeOver(){
+	//if($("#nginxPath").val() == ''){
+	//	layer.alert(monitorStr.pathAlert);
+	//}
 	if($("#nginxExe").val() == ''){
 		layer.alert(monitorStr.exeAlert);
 	}
-	
+	if($("#nginxDir").val() == ''){
+		layer.alert(monitorStr.dirAlert);
+	}
 	
 	$.ajax({
 		type : 'POST',
 		url : ctx + '/adminPage/monitor/addNginxGiudeOver',
 		data :{
-			nginxPath : $("#nginxPath").val(),
+			//nginxPath : $("#nginxPath").val(),
 			nginxExe : $("#nginxExe").val(),
 			nginxDir : $("#nginxDir").val()
 		},
