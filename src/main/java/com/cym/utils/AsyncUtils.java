@@ -24,6 +24,7 @@ public class AsyncUtils {
 	public void run(String path) {
 		ThreadUtil.safeSleep(2000);
 
+		System.out.println(path);
 		File file = new File(path);
 		String[] list = file.getParentFile().list();
 		for (String f : list) {
@@ -42,5 +43,17 @@ public class AsyncUtils {
 		LOG.info(cmd);
 		RuntimeUtil.exec(cmd);
 
+	}
+	
+	public static void main(String[] args) {
+		File file = new File("E:\\home\\test.gz");
+		String[] list = file.getParentFile().list();
+		for (String f : list) {
+			System.out.println(f);
+			if (f.startsWith("nginxWebUI") && f.endsWith(".jar")) {
+				System.err.println("del " + f);
+				FileUtil.del(f);
+			}
+		}
 	}
 }
