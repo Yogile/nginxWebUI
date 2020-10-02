@@ -27,7 +27,9 @@ public class AsyncUtils {
 		File file = new File(path);
 		String[] list = file.getParentFile().list();
 		for (String f : list) {
+			System.out.println(f);
 			if (f.startsWith("nginxWebUI") && f.endsWith(".jar")) {
+				System.err.println("del " + f);
 				FileUtil.del(f);
 			}
 		}
