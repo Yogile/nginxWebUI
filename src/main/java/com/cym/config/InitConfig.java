@@ -54,10 +54,8 @@ public class InitConfig {
 		Long count = sqlHelper.findAllCount(Basic.class);
 		if (count == 0) {
 			List<Basic> basics = new ArrayList<Basic>();
-
 			basics.add(new Basic("worker_processes", "auto", 1l));
 			basics.add(new Basic("events", "{\r\n" + "    worker_connections  1024;\r\n" + "}", 2l));
-
 			sqlHelper.insertAll(basics);
 		}
 
@@ -67,22 +65,23 @@ public class InitConfig {
 			List<Http> https = new ArrayList<Http>();
 			https.add(new Http("include", "mime.types", 0l));
 			https.add(new Http("default_type", "application/octet-stream", 1l));
-
 			sqlHelper.insertAll(https);
 		}
-
+		
+		// 释放nginx.conf,mime.types
+		if(!FileUtil.exist(home + "nginx.conf")) {
+			ClassPathResource resource = new ClassPathResource("nginx.conf");
+			FileUtil.writeFromStream(resource.getInputStream(), home + "nginx.conf");
+		}
+		if(!FileUtil.exist(home + "mime.types")) {
+			ClassPathResource resource = new ClassPathResource("mime.types");
+			FileUtil.writeFromStream(resource.getInputStream(), home + "mime.types");
+		}
+		
 		// 设置nginx配置文件
 		String nginxPath = settingService.get("nginxPath");
-
 		if (StrUtil.isEmpty(nginxPath)) {
-			// 释放nginx.conf,mime.types
 			nginxPath = home + "nginx.conf";
-			ClassPathResource resource = new ClassPathResource("nginx.conf");
-			FileUtil.writeFromStream(resource.getInputStream(), nginxPath);
-
-			resource = new ClassPathResource("mime.types");
-			FileUtil.writeFromStream(resource.getInputStream(), home + "mime.types");
-
 			// 设置nginx.conf路径
 			settingService.set("nginxPath", nginxPath);
 		}
@@ -105,7 +104,8 @@ public class InitConfig {
 					ZipUtil.unzip("/root/acme.zip", "/root/.acme.sh");
 					FileUtil.del("/root/acme.zip");
 				}
-
+				
+				// 赋予执行权限
 				RuntimeUtil.exec("chmod 777 " + acmeSh);
 			}
 
