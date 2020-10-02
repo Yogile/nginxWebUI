@@ -89,7 +89,7 @@ public class MainController extends BaseController {
 		String path = jar.getParent() + "/nginxWebUI.jar.update";
 		LOG.info("download:" + path);
 		HttpUtil.downloadFile(url, path);
-		asyncUtils.run(path, jar.getPath());
+		asyncUtils.run(path);
 		return renderSuccess();
 	}
 
