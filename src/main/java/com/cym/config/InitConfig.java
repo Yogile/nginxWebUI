@@ -71,9 +71,21 @@ public class InitConfig {
 			sqlHelper.insertAll(https);
 		}
 
+		// 设置nginx配置文件
+		String nginxPath = settingService.get("nginxPath");
+
+		if (StrUtil.isEmpty(nginxPath)) {
+			// 释放nginxOrg.conf
+			nginxPath = home + "nginx.conf";
+			ClassPathResource resource = new ClassPathResource("nginxOrg.conf");
+			InputStream inputStream = resource.getInputStream();
+			FileUtil.writeFromStream(inputStream, nginxPath);
+			// 设置nginx.conf路径
+			settingService.set("nginxPath", nginxPath);
+		}
+
 		if (SystemTool.isLinux()) {
 			// 初始化acme.sh
-			logger.info("----------------release acme.sh--------------");
 			if (!FileUtil.exist("/root/.acme.sh")) {
 
 				// 查看是否存在/home/nginxWebUI/.acme.sh
@@ -90,12 +102,12 @@ public class InitConfig {
 					ZipUtil.unzip("/root/acme.zip", "/root/.acme.sh");
 					FileUtil.del("/root/acme.zip");
 				}
-				
+
 				RuntimeUtil.exec("chmod 777 " + acmeSh);
 			}
 
 			// 查找ngx_stream_module模块
-			if(!basicService.contain("ngx_stream_module.so")) {
+			if (!basicService.contain("ngx_stream_module.so")) {
 				List<String> list = RuntimeUtil.execForLines(CharsetUtil.systemCharset(), "find / -name ngx_stream_module.so");
 				for (String path : list) {
 					if (path.contains("ngx_stream_module.so") && path.length() < 80) {
@@ -105,36 +117,14 @@ public class InitConfig {
 					}
 				}
 			}
-			
 
-			// 找寻nginx配置文件
-			logger.info("----------------find nginx.conf--------------");
-			String nginxPath = settingService.get("nginxPath");
-
-			if (StrUtil.isEmpty(nginxPath)) {
-				try {
-					// 判断是否是容器中
-					if (inDocker()) {
-						logger.info("----------------release nginx.conf--------------");
-						// 释放nginxOrg.conf
-						nginxPath = home + "nginx.conf";
-						ClassPathResource resource = new ClassPathResource("nginxOrg.conf");
-						InputStream inputStream = resource.getInputStream();
-						FileUtil.writeFromStream(inputStream, nginxPath);
-						settingService.set("nginxPath", nginxPath);
-
-						// 设置nginx执行文件
-						settingService.set("nginxExe", "nginx");
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-
-			// 在容器中,尝试启动nginx;
+			// 判断是否是容器中
 			if (inDocker()) {
+				String nginxExe = "nginx";
+				// 设置nginx执行文件
+				settingService.set("nginxExe", nginxExe);
 				// 启动nginx
-				RuntimeUtil.exec("nginx");
+				RuntimeUtil.exec(nginxExe, "-c", nginxPath);
 			}
 		}
 
