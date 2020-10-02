@@ -3,7 +3,7 @@ MAINTAINER Chenyimeng "cym1102@qq.com"
 RUN apt-get clean && apt-get update &&\
 	apt-get install -y nginx &&\
 	apt-get install -y curl &&\
-	apt-get install -y wget	
+	apt-get install -y wget	&&\
 	wget https://kkfileview.keking.cn/server-jre-8u251-linux-x64.tar.gz &&\
 	tar -zxf /tmp/server-jre-8u251-linux-x64.tar.gz && mv /tmp/jdk1.8.0_251 /usr/local/ &&\
 ENV JAVA_HOME /usr/local/jdk1.8.0_251
