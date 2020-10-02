@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.RuntimeUtil;
 
@@ -24,10 +25,10 @@ public class AsyncUtils {
 		ThreadUtil.safeSleep(2000);
 
 		File file = new File(path);
-		File[] list = file.getParentFile().listFiles();
-		for (File f : list) {
-			if (f.getName().startsWith("nginxWebUI") && f.getName().endsWith(".jar")) {
-				file.deleteOnExit();
+		String[] list = file.getParentFile().list();
+		for (String f : list) {
+			if (f.startsWith("nginxWebUI") && f.endsWith(".jar")) {
+				FileUtil.del(f);
 			}
 		}
 
