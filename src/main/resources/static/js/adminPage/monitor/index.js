@@ -13,7 +13,7 @@ $(function(){
 			type : 1,
 			closeBtn  :0,
 			title : monitorStr.init,
-			area : [ '800px', '400px' ], //宽高
+			area : [ '500px', '300px' ], //宽高
 			content : $('#nginxGuideDiv')
 		});
 	}
@@ -48,6 +48,10 @@ function load(){
 	});
 }
 
+function back(){
+	$("#selectForm").show();
+	$("#addForm").hide();
+}
 
 function selectNginxGiudeOver(){
 	var checkType = 0;
@@ -90,10 +94,12 @@ function addNginxGiudeOver(){
 	//	layer.alert(monitorStr.pathAlert);
 	//}
 	if($("#nginxExe").val() == ''){
-		layer.alert(monitorStr.exeAlert);
+		layer.msg(monitorStr.exeAlert);
+		return;
 	}
 	if($("#nginxDir").val() == ''){
-		layer.alert(monitorStr.dirAlert);
+		layer.msg(monitorStr.dirAlert);
+		return;
 	}
 	
 	$.ajax({
