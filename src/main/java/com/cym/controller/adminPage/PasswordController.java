@@ -1,5 +1,7 @@
 package com.cym.controller.adminPage;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,12 +10,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cym.config.InitConfig;
 import com.cym.model.Password;
 import com.cym.service.PasswordService;
 import com.cym.utils.BaseController;
+import com.cym.utils.CryptUtils;
 import com.cym.utils.JsonResult;
 
 import cn.craccd.sqlHelper.bean.Page;
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 
 @RequestMapping("/adminPage/password")
@@ -33,8 +38,8 @@ public class PasswordController extends BaseController {
 
 	@RequestMapping("addOver")
 	@ResponseBody
-	public JsonResult addOver(Password password) {
-		
+	public JsonResult addOver(Password password) throws IOException {
+
 		if (StrUtil.isEmpty(password.getId())) {
 			Long count = passwordService.getCountByName(password.getName());
 			if (count > 0) {
@@ -45,8 +50,15 @@ public class PasswordController extends BaseController {
 			if (count > 0) {
 				return renderError(m.get("adminStr.nameRepetition"));
 			}
+
+			Password passwordOrg = sqlHelper.findById(password.getId(), Password.class);
+			FileUtil.del(passwordOrg.getPath());
 		}
-		
+
+		password.setPath(InitConfig.home + "password/" + password.getName());
+//		CryptUtils.make(password.getName(), password.getPass(), password.getPath());
+		FileUtil.writeString(password.getName() + ":" + password.getPass(), password.getPath(), "UTF-8");
+
 		sqlHelper.insertOrUpdate(password);
 
 		return renderSuccess();
