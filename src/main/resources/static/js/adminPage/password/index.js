@@ -24,6 +24,12 @@ function showWindow(title){
 }
 
 function addOver() {
+	if($("#name").val() == '' || $("#pass").val() == '' || $("#descr").val() == '' ){
+		layer.msg("未填写完整");
+		return;
+	}
+	
+	
 	$.ajax({
 		type : 'POST',
 		url : ctx + '/adminPage/password/addOver',

@@ -14,7 +14,6 @@ import com.cym.config.InitConfig;
 import com.cym.model.Password;
 import com.cym.service.PasswordService;
 import com.cym.utils.BaseController;
-import com.cym.utils.CryptUtils;
 import com.cym.utils.JsonResult;
 
 import cn.craccd.sqlHelper.bean.Page;
@@ -57,7 +56,7 @@ public class PasswordController extends BaseController {
 
 		password.setPath(InitConfig.home + "password/" + password.getName());
 //		CryptUtils.make(password.getName(), password.getPass(), password.getPath());
-		FileUtil.writeString(password.getName() + ":" + password.getPass(), password.getPath(), "UTF-8");
+		FileUtil.writeString( password.getName() + ":" +  password.getPass(), password.getPath(), "UTF-8");
 
 		sqlHelper.insertOrUpdate(password);
 
