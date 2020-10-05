@@ -25,7 +25,7 @@ function showWindow(title){
 
 function addOver() {
 	if($("#name").val() == '' || $("#pass").val() == '' || $("#descr").val() == '' ){
-		layer.msg("未填写完整");
+		layer.msg(passwordStr.notFill);
 		return;
 	}
 	

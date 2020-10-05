@@ -30,9 +30,9 @@
 				<table class="layui-table">
 					<thead>
 						<tr>
-							<th>用户名</th>
-							<th>输入提示</th>
-							<th>文件路径</th>
+							<th>${passwordStr.name}</th>
+							<th>${passwordStr.descr}</th>
+							<th>${passwordStr.path}</th>
 							<th>${commonStr.operation}</th>
 						</tr>
 					</thead>
@@ -62,21 +62,21 @@
 				<input type="hidden" name="id" id="id">
 
 				<div class="layui-form-item">
-					<label class="layui-form-label">用户名</label>
+					<label class="layui-form-label">${passwordStr.name}</label>
 					<div class="layui-input-block">
 						<input type="text" name="name" id="name" class="layui-input">
 					</div>
 				</div>
 
 				<div class="layui-form-item">
-					<label class="layui-form-label">密码</label>
+					<label class="layui-form-label">${passwordStr.pass}</label>
 					<div class="layui-input-block">
 						<input type="password" name="pass" id="pass" class="layui-input">
 					</div>
 				</div>
 				
 				<div class="layui-form-item">
-					<label class="layui-form-label">输入提示</label>
+					<label class="layui-form-label">${passwordStr.descr}</label>
 					<div class="layui-input-block">
 						<input type="text" name="descr" id="descr" class="layui-input">
 					</div>

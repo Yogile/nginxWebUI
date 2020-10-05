@@ -272,10 +272,10 @@
 							
 							
 							<div class="layui-form-item">
-								<label class="layui-form-label">开启密码访问</label>
+								<label class="layui-form-label">${serverStr.pass}</label>
 								<div class="layui-input-inline">
 									<select name="passwordId" id="passwordId" >
-										<option value="">--不使用密码--</option>
+										<option value="">--${serverStr.noPass}--</option>
 										<#list passwordList as password>
 											<option value="${password.id}">${password.name}</option>
 										</#list>
