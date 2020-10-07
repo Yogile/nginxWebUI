@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ import com.cym.utils.JsonResult;
 import com.cym.utils.SystemTool;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.net.URLEncoder;
 import cn.hutool.core.util.RuntimeUtil;
@@ -129,8 +131,9 @@ public class CertController extends BaseController {
 			}
 			logger.info(cmd);
 
-			rs = RuntimeUtil.execForStr(cmd);
-
+			Process process = RuntimeUtil.exec(new String[] {}, new File("/root"), cmd);
+			rs = RuntimeUtil.getResult(process);
+			
 			logger.info(rs);
 
 		} catch (Exception e) {
