@@ -4,7 +4,6 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -29,7 +28,6 @@ import com.cym.utils.JsonResult;
 import com.cym.utils.SystemTool;
 
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.net.URLEncoder;
 import cn.hutool.core.util.RuntimeUtil;
@@ -123,17 +121,16 @@ public class CertController extends BaseController {
 					dnsType = "dns_cf";
 				}
 
-				cmd = "./acme.sh" + " --issue --dns " + dnsType + " -d " + cert.getDomain();
+				cmd = InitConfig.acmeSh + " --issue --dns " + dnsType + " -d " + cert.getDomain();
 			} else if (type.equals("renew")) {
 				// 续签,以第一个域名为证书名
 				String domain = cert.getDomain().split(",")[0];
-				cmd = "./acme.sh" + " --renew --force -d " + domain;
+				cmd = InitConfig.acmeSh + " --renew --force -d " + domain;
 			}
 			logger.info(cmd);
 
-			Process process = RuntimeUtil.exec(new String[] {}, new File("/root/.acme.sh/"), cmd);
-			rs = RuntimeUtil.getResult(process);
-			
+			rs = RuntimeUtil.execForStr(cmd);
+
 			logger.info(rs);
 
 		} catch (Exception e) {
