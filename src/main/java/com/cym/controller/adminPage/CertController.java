@@ -123,11 +123,11 @@ public class CertController extends BaseController {
 					dnsType = "dns_cf";
 				}
 
-				cmd = InitConfig.acmeSh + " --issue --dns " + dnsType + " -d " + cert.getDomain();
+				cmd = "./acme.sh" + " --issue --dns " + dnsType + " -d " + cert.getDomain();
 			} else if (type.equals("renew")) {
 				// 续签,以第一个域名为证书名
 				String domain = cert.getDomain().split(",")[0];
-				cmd = InitConfig.acmeSh + " --renew --force -d " + domain;
+				cmd = "./acme.sh" + " --renew --force -d " + domain;
 			}
 			logger.info(cmd);
 
