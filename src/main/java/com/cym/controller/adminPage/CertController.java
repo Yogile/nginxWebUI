@@ -131,7 +131,7 @@ public class CertController extends BaseController {
 			}
 			logger.info(cmd);
 
-			Process process = RuntimeUtil.exec(new String[] {}, new File("/root"), cmd);
+			Process process = RuntimeUtil.exec(new String[] {}, new File("/root/.acme.sh/"), cmd);
 			rs = RuntimeUtil.getResult(process);
 			
 			logger.info(rs);
