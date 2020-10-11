@@ -463,7 +463,7 @@ function diffUsingJS() {
 }
 
 
-function setStop(){
+/*function setStop(){
 	
 	$.ajax({
 		type : 'POST',
@@ -511,4 +511,4 @@ function setStopOver(){
 			layer.alert(commonStr.errorInfo);
 		}
 	});
-}
+}*/

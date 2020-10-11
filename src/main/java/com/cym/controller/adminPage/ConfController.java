@@ -1,8 +1,11 @@
 package com.cym.controller.adminPage;
 
 import java.io.File;
+import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -258,15 +261,12 @@ public class ConfController extends BaseController {
 			nginxDir = settingService.get("nginxDir");
 		}
 		try {
-			String cmd = settingService.get("nginxStop");
-//			if (SystemTool.isWindows()) {
-//				cmd = "taskkill /im /f nginx.exe ";
-//			} else {
-//				cmd = nginxExe + " -s stop";
-//				if (nginxExe.contains("/") && StrUtil.isNotEmpty(nginxDir)) {
-//					cmd = cmd + " -p " + nginxDir;
-//				}
-//			}
+			String cmd;
+			if (SystemTool.isWindows()) {
+				cmd = "taskkill /im /f nginx.exe ";
+			} else {
+				cmd = "pkill nginx";
+			}
 			String rs = RuntimeUtil.execForStr(cmd);
 
 			cmd = "<span class='blue'>" + cmd + "</span>";

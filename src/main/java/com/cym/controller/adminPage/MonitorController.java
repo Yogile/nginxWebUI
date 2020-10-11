@@ -115,11 +115,6 @@ public class MonitorController extends BaseController {
 
 		settingService.set("nginxDir", nginxDir);
 		settingService.set("nginxExe", nginxExe);
-		if (SystemTool.isWindows()) {
-			settingService.set("nginxStop", "taskkill /f /im nginx.exe");
-		} else {
-			settingService.set("nginxStop", nginxExe + " -s stop");
-		}
 		return renderSuccess();
 	}
 
