@@ -126,7 +126,6 @@ public class InitConfig {
 				String nginxExe = "nginx";
 				// 设置nginx执行文件
 				settingService.set("nginxExe", nginxExe);
-				settingService.set("nginxStop", "systemctl stop nginx");
 				// 启动nginx
 				RuntimeUtil.exec(nginxExe, "-c", nginxPath);
 			}
