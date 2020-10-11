@@ -572,7 +572,7 @@ public class ConfService {
 		
 		List<Password> passwordList = sqlHelper.findAll(Password.class);
 		for (Password password : passwordList) {
-			if (StrUtil.isNotEmpty(password.getPathStr()) && FileUtil.exist(password.getPath())) {
+			if (StrUtil.isNotEmpty(password.getPath()) && FileUtil.exist(password.getPath())) {
 				password.setPathStr(FileUtil.readString(password.getPath(), StandardCharsets.UTF_8));
 			}
 
