@@ -13,6 +13,7 @@ import com.cym.ext.AsycPack;
 import com.cym.ext.ConfExt;
 import com.cym.ext.ConfFile;
 import com.cym.model.Basic;
+import com.cym.model.Cert;
 import com.cym.model.Http;
 import com.cym.model.Location;
 import com.cym.model.Param;
@@ -554,6 +555,7 @@ public class ConfService {
 	public AsycPack getAsycPack() {
 		AsycPack asycPack = new AsycPack();
 		asycPack.setBasicList(sqlHelper.findAll(Basic.class));
+		
 		asycPack.setHttpList(sqlHelper.findAll(Http.class));
 		List<Server> serverList = sqlHelper.findAll(Server.class);
 		for (Server server : serverList) {
@@ -567,6 +569,16 @@ public class ConfService {
 		}
 		asycPack.setServerList(serverList);
 
+		
+		List<Password> passwordList = sqlHelper.findAll(Password.class);
+		for (Password password : passwordList) {
+			if (StrUtil.isNotEmpty(password.getPathStr()) && FileUtil.exist(password.getPath())) {
+				password.setPathStr(FileUtil.readString(password.getPath(), StandardCharsets.UTF_8));
+			}
+
+		}
+		asycPack.setPasswordList(passwordList); 
+		
 		asycPack.setLocationList(sqlHelper.findAll(Location.class));
 		asycPack.setUpstreamList(sqlHelper.findAll(Upstream.class));
 		asycPack.setUpstreamServerList(sqlHelper.findAll(UpstreamServer.class));
@@ -601,6 +613,7 @@ public class ConfService {
 	@Transactional
 	public void setAsycPack(AsycPack asycPack) {
 		// 不要同步Cert表
+		sqlHelper.deleteByQuery(new ConditionAndWrapper(), Password.class);
 		sqlHelper.deleteByQuery(new ConditionAndWrapper(), Basic.class);
 		sqlHelper.deleteByQuery(new ConditionAndWrapper(), Http.class);
 		sqlHelper.deleteByQuery(new ConditionAndWrapper(), Server.class);
@@ -618,13 +631,20 @@ public class ConfService {
 		sqlHelper.insertAll(asycPack.getUpstreamServerList());
 		sqlHelper.insertAll(asycPack.getStreamList());
 		sqlHelper.insertAll(asycPack.getParamList());
-
+		sqlHelper.insertAll(asycPack.getPasswordList());
+		
 		for (Server server : asycPack.getServerList()) {
 			if (StrUtil.isNotEmpty(server.getPem()) && StrUtil.isNotEmpty(server.getPemStr())) {
 				FileUtil.writeString(server.getPemStr(), server.getPem(), StandardCharsets.UTF_8);
 			}
 			if (StrUtil.isNotEmpty(server.getKey()) && StrUtil.isNotEmpty(server.getKeyStr())) {
 				FileUtil.writeString(server.getKeyStr(), server.getKey(), StandardCharsets.UTF_8);
+			}
+		}
+		
+		for (Password password : asycPack.getPasswordList()) {
+			if (StrUtil.isNotEmpty(password.getPath()) && StrUtil.isNotEmpty(password.getPathStr())) {
+				FileUtil.writeString(password.getPathStr(), password.getPath(), StandardCharsets.UTF_8);
 			}
 		}
 

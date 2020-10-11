@@ -258,17 +258,16 @@ public class ConfController extends BaseController {
 			nginxDir = settingService.get("nginxDir");
 		}
 		try {
-			String rs;
-			String cmd;
-			if (SystemTool.isWindows()) {
-				cmd = "taskkill /im nginx.exe /f";
-			} else {
-				cmd = nginxExe + " -s stop";
-				if (nginxExe.contains("/") && StrUtil.isNotEmpty(nginxDir)) {
-					cmd = cmd + " -p " + nginxDir;
-				}
-			}
-			rs = RuntimeUtil.execForStr(cmd);
+			String cmd = settingService.get("nginxStop");
+//			if (SystemTool.isWindows()) {
+//				cmd = "taskkill /im /f nginx.exe ";
+//			} else {
+//				cmd = nginxExe + " -s stop";
+//				if (nginxExe.contains("/") && StrUtil.isNotEmpty(nginxDir)) {
+//					cmd = cmd + " -p " + nginxDir;
+//				}
+//			}
+			String rs = RuntimeUtil.execForStr(cmd);
 
 			cmd = "<span class='blue'>" + cmd + "</span>";
 			if (StrUtil.isEmpty(rs) || rs.contains("已终止进程") || rs.toLowerCase().contains("terminated process")) {
@@ -338,6 +337,19 @@ public class ConfController extends BaseController {
 		} else {
 			return renderSuccess(m.get("confStr.noNeedUpdate"));
 		}
+	}
+
+	@RequestMapping(value = "getKey")
+	@ResponseBody
+	public JsonResult getKey(String key) {
+		return renderSuccess(settingService.get(key));
+	}
+
+	@RequestMapping(value = "setKey")
+	@ResponseBody
+	public JsonResult setKey(String key, String val) {
+		settingService.set(key, val);
+		return renderSuccess();
 	}
 
 }
