@@ -55,7 +55,7 @@ public class InitConfig {
 		if (count == 0) {
 			List<Basic> basics = new ArrayList<Basic>();
 			basics.add(new Basic("worker_processes", "auto", 1l));
-			basics.add(new Basic("events", "{\r\n" + "    worker_connections  1024;\r\n" + "}", 2l));
+			basics.add(new Basic("events", "{\r\n" + "    worker_connections  1024;\r\naccept_mutex on;\r\n" + "}", 2l));
 			sqlHelper.insertAll(basics);
 		}
 
@@ -126,6 +126,7 @@ public class InitConfig {
 				String nginxExe = "nginx";
 				// 设置nginx执行文件
 				settingService.set("nginxExe", nginxExe);
+				settingService.set("nginxStop", "systemctl stop nginx");
 				// 启动nginx
 				RuntimeUtil.exec(nginxExe, "-c", nginxPath);
 			}

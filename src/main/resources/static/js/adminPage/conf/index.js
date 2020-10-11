@@ -461,3 +461,54 @@ function diffUsingJS() {
 		content : $('#diffoutput')
 	});
 }
+
+
+function setStop(){
+	
+	$.ajax({
+		type : 'POST',
+		url : ctx + '/adminPage/conf/getKey',
+		data : {
+			key : "nginxStop"
+		},
+		dataType : 'json',
+		success : function(data) {
+			if(data.success){
+				$("#nginxStop").val(data.obj);
+			
+				layer.open({
+					type : 1,
+					title : "设置nginx停止命令",
+					area : [ '500px', '300px' ], //宽高
+					content : $('#setForm')
+				});
+				
+			}
+			
+		},
+		error : function() {
+			layer.alert(commonStr.errorInfo);
+		}
+	});
+	
+}
+
+function setStopOver(){
+	$.ajax({
+		type : 'POST',
+		url : ctx + '/adminPage/conf/setKey',
+		data : {
+			key : "nginxStop",
+			val : $("#nginxStop").val()
+		},
+		dataType : 'json',
+		success : function(data) {
+			if(data.success){
+				location.reload();
+			}
+		},
+		error : function() {
+			layer.alert(commonStr.errorInfo);
+		}
+	});
+}
