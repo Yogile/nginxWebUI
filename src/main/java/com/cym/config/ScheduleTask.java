@@ -1,9 +1,11 @@
 package com.cym.config;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -213,7 +215,14 @@ public class ScheduleTask {
 			}
 
 			if (ips.size() > 0) {
-				sendMailUtils.sendMailSmtp(mail, m.get("mailStr.upstreamFail"), m.get("mailStr.upstreamTips") + StrUtil.join(" ", ips));
+				String dateStr = DateUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss");
+				if (settingService.get("lang") != null && settingService.get("lang").equals("en_US")) {
+
+					SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss", Locale.ENGLISH);
+					dateStr = dateFormat.format(new Date());
+				}
+
+				sendMailUtils.sendMailSmtp(mail, m.get("mailStr.upstreamFail"), m.get("mailStr.upstreamTips") + StrUtil.join(" ", ips) + "\r\n" + dateStr);
 				settingService.set("lastUpstreamSend", String.valueOf(System.currentTimeMillis()));
 			}
 		}
