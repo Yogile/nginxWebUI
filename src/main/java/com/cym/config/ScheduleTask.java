@@ -106,10 +106,26 @@ public class ScheduleTask {
 		// 删掉7天前日志文件(zip)
 		long time = System.currentTimeMillis();
 		File dir = new File(InitConfig.home + "log/");
-
 		for (File file : dir.listFiles()) {
 			if (file.getName().contains("access.") && file.getName().endsWith(".zip")) {
 				String dateStr = file.getName().replace("access.", "").replace(".zip", "");
+				DateTime date = null;
+				if (dateStr.length() != 10) {
+					FileUtil.del(file);
+				} else {
+					date = DateUtil.parse(dateStr, "yyyy-MM-dd");
+					if (time - date.getTime() > TimeUnit.DAYS.toMillis(8)) {
+						FileUtil.del(file);
+					}
+				}
+			}
+		}
+
+		// 删除7天前的备份
+		dir = new File(InitConfig.home + "bak/");
+		for (File file : dir.listFiles()) {
+			if (file.getName().contains("nginx.conf.") && (file.getName().endsWith(".zip") || file.getName().endsWith(".bak"))) {
+				String dateStr = file.getName().replace("nginx.conf.", "").replace(".zip", "").replace(".bak", "");
 				DateTime date = null;
 				if (dateStr.length() != 10) {
 					FileUtil.del(file);
@@ -147,7 +163,7 @@ public class ScheduleTask {
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
-					
+
 					names.add(remote.getDescr() + "[" + remote.getIp() + ":" + remote.getPort() + "]");
 				}
 			}
