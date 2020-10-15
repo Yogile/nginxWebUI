@@ -462,53 +462,57 @@ function diffUsingJS() {
 	});
 }
 
-
-/*function setStop(){
+function runCmd(type){
+	if(type == 'nginxStop'){
+		$("#pkill").prop("checked",true);
+	}else{
+		$("#startNormal").prop("checked",true);
+	}
 	
-	$.ajax({
-		type : 'POST',
-		url : ctx + '/adminPage/conf/getKey',
-		data : {
-			key : "nginxStop"
-		},
-		dataType : 'json',
-		success : function(data) {
-			if(data.success){
-				$("#nginxStop").val(data.obj);
-			
-				layer.open({
-					type : 1,
-					title : "设置nginx停止命令",
-					area : [ '500px', '300px' ], //宽高
-					content : $('#setForm')
-				});
-				
-			}
-			
-		},
-		error : function() {
-			layer.alert(commonStr.errorInfo);
-		}
+	$("#nginxStop").hide();
+	$("#nginxStart").hide();
+	
+	$("#startNormal").attr("title", $("#nginxExe").val() + " -c " + $("#nginxPath").val() );
+	form.render();
+	$("#" + type).show();
+	
+	layer.open({
+		type : 1,
+		title: false,
+		area : [ '400px', '400px' ], //宽高
+		content : $('#cmdForm')
 	});
-	
 }
 
-function setStopOver(){
+function runCmdOver(){
+	var cmd = "";
+	$("input[name='cmd']").each(function(){
+		if($(this).prop("checked")){
+			cmd = $(this).attr("title");
+		}
+	})
+	
+	
 	$.ajax({
 		type : 'POST',
-		url : ctx + '/adminPage/conf/setKey',
+		url : ctx + '/adminPage/conf/runCmd',
 		data : {
-			key : "nginxStop",
-			val : $("#nginxStop").val()
+			cmd : cmd
 		},
 		dataType : 'json',
 		success : function(data) {
-			if(data.success){
-				location.reload();
+			//layer.msg("ok");
+			layer.closeAll();
+			if (data.success) {
+				layer.open({
+					  type: 0, 
+					  area : [ '810px', '400px' ],
+					  content: data.msg
+				});
 			}
 		},
 		error : function() {
-			layer.alert(commonStr.errorInfo);
+			
 		}
 	});
-}*/
+}
