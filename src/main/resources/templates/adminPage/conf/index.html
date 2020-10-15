@@ -26,6 +26,14 @@ table.diff {
 }
 
 
+.layui-form-radio{
+	width: 700px;
+}
+
+input[type='radio']{
+	width: 1000px;
+}
+
 </style>
 </head>
 <body class="layui-layout-body">
@@ -147,10 +155,12 @@ table.diff {
 			<div class="layui-form">
 				<div class="layui-form-item" id="nginxStop">
 					<div class="layui-input-inline">
-						<input type="radio" name="cmd" id="pkill" title="pkill nginx"><br>
-						<input type="radio" name="cmd" title="nginx -s stop"><br>
+						<input type="radio" name="cmd" id="stopNormal" title=""><br>
+						<input type="radio" name="cmd" title="pkill nginx"><br>
+						<input type="radio" name="cmd" title="taskkill /f /im nginx.exe"><br>
 						<input type="radio" name="cmd" title="systemctl stop nginx"><br>
 						<input type="radio" name="cmd" title="service nginx stop"><br>
+						
 					</div>
 				</div>
 				
@@ -159,6 +169,7 @@ table.diff {
 						<input type="radio" name="cmd" id="startNormal" title=""><br>
 						<input type="radio" name="cmd"  title="systemctl start nginx"><br>
 						<input type="radio" name="cmd" title="service nginx start"><br>
+						
 					</div>
 				</div>
 
