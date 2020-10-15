@@ -464,7 +464,7 @@ function diffUsingJS() {
 
 function runCmd(type){
 	if(type == 'nginxStop'){
-		$("#pkill").prop("checked",true);
+		$("#stopNormal").prop("checked",true);
 	}else{
 		$("#startNormal").prop("checked",true);
 	}
