@@ -92,10 +92,13 @@ public class ConfController extends BaseController {
 	@RequestMapping(value = "replace")
 	@ResponseBody
 	public JsonResult replace(String json) {
+		
 		JSONObject jsonObject = JSONUtil.parseObj(json);
-
+		
 		String nginxPath = jsonObject.getStr("nginxPath");
 		String nginxContent = Base64.decodeStr(jsonObject.getStr("nginxContent"), Charset.forName("UTF-8"));
+		nginxContent = URLDecoder.decode(nginxContent,  Charset.forName("UTF-8"));
+		
 		List<String> subContent = jsonObject.getJSONArray("subContent").toList(String.class);
 		for (int i = 0; i < subContent.size(); i++) {
 			subContent.set(i, Base64.decodeStr(subContent.get(i), Charset.forName("UTF-8")));

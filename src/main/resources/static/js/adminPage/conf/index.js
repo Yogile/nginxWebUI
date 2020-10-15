@@ -51,11 +51,11 @@ function replace() {
 		layer.msg(confStr.jserror2);
 		return;
 	}
-	var base = new Base64();  
+
 
 	var json = {};
 	json.nginxPath = $("#nginxPath").val();
-	json.nginxContent = base.encode($("#nginxContent").val());
+	json.nginxContent = Base64.encode(encodeURIComponent($("#nginxContent").val()));
 	json.subContent = [];
 	json.subName = [];
 	$("textarea[name='subContent']").each(function(){
