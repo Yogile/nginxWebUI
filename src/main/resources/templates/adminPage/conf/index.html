@@ -24,6 +24,8 @@ table.diff {
 .long{
 	width: 150px!important;
 }
+
+
 </style>
 </head>
 <body class="layui-layout-body">
@@ -98,10 +100,10 @@ table.diff {
 							</div>
 
 							<div class="layui-inline" style="margin-left: 20px;">
-								<button type="button" class="layui-btn" onclick="start()">${confStr.start}</button>
+								<button type="button" class="layui-btn" onclick="runCmd('nginxStart')">${confStr.start}</button>
 							</div>
 							<div class="layui-inline">
-								<button type="button" class="layui-btn" onclick="stop()">${confStr.stop}</button>
+								<button type="button" class="layui-btn" onclick="runCmd('nginxStop')">${confStr.stop}</button>
 							</div>
 							<!-- <div class="layui-inline">
 								<i class="layui-icon layui-icon-set-fill" title="配置nginx停止命令" onclick="setStop()"></i>
@@ -138,25 +140,35 @@ table.diff {
 		</div>
 	</div>
 
-	<!-- <div style="height: 0px; width: 0px; overflow: hidden;">
+	<div style="height: 0px; width: 0px; overflow: hidden;">
 		<div id="diffoutput"></div>
 
-		<div id="setForm" style="padding: 15px;display: none;">
+		<div id="cmdForm" style="padding: 15px;display: none;">
 			<div class="layui-form">
-				<div class="layui-form-item">
-					<label class="layui-form-label long">nginx停止命令</label>
+				<div class="layui-form-item" id="nginxStop">
 					<div class="layui-input-inline">
-						<input type="text" id="nginxStop" class="layui-input">
+						<input type="radio" name="cmd" id="pkill" title="pkill nginx"><br>
+						<input type="radio" name="cmd" title="nginx -s stop"><br>
+						<input type="radio" name="cmd" title="systemctl stop nginx"><br>
+						<input type="radio" name="cmd" title="service nginx stop"><br>
+					</div>
+				</div>
+				
+				<div class="layui-form-item" id="nginxStart">
+					<div class="layui-input-inline">
+						<input type="radio" name="cmd" id="startNormal" title=""><br>
+						<input type="radio" name="cmd"  title="systemctl start nginx"><br>
+						<input type="radio" name="cmd" title="service nginx start"><br>
 					</div>
 				</div>
 
 				<div class="layui-form-item" style="text-align: center;">
-					<button type="button" class="layui-btn layui-btn-normal" onclick="setStopOver()">${commonStr.submit}</button>
+					<button type="button" class="layui-btn layui-btn-normal" onclick="runCmdOver()">${commonStr.submit}</button>
 					<button type="button" class="layui-btn" onclick="layer.closeAll()">${commonStr.close}</button>
 				</div>
 			</div>
 		</div>
-	</div> -->
+	</div>
 
 
 
