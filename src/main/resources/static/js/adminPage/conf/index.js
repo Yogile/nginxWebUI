@@ -472,8 +472,12 @@ function runCmd(type){
 	$("#nginxStop").hide();
 	$("#nginxStart").hide();
 	
-	$("#startNormal").attr("title", $("#nginxExe").val() + " -c " + $("#nginxPath").val() + " -p " + $("#nginxDir").val());
-	$("#stopNormal").attr("title", $("#nginxExe").val() + " -s stop" + " -p " + $("#nginxDir").val());
+	var dir = "";
+	if($("#nginxDir").val()!=''){
+		dir =  " -p " + $("#nginxDir").val();
+	}
+	$("#startNormal").attr("title", $("#nginxExe").val() + " -c " + $("#nginxPath").val() + dir);
+	$("#stopNormal").attr("title", $("#nginxExe").val() + " -s stop" + dir);
 
 	form.render();
 	$("#" + type).show();
