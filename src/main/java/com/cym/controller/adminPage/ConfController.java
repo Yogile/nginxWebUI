@@ -212,7 +212,7 @@ public class ConfController extends BaseController {
 			return renderError(m.get("confStr.reloadFail") + "<br>" + e.getMessage().replace("\n", "<br>"));
 		}
 	}
-
+/*
 	@RequestMapping(value = "start")
 	@ResponseBody
 	public JsonResult start(String nginxPath, String nginxExe, String nginxDir) {
@@ -280,7 +280,8 @@ public class ConfController extends BaseController {
 			return renderError(m.get("confStr.stopFail") + "<br>" + e.getMessage().replace("\n", "<br>"));
 		}
 	}
-
+*/
+	
 	@RequestMapping(value = "runCmd")
 	@ResponseBody
 	public JsonResult runCmd(String cmd) {

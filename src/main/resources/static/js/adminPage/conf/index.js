@@ -276,7 +276,7 @@ function reload() {
 	});
 
 }
-
+/*
 function start(){
 	if ($("#nginxPath").val() == '') {
 		layer.msg(confStr.jserror2);
@@ -388,7 +388,7 @@ function stop(){
 		});
 	}
 }
-
+*/
 
 function saveCmd(){
 	
