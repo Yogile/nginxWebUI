@@ -472,14 +472,16 @@ function runCmd(type){
 	$("#nginxStop").hide();
 	$("#nginxStart").hide();
 	
-	$("#startNormal").attr("title", $("#nginxExe").val() + " -c " + $("#nginxPath").val() );
+	$("#startNormal").attr("title", $("#nginxExe").val() + " -c " + $("#nginxPath").val() + " -p " + $("#nginxDir").val());
+	$("#stopNormal").attr("title", $("#nginxExe").val() + " -s stop" + " -p " + $("#nginxDir").val());
+
 	form.render();
 	$("#" + type).show();
 	
 	layer.open({
 		type : 1,
 		title: false,
-		area : [ '400px', '400px' ], //宽高
+		area : [ '750px', '300px' ], //宽高
 		content : $('#cmdForm')
 	});
 }
@@ -501,15 +503,24 @@ function runCmdOver(){
 		},
 		dataType : 'json',
 		success : function(data) {
-			//layer.msg("ok");
 			layer.closeAll();
 			if (data.success) {
+				layer.open({
+					  type: 0, 
+					  area : [ '810px', '400px' ],
+					  content: data.obj
+				});
+			} else {
 				layer.open({
 					  type: 0, 
 					  area : [ '810px', '400px' ],
 					  content: data.msg
 				});
 			}
+			
+			setTimeout(() => {
+				nginxStatus();
+			}, 3000);
 		},
 		error : function() {
 			

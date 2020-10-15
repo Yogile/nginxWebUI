@@ -280,25 +280,28 @@ public class ConfController extends BaseController {
 			return renderError(m.get("confStr.stopFail") + "<br>" + e.getMessage().replace("\n", "<br>"));
 		}
 	}
-	
+
 	@RequestMapping(value = "runCmd")
 	@ResponseBody
 	public JsonResult runCmd(String cmd) {
 		try {
-			String rs = RuntimeUtil.execForStr(cmd);
-
+			String rs = "";
+			if (cmd.contains(".exe")) {
+				RuntimeUtil.exec(cmd);
+			} else {
+				rs = RuntimeUtil.execForStr(cmd);
+			}
 			cmd = "<span class='blue'>" + cmd + "</span>";
 			if (StrUtil.isEmpty(rs) || rs.contains("已终止进程") || rs.contains("signal process started") || rs.toLowerCase().contains("terminated process")) {
 				return renderSuccess(cmd + "<br>" + m.get("confStr.runSuccess") + "<br>" + rs.replace("\n", "<br>"));
 			} else {
-				return renderError(cmd + "<br>" + m.get("confStr.runfail") + "<br>" + rs.replace("\n", "<br>"));
+				return renderError(cmd + "<br>" + m.get("confStr.runFail") + "<br>" + rs.replace("\n", "<br>"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return renderError(m.get("confStr.runfail") + "<br>" + e.getMessage().replace("\n", "<br>"));
+			return renderError(m.get("confStr.runFail") + "<br>" + e.getMessage().replace("\n", "<br>"));
 		}
 	}
-	
 
 	@RequestMapping(value = "loadConf")
 	@ResponseBody
