@@ -144,12 +144,15 @@ public class ScheduleTask {
 	// 检查远程服务器
 	@Scheduled(cron = "0/30 * * * * ?")
 	public void nginxTasks() {
-		// System.err.println("检查nginx运行");
-
 		String lastNginxSend = settingService.get("lastNginxSend");
 		String mail = settingService.get("mail");
 		String nginxMonitor = settingService.get("nginxMonitor");
-		if ("true".equals(nginxMonitor) && StrUtil.isNotEmpty(mail) && (StrUtil.isEmpty(lastNginxSend) || System.currentTimeMillis() - Long.parseLong(lastNginxSend) > TimeUnit.MINUTES.toMillis(30))) {
+		String mailInterval =  settingService.get("mail_interval");
+		if(StrUtil.isEmpty(mailInterval)) {
+			mailInterval = "30";
+		}
+		
+		if ("true".equals(nginxMonitor) && StrUtil.isNotEmpty(mail) && (StrUtil.isEmpty(lastNginxSend) || System.currentTimeMillis() - Long.parseLong(lastNginxSend) > TimeUnit.MINUTES.toMillis(Integer.parseInt(mailInterval)))) {
 			List<String> names = new ArrayList<>();
 
 			// 测试远程
@@ -189,11 +192,14 @@ public class ScheduleTask {
 	// 检查节点情况
 	@Scheduled(cron = "0/30 * * * * ?")
 	public void nodeTasks() {
-		// System.err.println("检查节点情况");
-
 		String lastUpstreamSend = settingService.get("lastUpstreamSend");
 		String mail = settingService.get("mail");
 		String upstreamMonitor = settingService.get("upstreamMonitor");
+		String mailInterval =  settingService.get("mail_interval");
+		if(StrUtil.isEmpty(mailInterval)) {
+			mailInterval = "30";
+		}
+			
 		if ("true".equals(upstreamMonitor)) {
 
 			List<UpstreamServer> upstreamServers = upstreamService.getAllServer();
@@ -203,7 +209,7 @@ public class ScheduleTask {
 				if (!TelnetUtils.isRunning(upstreamServer.getServer(), upstreamServer.getPort())) {
 					Upstream upstream = sqlHelper.findById(upstreamServer.getUpstreamId(), Upstream.class);
 					if (upstream.getMonitor() == 1 && StrUtil.isNotEmpty(mail)
-							&& (StrUtil.isEmpty(lastUpstreamSend) || System.currentTimeMillis() - Long.parseLong(lastUpstreamSend) > TimeUnit.MINUTES.toMillis(30))) {
+							&& (StrUtil.isEmpty(lastUpstreamSend) || System.currentTimeMillis() - Long.parseLong(lastUpstreamSend) > TimeUnit.MINUTES.toMillis(Integer.parseInt(mailInterval)))) {
 						ips.add(upstreamServer.getServer() + ":" + upstreamServer.getPort());
 					}
 					upstreamServer.setMonitorStatus(0);
