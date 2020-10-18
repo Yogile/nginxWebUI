@@ -17,7 +17,7 @@ function showSelectMail() {
 			
 				$("#mail_user").val(data.obj.mail_user)
 				$("#mail_pass").val(data.obj.mail_pass)
-
+				$("#mail_interval").val(data.obj.mail_interval)
 
 				form.render();
 

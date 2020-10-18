@@ -104,7 +104,8 @@ public class AdminController extends BaseController {
 		map.put("mail_user", settingService.get("mail_user"));
 		map.put("mail_pass", settingService.get("mail_pass"));
 		map.put("mail_ssl", settingService.get("mail_ssl"));
-
+		map.put("mail_interval", settingService.get("mail_interval"));
+		
 		return renderSuccess(map);
 	}
 
