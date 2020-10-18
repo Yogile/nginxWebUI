@@ -51,11 +51,11 @@ function replace() {
 		layer.msg(confStr.jserror2);
 		return;
 	}
-	var base = new Base64();  
+
 
 	var json = {};
 	json.nginxPath = $("#nginxPath").val();
-	json.nginxContent = base.encode($("#nginxContent").val());
+	json.nginxContent = Base64.encode(encodeURIComponent($("#nginxContent").val()));
 	json.subContent = [];
 	json.subName = [];
 	$("textarea[name='subContent']").each(function(){
@@ -276,7 +276,7 @@ function reload() {
 	});
 
 }
-
+/*
 function start(){
 	if ($("#nginxPath").val() == '') {
 		layer.msg(confStr.jserror2);
@@ -388,7 +388,7 @@ function stop(){
 		});
 	}
 }
-
+*/
 
 function saveCmd(){
 	
@@ -462,53 +462,103 @@ function diffUsingJS() {
 	});
 }
 
-
-/*function setStop(){
+function runCmd(type){
 	
 	$.ajax({
 		type : 'POST',
-		url : ctx + '/adminPage/conf/getKey',
-		data : {
-			key : "nginxStop"
-		},
+		url : ctx + '/adminPage/conf/getLastCmd',
 		dataType : 'json',
 		success : function(data) {
+			//debugger;
 			if(data.success){
-				$("#nginxStop").val(data.obj);
-			
+				$("#nginxStop").hide();
+				$("#nginxStart").hide();
+				
+				var dir = "";
+				if($("#nginxDir").val()!=''){
+					dir =  " -p " + $("#nginxDir").val();
+				}
+				$("#startNormal").attr("title", $("#nginxExe").val() + " -c " + $("#nginxPath").val() + dir);
+				$("#stopNormal").attr("title", $("#nginxExe").val() + " -s stop" + dir);
+				
+				var cmd = data.obj;
+				if(type == 'nginxStop'){
+					$("#stopNormal").prop("checked",true);
+					
+					$("#nginxStop input[name='cmd']").each(function(){
+						if($(this).attr("title") == cmd){
+							$(this).prop("checked",true);
+						}
+					})
+				} else {
+					$("#startNormal").prop("checked",true);
+					
+					$("#nginxStart input[name='cmd']").each(function(){
+						if($(this).attr("title") == cmd){
+							$(this).prop("checked",true);
+						}
+					})
+				}
+				
+				form.render();
+				$("#" + type).show();
+				
 				layer.open({
 					type : 1,
-					title : "设置nginx停止命令",
-					area : [ '500px', '300px' ], //宽高
-					content : $('#setForm')
+					title: false,
+					area : [ '750px', '300px' ], //宽高
+					content : $('#cmdForm')
 				});
-				
 			}
-			
 		},
 		error : function() {
-			layer.alert(commonStr.errorInfo);
+			
 		}
 	});
+	
+	
 	
 }
 
-function setStopOver(){
+function runCmdOver(){
+	//debugger;
+	var cmd = "";
+	$("input[name='cmd']").each(function(){
+		if($(this).prop("checked")){
+			cmd = $(this).attr("title");
+		}
+	})
+	
+	
 	$.ajax({
 		type : 'POST',
-		url : ctx + '/adminPage/conf/setKey',
+		url : ctx + '/adminPage/conf/runCmd',
 		data : {
-			key : "nginxStop",
-			val : $("#nginxStop").val()
+			cmd : cmd
 		},
 		dataType : 'json',
 		success : function(data) {
-			if(data.success){
-				location.reload();
+			layer.closeAll();
+			if (data.success) {
+				layer.open({
+					  type: 0, 
+					  area : [ '810px', '400px' ],
+					  content: data.obj
+				});
+			} else {
+				layer.open({
+					  type: 0, 
+					  area : [ '810px', '400px' ],
+					  content: data.msg
+				});
 			}
+			
+			setTimeout(() => {
+				nginxStatus();
+			}, 3000);
 		},
 		error : function() {
-			layer.alert(commonStr.errorInfo);
+			
 		}
 	});
-}*/
+}

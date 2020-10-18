@@ -92,10 +92,13 @@ public class ConfController extends BaseController {
 	@RequestMapping(value = "replace")
 	@ResponseBody
 	public JsonResult replace(String json) {
+		
 		JSONObject jsonObject = JSONUtil.parseObj(json);
-
+		
 		String nginxPath = jsonObject.getStr("nginxPath");
 		String nginxContent = Base64.decodeStr(jsonObject.getStr("nginxContent"), Charset.forName("UTF-8"));
+		nginxContent = URLDecoder.decode(nginxContent,  Charset.forName("UTF-8"));
+		
 		List<String> subContent = jsonObject.getJSONArray("subContent").toList(String.class);
 		for (int i = 0; i < subContent.size(); i++) {
 			subContent.set(i, Base64.decodeStr(subContent.get(i), Charset.forName("UTF-8")));
@@ -281,6 +284,40 @@ public class ConfController extends BaseController {
 		}
 	}
 
+	
+	@RequestMapping(value = "runCmd")
+	@ResponseBody
+	public JsonResult runCmd(String cmd) {
+		settingService.set("cmd", cmd); 
+		
+		try {
+			String rs = "";
+			if (cmd.contains(".exe")) {
+				RuntimeUtil.exec(cmd);
+			} else {
+				rs = RuntimeUtil.execForStr(cmd);
+			}
+			
+			cmd = "<span class='blue'>" + cmd + "</span>";
+			if (StrUtil.isEmpty(rs) || rs.contains("已终止进程") || rs.contains("signal process started") || rs.toLowerCase().contains("terminated process")) {
+				return renderSuccess(cmd + "<br>" + m.get("confStr.runSuccess") + "<br>" + rs.replace("\n", "<br>"));
+			} else {
+				return renderError(cmd + "<br>" + m.get("confStr.runFail") + "<br>" + rs.replace("\n", "<br>"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return renderError(m.get("confStr.runFail") + "<br>" + e.getMessage().replace("\n", "<br>"));
+		}
+	}
+
+
+	@RequestMapping(value = "getLastCmd")
+	@ResponseBody
+	public JsonResult getLastCmd() {
+		return renderSuccess(settingService.get("cmd"));
+	}
+	
+	
 	@RequestMapping(value = "loadConf")
 	@ResponseBody
 	public JsonResult loadConf() {
