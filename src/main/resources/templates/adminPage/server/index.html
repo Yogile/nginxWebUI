@@ -513,21 +513,12 @@
 			</div>
 		</div>
 		
-		
-		<div class="layui-form" id="previewDiv" style="padding: 15px; display: none">
-			<div class="layui-form-item">
-				<div class="layui-input-inline" style="width: 100%">
-					<textarea type="text" id="preview" name="preview" readonly="readonly" class="layui-textarea" style="height: 500px;">
-					
-					</textarea>
-				</div>
-			</div>
-		</div>
 	</div>
 
 	<#include '/adminPage/script.html'/>
 	<#include '/adminPage/select_root.html'/>
 	<#include '/adminPage/select_template.html'/>
+	<#include '/adminPage/select_preview.html'/>
 	<script src="${ctx}/js/adminPage/server/index.js?v=${jsrandom}" type="text/javascript"></script>
 </body>
 
