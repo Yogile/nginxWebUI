@@ -18,6 +18,7 @@ import com.cym.model.Password;
 import com.cym.model.Server;
 import com.cym.model.Upstream;
 import com.cym.model.Www;
+import com.cym.service.ConfService;
 import com.cym.service.ParamService;
 import com.cym.service.ServerService;
 import com.cym.service.SettingService;
@@ -25,6 +26,9 @@ import com.cym.service.UpstreamService;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
 import com.cym.utils.TelnetUtils;
+import com.github.odiszapc.nginxparser.NgxBlock;
+import com.github.odiszapc.nginxparser.NgxConfig;
+import com.github.odiszapc.nginxparser.NgxDumper;
 
 import cn.craccd.sqlHelper.bean.Page;
 import cn.hutool.core.io.FileUtil;
@@ -42,7 +46,9 @@ public class ServerController extends BaseController {
 	ParamService paramService;
 	@Autowired
 	SettingService settingService;
-
+	@Autowired
+	ConfService confService;
+	
 	@RequestMapping("")
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView, Page page, String sort, String direction, String keywords) {
 		page = serverService.search(page, sort, direction, keywords);
@@ -82,7 +88,7 @@ public class ServerController extends BaseController {
 		modelAndView.addObject("direction", direction);
 
 		modelAndView.addObject("passwordList", sqlHelper.findAll(Password.class));
-		
+
 		modelAndView.addObject("keywords", keywords);
 		modelAndView.setViewName("/adminPage/server/index");
 		return modelAndView;
@@ -175,7 +181,7 @@ public class ServerController extends BaseController {
 	@ResponseBody
 	public JsonResult importServer(String nginxPath) {
 
-		if (StrUtil.isEmpty(nginxPath) ||  !FileUtil.exist(nginxPath)) {
+		if (StrUtil.isEmpty(nginxPath) || !FileUtil.exist(nginxPath)) {
 			return renderError(m.get("serverStr.fileNotExist"));
 		}
 
@@ -184,7 +190,7 @@ public class ServerController extends BaseController {
 			return renderSuccess(m.get("serverStr.importSuccess"));
 		} catch (Exception e) {
 			e.printStackTrace();
-			
+
 			return renderError(m.get("serverStr.importFail"));
 		}
 	}
@@ -219,10 +225,9 @@ public class ServerController extends BaseController {
 
 	}
 
-	
 	@RequestMapping("editDescr")
 	@ResponseBody
-	public JsonResult editDescr(String id,String descr) {
+	public JsonResult editDescr(String id, String descr) {
 		Server server = new Server();
 		server.setId(id);
 		server.setDescr(descr);
@@ -230,5 +235,23 @@ public class ServerController extends BaseController {
 
 		return renderSuccess();
 	}
-	
+
+	@RequestMapping("preview")
+	@ResponseBody
+	public JsonResult preview(String id, String type) {
+		if (type.equals("server")) {
+			Server server = sqlHelper.findById(id, Server.class);
+			NgxBlock ngxBlock = confService.bulidBlockServer(server); 
+			NgxConfig ngxConfig = new NgxConfig();
+			ngxConfig.addEntry(ngxBlock);
+			
+			String conf = new NgxDumper(ngxConfig).dump().replace("};", "  }");
+
+			return renderSuccess(conf);
+		} else {
+			return renderSuccess();
+		}
+
+	}
+
 }

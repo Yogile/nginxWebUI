@@ -203,6 +203,8 @@
 
 
 								<td>
+									<button type="button" class="layui-btn layui-btn-sm" onclick="preview('${ext.server.id}','server')">${commonStr.preview}</button>
+									
 									<button type="button" class="layui-btn layui-btn-sm" onclick="edit('${ext.server.id}', false)">${commonStr.edit}</button>
 									<button type="button" class="layui-btn layui-btn-sm" onclick="clone('${ext.server.id}')">${commonStr.clone}</button>
 									<button type="button" class="layui-btn layui-btn-danger layui-btn-sm" onclick="del('${ext.server.id}')">${commonStr.del}</button>
@@ -508,6 +510,17 @@
 			<div class="layui-form-item">
 				<button type="button" class="layui-btn layui-btn-normal" onclick="editDescrOver()">${commonStr.ok}</button>
 				<button type="button" class="layui-btn" onclick="layer.closeAll()">${commonStr.close}</button>
+			</div>
+		</div>
+		
+		
+		<div class="layui-form" id="previewDiv" style="padding: 15px; display: none">
+			<div class="layui-form-item">
+				<div class="layui-input-inline" style="width: 100%">
+					<textarea type="text" id="preview" name="preview" readonly="readonly" class="layui-textarea" style="height: 500px;">
+					
+					</textarea>
+				</div>
 			</div>
 		</div>
 	</div>
