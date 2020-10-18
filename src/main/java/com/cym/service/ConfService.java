@@ -183,7 +183,7 @@ public class ConfService {
 			// 添加upstream
 			upstreams = upstreamService.getListByProxyType(1);
 			for (Upstream upstream : upstreams) {
-				NgxBlock ngxBlockServer = buildUpStream(upstream);
+				NgxBlock ngxBlockServer = buildBlockUpstream(upstream);
 				
 				if (decompose) {
 					addConfFile(confExt, "upstreams." + upstream.getName() + ".conf", ngxBlockServer);
@@ -236,7 +236,7 @@ public class ConfService {
 		return null;
 	}
 
-	public NgxBlock buildUpStream(Upstream upstream) {
+	public NgxBlock buildBlockUpstream(Upstream upstream) {
 		NgxParam ngxParam = null;
 
 		NgxBlock ngxBlockServer = new NgxBlock();

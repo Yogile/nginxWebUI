@@ -22,6 +22,15 @@ $(function() {
 		});
 	});
 
+	form.on('select(proxyType)', function(data) {
+		if(data.value == 0){
+			$("#tacticsDiv").show();
+		}else{
+			$("#tacticsDiv").hide();
+		}
+	});
+
+proxyType
 })
 
 
@@ -141,11 +150,18 @@ function edit(id) {
 			if (data.success) {
 				var ext = data.obj;
 				var list = ext.upstreamServerList;
-
+				
 				$("#id").val(ext.upstream.id);
 				$("#name").val(ext.upstream.name);
 				$("#tactics").val(ext.upstream.tactics);
 				$("#proxyType").val(ext.upstream.proxyType);
+				
+				if(ext.upstream.proxyType == 0){
+					$("#tacticsDiv").show();
+				}else{
+					$("#tacticsDiv").hide();
+				}
+				
 				$("#upstreamParamJson").val(ext.paramJson);
 
 				var html = ``;
@@ -466,4 +482,35 @@ function addBatchOver(){
 	$("#itemList").html(html);
 	form.render();
 	layer.close(batchIndex);
+}
+
+function preview(id,type){
+	
+	$.ajax({
+		type: 'POST',
+		url: ctx + '/adminPage/server/preview',
+		data: {
+			id: id,
+			type : type
+		},
+		dataType: 'json',
+		success: function(data) {
+			if (data.success) {
+				
+				$("#preview").val(data.obj);
+				layer.open({
+					type: 1,
+					title: commonStr.preview,
+					area: ['800px', '600px'], // 宽高
+					content: $('#previewDiv')
+				});
+				
+			} else {
+				layer.msg(data.msg)
+			}
+		},
+		error: function() {
+			layer.alert(commonStr.errorInfo);
+		}
+	});
 }

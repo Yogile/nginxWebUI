@@ -48,7 +48,7 @@ public class ServerController extends BaseController {
 	SettingService settingService;
 	@Autowired
 	ConfService confService;
-	
+
 	@RequestMapping("")
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView, Page page, String sort, String direction, String keywords) {
 		page = serverService.search(page, sort, direction, keywords);
@@ -239,19 +239,20 @@ public class ServerController extends BaseController {
 	@RequestMapping("preview")
 	@ResponseBody
 	public JsonResult preview(String id, String type) {
+		NgxBlock ngxBlock = null;
 		if (type.equals("server")) {
 			Server server = sqlHelper.findById(id, Server.class);
-			NgxBlock ngxBlock = confService.bulidBlockServer(server); 
-			NgxConfig ngxConfig = new NgxConfig();
-			ngxConfig.addEntry(ngxBlock);
-			
-			String conf = new NgxDumper(ngxConfig).dump().replace("};", "  }");
-
-			return renderSuccess(conf);
+			ngxBlock = confService.bulidBlockServer(server);
 		} else {
-			return renderSuccess();
+			Upstream upstream = sqlHelper.findById(id, Upstream.class);
+			ngxBlock = confService.buildBlockUpstream(upstream);
 		}
+		NgxConfig ngxConfig = new NgxConfig();
+		ngxConfig.addEntry(ngxBlock);
 
+		String conf = new NgxDumper(ngxConfig).dump().replace("};", "  }");
+
+		return renderSuccess(conf);
 	}
 
 }
