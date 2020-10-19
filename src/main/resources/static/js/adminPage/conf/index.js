@@ -467,6 +467,9 @@ function runCmd(type){
 	$.ajax({
 		type : 'POST',
 		url : ctx + '/adminPage/conf/getLastCmd',
+		data : {
+			type : type
+		},
 		dataType : 'json',
 		success : function(data) {
 			//debugger;
@@ -478,11 +481,13 @@ function runCmd(type){
 				if($("#nginxDir").val()!=''){
 					dir =  " -p " + $("#nginxDir").val();
 				}
+				
 				$("#startNormal").attr("title", $("#nginxExe").val() + " -c " + $("#nginxPath").val() + dir);
 				$("#stopNormal").attr("title", $("#nginxExe").val() + " -s stop" + dir);
 				
 				var cmd = data.obj;
-				if(type == 'nginxStop'){
+				if(type == 'cmdStop'){
+					$("#nginxStop").show();
 					$("#stopNormal").prop("checked",true);
 					
 					$("#nginxStop input[name='cmd']").each(function(){
@@ -491,6 +496,7 @@ function runCmd(type){
 						}
 					})
 				} else {
+					$("#nginxStart").show();
 					$("#startNormal").prop("checked",true);
 					
 					$("#nginxStart input[name='cmd']").each(function(){
@@ -501,7 +507,7 @@ function runCmd(type){
 				}
 				
 				form.render();
-				$("#" + type).show();
+				
 				
 				layer.open({
 					type : 1,
@@ -523,9 +529,11 @@ function runCmd(type){
 function runCmdOver(){
 	//debugger;
 	var cmd = "";
+	var type = "";
 	$("input[name='cmd']").each(function(){
 		if($(this).prop("checked")){
 			cmd = $(this).attr("title");
+			type = $(this).attr("lang");
 		}
 	})
 	
@@ -534,7 +542,8 @@ function runCmdOver(){
 		type : 'POST',
 		url : ctx + '/adminPage/conf/runCmd',
 		data : {
-			cmd : cmd
+			cmd : cmd,
+			type : type
 		},
 		dataType : 'json',
 		success : function(data) {

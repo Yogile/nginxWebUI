@@ -287,8 +287,8 @@ public class ConfController extends BaseController {
 	
 	@RequestMapping(value = "runCmd")
 	@ResponseBody
-	public JsonResult runCmd(String cmd) {
-		settingService.set("cmd", cmd); 
+	public JsonResult runCmd(String cmd, String type) {
+		settingService.set(type, cmd); 
 		
 		try {
 			String rs = "";
@@ -313,8 +313,8 @@ public class ConfController extends BaseController {
 
 	@RequestMapping(value = "getLastCmd")
 	@ResponseBody
-	public JsonResult getLastCmd() {
-		return renderSuccess(settingService.get("cmd"));
+	public JsonResult getLastCmd(String type) {
+		return renderSuccess(settingService.get(type));
 	}
 	
 	

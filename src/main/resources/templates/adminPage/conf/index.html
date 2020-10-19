@@ -108,10 +108,10 @@ input[type='radio']{
 							</div>
 
 							<div class="layui-inline" style="margin-left: 20px;">
-								<button type="button" class="layui-btn" onclick="runCmd('nginxStart')">${confStr.start}</button>
+								<button type="button" class="layui-btn" onclick="runCmd('cmdStart')">${confStr.start}</button>
 							</div>
 							<div class="layui-inline">
-								<button type="button" class="layui-btn" onclick="runCmd('nginxStop')">${confStr.stop}</button>
+								<button type="button" class="layui-btn" onclick="runCmd('cmdStop')">${confStr.stop}</button>
 							</div>
 							<!-- <div class="layui-inline">
 								<i class="layui-icon layui-icon-set-fill" title="配置nginx停止命令" onclick="setStop()"></i>
@@ -155,20 +155,20 @@ input[type='radio']{
 			<div class="layui-form">
 				<div class="layui-form-item" id="nginxStop">
 					<div class="layui-input-inline">
-						<input type="radio" name="cmd" id="stopNormal" title=""><br>
-						<input type="radio" name="cmd" title="pkill nginx"><br>
-						<input type="radio" name="cmd" title="taskkill /f /im nginx.exe"><br>
-						<input type="radio" name="cmd" title="systemctl stop nginx"><br>
-						<input type="radio" name="cmd" title="service nginx stop"><br>
+						<input type="radio" name="cmd" lang="cmdStop" id="stopNormal" title=""><br>
+						<input type="radio" name="cmd" lang="cmdStop" title="pkill nginx"><br>
+						<input type="radio" name="cmd" lang="cmdStop" title="taskkill /f /im nginx.exe"><br>
+						<input type="radio" name="cmd" lang="cmdStop" title="systemctl stop nginx"><br>
+						<input type="radio" name="cmd" lang="cmdStop" title="service nginx stop"><br>
 						
 					</div>
 				</div>
 				
 				<div class="layui-form-item" id="nginxStart">
 					<div class="layui-input-inline">
-						<input type="radio" name="cmd" id="startNormal" title=""><br>
-						<input type="radio" name="cmd"  title="systemctl start nginx"><br>
-						<input type="radio" name="cmd" title="service nginx start"><br>
+						<input type="radio" name="cmd" lang="cmdStart" id="startNormal" title=""><br>
+						<input type="radio" name="cmd" lang="cmdStart" title="systemctl start nginx"><br>
+						<input type="radio" name="cmd" lang="cmdStart" title="service nginx start"><br>
 						
 					</div>
 				</div>
