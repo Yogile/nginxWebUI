@@ -101,7 +101,9 @@ public class ConfController extends BaseController {
 		
 		List<String> subContent = jsonObject.getJSONArray("subContent").toList(String.class);
 		for (int i = 0; i < subContent.size(); i++) {
-			subContent.set(i, Base64.decodeStr(subContent.get(i), Charset.forName("UTF-8")));
+			String content = Base64.decodeStr(subContent.get(i), Charset.forName("UTF-8"));
+			content = URLDecoder.decode(nginxContent,  Charset.forName("UTF-8"));
+			subContent.set(i, content);
 		}
 		List<String> subName = jsonObject.getJSONArray("subName").toList(String.class);
 

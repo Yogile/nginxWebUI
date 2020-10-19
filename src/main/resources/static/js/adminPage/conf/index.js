@@ -59,7 +59,7 @@ function replace() {
 	json.subContent = [];
 	json.subName = [];
 	$("textarea[name='subContent']").each(function(){
-		json.subContent.push(base.encode($(this).val()));
+		json.subContent.push(Base64.encode(encodeURIComponent($(this).val())));
 	})
 	$("input[name='subName']").each(function(){
 		json.subName.push($(this).val());
