@@ -72,7 +72,7 @@ Note that an & sign is added at the end of the command, indicating that the dock
 1.Install the Docker environment
 
 ```
-apt install docker.io
+sudo apt install docker.io
 ```
 
 2.Download images:

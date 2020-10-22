@@ -76,7 +76,7 @@ sudo nohup java -jar -Xmx64m nginxWebUI-2.2.1.jar --server.port=8080 --project.h
 1.安装docker容器环境
 
 ```
-apt install docker.io
+sudo apt install docker.io
 ```
 
 2.下载镜像: 
