@@ -15,8 +15,8 @@ public class MonitorInfo {
 	/** 总的物理内存. */
 	private String totalMemorySize;
 
-	/** 剩余的物理内存. */
-	private String freePhysicalMemorySize;
+//	/** 剩余的物理内存. */
+//	private String freePhysicalMemorySize;
 
 	/** 已使用的物理内存. */
 	private String usedMemory;
@@ -26,7 +26,23 @@ public class MonitorInfo {
 	/** 内存使用率. */
 	private String memRatio;
 
+	/**
+	 * cpu数量
+	 */
 	private Integer cpuCount;
+
+	/**
+	 * 线程数量
+	 */
+	private Integer threadCount;
+	
+	public Integer getThreadCount() {
+		return threadCount;
+	}
+
+	public void setThreadCount(Integer threadCount) {
+		this.threadCount = threadCount;
+	}
 
 	public Integer getCpuCount() {
 		return cpuCount;
@@ -52,13 +68,13 @@ public class MonitorInfo {
 		this.totalMemorySize = totalMemorySize;
 	}
 
-	public String getFreePhysicalMemorySize() {
-		return freePhysicalMemorySize;
-	}
-
-	public void setFreePhysicalMemorySize(String freePhysicalMemorySize) {
-		this.freePhysicalMemorySize = freePhysicalMemorySize;
-	}
+//	public String getFreePhysicalMemorySize() {
+//		return freePhysicalMemorySize;
+//	}
+//
+//	public void setFreePhysicalMemorySize(String freePhysicalMemorySize) {
+//		this.freePhysicalMemorySize = freePhysicalMemorySize;
+//	}
 
 	public String getUsedMemory() {
 		return usedMemory;

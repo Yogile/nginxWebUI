@@ -105,7 +105,7 @@ public class MonitorController extends BaseController {
 	@ResponseBody
 	public JsonResult check() {
 
-		MonitorInfo monitorInfo = monitorService.getMonitorInfo();
+		MonitorInfo monitorInfo = monitorService.getMonitorInfoOshi();
 		return renderSuccess(monitorInfo);
 	}
 

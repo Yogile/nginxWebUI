@@ -38,7 +38,7 @@ function load(){
 				element.progress('mem', monitorInfo.memRatio);
 				
 				$("#memContent").html("( " + monitorStr.used + ":" + monitorInfo.usedMemory + " / "+ monitorStr.total + ":" + monitorInfo.totalMemorySize + " )");
-				$("#cpuCount").html("( " + monitorStr.coreCount + ":" + monitorInfo.cpuCount + " )");
+				$("#cpuCount").html("( " + monitorStr.coreCount + ":" + monitorInfo.cpuCount + " / " + monitorStr.threadCount + ":" + monitorInfo.threadCount+ " )");
 				
 			}
 		},
