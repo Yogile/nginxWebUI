@@ -102,13 +102,13 @@ public class ConfController extends BaseController {
 		JSONObject jsonObject = JSONUtil.parseObj(json);
 
 		String nginxPath = jsonObject.getStr("nginxPath");
-		String nginxContent = Base64.decodeStr(jsonObject.getStr("nginxContent"), Charset.forName("UTF-8"));
-		nginxContent = URLDecoder.decode(nginxContent, Charset.forName("UTF-8"));
+		String nginxContent = Base64.decodeStr(jsonObject.getStr("nginxContent"), CharsetUtil.CHARSET_UTF_8);
+		nginxContent = URLDecoder.decode(nginxContent, CharsetUtil.CHARSET_UTF_8);
 
 		List<String> subContent = jsonObject.getJSONArray("subContent").toList(String.class);
 		for (int i = 0; i < subContent.size(); i++) {
-			String content = Base64.decodeStr(subContent.get(i), Charset.forName("UTF-8"));
-			content = URLDecoder.decode(content, Charset.forName("UTF-8"));
+			String content = Base64.decodeStr(subContent.get(i), CharsetUtil.CHARSET_UTF_8);
+			content = URLDecoder.decode(content, CharsetUtil.CHARSET_UTF_8);
 			subContent.set(i, content);
 		}
 		List<String> subName = jsonObject.getJSONArray("subName").toList(String.class);
@@ -139,7 +139,7 @@ public class ConfController extends BaseController {
 		ConfExt confExt = confService.buildConf(StrUtil.isNotEmpty(decompose) && decompose.equals("true"));
 
 		JSONObject jsonObject = new JSONObject();
-		jsonObject.set("nginxContent", Base64.encode(URLEncoder.encode(confExt.getConf(), Charset.forName("UTF-8"))));
+		jsonObject.set("nginxContent", Base64.encode(URLEncoder.encode(confExt.getConf(), CharsetUtil.CHARSET_UTF_8)));
 		jsonObject.set("subContent", new JSONArray());
 		jsonObject.set("subName", new JSONArray());
 		for (ConfFile confFile : confExt.getFileList()) {
