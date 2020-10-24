@@ -31,7 +31,7 @@ public class NetWorkUtil {
 			String command = "windows".equals(os) ? "netstat -e" : "ifconfig";
 			pro = r.exec(command);
 			input = new BufferedReader(new InputStreamReader(pro.getInputStream()));
-			long result1[] = readInLine(input, "windows");
+			long result1[] = readInLine(input, os);
 			Thread.sleep(SLEEP_TIME);
 			pro.destroy();
 			input.close();
