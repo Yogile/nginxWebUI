@@ -3,7 +3,7 @@ package com.cym.ext;
 public class DiskInfo {
 	String path;
 
-	String usableSpace;
+	String useSpace;
 	String totalSpace;
 
 	String percent;
@@ -26,12 +26,13 @@ public class DiskInfo {
 		this.path = path;
 	}
 
-	public String getUsableSpace() {
-		return usableSpace;
+
+	public String getUseSpace() {
+		return useSpace;
 	}
 
-	public void setUsableSpace(String usableSpace) {
-		this.usableSpace = usableSpace;
+	public void setUseSpace(String useSpace) {
+		this.useSpace = useSpace;
 	}
 
 	public String getTotalSpace() {

@@ -33,7 +33,6 @@ public class MonitorService {
 		osmxb = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
 	}
 
-
 	public MonitorInfo getMonitorInfoOshi() {
 
 		MonitorInfo infoBean = new MonitorInfo();
@@ -55,9 +54,9 @@ public class MonitorService {
 			DiskInfo diskInfo = new DiskInfo();
 
 			diskInfo.setPath(fs.getMount());
-			diskInfo.setUsableSpace(FormatUtil.formatBytes(fs.getUsableSpace()));
+			diskInfo.setUseSpace(FormatUtil.formatBytes(fs.getTotalSpace() - fs.getUsableSpace()));
 			diskInfo.setTotalSpace(FormatUtil.formatBytes(fs.getTotalSpace()));
-			diskInfo.setPercent(NumberUtil.decimalFormat("#.##%", NumberUtil.div(fs.getUsableSpace(), fs.getTotalSpace())));
+			diskInfo.setPercent(NumberUtil.decimalFormat("#.##%", NumberUtil.div(fs.getTotalSpace() - fs.getUsableSpace(), fs.getTotalSpace())));
 
 			list.add(diskInfo);
 		}
