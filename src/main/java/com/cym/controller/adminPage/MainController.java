@@ -1,4 +1,4 @@
-package com.cym.controller;
+package com.cym.controller.adminPage;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,7 +30,7 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
 
-@RequestMapping("")
+@RequestMapping("/adminPage/main")
 @Controller
 public class MainController extends BaseController {
 	@Autowired
