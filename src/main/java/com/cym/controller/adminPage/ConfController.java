@@ -163,7 +163,7 @@ public class ConfController extends BaseController {
 			ConfExt confExt = confService.buildConf(false);
 			FileUtil.writeString(confExt.getConf(), fileTemp, CharsetUtil.CHARSET_UTF_8);
 			ClassPathResource resource = new ClassPathResource("mime.types");
-			FileUtil.writeFromStream(resource.getInputStream(), FileUtil.getTmpDirPath() + "mime.types");
+			FileUtil.writeFromStream(resource.getInputStream(), FileUtil.getTmpDirPath() + File.separator  + "mime.types");
 
 			if (SystemTool.isWindows()) {
 				cmd = nginxExe + " -t -c " + fileTemp + " -p " + nginxDir;
