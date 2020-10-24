@@ -21,7 +21,7 @@ spring:
   database: 
     type: sqlite
     package: com.cym.model
-    print: false
+    print: true
     sqlite-path: ${project.home}sqlite.db
 
 project:
