@@ -80,12 +80,17 @@ public class NetWorkUtil {
 				// TX packets 169848511  bytes 155937621328 (155.9 GB)
 				
 				while ((line = input.readLine()) != null) {
+					System.err.println(line);
+					
 					if (line.indexOf("RX packets") >= 0) {
 						rx += Long.parseLong(line.split(" ")[2]);
+						System.err.println(rx);
 					} else if (line.indexOf("TX packets") >= 0) {
 						tx += Long.parseLong(line.split(" ")[2]);
+						System.err.println(tx);
 					}
 				}
+				
 				arr[0] = rx;
 				arr[1] = tx;
 			} else { // 获取windows环境下的网口上下行速率
