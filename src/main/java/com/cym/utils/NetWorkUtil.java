@@ -81,13 +81,13 @@ public class NetWorkUtil {
 				
 				while ((line = input.readLine()) != null) {
 					if (line.indexOf("RX packets") >= 0) {
-						System.err.println(line);
+						//System.err.println(line);
 						rx += Long.parseLong(line.split("packets")[1].split("bytes")[0].trim()) * 1024;
-						System.err.println(rx);
+						//System.err.println(rx);
 					} else if (line.indexOf("TX packets") >= 0) {
-						System.err.println(line);
+						//System.err.println(line);
 						tx += Long.parseLong(line.split("packets")[1].split("bytes")[0].trim()) * 1024;
-						System.err.println(tx);
+						//System.err.println(tx);
 					}
 				}
 				
