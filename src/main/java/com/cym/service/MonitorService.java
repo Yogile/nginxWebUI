@@ -1,19 +1,20 @@
 package com.cym.service;
 
 import java.lang.management.ManagementFactory;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 
 import org.springframework.stereotype.Service;
 
-import com.cym.model.MonitorInfo;
-import com.cym.utils.SystemTool;
+import com.cym.ext.MonitorInfo;
 import com.sun.management.OperatingSystemMXBean;
 
 import cn.hutool.core.util.NumberUtil;
-import cn.hutool.core.util.RuntimeUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.system.oshi.OshiUtil;
+import oshi.software.os.FileSystem;
+import oshi.software.os.OSFileStore;
+import oshi.util.FormatUtil;
 
 /** */
 /**
@@ -25,7 +26,7 @@ import cn.hutool.system.oshi.OshiUtil;
 public class MonitorService {
 
 	OperatingSystemMXBean osmxb;
-	Double gb = Double.valueOf(1024 * 1024 * 1024);
+//	Double gb = Double.valueOf(1024 * 1024 * 1024);
 
 	@PostConstruct
 	private void init() {
@@ -93,8 +94,8 @@ public class MonitorService {
 		infoBean.setCpuCount(OshiUtil.getProcessor().getPhysicalProcessorCount());
 		infoBean.setThreadCount(OshiUtil.getProcessor().getLogicalProcessorCount());
 
-		infoBean.setUsedMemory(NumberUtil.decimalFormat("0.00GB", OshiUtil.getMemory().getAvailable() / gb));
-		infoBean.setTotalMemorySize(NumberUtil.decimalFormat("0.00GB", OshiUtil.getMemory().getTotal() / gb));
+		infoBean.setUsedMemory(FormatUtil.formatBytes(OshiUtil.getMemory().getTotal() - OshiUtil.getMemory().getAvailable()));
+		infoBean.setTotalMemorySize(FormatUtil.formatBytes(OshiUtil.getMemory().getTotal()));
 
 		infoBean.setCpuRatio(NumberUtil.decimalFormat("#.##%", osmxb.getSystemCpuLoad()));
 		infoBean.setMemRatio(NumberUtil.decimalFormat("#.##%", NumberUtil.div(OshiUtil.getMemory().getAvailable(), OshiUtil.getMemory().getTotal())));
@@ -103,7 +104,21 @@ public class MonitorService {
 	}
 
 	public static void main(String[] args) {
-		OperatingSystemMXBean osmxb = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
-		System.out.println(osmxb.getSystemCpuLoad());
+		printFileSystem(OshiUtil.getOs().getFileSystem());
+	}
+
+	private static void printFileSystem(FileSystem fileSystem) {
+		System.out.println("File System:");
+
+		System.out.format(" File Descriptors: %d/%d%n", fileSystem.getOpenFileDescriptors(), fileSystem.getMaxFileDescriptors());
+
+		List<OSFileStore> fsArray = fileSystem.getFileStores();
+		for (OSFileStore fs : fsArray) {
+			long usable = fs.getUsableSpace();
+			long total = fs.getTotalSpace();
+			System.out.format(" %s (%s) [%s] %s of %s free (%.1f%%) is %s " + (fs.getLogicalVolume() != null && fs.getLogicalVolume().length() > 0 ? "[%s]" : "%s") + " and is mounted at %s%n",
+					fs.getName(), fs.getDescription().isEmpty() ? "file system" : fs.getDescription(), fs.getType(), FormatUtil.formatBytes(usable), FormatUtil.formatBytes(fs.getTotalSpace()),
+					100d * usable / total, fs.getVolume(), fs.getLogicalVolume(), fs.getMount());
+		}
 	}
 }
