@@ -56,7 +56,11 @@ public class MonitorService {
 			diskInfo.setPath(fs.getMount());
 			diskInfo.setUseSpace(FormatUtil.formatBytes(fs.getTotalSpace() - fs.getUsableSpace()));
 			diskInfo.setTotalSpace(FormatUtil.formatBytes(fs.getTotalSpace()));
-			diskInfo.setPercent(NumberUtil.decimalFormat("#.##%", NumberUtil.div(fs.getTotalSpace() - fs.getUsableSpace(), fs.getTotalSpace())));
+			if (fs.getTotalSpace() != 0) {
+				diskInfo.setPercent(NumberUtil.decimalFormat("#.##%", NumberUtil.div(fs.getTotalSpace() - fs.getUsableSpace(), fs.getTotalSpace())));
+			} else {
+				diskInfo.setPercent(NumberUtil.decimalFormat("#.##%", 0));
+			}
 
 			list.add(diskInfo);
 		}
