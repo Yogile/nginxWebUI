@@ -80,13 +80,15 @@ public class NetWorkUtil {
 				// TX packets 169848511  bytes 155937621328 (155.9 GB)
 				
 				while ((line = input.readLine()) != null) {
-					System.err.println(line);
+					
 					
 					if (line.indexOf("RX packets") >= 0) {
-						rx += Long.parseLong(line.split(" ")[2]);
+						System.err.println(line);
+						rx += Long.parseLong(line.split("packets")[1].split("bytes")[0]);
 						System.err.println(rx);
 					} else if (line.indexOf("TX packets") >= 0) {
-						tx += Long.parseLong(line.split(" ")[2]);
+						System.err.println(line);
+						tx += Long.parseLong(line.split("packets")[1].split("bytes")[0]);
 						System.err.println(tx);
 					}
 				}
@@ -114,9 +116,7 @@ public class NetWorkUtil {
 	}
 
 	public static void main(String[] args) {
-		NetworkInfo result = getNetworkDownUp();
-		System.out.println("recieve:" + result.getReceive() + "kB/s");
-		System.out.println("send:" + result.getSend() + "kB/s");
-
+		String line = "      RX packets 0  bytes 0 (0.0 B)";
+		System.out.println(line.split("packets")[1].split("bytes")[0]);
 	}
 }
