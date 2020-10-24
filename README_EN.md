@@ -63,6 +63,14 @@ Parameter description (both non-required)
 
 --project.home Project profile directory for database files, certificate files, logs, etc. Default is /home/nginxwebui/
 
+--spring.database.type=mysql Use other databases, not filled with native SQLite, options include mysql and postgresql
+
+--spring.datasource.url=jdbc:mysql://ip:port/nginxwebui Databases url
+
+--spring.datasource.username=root  Databases user
+
+--spring.datasource.password=pass  Databases password
+
 Note that the command ends with an & to indicate that the project is running in the background
 
 #### docker installation instructions 

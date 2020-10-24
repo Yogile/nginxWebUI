@@ -67,6 +67,14 @@ sudo nohup java -jar -Xmx64m nginxWebUI-2.2.1.jar --server.port=8080 --project.h
 
 --project.home 项目配置文件目录，存放数据库文件，证书文件，日志等, 默认为/home/nginxWebUI/
 
+--spring.database.type=mysql 使用其他数据库，不填为使用本地sqlite，选项包括mysql和postgresql
+
+--spring.datasource.url=jdbc:mysql://ip:port/nginxwebui 数据库url
+
+--spring.datasource.username=root  数据库用户
+
+--spring.datasource.password=pass  数据库密码
+
 注意命令最后加一个&号, 表示项目后台运行
 
 #### docker安装说明
