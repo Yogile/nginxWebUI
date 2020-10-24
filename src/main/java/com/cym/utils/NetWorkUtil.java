@@ -12,6 +12,7 @@ import java.util.StringTokenizer;
 import com.cym.ext.NetworkInfo;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.NumberUtil;
 
 public class NetWorkUtil {
 	private static final int SLEEP_TIME = 2 * 1000;
@@ -37,8 +38,16 @@ public class NetWorkUtil {
 			pro = r.exec(command);
 			input = new BufferedReader(new InputStreamReader(pro.getInputStream()));
 			long result2[] = readInLine(input, os);
-			networkInfo. setSend(formatNumber((result2[0] - result1[0]) / (1024.0 * (SLEEP_TIME / 1000)))); // 上行速率(kB/s)
-			networkInfo.setReceive(formatNumber((result2[1] - result1[1]) / (1024.0 * (SLEEP_TIME / 1000)))); // 下行速率(kB/s)
+			networkInfo.setReceive(formatNumber((result2[0] - result1[0]) / (1024.0 * (SLEEP_TIME / 1000)))); // 上行速率(kB/s)
+			networkInfo.setSend(formatNumber((result2[1] - result1[1]) / (1024.0 * (SLEEP_TIME / 1000)))); // 下行速率(kB/s)
+
+			// 去绝对值
+			if (networkInfo.getReceive() < 0) {
+				networkInfo.setReceive(0 - networkInfo.getReceive());
+			}
+			if (networkInfo.getSend() < 0) {
+				networkInfo.setSend(0 - networkInfo.getSend());
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

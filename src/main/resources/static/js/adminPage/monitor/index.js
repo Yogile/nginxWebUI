@@ -95,23 +95,23 @@ function initEchart(){
 	
 	var option = {
 		title: {
-			text: "网速统计",
+			text: monitorStr.netStatistics,
 			left: 'left'
 		},
 		tooltip: {
 			trigger: 'axis',
 			formatter(params) {
 				return `
-	            	发送: ${params[0].value} kB/s<br>
-	            	接收: ${params[1].value}  kB/s
+	            	${monitorStr.send}: ${params[0].value} kB/s<br>
+	            	${monitorStr.receive}: ${params[1].value}  kB/s
 	            `;
 			},
 		},
 	    legend: {
-            data:[ '发送', '接收']
+            data:[ monitorStr.send, monitorStr.receive]
         },
 		xAxis: {
-			name: "时间",
+			name: monitorStr.time,
 			type: 'category',
 			data: time
 		},
@@ -122,7 +122,7 @@ function initEchart(){
 	        }
 		},
 		series: [{
-			name: '发送',
+			name: monitorStr.send,
 			data: send,
 			type: 'line',
 			showBackground: true,
@@ -130,7 +130,7 @@ function initEchart(){
 				color: 'rgba(108,80,243,0.3)'
 			}
 		}, {
-			name: '接收',
+			name: monitorStr.receive,
 			data: receive,
 			type: 'line',
 			showBackground: true,
