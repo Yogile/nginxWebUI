@@ -84,11 +84,11 @@ public class NetWorkUtil {
 					
 					if (line.indexOf("RX packets") >= 0) {
 						System.err.println(line);
-						rx += Long.parseLong(line.split("packets")[1].split("bytes")[0]);
+						rx += Long.parseLong(line.split("packets")[1].split("bytes")[0].trim());
 						System.err.println(rx);
 					} else if (line.indexOf("TX packets") >= 0) {
 						System.err.println(line);
-						tx += Long.parseLong(line.split("packets")[1].split("bytes")[0]);
+						tx += Long.parseLong(line.split("packets")[1].split("bytes")[0].trim());
 						System.err.println(tx);
 					}
 				}
@@ -117,6 +117,6 @@ public class NetWorkUtil {
 
 	public static void main(String[] args) {
 		String line = "      RX packets 0  bytes 0 (0.0 B)";
-		System.out.println(line.split("packets")[1].split("bytes")[0]);
+		System.out.println(Long.parseLong(line.split("packets")[1].split("bytes")[0].trim()));
 	}
 }
