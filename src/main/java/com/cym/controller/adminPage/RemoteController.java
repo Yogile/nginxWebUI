@@ -259,7 +259,7 @@ public class RemoteController extends BaseController {
 
 	@RequestMapping("cmdOver")
 	@ResponseBody
-	public JsonResult cmdOver(String[] remoteId, String cmd) {
+	public JsonResult cmdOver(String[] remoteId, String cmd, Integer interval) {
 		if (remoteId == null || remoteId.length == 0) {
 			return renderSuccess(m.get("remoteStr.noSelect"));
 		}
@@ -307,12 +307,18 @@ public class RemoteController extends BaseController {
 				}
 			}
 			rs.append("<br>");
+
+			if (interval != null) {
+				try {
+					Thread.sleep(interval * 1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 
 		return renderSuccess(rs.toString());
 	}
-
-	
 
 	@RequestMapping("asyc")
 	@ResponseBody
