@@ -75,7 +75,6 @@ function replace() {
 		success : function(data) {
 			if (data.success) {
 				layer.msg(data.obj);
-				//loadConf();
 				loadOrg();
 
 			} else {
@@ -90,7 +89,6 @@ function replace() {
 
 
 function loadConf() {
-	//layer.load();
 	$.ajax({
 		type : 'POST',
 		url : ctx + '/adminPage/conf/loadConf',

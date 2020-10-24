@@ -1,6 +1,7 @@
 package com.cym.controller.adminPage;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 import java.nio.charset.Charset;
@@ -10,6 +11,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -30,7 +32,9 @@ import com.cym.utils.SystemTool;
 
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.IORuntimeException;
 import cn.hutool.core.net.URLDecoder;
+import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
@@ -40,24 +44,21 @@ import cn.hutool.json.JSONUtil;
 @Controller
 @RequestMapping("/adminPage/conf")
 public class ConfController extends BaseController {
-	final UpstreamService upstreamService;
-	final SettingService settingService;
-	final ServerService serverService;
-	final ConfService confService;
-	final MainController mainController;
+	@Autowired
+	UpstreamService upstreamService;
+	@Autowired
+	SettingService settingService;
+	@Autowired
+	ServerService serverService;
+	@Autowired
+	ConfService confService;
+	@Autowired
+	MainController mainController;
 
 	@Autowired
 	VersionConfig versionConfig;
 	@Value("${project.version}")
 	String currentVersion;
-
-	public ConfController(UpstreamService upstreamService, SettingService settingService, ServerService serverService, ConfService confService, MainController mainController) {
-		this.upstreamService = upstreamService;
-		this.settingService = settingService;
-		this.serverService = serverService;
-		this.confService = confService;
-		this.mainController = mainController;
-	}
 
 	@RequestMapping("")
 	public ModelAndView index(ModelAndView modelAndView) {
@@ -92,17 +93,17 @@ public class ConfController extends BaseController {
 	@RequestMapping(value = "replace")
 	@ResponseBody
 	public JsonResult replace(String json) {
-		
+
 		JSONObject jsonObject = JSONUtil.parseObj(json);
-		
+
 		String nginxPath = jsonObject.getStr("nginxPath");
 		String nginxContent = Base64.decodeStr(jsonObject.getStr("nginxContent"), Charset.forName("UTF-8"));
-		nginxContent = URLDecoder.decode(nginxContent,  Charset.forName("UTF-8"));
-		
+		nginxContent = URLDecoder.decode(nginxContent, Charset.forName("UTF-8"));
+
 		List<String> subContent = jsonObject.getJSONArray("subContent").toList(String.class);
 		for (int i = 0; i < subContent.size(); i++) {
 			String content = Base64.decodeStr(subContent.get(i), Charset.forName("UTF-8"));
-			content = URLDecoder.decode(content,  Charset.forName("UTF-8"));
+			content = URLDecoder.decode(content, Charset.forName("UTF-8"));
 			subContent.set(i, content);
 		}
 		List<String> subName = jsonObject.getJSONArray("subName").toList(String.class);
@@ -130,10 +131,10 @@ public class ConfController extends BaseController {
 
 	@RequestMapping(value = "check")
 	@ResponseBody
-	public JsonResult check(String nginxPath, String nginxExe, String nginxDir) {
-		if (nginxPath == null) {
-			nginxPath = settingService.get("nginxPath");
-		}
+	public JsonResult check(String nginxPath, String nginxExe, String nginxDir) throws IORuntimeException, IOException {
+//		if (nginxPath == null) {
+//			nginxPath = settingService.get("nginxPath");
+//		}
 		if (nginxExe == null) {
 			nginxExe = settingService.get("nginxExe");
 		}
@@ -141,13 +142,20 @@ public class ConfController extends BaseController {
 			nginxDir = settingService.get("nginxDir");
 		}
 
-		String rs;
+		String rs = null;
 		String cmd = null;
+		String fileTemp = FileUtil.getTmpDirPath() + "nginx.conf";
+		
+		ConfExt confExt = confService.buildConf(false);
+		FileUtil.writeString(confExt.getConf(), fileTemp, CharsetUtil.CHARSET_UTF_8);
+		ClassPathResource resource = new ClassPathResource("mime.types");
+		FileUtil.writeFromStream(resource.getInputStream(), FileUtil.getTmpDirPath() + "mime.types");
+		
 		try {
 			if (SystemTool.isWindows()) {
-				cmd = nginxExe + " -t -c " + nginxPath + " -p " + nginxDir;
+				cmd = nginxExe + " -t -c " + fileTemp + " -p " + nginxDir;
 			} else {
-				cmd = nginxExe + " -t -c " + nginxPath;
+				cmd = nginxExe + " -t -c " + fileTemp;
 				if (StrUtil.isNotEmpty(nginxDir)) {
 					cmd += " -p " + nginxDir;
 				}
@@ -286,12 +294,11 @@ public class ConfController extends BaseController {
 		}
 	}
 
-	
 	@RequestMapping(value = "runCmd")
 	@ResponseBody
 	public JsonResult runCmd(String cmd, String type) {
-		settingService.set(type, cmd); 
-		
+		settingService.set(type, cmd);
+
 		try {
 			String rs = "";
 			if (cmd.contains(".exe")) {
@@ -299,7 +306,7 @@ public class ConfController extends BaseController {
 			} else {
 				rs = RuntimeUtil.execForStr(cmd);
 			}
-			
+
 			cmd = "<span class='blue'>" + cmd + "</span>";
 			if (StrUtil.isEmpty(rs) || rs.contains("已终止进程") || rs.contains("signal process started") || rs.toLowerCase().contains("terminated process")) {
 				return renderSuccess(cmd + "<br>" + m.get("confStr.runSuccess") + "<br>" + rs.replace("\n", "<br>"));
@@ -312,14 +319,12 @@ public class ConfController extends BaseController {
 		}
 	}
 
-
 	@RequestMapping(value = "getLastCmd")
 	@ResponseBody
 	public JsonResult getLastCmd(String type) {
 		return renderSuccess(settingService.get(type));
 	}
-	
-	
+
 	@RequestMapping(value = "loadConf")
 	@ResponseBody
 	public JsonResult loadConf() {
