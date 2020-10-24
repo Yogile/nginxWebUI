@@ -131,7 +131,7 @@ public class ConfController extends BaseController {
 
 	@RequestMapping(value = "check")
 	@ResponseBody
-	public JsonResult check(String nginxPath, String nginxExe, String nginxDir) throws IORuntimeException, IOException {
+	public JsonResult check(String nginxPath, String nginxExe, String nginxDir) {
 //		if (nginxPath == null) {
 //			nginxPath = settingService.get("nginxPath");
 //		}
@@ -146,12 +146,13 @@ public class ConfController extends BaseController {
 		String cmd = null;
 		String fileTemp = FileUtil.getTmpDirPath() + "nginx.conf";
 		
-		ConfExt confExt = confService.buildConf(false);
-		FileUtil.writeString(confExt.getConf(), fileTemp, CharsetUtil.CHARSET_UTF_8);
-		ClassPathResource resource = new ClassPathResource("mime.types");
-		FileUtil.writeFromStream(resource.getInputStream(), FileUtil.getTmpDirPath() + "mime.types");
 		
 		try {
+			ConfExt confExt = confService.buildConf(false);
+			FileUtil.writeString(confExt.getConf(), fileTemp, CharsetUtil.CHARSET_UTF_8);
+			ClassPathResource resource = new ClassPathResource("mime.types");
+			FileUtil.writeFromStream(resource.getInputStream(), FileUtil.getTmpDirPath() + "mime.types");
+			
 			if (SystemTool.isWindows()) {
 				cmd = nginxExe + " -t -c " + fileTemp + " -p " + nginxDir;
 			} else {
