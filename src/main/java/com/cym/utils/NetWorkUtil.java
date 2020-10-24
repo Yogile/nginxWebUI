@@ -72,13 +72,18 @@ public class NetWorkUtil {
 			if (osType.equals("linux")) { // 获取linux环境下的网口上下行速率
 				long rx = 0, tx = 0;
 				String line = null;
+				// 旧
 				// RX packets:4171603 errors:0 dropped:0 overruns:0 frame:0
 				// TX packets:4171603 errors:0 dropped:0 overruns:0 carrier:0
+				// 新
+				// RX packets 228451110  bytes 153707332334 (153.7 GB)
+				// TX packets 169848511  bytes 155937621328 (155.9 GB)
+				
 				while ((line = input.readLine()) != null) {
 					if (line.indexOf("RX packets") >= 0) {
-						rx += Long.parseLong(line.substring(line.indexOf("RX packets") + 11, line.indexOf(" ", line.indexOf("RX packets") + 11)));
+						rx += Long.parseLong(line.split(" ")[2]);
 					} else if (line.indexOf("TX packets") >= 0) {
-						tx += Long.parseLong(line.substring(line.indexOf("TX packets") + 11, line.indexOf(" ", line.indexOf("TX packets") + 11)));
+						tx += Long.parseLong(line.split(" ")[2]);
 					}
 				}
 				arr[0] = rx;
