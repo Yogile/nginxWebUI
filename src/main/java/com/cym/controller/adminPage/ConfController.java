@@ -157,7 +157,7 @@ public class ConfController extends BaseController {
 
 		String rs = null;
 		String cmd = null;
-		String fileTemp = FileUtil.getTmpDirPath() + "nginx.conf";
+		String fileTemp = FileUtil.getTmpDirPath() + File.separator + "nginx.conf";
 
 		try {
 			ConfExt confExt = confService.buildConf(false);
