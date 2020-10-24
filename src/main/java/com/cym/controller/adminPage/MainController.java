@@ -30,7 +30,7 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
 
-@RequestMapping("/adminPage/main")
+@RequestMapping("")
 @Controller
 public class MainController extends BaseController {
 	@Autowired
@@ -46,7 +46,7 @@ public class MainController extends BaseController {
 	}
 
 	@ResponseBody
-	@RequestMapping("/upload")
+	@RequestMapping("/adminPage/main/upload")
 	public JsonResult upload(@RequestParam("file") MultipartFile file, HttpSession httpSession) {
 		try {
 			File temp = new File(FileUtil.getTmpDir() + "/" + file.getOriginalFilename());
@@ -78,7 +78,7 @@ public class MainController extends BaseController {
 	}
 
 	@ResponseBody
-	@RequestMapping("/autoUpdate")
+	@RequestMapping("/adminPage/main/autoUpdate")
 	public JsonResult autoUpdate(String url) {
 		if (!SystemTool.isLinux()) {
 			return renderError(m.get("commonStr.updateTips"));
