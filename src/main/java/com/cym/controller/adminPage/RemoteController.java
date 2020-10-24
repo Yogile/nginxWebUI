@@ -275,19 +275,7 @@ public class RemoteController extends BaseController {
 					jsonResult = confController.reload(null, null, null);
 				}
 				if (cmd.contentEquals("replace")) {
-					String decompose = settingService.get("decompose");
-					ConfExt confExt = confService.buildConf(StrUtil.isNotEmpty(decompose) && decompose.equals("true"));
-
-					JSONObject jsonObject = new JSONObject();
-					jsonObject.set("nginxContent", Base64.encode(URLEncoder.encode(confExt.getConf(), Charset.forName("UTF-8"))));
-					jsonObject.set("subContent", new JSONArray());
-					jsonObject.set("subName", new JSONArray());
-					for (ConfFile confFile : confExt.getFileList()) {
-						jsonObject.getJSONArray("subContent").add(confFile.getConf());
-						jsonObject.getJSONArray("subName").add(confFile.getName());
-					}
-
-					jsonResult = confController.replace(jsonObject.toStringPretty());
+					jsonResult = confController.replace(confController.getReplaceJson());
 				}
 				if (cmd.contentEquals("start")) {
 					jsonResult = confController.start(null, null, null);
@@ -323,6 +311,8 @@ public class RemoteController extends BaseController {
 
 		return renderSuccess(rs.toString());
 	}
+
+	
 
 	@RequestMapping("asyc")
 	@ResponseBody

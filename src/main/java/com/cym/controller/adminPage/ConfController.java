@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
+import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 
@@ -93,6 +95,10 @@ public class ConfController extends BaseController {
 	@ResponseBody
 	public JsonResult replace(String json) {
 
+		if(StrUtil.isEmpty(json)) {
+			json = getReplaceJson();
+		}
+		
 		JSONObject jsonObject = JSONUtil.parseObj(json);
 
 		String nginxPath = jsonObject.getStr("nginxPath");
@@ -127,13 +133,25 @@ public class ConfController extends BaseController {
 		}
 
 	}
+	
+	public String getReplaceJson() {
+		String decompose = settingService.get("decompose");
+		ConfExt confExt = confService.buildConf(StrUtil.isNotEmpty(decompose) && decompose.equals("true"));
+
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.set("nginxContent", Base64.encode(URLEncoder.encode(confExt.getConf(), Charset.forName("UTF-8"))));
+		jsonObject.set("subContent", new JSONArray());
+		jsonObject.set("subName", new JSONArray());
+		for (ConfFile confFile : confExt.getFileList()) {
+			jsonObject.getJSONArray("subContent").add(confFile.getConf());
+			jsonObject.getJSONArray("subName").add(confFile.getName());
+		}
+		return jsonObject.toStringPretty();
+	}
 
 	@RequestMapping(value = "check")
 	@ResponseBody
 	public JsonResult check(String nginxPath, String nginxExe, String nginxDir) {
-//		if (nginxPath == null) {
-//			nginxPath = settingService.get("nginxPath");
-//		}
 		if (nginxExe == null) {
 			nginxExe = settingService.get("nginxExe");
 		}
