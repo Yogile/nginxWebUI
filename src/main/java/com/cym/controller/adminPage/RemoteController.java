@@ -261,7 +261,7 @@ public class RemoteController extends BaseController {
 	@ResponseBody
 	public JsonResult cmdOver(String[] remoteId, String cmd) {
 		if (remoteId == null || remoteId.length == 0) {
-			return renderSuccess("未选择服务器");
+			return renderSuccess(m.get("remoteStr.noSelect"));
 		}
 
 		StringBuilder rs = new StringBuilder();

@@ -230,8 +230,7 @@
 				<div class="layui-form-item" id="cmdDiv">
 					<label class="layui-form-label">${remoteStr.cmd}</label>
 					<div class="layui-input-block">
-						<select name="cmd">
-							
+						<select name="cmd" lay-filter="cmd">
 							<option value="check">${remoteStr.check}</option>
 							<option value="replace">${remoteStr.replace}</option>
 							<option value="reload">${remoteStr.reload}</option>
@@ -241,6 +240,14 @@
 						</select>
 					</div>
 				</div>
+				
+				<div class="layui-form-item" id="intervalDiv" style="display: none;">
+					<label class="layui-form-label">${remoteStr.interval}</label>
+					<div class="layui-input-block">
+						<input type="number" id="interval" name="interval" class="layui-input" >
+					</div>
+				</div>
+				
 				
 				<div class="layui-form-item">
 					<button type="button" class="layui-btn layui-btn-normal" onclick="cmdOver()">${remoteStr.execute}</button>
