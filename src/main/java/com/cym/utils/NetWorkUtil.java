@@ -80,15 +80,13 @@ public class NetWorkUtil {
 				// TX packets 169848511  bytes 155937621328 (155.9 GB)
 				
 				while ((line = input.readLine()) != null) {
-					
-					
 					if (line.indexOf("RX packets") >= 0) {
 						System.err.println(line);
-						rx += Long.parseLong(line.split("packets")[1].split("bytes")[0].trim());
+						rx += Long.parseLong(line.split("packets")[1].split("bytes")[0].trim()) * 1024;
 						System.err.println(rx);
 					} else if (line.indexOf("TX packets") >= 0) {
 						System.err.println(line);
-						tx += Long.parseLong(line.split("packets")[1].split("bytes")[0].trim());
+						tx += Long.parseLong(line.split("packets")[1].split("bytes")[0].trim()) * 1024;
 						System.err.println(tx);
 					}
 				}
