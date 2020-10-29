@@ -43,7 +43,9 @@ input[name='param']{
 						<tr>
 							<th>${commonStr.name}</th>
 							<th>${templateStr.paramCount}</th>
-							<th>${templateStr.def}</th>
+							<th>
+								${templateStr.def}
+							</th>
 							<th>${commonStr.operation}</th>
 						</tr>
 					</thead>
@@ -52,7 +54,18 @@ input[name='param']{
 						<tr>
 							<td>${ext.template.name}</td>
 							<td>${ext.count}</td>
-							<td>${ext.template.def}</td>
+							<td>${ext.template.def}
+								<#if ext.template.def == 'server'>
+									${menuStr.server}
+								</#if>
+								<#if ext.template.def == 'location'>
+									${menuStr.location}
+								</#if>
+								<#if ext.template.def == 'upstream'>
+									${menuStr.upstream}
+								</#if>
+							
+							</td>
 							<td>
 								<button class="layui-btn layui-btn-sm" onclick="edit('${ext.template.id}')">${commonStr.edit}</button>
 								<button class="layui-btn layui-btn-danger layui-btn-sm" onclick="del('${ext.template.id}')">${commonStr.del}</button>
@@ -79,10 +92,10 @@ input[name='param']{
 				<label class="layui-form-label">${templateStr.def}</label>
 				<div class="layui-input-inline">
 					<select name="def" id="def">
-						<option value="">--无--</option>
-						<option value="server">server</option>
-						<option value="location">location</option>
-						<option value="upstream">upstream</option>
+						<option value="">${commonStr.null}</option>
+						<option value="server">${menuStr.server}</option>
+						<option value="location">${menuStr.location}</option>
+						<option value="upstream">${menuStr.upstream}</option>
 					</select>
 				</div>
 			</div>
