@@ -162,7 +162,9 @@ public class InitConfig {
 	private Boolean inDocker() {
 		List<String> rs = RuntimeUtil.execForLines("cat /proc/1/cgroup");
 		for (String str : rs) {
+			logger.info(str);
 			if (str.contains("docker")) {
+				logger.info("I am in docker");
 				return true;
 			}
 		}
