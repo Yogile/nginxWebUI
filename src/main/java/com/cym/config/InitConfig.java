@@ -168,6 +168,7 @@ public class InitConfig {
 				return true;
 			}
 		}
+		logger.info("I am not in docker");
 		return false;
 	}
 
