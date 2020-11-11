@@ -1,6 +1,6 @@
 # nginxWebUI
 
-[English version](https://github.com/cym1102/nginxWebUI/blob/master/README_EN.md): 
+### [English README](https://github.com/cym1102/nginxWebUI/blob/master/README_EN.md): 
 
 #### 介绍
 nginx网页配置工具
