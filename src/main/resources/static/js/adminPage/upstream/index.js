@@ -378,8 +378,7 @@ function upstreamMonitor() {
 
 
 function upstreamOver() {
-	var myreg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
-	if ($("#mail").val() == '' || !myreg.test($("#mail").val())) {
+	if ($("#mail").val().indexOf("@") == -1) {
 		layer.alert(remoteStr.emailTips);
 		return;
 	}
