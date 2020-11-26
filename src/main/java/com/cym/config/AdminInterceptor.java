@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
@@ -130,7 +131,7 @@ public class AdminInterceptor implements HandlerInterceptor {
 		return true;
 	}
 
-	private String buldBody(Map<String, String[]> parameterMap, Remote remote) {
+	private String buldBody(Map<String, String[]> parameterMap, Remote remote) throws UnsupportedEncodingException {
 		List<String> body = new ArrayList<>();
 		body.add("creditKey=" + remote.getCreditKey());
 
@@ -138,7 +139,7 @@ public class AdminInterceptor implements HandlerInterceptor {
 			Map.Entry me = (Map.Entry) itr.next();
 
 			for (String value : (String[]) me.getValue()) {
-				body.add(me.getKey() + "=" + URLEncoder.encode(value, CharsetUtil.parse("UTF-8"))); 
+				body.add(me.getKey() + "=" + URLEncoder.encode (value, "UTF-8")); 
 			}
 
 		}
