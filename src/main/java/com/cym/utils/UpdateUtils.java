@@ -10,7 +10,7 @@ import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.RuntimeUtil;
 
 @Component
-public class AsyncUtils {
+public class UpdateUtils {
 	@Value("${server.port}")
 	String port;
 	@Value("${project.home}")
@@ -25,9 +25,8 @@ public class AsyncUtils {
 	@Value("${spring.datasource.password:}")
 	String password;
 
-	private static final Logger LOG = LoggerFactory.getLogger(AsyncUtils.class);
+	private static final Logger LOG = LoggerFactory.getLogger(UpdateUtils.class);
 
-	@Async
 	public void run(String path) {
 		ThreadUtil.safeSleep(2000);
 
