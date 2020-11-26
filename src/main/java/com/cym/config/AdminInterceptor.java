@@ -19,6 +19,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.http.util.EncodingUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -29,6 +30,7 @@ import com.cym.service.CreditService;
 import com.cym.utils.MessageUtils;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
@@ -40,6 +42,7 @@ public class AdminInterceptor implements HandlerInterceptor {
 	CreditService creditService;
 	@Autowired
 	MessageUtils m;
+
 	/*
 	 * 视图渲染之后的操作
 	 */
@@ -130,19 +133,16 @@ public class AdminInterceptor implements HandlerInterceptor {
 
 		return true;
 	}
-	
-	
 
 	private String buldBody(Map<String, String[]> parameterMap, Remote remote) {
 		List<String> body = new ArrayList<>();
 		body.add("creditKey=" + remote.getCreditKey());
-		body.add("loca=" + remote.getCreditKey());
 
 		for (Iterator itr = parameterMap.entrySet().iterator(); itr.hasNext();) {
 			Map.Entry me = (Map.Entry) itr.next();
 
 			for (String value : (String[]) me.getValue()) {
-				body.add(me.getKey() + "=" + value);
+				body.add(me.getKey() + "=" + URLEncoder.encode(value, CharsetUtil.CHARSET_UTF_8));
 			}
 
 		}
