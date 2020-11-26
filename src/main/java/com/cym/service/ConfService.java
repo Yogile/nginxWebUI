@@ -551,18 +551,20 @@ public class ConfService {
 		if (FileUtil.exist(nginxPath)) {
 			FileUtil.mkdir(InitConfig.home + "bak");
 			FileUtil.copy(nginxPath, InitConfig.home + "bak/nginx.conf." + date + ".bak", true);
-			// 备份conf.d文件夹
-			String confd = nginxPath.replace("nginx.conf", "conf.d/");
-			if (!FileUtil.exist(confd)) {
-				FileUtil.mkdir(confd);
-			}
-			ZipUtil.zip(confd, InitConfig.home + "bak/nginx.conf." + date + ".zip");
+		}
 
-			// 删除conf.d下全部文件
-			FileUtil.del(confd);
+		// 备份conf.d文件夹
+		String confd = nginxPath.replace("nginx.conf", "conf.d/");
+		if (!FileUtil.exist(confd)) {
 			FileUtil.mkdir(confd);
+		} else {
+			ZipUtil.zip(confd, InitConfig.home + "bak/nginx.conf." + date + ".zip");
 		}
 		
+		// 删除conf.d下全部文件
+		FileUtil.del(confd);
+		FileUtil.mkdir(confd);
+
 		// 写入主文件
 		FileUtil.writeString(nginxContent, nginxPath.replace(" ", "_"), StandardCharsets.UTF_8);
 		String decompose = settingService.get("decompose");
