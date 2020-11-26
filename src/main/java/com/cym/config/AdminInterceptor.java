@@ -139,7 +139,7 @@ public class AdminInterceptor implements HandlerInterceptor {
 			Map.Entry me = (Map.Entry) itr.next();
 
 			for (String value : (String[]) me.getValue()) {
-				body.add(me.getKey() + "=" + URLEncoder.encode (value, "UTF-8")); 
+				body.add(me.getKey() + "=" + URLEncoder.encode(value, "UTF-8"));
 			}
 
 		}
