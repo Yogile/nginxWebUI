@@ -402,8 +402,8 @@ function runCmd(type){
 				
 				layer.open({
 					type : 1,
-					title: false,
-					area : [ '750px', '300px' ], //宽高
+					title: confStr.runCmd,
+					area : [ '750px', '400px' ], //宽高
 					content : $('#cmdForm')
 				});
 			}
