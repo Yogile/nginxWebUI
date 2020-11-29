@@ -59,7 +59,7 @@ yum install nginx
 2.下载最新版发行包jar
 
 ```
-wget http://www.nginxwebui.cn/download/nginxWebUI-2.3.3.jar
+wget http://file.nginxwebui.cn/nginxWebUI-2.3.3.jar
 ```
 
 有新版本只需要修改路径中的版本即可

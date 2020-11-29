@@ -53,7 +53,7 @@ yum install nginx
 2.Download the latest release of the distribution jar
 
 ```
-sudo wget http://www.nginxwebui.cn/download/nginxWebUI-2.3.3.jar
+sudo wget http://file.nginxwebui.cn/nginxWebUI-2.3.3.jar
 ```
 
 With a new version, you just need to change the version in the path
