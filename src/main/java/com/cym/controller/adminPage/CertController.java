@@ -217,6 +217,8 @@ public class CertController extends BaseController {
 			FileUtil.del(dir);
 			
 			String fileName = URLEncoder.createDefault().encode(cert.getDomain(), Charset.forName("UTF-8"));
+			
+			System.err.println(dir + ".zip");
 			handleStream(response, dir + ".zip", fileName);
 		}
 
