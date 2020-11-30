@@ -203,7 +203,7 @@ public class CertController extends BaseController {
 	public void download(String id, HttpServletResponse response) throws IOException {
 		Cert cert = sqlHelper.findById(id, Cert.class);
 		if (StrUtil.isNotEmpty(cert.getPem()) && StrUtil.isNotEmpty(cert.getKey())) {
-			String dir = FileUtil.getTmpDirPath() + File.separator + "cert";
+			String dir = InitConfig.home + "/temp/cert/";
 			FileUtil.del(dir);
 			FileUtil.del(dir + ".zip");
 			FileUtil.mkdir(dir);
@@ -221,8 +221,9 @@ public class CertController extends BaseController {
 			System.err.println(dir + ".zip");
 			handleStream(response, dir + ".zip", fileName);
 		}
-
 	}
+	
+	
 
 	private void handleStream(HttpServletResponse response, String path, String fileName) throws IOException {
 
