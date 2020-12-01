@@ -102,7 +102,7 @@ function link(id, name) {
 	layer.open({
 		type: 2,
 		title: name,
-		area: ['1000px', '635px'], // 宽高
+		area: ['1000px', '731px'], // 宽高
 		content: ctx + `/adminPage/ssh/webssh?id=` + id
 	});
 
