@@ -3,11 +3,11 @@ function WSSHClient() {
 
 WSSHClient.prototype._generateEndpoint = function () {
     if (window.location.protocol == 'https:') {
-        var protocol = 'wss://';
+        var protocol = 'wss:';
     } else {
-        var protocol = 'ws://';
+        var protocol = 'ws:';
     }
-    var endpoint = protocol+'127.0.0.1:8080/webssh';
+    var endpoint = protocol + ctx + 'webssh';
     return endpoint;
 };
 
