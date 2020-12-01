@@ -1,22 +1,22 @@
 <!doctype html>
 <html>
 <head>
-    <title>WebSSH</title>
-    <link rel="stylesheet" href="../css/xterm.css" />
+  	<#include "/adminPage/common.html"/>
+    <link rel="stylesheet" href="${ctx}/js/lib/xterm/xterm.css" />
 </head>
 <body>
 <div id="terminal" style="width: 100%;height: 100%"></div>
 
-<script src="../js/jquery-3.4.1.min.js"></script>
-<script src="../js/xterm.js" charset="utf-8"></script>
-<script src="../js/webssh.js" charset="utf-8"></script>
+<script src="${ctx}/js/lib/xterm/xterm.js" charset="utf-8"></script>
+<script src="${ctx}/js/ssh/webssh.js" charset="utf-8"></script>
+
 <script>
     openTerminal( {
         operate:'connect',
-        host: '139.155.8.65',//IP
-        port: '22',//端口号
-        username: 'root',//用户名
-        password: '6e1f6aaa89ed4b9b9a5f81e8740f0f55'//密码
+        host: '',//IP
+        port: '',//端口号
+        username: '',//用户名
+        password: ''//密码
     });
     
     function openTerminal(options){
