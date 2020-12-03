@@ -14,13 +14,13 @@
 			<!-- 内容主体区域 -->
 			<div style="padding: 15px">
 				<fieldset class="layui-elem-field layui-field-title">
-					<legend>ssh终端</legend>
+					<legend>${menuStr.ssh}</legend>
 				</fieldset>
 
 				<form action="${ctx}/adminPage/ssh" id="searchForm" method="post">
 					<div class="layui-form">
 						<div class="layui-inline">
-							<button type="button" class="layui-btn layui-btn-normal" onclick="add()">添加ssh终端</button>
+							<button type="button" class="layui-btn layui-btn-normal" onclick="add()">${commonStr.add}</button>
 						</div>
 
 						<input type="hidden" name="curr" value="${page.curr}"> 
@@ -31,11 +31,11 @@
 				<table class="layui-table">
 					<thead>
 						<tr>
-							<th>终端名称</th>
-							<th>主机</th>
-							<th>端口</th>
-							<th>用户名</th>
-							<th>操作</th>
+							<th>${sshStr.name}</th>
+							<th>${sshStr.host}</th>
+							<th>${sshStr.port}</th>
+							<th>${sshStr.username}</th>
+							<th>${commonStr.operation}</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -66,35 +66,35 @@
 				<input type="hidden" name="id" id="id">
 
 				<div class="layui-form-item">
-					<label class="layui-form-label">名称</label>
+					<label class="layui-form-label">${sshStr.name}</label>
 					<div class="layui-input-block">
 						<input type="text" name="name" id="name" class="layui-input">
 					</div>
 				</div>
 
 				<div class="layui-form-item">
-					<label class="layui-form-label">主机</label>
+					<label class="layui-form-label">${sshStr.host}</label>
 					<div class="layui-input-block">
 						<input type="text" name="host" id="host" class="layui-input">
 					</div>
 				</div>
 				
 				<div class="layui-form-item">
-					<label class="layui-form-label">端口</label>
+					<label class="layui-form-label">${sshStr.port}</label>
 					<div class="layui-input-block">
 						<input type="number" name="port" id="port" class="layui-input">
 					</div>
 				</div>
 				
 				<div class="layui-form-item">
-					<label class="layui-form-label">用户名</label>
+					<label class="layui-form-label">${sshStr.username}</label>
 					<div class="layui-input-block">
 						<input type="text" name="username" id="username" class="layui-input">
 					</div>
 				</div>
 				
 				<div class="layui-form-item">
-					<label class="layui-form-label">密码</label>
+					<label class="layui-form-label">${sshStr.password}</label>
 					<div class="layui-input-block">
 						<input type="password" name="password" id="password" class="layui-input">
 					</div>

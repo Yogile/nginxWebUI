@@ -11,7 +11,7 @@ function add() {
 	$("#username").val("");
 	$("#password").val("");
 
-	showWindow(adminStr.add);
+	showWindow(commonStr.add);
 }
 
 
@@ -103,7 +103,7 @@ function link(id, name) {
 		type: 2,
 		title: name,
 		resize  : false,
-		area: ['1000px', '731px'], // 宽高
+		area: ['1000px', '430px'], // 宽高
 		content: ctx + `/adminPage/ssh/webssh?id=` + id
 	});
 
