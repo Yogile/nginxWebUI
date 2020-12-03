@@ -1,12 +1,24 @@
 $(function() {
-
+	
+	
 	if ($("#adminCount").val() > 0) {
+		var remember = window.localStorage.getItem("remember");
+		if(remember){
+			var name = window.localStorage.getItem("name");
+			var pass = window.localStorage.getItem("pass");
+			
+			$("#name").val(name);
+			$("#pass").val(pass);
+			$("#remember").prop("checked",true);
+			form.render();
+		}
+		
 		layer.open({
 			type: 1,
 			shade: false,
 			title: loginStr.title1,
 			closeBtn: false,
-			area: ['400px', '330px'], //宽高
+			area: ['400px', '350px'], //宽高
 			content: $('#windowDiv')
 		});
 	} else {
@@ -25,6 +37,16 @@ $(function() {
 
 function login() {
 	$("#authCode").val($("#codeInput").val());
+	
+	if($("#remember").prop("checked")){
+		window.localStorage.setItem("name", $("#name").val());
+		window.localStorage.setItem("pass", $("#pass").val());
+		window.localStorage.setItem("remember", true);
+	}else{
+		window.localStorage.setItem("name", "");
+		window.localStorage.setItem("pass", "");
+		window.localStorage.setItem("remember", false);
+	}
 	
 	$.ajax({
 		type: 'POST',
