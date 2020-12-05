@@ -1,7 +1,9 @@
 $(function() {
 	if ($("#adminCount").val() > 0) {
 		var adminId = window.localStorage.getItem("adminId");
-		if(adminId != null && adminId != ''){
+		var time = window.localStorage.getItem("time");
+		
+		if(adminId != null && adminId != '' && new Date().getTime() - time < 7 * 24 * 60 * 60 * 1000){
 			// 自动登录
 			$.ajax({
 				type: 'POST',
@@ -12,6 +14,7 @@ $(function() {
 				dataType: 'json',
 				success: function(data) {
 					if (data.success) {
+						window.localStorage.setItem("time", new Date().getTime());
 						location.href = ctx + "adminPage/monitor";
 					} 
 				},
@@ -54,9 +57,10 @@ function login() {
 		success: function(data) {
 			if (data.success) {
 				if($("#remember").prop("checked")){
-					 window.localStorage.setItem("adminId",data.obj.id );
-				}else{
-					 window.localStorage.removeItem("adminId");
+					window.localStorage.setItem("time", new Date().getTime());
+					window.localStorage.setItem("adminId",data.obj.id);
+				} else {
+					window.localStorage.removeItem("adminId");
 				}
 				
 				location.href = ctx + "adminPage/monitor";
