@@ -1,16 +1,24 @@
 $(function() {
-	
-	
 	if ($("#adminCount").val() > 0) {
-		var remember = window.localStorage.getItem("remember");
-		if(remember){
-			var name = window.localStorage.getItem("name");
-			var pass = window.localStorage.getItem("pass");
-			
-			$("#name").val(name);
-			$("#pass").val(pass);
-			$("#remember").prop("checked",true);
-			form.render();
+		var adminId = window.localStorage.getItem("adminId");
+		if(adminId != null && adminId != ''){
+			// 自动登录
+			$.ajax({
+				type: 'POST',
+				url: ctx + '/adminPage/login/autoLogin',
+				data: {
+					adminId : adminId
+				},
+				dataType: 'json',
+				success: function(data) {
+					if (data.success) {
+						location.href = ctx + "adminPage/monitor";
+					} 
+				},
+				error: function() {
+					layer.alert(commonStr.errorInfo);
+				}
+			});
 		}
 		
 		layer.open({
@@ -38,16 +46,6 @@ $(function() {
 function login() {
 	$("#authCode").val($("#codeInput").val());
 	
-	if($("#remember").prop("checked")){
-		window.localStorage.setItem("name", $("#name").val());
-		window.localStorage.setItem("pass", $("#pass").val());
-		window.localStorage.setItem("remember", true);
-	}else{
-		window.localStorage.setItem("name", "");
-		window.localStorage.setItem("pass", "");
-		window.localStorage.setItem("remember", false);
-	}
-	
 	$.ajax({
 		type: 'POST',
 		url: ctx + '/adminPage/login/login',
@@ -55,6 +53,12 @@ function login() {
 		dataType: 'json',
 		success: function(data) {
 			if (data.success) {
+				if($("#remember").prop("checked")){
+					 window.localStorage.setItem("adminId",data.obj.id );
+				}else{
+					 window.localStorage.removeItem("adminId");
+				}
+				
 				location.href = ctx + "adminPage/monitor";
 			} else {
 				layer.msg(data.msg);
