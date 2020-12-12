@@ -124,6 +124,55 @@ notice:
 
 4. Logs are stored by default /home/nginxWebUI/log/nginxWebUI.log
 
+
+#### Compile 
+
+1. Compile the package with Maven
+
+```
+mvn clean package
+```
+
+2. Compile the image with Docker
+
+```
+docker build -t nginxwebui:2.3.9 .
+```
+
+#### Add boot up run
+
+1. Install Supervisor
+
+ubuntu:
+
+```
+apt install supervisor
+```
+
+centos:
+
+```
+yum install supervisor
+```
+
+2. Edit the configuration
+
+```
+vim /etc/supervisor/conf.d/nginxwebui.conf
+```
+
+Content:
+
+```
+[program:nginxwebui]
+command=java -jar /home/nginxWebUI-2.3.9.jar
+autostart=true
+autorestart=true
+stderr_logfile=/tmp/nginxwebui_stderr.log
+stdout_logfile=/tmp/nginxwebui_stdout.log
+user = root #Must be root
+```
+
 #### instructions
 
 open http://xxx.xxx.xxx.xxx:8080 Enter the main page

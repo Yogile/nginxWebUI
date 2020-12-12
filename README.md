@@ -112,7 +112,7 @@ yum install docker
 docker pull cym1102/nginxwebui:latest
 ```
 
-3. 启动容器: 
+3.启动容器: 
 
 ```
 docker run -itd -v /home/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--server.port=8080" --privileged=true --net=host  cym1102/nginxwebui:latest /bin/bash
@@ -142,6 +142,40 @@ mvn clean package
 
 ```
 docker build -t nginxwebui:2.3.9 .
+```
+
+#### 添加开机启动
+
+1. 安装Supervisor
+
+ubuntu:
+
+```
+apt install supervisor
+```
+
+centos:
+
+```
+yum install supervisor
+```
+
+2. 编辑启动配置
+
+```
+vim /etc/supervisor/conf.d/nginxwebui.conf
+```
+
+内容:
+
+```
+[program:nginxwebui]
+command=java -jar /home/nginxWebUI-2.3.9.jar
+autostart=true #开机自启动
+autorestart=true #进程死掉后自动重启
+stderr_logfile=/tmp/nginxwebui_stderr.log #错误输出
+stdout_logfile=/tmp/nginxwebui_stdout.log #日志输出
+user = root #启动用户,必须为root
 ```
 
 #### 使用说明
