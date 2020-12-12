@@ -94,18 +94,18 @@ public class InitConfig {
 
 		if (SystemTool.isLinux()) {
 			// 初始化acme.sh
-			if (!FileUtil.exist(InitConfig.acmeShDir)) {
-				// 释放全新包
-				ClassPathResource resource = new ClassPathResource("acme.zip");
-				InputStream inputStream = resource.getInputStream();
-				FileUtil.writeFromStream(inputStream, InitConfig.home + "acme.zip");
-				FileUtil.mkdir(InitConfig.acmeShDir);
-				ZipUtil.unzip(InitConfig.home + "acme.zip", InitConfig.acmeShDir);
-				FileUtil.del(InitConfig.home + "acme.zip");
-			}
+			//if (!FileUtil.exist(InitConfig.acmeShDir)) {
+			// 释放全新包
+			ClassPathResource resource = new ClassPathResource("acme.zip");
+			InputStream inputStream = resource.getInputStream();
+			FileUtil.writeFromStream(inputStream, InitConfig.home + "acme.zip");
+			FileUtil.mkdir(InitConfig.acmeShDir);
+			ZipUtil.unzip(InitConfig.home + "acme.zip", InitConfig.acmeShDir);
+			FileUtil.del(InitConfig.home + "acme.zip");
+			//}
 
-			// 强制释放新的.acme.sh文件
-			ClassPathResource resource = new ClassPathResource("acme.sh");
+			// 释放新的.acme.sh文件
+			resource = new ClassPathResource("acme.sh");
 			String res = "";
 			BufferedReader br = new BufferedReader(new InputStreamReader(resource.getInputStream(), "UTF-8"));
 			StringBuffer sb = new StringBuffer();
@@ -119,7 +119,7 @@ public class InitConfig {
 			res = sb.toString();
 
 			FileUtil.writeString(res, InitConfig.acmeSh, "UTF-8");
-			RuntimeUtil.exec("chmod 777 " + acmeSh);
+			RuntimeUtil.exec("chmod a+x " + acmeSh);
 
 			
 			// 查找ngx_stream_module模块
