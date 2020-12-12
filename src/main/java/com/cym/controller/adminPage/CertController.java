@@ -141,10 +141,6 @@ public class CertController extends BaseController {
 			rs = e.getMessage();
 		}
 
-		// 申请完后,马上备份.acme.sh,以便在升级docker后可还原
-//		FileUtil.del(InitConfig.home + ".acme.sh");
-//		FileUtil.copy("/root/.acme.sh", InitConfig.home, true);
-
 		if (rs.contains("Your cert is in")) {
 			try {
 				// 将证书复制到/home/nginxWebUI
