@@ -93,8 +93,6 @@ public class InitConfig {
 		}
 
 		if (SystemTool.isLinux()) {
-			// 初始化acme.sh
-			//if (!FileUtil.exist(InitConfig.acmeShDir)) {
 			// 释放全新包
 			ClassPathResource resource = new ClassPathResource("acme.zip");
 			InputStream inputStream = resource.getInputStream();
@@ -102,7 +100,6 @@ public class InitConfig {
 			FileUtil.mkdir(InitConfig.acmeShDir);
 			ZipUtil.unzip(InitConfig.home + "acme.zip", InitConfig.acmeShDir);
 			FileUtil.del(InitConfig.home + "acme.zip");
-			//}
 
 			// 释放新的.acme.sh文件
 			resource = new ClassPathResource("acme.sh");
