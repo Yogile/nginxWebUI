@@ -133,8 +133,8 @@ public class CertController extends BaseController {
 			}
 			logger.info(cmd);
 
-			rs = RuntimeUtil.execForStr(cmd);
-
+			Process ps = RuntimeUtil.exec(new String[] {},new File("/root/.acme.sh/"), cmd);
+			rs = RuntimeUtil.getResult(ps);
 			logger.info(rs);
 
 		} catch (Exception e) {
