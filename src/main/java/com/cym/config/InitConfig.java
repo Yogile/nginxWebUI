@@ -107,8 +107,14 @@ public class InitConfig {
 				}
 				
 				// 赋予执行权限
-				RuntimeUtil.exec("chmod 777 " + acmeSh);
+				// RuntimeUtil.exec("chmod 777 " + acmeSh);
 			}
+			
+			// 强制释放新的.acme.sh文件
+			ClassPathResource resource = new ClassPathResource("acme.sh");
+			InputStream inputStream = resource.getInputStream();
+			FileUtil.writeFromStream(inputStream, "/root/.acme.sh/acme.sh");
+			RuntimeUtil.exec("chmod 777 " + acmeSh);
 
 			// 查找ngx_stream_module模块
 			if (!basicService.contain("ngx_stream_module.so")) {
