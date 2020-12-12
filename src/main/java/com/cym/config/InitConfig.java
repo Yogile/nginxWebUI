@@ -106,19 +106,17 @@ public class InitConfig {
 
 			// 释放新的.acme.sh文件
 			resource = new ClassPathResource("acme.sh");
-			String res = "";
+			List<String> res = new ArrayList<>();
 			BufferedReader br = new BufferedReader(new InputStreamReader(resource.getInputStream(), "UTF-8"));
-			StringBuffer sb = new StringBuffer();
 			String str = "";
 			while ((str = br.readLine()) != null) {
 				if (str.contains("${acmeShDir}")) {
 					str = str.replace("${acmeShDir}", InitConfig.acmeShDir);
 				}
-				sb.append(str);
+				res.add(str);
 			}
-			res = sb.toString();
 
-			FileUtil.writeString(res, InitConfig.acmeSh, "UTF-8");
+			FileUtil.writeLines(res, InitConfig.acmeSh, "UTF-8");
 			RuntimeUtil.exec("chmod a+x " + acmeSh);
 
 			
