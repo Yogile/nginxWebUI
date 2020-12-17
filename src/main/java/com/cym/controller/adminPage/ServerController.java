@@ -254,7 +254,7 @@ public class ServerController extends BaseController {
 			Upstream upstream = sqlHelper.findById(id, Upstream.class);
 			ngxBlock = confService.buildBlockUpstream(upstream);
 		} else if (type.equals("http")) {
-			List<Http> httpList = sqlHelper.findAll(new Sort("seq", Direction.ASC), Http.class);
+			List<Http> httpList = sqlHelper.findAll(new Sort("seq + 0", Direction.ASC), Http.class);
 			ngxBlock = new NgxBlock();
 			ngxBlock.addValue("http");
 			for (Http http : httpList) {
@@ -263,7 +263,7 @@ public class ServerController extends BaseController {
 				ngxBlock.addEntry(ngxParam);
 			}
 		} else if (type.equals("stream")) {
-			List<Stream> streamList = sqlHelper.findAll(new Sort("seq", Direction.ASC), Stream.class);
+			List<Stream> streamList = sqlHelper.findAll(new Sort("seq + 0", Direction.ASC), Stream.class);
 			ngxBlock = new NgxBlock();
 			ngxBlock.addValue("stream");
 			for (Stream stream : streamList) {
