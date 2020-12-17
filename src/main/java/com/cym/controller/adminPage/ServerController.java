@@ -125,6 +125,10 @@ public class ServerController extends BaseController {
 		Server server = JSONUtil.toBean(serverJson, Server.class);
 		List<Location> locations = JSONUtil.toList(JSONUtil.parseArray(locationJson), Location.class);
 
+		if (StrUtil.isEmpty(server.getId())) {
+			server.setSeq(serverService.buildOrder());
+		}
+		
 		if (server.getProxyType() == 0) {
 			try {
 				serverService.addOver(server, serverParamJson, locations);
@@ -275,5 +279,11 @@ public class ServerController extends BaseController {
 
 		return renderSuccess(conf);
 	}
-
+	
+	@RequestMapping("setOrder")
+	@ResponseBody
+	public JsonResult setOrder(String id, Integer count) {
+		serverService.setSeq(id, count);
+		return renderSuccess();
+	}
 }
