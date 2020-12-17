@@ -44,16 +44,14 @@ public class ServerService {
 //	@Value("${project.home}")
 //	private String tmpPath;
 
-	public Page search(Page page, String sortColum, String direction, String keywords) {
+	public Page search(Page page, String keywords) {
 		ConditionAndWrapper conditionAndWrapper = new ConditionAndWrapper();
 		if (StrUtil.isNotEmpty(keywords)) {
 			conditionAndWrapper.and(new ConditionOrWrapper().like("descr", keywords).like("serverName", keywords.trim()).like("listen", keywords.trim()));
 		}
 
-		Sort sort = null;
-		if (StrUtil.isNotEmpty(sortColum)) {
-			sort = new Sort(sortColum, "asc".equalsIgnoreCase(direction) ? Direction.ASC : Direction.DESC);
-		}
+		Sort sort = new Sort().add("seq", Direction.DESC);
+		
 
 		page = sqlHelper.findPage(conditionAndWrapper, sort, page, Server.class);
 
@@ -147,7 +145,8 @@ public class ServerService {
 	}
 
 	public List<Server> getListByProxyType(Integer[] proxyType) {
-		return sqlHelper.findListByQuery(new ConditionAndWrapper().in("proxyType", proxyType), Server.class);
+		Sort sort = new Sort().add("seq", Direction.DESC);
+		return sqlHelper.findListByQuery(new ConditionAndWrapper().in("proxyType", proxyType), sort, Server.class);
 	}
 
 	@Transactional

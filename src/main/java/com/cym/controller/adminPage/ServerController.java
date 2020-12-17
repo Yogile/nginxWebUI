@@ -55,8 +55,8 @@ public class ServerController extends BaseController {
 	ConfService confService;
 
 	@RequestMapping("")
-	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView, Page page, String sort, String direction, String keywords) {
-		page = serverService.search(page, sort, direction, keywords);
+	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView, Page page, String keywords) {
+		page = serverService.search(page, keywords);
 
 		List<ServerExt> exts = new ArrayList<ServerExt>();
 		for (Server server : page.getRecords(Server.class)) {
@@ -89,8 +89,6 @@ public class ServerController extends BaseController {
 
 		modelAndView.addObject("certList", sqlHelper.findAll(Cert.class));
 		modelAndView.addObject("wwwList", sqlHelper.findAll(Www.class));
-		modelAndView.addObject("sort", sort);
-		modelAndView.addObject("direction", direction);
 
 		modelAndView.addObject("passwordList", sqlHelper.findAll(Password.class));
 

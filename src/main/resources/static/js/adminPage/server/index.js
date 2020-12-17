@@ -731,7 +731,7 @@ function addParamOver() {
 }
 
 
-function sort(id) {
+/*function sort(id) {
 	$("#sort").val(id.replace("Sort", ""))
 	if ($("#" + id).attr("class").indexOf("blue") > -1) {
 		if ($("#direction").val() == 'asc') {
@@ -744,7 +744,7 @@ function sort(id) {
 	}
 
 	search();
-}
+}*/
 
 
 var wwwIndex;
