@@ -38,8 +38,6 @@ public class ServerService {
 	@Autowired
 	SqlHelper sqlHelper;
 
-//	@Value("${project.home}")
-//	private String tmpPath;
 
 	public Page search(Page page, String keywords) {
 		ConditionAndWrapper conditionAndWrapper = new ConditionAndWrapper();
