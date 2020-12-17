@@ -90,7 +90,8 @@ public class UpstreamService {
 	}
 
 	public List<Upstream> getListByProxyType(Integer proxyType) {
-		return sqlHelper.findListByQuery(new ConditionAndWrapper().eq("proxyType", proxyType), Upstream.class);
+		Sort sort = new Sort().add("seq + 0", Direction.DESC);
+		return sqlHelper.findListByQuery(new ConditionAndWrapper().eq("proxyType", proxyType), sort, Upstream.class);
 	}
 
 	public Long getCountByName(String name) {
