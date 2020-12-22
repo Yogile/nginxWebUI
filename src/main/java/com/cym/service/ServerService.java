@@ -283,7 +283,8 @@ public class ServerService {
 			}
 
 			server.setDef(0);
-			this.addOver(server, "", locations);
+			server.setSeq(buildOrder());
+			addOver(server, "", locations);
 		}
 
 		// 删除临时文件
