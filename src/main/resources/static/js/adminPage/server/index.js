@@ -551,7 +551,7 @@ function buildHtml(uuid, location, upstreamSelect) {
 							<input type="checkbox" name="header" title="${serverStr.headerAddHost}" lay-skin="primary" checked> 
 						</div>
 						<div class="layui-inline">
-							<input type="checkbox" name="websocket" title="${serverStr.websocket}" lay-skin="primary" checked> 
+							<input type="checkbox" name="websocket" title="${serverStr.websocket}" lay-skin="primary"> 
 						</div>
 					</span>
 				</td> 
