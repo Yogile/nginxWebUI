@@ -146,22 +146,6 @@ public class InitConfig {
 		}
 
 		// 初始化http和stream的seq值
-//		List<Http> https = sqlHelper.findAll(Http.class);
-//		List<Stream> streams = sqlHelper.findAll(Stream.class);
-//
-//		for (Http http : https) {
-//			if (http.getSeq() == null) {
-//				http.setSeq(Long.parseLong(http.getId()));
-//				sqlHelper.updateById(http);
-//			}
-//		}
-//		for (Stream stream : streams) {
-//			if (stream.getSeq() == null) {
-//				stream.setSeq(Long.parseLong(stream.getId()));
-//				sqlHelper.updateById(stream);
-//			}
-//		}
-		
 		jdbcTemplate.update("update server set seq = id where seq is null");
 		jdbcTemplate.update("update http set seq = id where seq is null");
 		jdbcTemplate.update("update upstream set seq = id where seq is null");
