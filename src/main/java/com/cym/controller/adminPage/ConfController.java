@@ -375,7 +375,7 @@ public class ConfController extends BaseController {
 			for (ConfFile confFile : confExt.getFileList()) {
 				confFile.setConf("");
 
-				String filePath = new File(nginxPath).getParent() + "conf.d/" + confFile.getName();
+				String filePath = new File(nginxPath).getParent() + "/conf.d/" + confFile.getName();
 				if (FileUtil.exist(filePath)) {
 					confFile.setConf(FileUtil.readString(filePath, StandardCharsets.UTF_8));
 				}
