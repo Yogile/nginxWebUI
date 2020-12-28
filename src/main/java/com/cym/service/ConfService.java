@@ -155,7 +155,7 @@ public class ConfService {
 					addConfFile(confExt, name + ".conf", ngxBlockServer);
 
 					ngxParam = new NgxParam();
-					ngxParam.addValue("include " + new File(nginxPath).getParent() +  "/conf.d/" + name + ".conf");
+					ngxParam.addValue("include " + new File(nginxPath).getParent() + "/conf.d/" + name + ".conf");
 
 					if (noContain(ngxBlockHttp, ngxParam)) {
 						ngxBlockHttp.addEntry(ngxParam);
@@ -193,7 +193,7 @@ public class ConfService {
 					addConfFile(confExt, "upstreams." + upstream.getName() + ".conf", ngxBlockServer);
 
 					ngxParam = new NgxParam();
-					ngxParam.addValue("include " + new File(nginxPath).getParent() +  "/conf.d/upstreams." + upstream.getName() + ".conf");
+					ngxParam.addValue("include " + new File(nginxPath).getParent() + "/conf.d/upstreams." + upstream.getName() + ".conf");
 					ngxBlockStream.addEntry(ngxParam);
 				} else {
 					ngxBlockStream.addEntry(ngxBlockServer);
@@ -215,7 +215,7 @@ public class ConfService {
 					addConfFile(confExt, "stream." + server.getListen() + ".conf", ngxBlockServer);
 
 					ngxParam = new NgxParam();
-					ngxParam.addValue("include " + new File(nginxPath).getParent() +  "/conf.d/stream." + server.getListen() + ".conf");
+					ngxParam.addValue("include " + new File(nginxPath).getParent() + "/conf.d/stream." + server.getListen() + ".conf");
 					ngxBlockStream.addEntry(ngxParam);
 				} else {
 					ngxBlockStream.addEntry(ngxBlockServer);
@@ -343,7 +343,15 @@ public class ConfService {
 					NgxBlock ngxBlock = new NgxBlock();
 					ngxBlock.addValue("if ($scheme = http)");
 					ngxParam = new NgxParam();
-					ngxParam.addValue("return 301 https://$host$request_uri");
+
+					String port = "";
+					if (server.getListen().contains(":")) {
+						port = server.getListen().split(":")[1];
+					} else {
+						port = server.getListen();
+					}
+
+					ngxParam.addValue("return 301 https://$host:" + port + "$request_uri");
 					ngxBlock.addEntry(ngxParam);
 
 					ngxBlockServer.addEntry(ngxBlock);
@@ -397,7 +405,7 @@ public class ConfService {
 						ngxParam.addValue("proxy_set_header X-Forwarded-Proto $scheme");
 						ngxBlockLocation.addEntry(ngxParam);
 					}
-					
+
 					if (location.getWebsocket() == 1) { // 设置header
 						ngxParam = new NgxParam();
 						ngxParam.addValue("proxy_http_version 1.1");
@@ -569,13 +577,13 @@ public class ConfService {
 		}
 
 		// 备份conf.d文件夹
-		String confd = new File(nginxPath).getParent()  + "/conf.d/"; 
+		String confd = new File(nginxPath).getParent() + "/conf.d/";
 		if (!FileUtil.exist(confd)) {
 			FileUtil.mkdir(confd);
 		} else {
 			ZipUtil.zip(confd, InitConfig.home + "bak/nginx.conf." + date + ".zip");
 		}
-		
+
 		// 删除conf.d下全部文件
 		FileUtil.del(confd);
 		FileUtil.mkdir(confd);
@@ -595,7 +603,6 @@ public class ConfService {
 		}
 
 	}
-
 
 	public AsycPack getAsycPack() {
 		AsycPack asycPack = new AsycPack();
@@ -642,7 +649,7 @@ public class ConfService {
 			for (ConfFile confFile : confExt.getFileList()) {
 				confFile.setConf("");
 
-				String filePath = new File(nginxPath).getParent() +  "/conf.d/" + confFile.getName();
+				String filePath = new File(nginxPath).getParent() + "/conf.d/" + confFile.getName();
 				if (FileUtil.exist(filePath)) {
 					confFile.setConf(FileUtil.readString(filePath, StandardCharsets.UTF_8));
 				}
