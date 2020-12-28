@@ -349,7 +349,7 @@ public class ConfService {
 					}
 
 					NgxBlock ngxBlock = new NgxBlock();
-					ngxBlock.addValue("if ($server_port !~ " + port + ")");
+					ngxBlock.addValue("if ($scheme = http)");
 					ngxParam = new NgxParam();
 
 					ngxParam.addValue("return 301 https://$host:" + port + "$request_uri");
