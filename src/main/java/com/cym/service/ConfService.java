@@ -340,9 +340,6 @@ public class ConfService {
 						ngxParam.addValue("listen " + server.getRewriteListen());
 						ngxBlockServer.addEntry(ngxParam);
 					}
-					NgxBlock ngxBlock = new NgxBlock();
-					ngxBlock.addValue("if ($scheme = http)");
-					ngxParam = new NgxParam();
 
 					String port = "";
 					if (server.getListen().contains(":")) {
@@ -350,6 +347,10 @@ public class ConfService {
 					} else {
 						port = server.getListen();
 					}
+
+					NgxBlock ngxBlock = new NgxBlock();
+					ngxBlock.addValue("if ($server_port !~ " + port + ")");
+					ngxParam = new NgxParam();
 
 					ngxParam.addValue("return 301 https://$host:" + port + "$request_uri");
 					ngxBlock.addEntry(ngxParam);
