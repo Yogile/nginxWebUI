@@ -152,13 +152,24 @@ apt install supervisor
 centos:
 
 ```
-yum install supervisor
+yum install epel-release 
+yum install supervisor 
+systemctl start supervisord.service     
+systemctl enable supervisord.service    
 ```
 
 2. Edit the configuration
 
+ubuntu:
+
 ```
 vim /etc/supervisor/conf.d/nginxwebui.conf
+```
+
+centos:
+
+```
+vim /etc/supervisord.d/nginxwebui.ini
 ```
 
 Content:
