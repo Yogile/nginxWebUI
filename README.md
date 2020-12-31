@@ -157,8 +157,10 @@ apt install supervisor
 centos:
 
 ```
-yum install epel-release
-yum install supervisor
+yum install epel-release // 引入supervisor的源
+yum install supervisor // 安装supervisor
+systemctl start supervisord.service     //启动supervisor并加载默认配置文件
+systemctl enable supervisord.service    //将supervisor加入开机启动项
 ```
 
 2. 编辑启动配置
@@ -172,7 +174,7 @@ vim /etc/supervisor/conf.d/nginxwebui.conf
 centos:
 
 ```
-vim /etc/supervisord.d/nginxwebui.conf
+vim /etc/supervisord.d/nginxwebui.ini
 ```
 
 内容:
