@@ -141,7 +141,8 @@ public class InitConfig {
 				// 设置nginx执行文件
 				settingService.set("nginxExe", nginxExe);
 				// 启动nginx
-				RuntimeUtil.exec(nginxExe, "-c", nginxPath);
+				//RuntimeUtil.exec(nginxExe, "-c", nginxPath);
+				RuntimeUtil.exec("systemctl start nginx");
 			}
 		}
 
