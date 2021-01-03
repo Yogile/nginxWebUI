@@ -68,7 +68,7 @@ public class LogController extends BaseController {
 	@RequestMapping("detailByTIme")
 	@ResponseBody
 	public JsonResult detailByTIme(String startDate, String endDate) {
-		List<Log> logAll = sqlHelper.findAll(Log.class);
+		List<Log> logAll = logService.findByDate(startDate, endDate);
 
 		JSONObject jsonObjectFilter = new JSONObject();
 		jsonObjectFilter.set("uv", new JsonArray());
@@ -76,18 +76,15 @@ public class LogController extends BaseController {
 		jsonObjectFilter.set("browser", new JsonArray());
 		jsonObjectFilter.set("httpReferer", new JsonArray());
 		jsonObjectFilter.set("status", new JsonArray());
-		
-		for (Log log : logAll) {
-			if (log.getDate().compareTo(startDate) >= 0 && log.getDate().compareTo(endDate) <= 0) {
-				JSONObject jsonObject = JSONUtil.parseObj(log.getJson());
 
-				addToJsonArray(jsonObjectFilter.getJSONArray("uv"), jsonObject.getJSONArray("uv"));
-				addToJsonArray(jsonObjectFilter.getJSONArray("pv"), jsonObject.getJSONArray("pv"));
-				addToJsonArray(jsonObjectFilter.getJSONArray("browser"), jsonObject.getJSONArray("browser"));
-				addToJsonArray(jsonObjectFilter.getJSONArray("httpReferer"), jsonObject.getJSONArray("httpReferer"));
-				addToJsonArray(jsonObjectFilter.getJSONArray("status"), jsonObject.getJSONArray("status"));
-				
-			}
+		for (Log log : logAll) {
+			JSONObject jsonObject = JSONUtil.parseObj(log.getJson());
+
+			addToJsonArray(jsonObjectFilter.getJSONArray("uv"), jsonObject.getJSONArray("uv"));
+			addToJsonArray(jsonObjectFilter.getJSONArray("pv"), jsonObject.getJSONArray("pv"));
+			addToJsonArray(jsonObjectFilter.getJSONArray("browser"), jsonObject.getJSONArray("browser"));
+			addToJsonArray(jsonObjectFilter.getJSONArray("httpReferer"), jsonObject.getJSONArray("httpReferer"));
+			addToJsonArray(jsonObjectFilter.getJSONArray("status"), jsonObject.getJSONArray("status"));
 
 		}
 
@@ -104,7 +101,7 @@ public class LogController extends BaseController {
 					return;
 				}
 			}
-			
+
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.set("name", jsonArray.getJSONObject(i).getStr("name"));
 			jsonObject.set("value", jsonArray.getJSONObject(i).getStr("value"));
