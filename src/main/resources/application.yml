@@ -18,9 +18,6 @@ spring:
     default-property-inclusion: NON_NULL
   jmx:
     enabled: true 
-  datasource:
-    url: jdbc:mysql://139.155.8.65:3306/nginx_web_ui    username: root
-    password: chenyimeng19871102
   database: 
     type: mysql
     package: com.cym.model
