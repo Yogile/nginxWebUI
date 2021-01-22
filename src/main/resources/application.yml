@@ -19,7 +19,7 @@ spring:
   jmx:
     enabled: true 
   database: 
-    type: mysql
+    type: sqlite
     package: com.cym.model
     print: true
     sqlite-path: ${project.home}sqlite.db
