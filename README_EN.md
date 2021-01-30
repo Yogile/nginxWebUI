@@ -39,14 +39,14 @@ Take the Ubuntu operating system, for example.
 ubuntu:
 
 ```
-apt install openjdk-8-jdk
+apt install openjdk-11-jdk
 apt install nginx
 ```
 
 centos:
 
 ```
-yum install java-1.8.0-openjdk
+yum install java-11-openjdk
 yum install nginx
 ```
 

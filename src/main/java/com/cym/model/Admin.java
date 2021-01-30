@@ -11,8 +11,9 @@ public class Admin extends BaseModel {
 	@SingleIndex(unique = true)
 	String name;
 	String pass;
-
+	// 谷歌秘钥
 	String key;
+	// 是否开启谷歌验证
 	@InitValue("false")
 	Boolean auth;
 	
