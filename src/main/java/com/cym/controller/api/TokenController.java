@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cym.model.Admin;
 import com.cym.service.AdminService;
-import com.cym.service.CreditService;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
 
@@ -23,8 +22,6 @@ import io.swagger.annotations.ApiParam;
 public class TokenController extends BaseController {
 	@Autowired
 	AdminService adminService;
-	@Autowired
-	CreditService creditService;
 
 	@GetMapping("getToken")
 	public JsonResult getToken(@ApiParam("用户名") String name, @ApiParam("密码") String pass) {
@@ -36,7 +33,7 @@ public class TokenController extends BaseController {
 		}
 
 		Map<String, String> map = new HashMap<String, String>();
-		map.put("token", creditService.make());
+		map.put("token", adminService.makeToken(admin.getId()));
 
 		return renderSuccess(map);
 	}

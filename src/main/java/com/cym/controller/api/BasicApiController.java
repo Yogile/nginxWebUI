@@ -1,5 +1,7 @@
 package com.cym.controller.api;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,18 +34,18 @@ public class BasicApiController extends BaseController {
 
 	@ApiOperation("获取Http参数")
 	@PostMapping("getHttp")
-	public JsonResult getHttp() {
+	public JsonResult<List<Http>> getHttp() {
 		return renderSuccess(httpService.findAll());
 	}
 
 	@ApiOperation("添加或编辑Http参数")
 	@PostMapping("insertOrUpdateHttp")
-	public JsonResult insertOrUpdateHttp(Http http) {
+	public JsonResult<Http> insertOrUpdateHttp(Http http) {
 		if (StrUtil.isEmpty(http.getId())) {
 			http.setSeq(SnowFlakeUtils.getId());
 		}
 		sqlHelper.insertOrUpdate(http);
-		return renderSuccess();
+		return renderSuccess(http);
 	}
 
 	@ApiOperation("删除Http参数")
@@ -55,18 +57,18 @@ public class BasicApiController extends BaseController {
 
 	@ApiOperation("获取基础参数")
 	@PostMapping("getBasic")
-	public JsonResult getBasic(Basic basic) {
+	public JsonResult<List<Basic>> getBasic() {
 		return renderSuccess(basicService.findAll());
 	}
 
 	@ApiOperation("添加或编辑基础参数")
 	@PostMapping("insertOrUpdateBasic")
-	public JsonResult insertOrUpdateBasic(Basic basic) {
+	public JsonResult<Basic> insertOrUpdateBasic(Basic basic) {
 		if (StrUtil.isEmpty(basic.getId())) {
 			basic.setSeq(SnowFlakeUtils.getId());
 		}
 		sqlHelper.insertOrUpdate(basic);
-		return renderSuccess();
+		return renderSuccess(basic);
 	}
 
 	@ApiOperation("删除基础参数")

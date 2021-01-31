@@ -6,12 +6,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.cym.service.CreditService;
+import com.cym.service.AdminService;
 import com.cym.utils.JsonResult;
 import com.cym.utils.MessageUtils;
 
@@ -24,7 +23,7 @@ public class ApiInterceptor implements HandlerInterceptor {
 	@Autowired
 	MessageUtils m;
 	@Autowired
-	CreditService creditService;
+	AdminService adminService;
 	/*
 	 * 视图渲染之后的操作
 	 */
@@ -48,7 +47,7 @@ public class ApiInterceptor implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object obj) throws Exception {
 		String token = request.getHeader("token");
 
-		if (StrUtil.isNotEmpty(token) && creditService.check(token)) {
+		if (StrUtil.isNotEmpty(token) && adminService.checkToken(token)) {
 			return true;
 		} else {
 

@@ -16,12 +16,21 @@ public class Admin extends BaseModel {
 	// 是否开启谷歌验证
 	@InitValue("false")
 	Boolean auth;
-	
+
 	// 是否开启api
 	@InitValue("false")
 	Boolean api;
-	
-	
+
+	String token;
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
 	public Boolean getApi() {
 		return api;
 	}
