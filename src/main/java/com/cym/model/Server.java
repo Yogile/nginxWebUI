@@ -8,8 +8,7 @@ import cn.craccd.sqlHelper.config.Table;
 public class Server extends BaseModel {
 	String serverName;
 	String listen;
-	
-	
+
 	@InitValue("0")
 	Integer def; // 是否为默认server
 
@@ -39,8 +38,7 @@ public class Server extends BaseModel {
 	String protocols; // 加密协议
 
 	String passwordId;
-	String denyAllowId;
-	
+
 	Long seq;
 
 	public Long getSeq() {
@@ -49,14 +47,6 @@ public class Server extends BaseModel {
 
 	public void setSeq(Long seq) {
 		this.seq = seq;
-	}
-
-	public String getDenyAllowId() {
-		return denyAllowId;
-	}
-
-	public void setDenyAllowId(String denyAllowId) {
-		this.denyAllowId = denyAllowId;
 	}
 
 	public String getPasswordId() {

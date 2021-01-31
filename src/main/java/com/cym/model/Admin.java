@@ -17,7 +17,19 @@ public class Admin extends BaseModel {
 	@InitValue("false")
 	Boolean auth;
 	
+	// 是否开启api
+	@InitValue("false")
+	Boolean api;
 	
+	
+	public Boolean getApi() {
+		return api;
+	}
+
+	public void setApi(Boolean api) {
+		this.api = api;
+	}
+
 	public String getKey() {
 		return key;
 	}
