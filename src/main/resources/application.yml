@@ -34,5 +34,3 @@ logging:
   level: 
     root: info
     
-knife4j:
-  production: false #生产环境屏蔽

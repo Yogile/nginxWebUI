@@ -82,18 +82,18 @@ public class BasicApiController extends BaseController {
 	
 	@ApiOperation("获取Stream参数")
 	@PostMapping("getStream")
-	public JsonResult getStream() {
+	public JsonResult<List<Stream>> getStream() {
 		return renderSuccess(httpService.findAll());
 	}
 
 	@ApiOperation("添加或编辑Stream参数")
 	@PostMapping("insertOrUpdateStream")
-	public JsonResult insertOrUpdateStream(Stream stream) {
+	public JsonResult<Stream> insertOrUpdateStream(Stream stream) {
 		if (StrUtil.isEmpty(stream.getId())) {
 			stream.setSeq(SnowFlakeUtils.getId());
 		}
 		sqlHelper.insertOrUpdate(stream);
-		return renderSuccess();
+		return renderSuccess(stream);
 	}
 
 	@ApiOperation("删除Stream参数")
