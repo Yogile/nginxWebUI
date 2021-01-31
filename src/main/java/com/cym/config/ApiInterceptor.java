@@ -57,6 +57,7 @@ public class ApiInterceptor implements HandlerInterceptor {
 			result.setStatus("401");
 			result.setMsg(m.get("apiStr.wrongToken")); 
 
+			response.setCharacterEncoding("UTF-8");
 			PrintWriter out = response.getWriter();
 			out.append(JSONUtil.toJsonPrettyStr(result));
 
