@@ -30,7 +30,7 @@ public class ServerApiController extends BaseController {
 
 	@ApiOperation("获取server分页列表")
 	@GetMapping("getPage")
-	public JsonResult getPage(@ApiParam("当前页数(从1开始)") Integer current, @ApiParam("每页数量") Integer limit, @ApiParam("查询关键字") String keywords) {
+	public JsonResult<List<Server>> getPage(@ApiParam("当前页数(从1开始)") Integer current, @ApiParam("每页数量") Integer limit, @ApiParam("查询关键字") String keywords) {
 		Page page = new Page();
 		page.setCurr(current);
 		page.setLimit(limit);

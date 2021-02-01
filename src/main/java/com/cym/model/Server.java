@@ -3,9 +3,13 @@ package com.cym.model;
 import cn.craccd.sqlHelper.bean.BaseModel;
 import cn.craccd.sqlHelper.config.InitValue;
 import cn.craccd.sqlHelper.config.Table;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
+@ApiModel("反向代理server")
 @Table
 public class Server extends BaseModel {
+	@ApiModelProperty("域名")
 	String serverName;
 	String listen;
 
