@@ -13,7 +13,6 @@ import com.cym.service.ParamService;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
 
-import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
