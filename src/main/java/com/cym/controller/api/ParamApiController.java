@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,14 +27,14 @@ public class ParamApiController extends BaseController {
 	ParamService paramService;
 
 	@ApiOperation("根据项目获取参数列表")
-	@GetMapping("getList")
+	@PostMapping("getList")
 	public JsonResult<List<Param>> getList(String serverId, String locationId, String upstreamId) {
 		List<Param> list = paramService.getList(serverId, locationId, upstreamId);
 		return renderSuccess(list);
 	}
 
 	@ApiOperation("添加或编辑参数")
-	@RequestMapping("insertOrUpdate")
+	@PostMapping("insertOrUpdate")
 	public JsonResult<?> insertOrUpdate(Param param) throws IOException {
 		if (StrUtil.isEmpty(param.getServerId()) || StrUtil.isEmpty(param.getLocationId()) || StrUtil.isEmpty(param.getUpstreamId())) {
 			renderError(m.get("apiStr.paramError"));
@@ -45,7 +46,7 @@ public class ParamApiController extends BaseController {
 	}
 
 	@ApiOperation("删除")
-	@RequestMapping("del")
+	@PostMapping("del")
 	public JsonResult<?> del(String id) {
 		sqlHelper.deleteById(id, Param.class);
 

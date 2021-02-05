@@ -29,7 +29,7 @@ public class PasswordApiController extends BaseController{
 	PasswordController passwordController;
 	
 	@ApiOperation("获取全部密码文件列表")
-	@GetMapping("getList")
+	@PostMapping("getList")
 	public JsonResult<List<Password>> getList() {
 		List<Password> list = sqlHelper.findAll(Password.class);
 		return renderSuccess(list);
@@ -42,7 +42,7 @@ public class PasswordApiController extends BaseController{
 	}
 
 	@ApiOperation("删除密码文件")
-	@GetMapping("del")
+	@PostMapping("del")
 	public JsonResult<?> del(String id) {
 		Password password = sqlHelper.findById(id, Password.class);
 		sqlHelper.deleteById(id, Password.class);

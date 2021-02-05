@@ -29,7 +29,7 @@ public class ServerApiController extends BaseController {
 	ServerService serverService;
 
 	@ApiOperation("获取server分页列表")
-	@GetMapping("getPage")
+	@PostMapping("getPage")
 	public JsonResult<Page<Server>> getPage(@ApiParam("当前页数(从1开始)") Integer current, @ApiParam("每页数量") Integer limit, @ApiParam("查询关键字") String keywords) {
 		Page page = new Page();
 		page.setCurr(current);
@@ -50,7 +50,7 @@ public class ServerApiController extends BaseController {
 	}
 
 	@ApiOperation("删除server")
-	@GetMapping("delete")
+	@PostMapping("delete")
 	public JsonResult<?> delete(String id) {
 		serverService.deleteById(id);
 
@@ -58,7 +58,7 @@ public class ServerApiController extends BaseController {
 	}
 
 	@ApiOperation("根据serverId获取location列表")
-	@GetMapping("getLocationByServerId")
+	@PostMapping("getLocationByServerId")
 	public JsonResult<List<Location>> getLocationByServerId(String serverId) {
 		List<Location> locationList = serverService.getLocationByServerId(serverId);
 
@@ -73,7 +73,7 @@ public class ServerApiController extends BaseController {
 	}
 
 	@ApiOperation("删除location")
-	@GetMapping("deleteLocation")
+	@PostMapping("deleteLocation")
 	public JsonResult<?> deleteLocation(String id) {
 		sqlHelper.deleteById(id, Location.class);
 
