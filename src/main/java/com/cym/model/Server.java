@@ -9,40 +9,63 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel("反向代理server")
 @Table
 public class Server extends BaseModel {
-	@ApiModelProperty("域名")
+	@ApiModelProperty("监听域名")
 	String serverName;
+	
+	@ApiModelProperty("监听ip端口 (格式 ip:port或port)")
 	String listen;
 
+	@ApiModelProperty("是否为默认server 0否(默认) 1是")
 	@InitValue("0")
-	Integer def; // 是否为默认server
+	Integer def; 
 
+	@ApiModelProperty("是否http跳转https 0否(默认) 1是")
 	@InitValue("0")
-	Integer rewrite; // 0否 1是
+	Integer rewrite; 
+	
+	@ApiModelProperty("http跳转https监听ip端口,默认为80 (格式 ip:port或port)")
 	@InitValue("80")
-	String rewriteListen; // 转跳监听
+	String rewriteListen; 
 
+	@ApiModelProperty("是否开启ssl 0否(默认) 1是")
 	@InitValue("0")
-	Integer ssl; // 0 否 1是
+	Integer ssl; 
+	@ApiModelProperty("是否开启http2 0否(默认) 1是")
 	@InitValue("0")
-	Integer http2; // 0否 1是
+	Integer http2; 
+	
+	@ApiModelProperty("ssl证书pem文件路径")
 	String pem;
+	@ApiModelProperty("ssl证书key文件路径")
 	String key;
+	
+	@ApiModelProperty("代理类型 0:http(默认) 1:tcp 2:udp")
 	@InitValue("0")
-	Integer proxyType; // 代理类型 0 http 1 tcp 2 udp
+	Integer proxyType;
+	
+	@ApiModelProperty("代理upstream的id")
 	String proxyUpstreamId;
 
+	@ApiModelProperty(hidden = true)
 	String pemStr;
+	@ApiModelProperty(hidden = true)
 	String keyStr;
 
+	@ApiModelProperty("是否启用 true:启用 false:禁用")
 	@InitValue("true")
-	Boolean enable; // 是否启用
+	Boolean enable;
 
-	String descr; // 描述
+	@ApiModelProperty("描述")
+	String descr; 
+	
+	@ApiModelProperty("加密协议 (默认:TLSv1 TLSv1.1 TLSv1.2 TLSv1.3)")
 	@InitValue("TLSv1 TLSv1.1 TLSv1.2 TLSv1.3")
-	String protocols; // 加密协议
+	String protocols; 
 
+	@ApiModelProperty("使用的password文件Id")
 	String passwordId;
 
+	@ApiModelProperty(hidden = true)
 	Long seq;
 
 	public Long getSeq() {

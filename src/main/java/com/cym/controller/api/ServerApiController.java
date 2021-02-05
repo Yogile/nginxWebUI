@@ -30,7 +30,7 @@ public class ServerApiController extends BaseController {
 
 	@ApiOperation("获取server分页列表")
 	@GetMapping("getPage")
-	public JsonResult<List<Server>> getPage(@ApiParam("当前页数(从1开始)") Integer current, @ApiParam("每页数量") Integer limit, @ApiParam("查询关键字") String keywords) {
+	public JsonResult<Page<Server>> getPage(@ApiParam("当前页数(从1开始)") Integer current, @ApiParam("每页数量") Integer limit, @ApiParam("查询关键字") String keywords) {
 		Page page = new Page();
 		page.setCurr(current);
 		page.setLimit(limit);
@@ -41,7 +41,7 @@ public class ServerApiController extends BaseController {
 
 	@ApiOperation("添加或编辑server")
 	@PostMapping("insertOrUpdate")
-	public JsonResult insertOrUpdate(Server server) {
+	public JsonResult<?> insertOrUpdate(Server server) {
 		if (StrUtil.isEmpty(server.getId())) {
 			server.setSeq(SnowFlakeUtils.getId());
 		}
@@ -51,7 +51,7 @@ public class ServerApiController extends BaseController {
 
 	@ApiOperation("删除server")
 	@GetMapping("delete")
-	public JsonResult delete(String id) {
+	public JsonResult<?> delete(String id) {
 		serverService.deleteById(id);
 
 		return renderSuccess();
@@ -59,7 +59,7 @@ public class ServerApiController extends BaseController {
 
 	@ApiOperation("根据serverId获取location列表")
 	@GetMapping("getLocationByServerId")
-	public JsonResult getLocationByServerId(String serverId) {
+	public JsonResult<List<Location>> getLocationByServerId(String serverId) {
 		List<Location> locationList = serverService.getLocationByServerId(serverId);
 
 		return renderSuccess(locationList);
@@ -67,14 +67,14 @@ public class ServerApiController extends BaseController {
 
 	@ApiOperation("添加或编辑location")
 	@PostMapping("insertOrUpdateLocation")
-	public JsonResult insertOrUpdateLocation(Location location) {
+	public JsonResult<?> insertOrUpdateLocation(Location location) {
 		sqlHelper.insert(location);
 		return renderSuccess(location);
 	}
 
 	@ApiOperation("删除location")
 	@GetMapping("deleteLocation")
-	public JsonResult deleteLocation(String id) {
+	public JsonResult<?> deleteLocation(String id) {
 		sqlHelper.deleteById(id, Location.class);
 
 		return renderSuccess();

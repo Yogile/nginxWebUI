@@ -30,7 +30,7 @@ public class UpstreamApiController extends BaseController {
 
 	@ApiOperation("获取upstream分页列表")
 	@GetMapping("getPage")
-	public JsonResult getPage(@ApiParam("当前页数(从1开始)") Integer current, @ApiParam("每页数量") Integer limit, @ApiParam("查询关键字") String keywords) {
+	public JsonResult<Page<Upstream>> getPage(@ApiParam("当前页数(从1开始)") Integer current, @ApiParam("每页数量") Integer limit, @ApiParam("查询关键字") String keywords) {
 		Page page = new Page();
 		page.setCurr(current);
 		page.setLimit(limit);
@@ -41,7 +41,7 @@ public class UpstreamApiController extends BaseController {
 
 	@ApiOperation("添加或编辑upstream")
 	@PostMapping("insertOrUpdate")
-	public JsonResult insertOrUpdate(Upstream upstream) {
+	public JsonResult<?> insertOrUpdate(Upstream upstream) {
 
 		if (StrUtil.isEmpty(upstream.getId())) {
 			upstream.setSeq(SnowFlakeUtils.getId());
@@ -52,7 +52,7 @@ public class UpstreamApiController extends BaseController {
 
 	@ApiOperation("删除upstream")
 	@GetMapping("delete")
-	public JsonResult delete(String id) {
+	public JsonResult<?> delete(String id) {
 		upstreamService.deleteById(id);
 
 		return renderSuccess();
@@ -60,7 +60,7 @@ public class UpstreamApiController extends BaseController {
 
 	@ApiOperation("根据upstreamId获取server列表")
 	@GetMapping("getServerByUpstreamId")
-	public JsonResult getServerByUpstreamId(String upstreamId) {
+	public JsonResult<List<UpstreamServer>> getServerByUpstreamId(String upstreamId) {
 		List<UpstreamServer> list = upstreamService.getUpstreamServers(upstreamId);
 
 		return renderSuccess(list);
