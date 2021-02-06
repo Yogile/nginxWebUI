@@ -32,7 +32,7 @@ public class ServerApiController extends BaseController {
 	@ApiOperation("获取server分页列表")
 	@PostMapping("getPage")
 	public JsonResult<Page<Server>> getPage(@ApiParam("当前页数(从1开始)") @RequestParam(defaultValue = "1") Integer current, //
-			@ApiParam("每页数量(默认为10)") @RequestParam(defaultValue = "10")Integer limit, //
+			@ApiParam("每页数量(默认为10)") @RequestParam(defaultValue = "10") Integer limit, //
 			@ApiParam("查询关键字") String keywords) {
 		Page page = new Page();
 		page.setCurr(current);
@@ -45,6 +45,10 @@ public class ServerApiController extends BaseController {
 	@ApiOperation("添加或编辑server")
 	@PostMapping("insertOrUpdate")
 	public JsonResult<?> insertOrUpdate(Server server) {
+		if (StrUtil.isEmpty(server.getListen())) {
+			return renderError("listen" + m.get("apiStr.notFill"));
+		}
+
 		if (StrUtil.isEmpty(server.getId())) {
 			server.setSeq(SnowFlakeUtils.getId());
 		}
@@ -71,6 +75,12 @@ public class ServerApiController extends BaseController {
 	@ApiOperation("添加或编辑location")
 	@PostMapping("insertOrUpdateLocation")
 	public JsonResult<?> insertOrUpdateLocation(Location location) {
+		if (StrUtil.isEmpty(location.getServerId())) {
+			return renderError("serverId" + m.get("apiStr.notFill"));
+		}
+		if (StrUtil.isEmpty(location.getPath())) {
+			return renderError("path" + m.get("apiStr.notFill"));
+		}
 		sqlHelper.insertOrUpdate(location);
 		return renderSuccess(location);
 	}

@@ -3,7 +3,6 @@ package com.cym.controller.api;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -45,6 +44,10 @@ public class UpstreamApiController extends BaseController {
 	@ApiOperation("添加或编辑upstream")
 	@PostMapping("insertOrUpdate")
 	public JsonResult<?> insertOrUpdate(Upstream upstream) {
+		if (StrUtil.isEmpty(upstream.getName())) {
+			return renderError("name" + m.get("apiStr.notFill"));
+		}
+
 		if (StrUtil.isEmpty(upstream.getId())) {
 			Long count = upstreamService.getCountByName(upstream.getName());
 			if (count > 0) {
@@ -82,6 +85,16 @@ public class UpstreamApiController extends BaseController {
 	@ApiOperation("添加或编辑server")
 	@PostMapping("insertOrUpdateServer")
 	public JsonResult insertOrUpdateServer(UpstreamServer upstreamServer) {
+		if (StrUtil.isEmpty(upstreamServer.getUpstreamId())) {
+			return renderError("upstreamId" + m.get("apiStr.notFill"));
+		}
+		if (null == upstreamServer.getPort()) {
+			return renderError("port" + m.get("apiStr.notFill"));
+		}
+		if (StrUtil.isEmpty(upstreamServer.getServer())) {
+			return renderError("server" + m.get("apiStr.notFill"));
+		}
+		
 		sqlHelper.insertOrUpdate(upstreamServer);
 		return renderSuccess(upstreamServer);
 	}

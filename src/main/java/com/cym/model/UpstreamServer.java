@@ -14,7 +14,7 @@ public class UpstreamServer extends BaseModel {
 
 	@ApiModelProperty("*负载节点ip (例:10.10.10.1)")
 	String server;
-	@ApiModelProperty("负载节点端口 (例:8080)")
+	@ApiModelProperty("*负载节点端口 (例:8080)")
 	Integer port;
 	@ApiModelProperty("负载节点权重 (默认:1)")
 	@InitValue("1")
