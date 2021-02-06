@@ -242,7 +242,7 @@ Provides one-click synchronization to synchronize data configuration and certifi
 
 This system provides the HTTP interface call, as long as the open http://xxx.xxx.xxx.xxx:8080/doc.html to view page knife4j interface.
 
-The interface call needs to add the token in the header, where the token acquisition needs to be managed by the administrator, open the user's interface call authority, and then get the token interface through the user name and password call to get the interface, and then set the global token in the document management of knife4j.
+The interface call needs to add the token in the header, where the token acquisition needs to be managed by the administrator, open the user's interface call authority, and then get the token interface through the user name and password call to get the token, and then set the global token in the document management of knife4j.
 
 Note: In the parameter description, all fields with * prefix are required.
 
