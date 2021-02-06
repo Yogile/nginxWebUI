@@ -238,6 +238,18 @@ Remote server management. If you have multiple Nginx servers, you can deploy ngi
 
 Provides one-click synchronization to synchronize data configuration and certificate files from one server to another
 
+#### Interface development 
+
+This system provides the HTTP interface call, as long as the open http://xxx.xxx.xxx.xxx:8080/doc.html to view page knife4j interface.
+
+The interface call needs to add the token in the header, where the token acquisition needs to be managed by the administrator, open the user's interface call authority, and then get the token interface through the user name and password call to get the interface, and then set the global token in the document management of knife4j.
+
+Note: In the parameter description, all fields with * prefix are required.
+
+To block knife4j display, simply add --knife4j. Production =true to the startup parameter.
+
+![输入图片说明](http://www.nginxwebui.cn/img/knife4j.png "knife4j.png")
+
 #### Forgot Password
 
 If you forget your login password, follow the following tutorial to retrieve it

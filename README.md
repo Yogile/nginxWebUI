@@ -253,6 +253,8 @@ log管理, 在http配置中如果开启了log监控的话, 会每天在这里生
 
 注意: 参数说明中, 带*前缀的均是必填项
 
+如要屏蔽knife4j界面展示, 只要在启动参数添加 --knife4j.production=true 即可屏蔽
+
 ![输入图片说明](http://www.nginxwebui.cn/img/knife4j.png "knife4j.png")
 
 #### 找回密码

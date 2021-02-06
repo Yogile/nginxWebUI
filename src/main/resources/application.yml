@@ -34,4 +34,5 @@ logging:
   level: 
     root: info
 
-    
+knife4j:
+  enable: true  
