@@ -27,9 +27,7 @@ nginx本身功能复杂, 本项目并不能涵盖nginx所有功能, 只能配置
 
 本项目是基于springBoot的web系统, 数据库使用sqlite, 因此服务器上不需要安装任何数据库
 
-其中orm使用了本人自己开源的sqlHelper项目作为orm, 使用sqlite作为数据库, 项目启动时会释放一个.sqlite.db到系统用户文件夹中, 注意进行备份
-
-> sqlHelper是一个可以像mongodb一样使用sql数据库的orm, 解放开发者对sql数据库表结构的维护工作, 支持sqlite, mysql, postgresql三种数据库, 有兴趣的可以了解一下 https://gitee.com/cym1102/sqlHelper
+项目启动时会释放一个.sqlite.db到系统用户文件夹中, 注意进行备份
 
 本系统通过Let's encrypt申请证书, 使用acme.sh脚本进行自动化申请和续签, 开启续签的证书将在每天凌晨2点进行续签, 只有超过60天的证书才会进行续签. 只支持在linux下签发证书.
 

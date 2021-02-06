@@ -23,7 +23,7 @@ After deploying this project, nginx can be configured without searching on the I
 
 This project is a Web system based on springBoot. The database use SQLite, so there is no need to install any database on the server.
 
-Among them, ORM use its own open source sqlHelper project as ORM and SQLite as database. Sqlite. Db will be released into the system user folder when the project starts, so pay attention to backup.
+sqlite.db will be released into the system user folder when the project starts, so pay attention to backup.
 
 This system applies for the certificate through Let's ENCRYPT and USES acme.sh script to automatically apply for and renew the certificate. Once the certificate is renewed, it will be renewed at 2 am every day, and only certificates exceeding 60 days will be renewed.
 
