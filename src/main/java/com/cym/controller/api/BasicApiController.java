@@ -41,6 +41,10 @@ public class BasicApiController extends BaseController {
 	@ApiOperation("添加或编辑Http参数")
 	@PostMapping("insertOrUpdateHttp")
 	public JsonResult<Http> insertOrUpdateHttp(Http http) {
+		if (StrUtil.isEmpty(http.getName()) || StrUtil.isEmpty(http.getValue())) {
+			return renderError(m.get("apiStr.noContent"));
+		}
+
 		if (StrUtil.isEmpty(http.getId())) {
 			http.setSeq(SnowFlakeUtils.getId());
 		}
@@ -64,6 +68,10 @@ public class BasicApiController extends BaseController {
 	@ApiOperation("添加或编辑基础参数")
 	@PostMapping("insertOrUpdateBasic")
 	public JsonResult<Basic> insertOrUpdateBasic(Basic basic) {
+		if (StrUtil.isEmpty(basic.getName()) || StrUtil.isEmpty(basic.getValue())) {
+			return renderError(m.get("apiStr.noContent"));
+		}
+		
 		if (StrUtil.isEmpty(basic.getId())) {
 			basic.setSeq(SnowFlakeUtils.getId());
 		}
@@ -77,9 +85,7 @@ public class BasicApiController extends BaseController {
 		sqlHelper.deleteById(id, Basic.class);
 		return renderSuccess();
 	}
-	
-	
-	
+
 	@ApiOperation("获取Stream参数")
 	@PostMapping("getStream")
 	public JsonResult<List<Stream>> getStream() {
@@ -89,6 +95,9 @@ public class BasicApiController extends BaseController {
 	@ApiOperation("添加或编辑Stream参数")
 	@PostMapping("insertOrUpdateStream")
 	public JsonResult<Stream> insertOrUpdateStream(Stream stream) {
+		if (StrUtil.isEmpty(stream.getName()) || StrUtil.isEmpty(stream.getValue())) {
+			return renderError(m.get("apiStr.noContent"));
+		}
 		if (StrUtil.isEmpty(stream.getId())) {
 			stream.setSeq(SnowFlakeUtils.getId());
 		}

@@ -33,4 +33,5 @@ logging:
     name: ${project.home}log/nginxWebUI.log
   level: 
     root: info
+
     
