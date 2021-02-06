@@ -28,6 +28,7 @@ public class UpstreamApiController extends BaseController {
 	@Autowired
 	UpstreamService upstreamService;
 
+	@SuppressWarnings("unchecked")
 	@ApiOperation("获取upstream分页列表")
 	@PostMapping("getPage")
 	public JsonResult<Page<Upstream>> getPage(@ApiParam("当前页数(从1开始)") @RequestParam(defaultValue = "1") Integer current, //

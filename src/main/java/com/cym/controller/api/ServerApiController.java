@@ -3,7 +3,6 @@ package com.cym.controller.api;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,6 +28,7 @@ public class ServerApiController extends BaseController {
 	@Autowired
 	ServerService serverService;
 
+	@SuppressWarnings("unchecked")
 	@ApiOperation("获取server分页列表")
 	@PostMapping("getPage")
 	public JsonResult<Page<Server>> getPage(@ApiParam("当前页数(从1开始)") @RequestParam(defaultValue = "1") Integer current, //
