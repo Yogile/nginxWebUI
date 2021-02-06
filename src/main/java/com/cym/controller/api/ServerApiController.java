@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cym.model.Location;
@@ -30,7 +31,9 @@ public class ServerApiController extends BaseController {
 
 	@ApiOperation("获取server分页列表")
 	@PostMapping("getPage")
-	public JsonResult<Page<Server>> getPage(@ApiParam("当前页数(从1开始)") Integer current, @ApiParam("每页数量") Integer limit, @ApiParam("查询关键字") String keywords) {
+	public JsonResult<Page<Server>> getPage(@ApiParam("当前页数(从1开始)") @RequestParam(defaultValue = "1") Integer current, //
+			@ApiParam("每页数量(默认为10)") @RequestParam(defaultValue = "10")Integer limit, //
+			@ApiParam("查询关键字") String keywords) {
 		Page page = new Page();
 		page.setCurr(current);
 		page.setLimit(limit);
@@ -45,7 +48,7 @@ public class ServerApiController extends BaseController {
 		if (StrUtil.isEmpty(server.getId())) {
 			server.setSeq(SnowFlakeUtils.getId());
 		}
-		sqlHelper.insert(server);
+		sqlHelper.insertOrUpdate(server);
 		return renderSuccess(server);
 	}
 
@@ -68,7 +71,7 @@ public class ServerApiController extends BaseController {
 	@ApiOperation("添加或编辑location")
 	@PostMapping("insertOrUpdateLocation")
 	public JsonResult<?> insertOrUpdateLocation(Location location) {
-		sqlHelper.insert(location);
+		sqlHelper.insertOrUpdate(location);
 		return renderSuccess(location);
 	}
 

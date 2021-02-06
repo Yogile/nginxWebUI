@@ -9,11 +9,12 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel("代理目标location")
 @Table
 public class Location extends BaseModel {
-	@ApiModelProperty("所属反向代理serverId")
+	@ApiModelProperty("*所属反向代理serverId")
 	String serverId;
-	@ApiModelProperty("监控路径 例:/")
+	@ApiModelProperty("*监控路径 例:/")
 	String path;
-	@ApiModelProperty("代理类型 0:http 1:root 2:负载均衡 3:空白代理")
+	@ApiModelProperty("代理类型 0:动态代理(默认) 1:静态代理 2:负载均衡 3:空白代理")
+	@InitValue("0")
 	Integer type;
 	@ApiModelProperty(hidden = true, name = "额外参数")
 	String locationParamJson;

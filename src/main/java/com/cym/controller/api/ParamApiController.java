@@ -16,7 +16,9 @@ import com.cym.utils.JsonResult;
 
 import cn.hutool.core.util.StrUtil;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 @Api(tags = "额外参数接口")
 @RestController
@@ -28,7 +30,9 @@ public class ParamApiController extends BaseController {
 
 	@ApiOperation("根据项目获取参数列表")
 	@PostMapping("getList")
-	public JsonResult<List<Param>> getList(String serverId, String locationId, String upstreamId) {
+	public JsonResult<List<Param>> getList(@ApiParam("所属反向代理id") String serverId, //
+			@ApiParam("所属代理目标id") String locationId, //
+			@ApiParam("所属负载均衡id") String upstreamId) {
 		List<Param> list = paramService.getList(serverId, locationId, upstreamId);
 		return renderSuccess(list);
 	}
@@ -39,9 +43,9 @@ public class ParamApiController extends BaseController {
 		if (StrUtil.isEmpty(param.getServerId()) || StrUtil.isEmpty(param.getLocationId()) || StrUtil.isEmpty(param.getUpstreamId())) {
 			renderError(m.get("apiStr.paramError"));
 		}
-		
+
 		sqlHelper.insertOrUpdate(param);
-		
+
 		return renderSuccess();
 	}
 

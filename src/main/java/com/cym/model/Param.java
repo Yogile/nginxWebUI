@@ -8,11 +8,11 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel("额外参数")
 @Table
 public class Param extends BaseModel {
-	@ApiModelProperty("反向代理id")
+	@ApiModelProperty("所属反向代理id")
 	String serverId;
-	@ApiModelProperty("代理目标id")
+	@ApiModelProperty("所属代理目标id")
 	String locationId;
-	@ApiModelProperty("负载均衡id")
+	@ApiModelProperty("所属负载均衡id")
 	String upstreamId;
 	@ApiModelProperty(hidden = true)
 	String templateId;

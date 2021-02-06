@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cym.model.Upstream;
@@ -30,7 +31,9 @@ public class UpstreamApiController extends BaseController {
 
 	@ApiOperation("获取upstream分页列表")
 	@PostMapping("getPage")
-	public JsonResult<Page<Upstream>> getPage(@ApiParam("当前页数(从1开始)") Integer current, @ApiParam("每页数量") Integer limit, @ApiParam("查询关键字") String keywords) {
+	public JsonResult<Page<Upstream>> getPage(@ApiParam("当前页数(从1开始)") @RequestParam(defaultValue = "1") Integer current, //
+			@ApiParam("每页数量(默认为10)") @RequestParam(defaultValue = "10") Integer limit, //
+			@ApiParam("查询关键字") String keywords) {
 		Page page = new Page();
 		page.setCurr(current);
 		page.setLimit(limit);
@@ -42,11 +45,21 @@ public class UpstreamApiController extends BaseController {
 	@ApiOperation("添加或编辑upstream")
 	@PostMapping("insertOrUpdate")
 	public JsonResult<?> insertOrUpdate(Upstream upstream) {
-
+		if (StrUtil.isEmpty(upstream.getId())) {
+			Long count = upstreamService.getCountByName(upstream.getName());
+			if (count > 0) {
+				return renderError(m.get("upstreamStr.sameName"));
+			}
+		} else {
+			Long count = upstreamService.getCountByNameWithOutId(upstream.getName(), upstream.getId());
+			if (count > 0) {
+				return renderError(m.get("upstreamStr.sameName"));
+			}
+		}
 		if (StrUtil.isEmpty(upstream.getId())) {
 			upstream.setSeq(SnowFlakeUtils.getId());
 		}
-		sqlHelper.insert(upstream);
+		sqlHelper.insertOrUpdate(upstream);
 		return renderSuccess(upstream);
 	}
 
@@ -69,14 +82,14 @@ public class UpstreamApiController extends BaseController {
 	@ApiOperation("添加或编辑server")
 	@PostMapping("insertOrUpdateServer")
 	public JsonResult insertOrUpdateServer(UpstreamServer upstreamServer) {
-		sqlHelper.insert(upstreamServer);
+		sqlHelper.insertOrUpdate(upstreamServer);
 		return renderSuccess(upstreamServer);
 	}
 
 	@ApiOperation("删除server")
 	@PostMapping("deleteServer")
 	public JsonResult deleteServer(String id) {
-		sqlHelper.deleteById(id, UpstreamServer.class);
+		upstreamService.del(id);
 		return renderSuccess();
 	}
 }

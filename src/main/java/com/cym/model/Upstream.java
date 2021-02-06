@@ -9,7 +9,7 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel("负载均衡upstream")
 @Table
 public class Upstream extends BaseModel {
-	@ApiModelProperty("负载均衡名称")
+	@ApiModelProperty("*负载均衡名称")
 	String name;
 	
 	@ApiModelProperty("负载策略: '':无(默认) 'sticky':会话保持 'ip_hash':ip绑定 'least_conn':最少连接 'least_time':最短时间")

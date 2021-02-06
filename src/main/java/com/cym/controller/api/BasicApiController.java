@@ -83,7 +83,7 @@ public class BasicApiController extends BaseController {
 	@ApiOperation("获取Stream参数")
 	@PostMapping("getStream")
 	public JsonResult<List<Stream>> getStream() {
-		return renderSuccess(httpService.findAll());
+		return renderSuccess(streamService.findAll());
 	}
 
 	@ApiOperation("添加或编辑Stream参数")

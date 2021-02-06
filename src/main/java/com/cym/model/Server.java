@@ -12,7 +12,7 @@ public class Server extends BaseModel {
 	@ApiModelProperty("监听域名")
 	String serverName;
 	
-	@ApiModelProperty("监听ip端口 (格式 ip:port或port)")
+	@ApiModelProperty("*监听ip端口 (格式 ip:port或port)")
 	String listen;
 
 	@ApiModelProperty("是否为默认server 0否(默认) 1是")
@@ -51,7 +51,7 @@ public class Server extends BaseModel {
 	@ApiModelProperty(hidden = true)
 	String keyStr;
 
-	@ApiModelProperty("是否启用 true:启用 false:禁用")
+	@ApiModelProperty("是否启用 true:启用(默认) false:禁用")
 	@InitValue("true")
 	Boolean enable;
 
