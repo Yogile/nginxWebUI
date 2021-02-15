@@ -16,7 +16,7 @@ public class UpdateUtils {
 	String port;
 	@Value("${project.home}")
 	String home;
-	@Value("${knife4j.production}")
+	@Value("${knife4j.production:}")
 	String production;
 
 	@Value("${spring.database.type:}")
