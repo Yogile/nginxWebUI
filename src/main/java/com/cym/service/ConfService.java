@@ -289,6 +289,9 @@ public class ConfService {
 			if (server.getDef() == 1) {
 				value += " default";
 			}
+			if (server.getProxyProtocol() == 1) {
+				value += " proxy_protocol";
+			}
 
 			if (server.getSsl() != null && server.getSsl() == 1) {
 				value += " ssl";
