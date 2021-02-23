@@ -169,6 +169,7 @@ Then execute
 
 ```
 systemctl daemon-reload
+systemctl enable nginxwebui.service
 systemctl start nginxwebui.service
 ```
 

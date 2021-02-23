@@ -173,6 +173,7 @@ WantedBy=multi-user.target
 
 ```
 systemctl daemon-reload
+systemctl enable nginxwebui.service
 systemctl start nginxwebui.service
 ```
 
