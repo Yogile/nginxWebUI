@@ -53,7 +53,7 @@ yum install nginx
 2.Download the latest release of the distribution jar
 
 ```
-wget -O /home/nginxWebUI/nginxWebUI.jar http://file.nginxwebui.cn/nginxWebUI-2.4.8.jar
+wget -O /home/nginxWebUI/nginxWebUI.jar http://file.nginxwebui.cn/nginxWebUI-2.4.9.jar
 ```
 
 With a new version, you just need to change the version in the path
@@ -103,13 +103,13 @@ yum install docker
 2.Download images:
 
 ```
-docker pull cym1102/nginxwebui:2.4.8
+docker pull cym1102/nginxwebui:2.4.9
 ```
 
 3.start container
 
 ```
-docker run -itd -v /home/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--server.port=8080" --privileged=true --net=host  cym1102/nginxwebui:2.4.8 /bin/bash
+docker run -itd -v /home/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--server.port=8080" --privileged=true --net=host  cym1102/nginxwebui:2.4.9 /bin/bash
 ```
 
 notice: 
@@ -136,7 +136,7 @@ mvn clean package
 2. Compile the image with Docker
 
 ```
-docker build -t nginxwebui:2.4.8 .
+docker build -t nginxwebui:2.4.9 .
 ```
 
 #### Add boot up run

@@ -57,7 +57,7 @@ yum install nginx
 2.下载最新版发行包jar
 
 ```
-wget -O /home/nginxWebUI/nginxWebUI.jar http://file.nginxwebui.cn/nginxWebUI-2.4.8.jar
+wget -O /home/nginxWebUI/nginxWebUI.jar http://file.nginxwebui.cn/nginxWebUI-2.4.9.jar
 ```
 
 有新版本只需要修改路径中的版本即可
@@ -139,7 +139,7 @@ mvn clean package
 2. 使用docker构建镜像
 
 ```
-docker build -t nginxwebui:2.4.8 .
+docker build -t nginxwebui:2.4.9 .
 ```
 
 #### 添加开机启动
