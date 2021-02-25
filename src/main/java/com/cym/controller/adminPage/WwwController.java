@@ -47,7 +47,7 @@ public class WwwController extends BaseController {
 		}
 
 		try {
-			String dir = InitConfig.home + "www/" + www.getName();
+			String dir = InitConfig.home + "/www/" + www.getName();
 			FileUtil.del(dir);
 			try {
 				ZipUtil.unzip(www.getDir(), dir);
