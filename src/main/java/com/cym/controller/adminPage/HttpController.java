@@ -52,6 +52,14 @@ public class HttpController extends BaseController {
 		return renderSuccess();
 	}
 
+	@RequestMapping("addTemplate")
+	@ResponseBody
+	public JsonResult addTemplate(String templateId) {
+		httpService.addTemplate(templateId);
+		
+		return renderSuccess();
+	}
+	
 	@RequestMapping("detail")
 	@ResponseBody
 	public JsonResult detail(String id) {

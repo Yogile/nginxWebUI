@@ -30,6 +30,8 @@ $(function(){
 var selectTemplateTagertId;
 var templateIndex;
 var templateType;
+var isHttp = false;
+var isStream = false;
 
 function selectTemplate(id){
 	selectTemplateTagertId = id;
@@ -48,6 +50,17 @@ function selectTemplateOver(){
 		layer.msg(templateStr.noSelect);
 		return;
 	}
+	
+		
+	if(isHttp){
+		addHttpParam(templateId);
+		return;
+	}
+	if(isStream){
+		addStreamParam(templateId);
+		return;
+	}
+				
 	$.ajax({
 		type: 'GET',
 		url: ctx + '/adminPage/template/detail',
@@ -129,6 +142,16 @@ function selectTemplateAsParam(id){
 	});
 }
 
+function selectTemplateAsHttp(){
+	isHttp = true;
+	templateIndex = layer.open({
+		type: 1,
+		title: templateStr.select,
+		area: ['450px', '350px'], // 宽高
+		content: $('#templateSelectDiv')
+	});
+}
+
 
 function buildTemplateParam(uuid, param){
 	return `
@@ -149,4 +172,27 @@ function buildTemplateParam(uuid, param){
 				</td>
 			</tr>
 			`;
+}
+
+function addHttpParam(templateId){
+	 $.ajax({
+		type : 'POST',
+		url : ctx + '/adminPage/http/addTemplate',
+		data : {
+			templateId : templateId
+		},
+		dataType : 'json',
+		success : function(data) {
+			if (data.success) {
+				location.reload();
+				
+			} else {
+				layer.msg(data.msg);
+			}
+		},
+		error : function() {
+			layer.alert(commonStr.errorInfo);
+		}
+	});
+	
 }
