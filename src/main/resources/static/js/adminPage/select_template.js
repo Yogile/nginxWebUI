@@ -152,6 +152,15 @@ function selectTemplateAsHttp(){
 	});
 }
 
+function selectTemplateAsStream(){
+	isStream = true;
+	templateIndex = layer.open({
+		type: 1,
+		title: templateStr.select,
+		area: ['450px', '350px'], // 宽高
+		content: $('#templateSelectDiv')
+	});
+}
 
 function buildTemplateParam(uuid, param){
 	return `
@@ -178,6 +187,30 @@ function addHttpParam(templateId){
 	 $.ajax({
 		type : 'POST',
 		url : ctx + '/adminPage/http/addTemplate',
+		data : {
+			templateId : templateId
+		},
+		dataType : 'json',
+		success : function(data) {
+			if (data.success) {
+				location.reload();
+				
+			} else {
+				layer.msg(data.msg);
+			}
+		},
+		error : function() {
+			layer.alert(commonStr.errorInfo);
+		}
+	});
+	
+}
+
+
+function addStreamParam(templateId){
+	 $.ajax({
+		type : 'POST',
+		url : ctx + '/adminPage/stream/addTemplate',
 		data : {
 			templateId : templateId
 		},
