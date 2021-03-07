@@ -62,11 +62,15 @@ function showWindow(title){
 }
 
 function addOver() {
-	if($("#dirTemp").val() == '' || $("#dir").val() == ''){
+	if($("#dir").val() == ''){
 		layer.alert(wwwStr.noFill);
 		return;
 	}
 	
+	if($("#dirTemp").val() == ''){
+		layer.alert(wwwStr.noUpload);
+		return;
+	}
 	
 	$.ajax({
 		type : 'POST',
