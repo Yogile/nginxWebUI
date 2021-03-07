@@ -1,11 +1,12 @@
 package com.cym.model;
 
 import cn.craccd.sqlHelper.bean.BaseModel;
+import cn.craccd.sqlHelper.config.SingleIndex;
 import cn.craccd.sqlHelper.config.Table;
 
 @Table
 public class Www extends BaseModel {
-
+	@SingleIndex(unique = true)
 	String dir;
 	
 //	String name;
