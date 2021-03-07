@@ -152,39 +152,6 @@ function edit(id){
 	});
 }
 
-/*function update(id){
-	$.ajax({
-		type : 'POST',
-		url : ctx + '/adminPage/www/detail',
-		data : {
-			id : id
-		},
-		dataType : 'json',
-		success : function(data) {
-			if (data.success) {
-				var www = data.obj;
-				
-				$("#id").val(www.id); 
-				$("#name").val(www.name); 
-				$("#fileName").html(""); 
-				$("#dir").val(""); 
-				
-				$("#nameDiv").hide();
-				$("#zipDiv").show();
-				
-					
-				$("#action").val("update");
-				showWindow(commonStr.update);
-			}else{
-				layer.msg(data.msg)
-			}
-		},
-		error : function() {
-			layer.alert(commonStr.errorInfo);
-		}
-	});
-}*/
-
 
 
 function selectRootCustom(){
