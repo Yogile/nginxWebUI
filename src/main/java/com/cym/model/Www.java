@@ -7,15 +7,16 @@ import cn.craccd.sqlHelper.config.Table;
 public class Www extends BaseModel {
 
 	String dir;
-	String name;
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
+	
+//	String name;
+//
+//	public String getName() {
+//		return name;
+//	}
+//
+//	public void setName(String name) {
+//		this.name = name;
+//	}
 
 	public String getDir() {
 		return dir;
