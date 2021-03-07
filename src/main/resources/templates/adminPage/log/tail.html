@@ -9,12 +9,15 @@
 		<div></div>
 	</div>
 
+	<input type="hidden" id="id" value="${id}">
 	<#include '/adminPage/script.html'/>
 
 	<script>
+		
 		$(document).ready(function() {
 			// 指定websocket路径
-			var websocket = new WebSocket('ws://localhost:8080/adminPage/logTail');
+			//debugger
+			var websocket = new WebSocket(`ws:${ctx}/adminPage/logTail/` + $("#id").val());
 			websocket.onmessage = function(event) {
 				// 接收服务端的实时日志并添加到HTML页面中
 				$("#log-container div").append(event.data);

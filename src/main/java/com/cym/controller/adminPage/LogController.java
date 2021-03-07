@@ -24,6 +24,7 @@ import com.cym.utils.JsonResult;
 
 import cn.craccd.sqlHelper.bean.Page;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.URLUtil;
 
 @Controller
 @RequestMapping("/adminPage/log")
@@ -73,10 +74,13 @@ public class LogController extends BaseController {
 	}
 
 	@RequestMapping("tail")
-	public ModelAndView tail(ModelAndView modelAndView, String path) {
+	public ModelAndView tail(ModelAndView modelAndView, String id) {
+		modelAndView.addObject("id", id);
 		modelAndView.setViewName("/adminPage/log/tail");
 		return modelAndView;
 	}
+	
+	
 	@ResponseBody
 	@RequestMapping("down")
 	public void down(ModelAndView modelAndView, String id, HttpServletResponse response) {
@@ -89,7 +93,7 @@ public class LogController extends BaseController {
 		try {
 			response.setContentType("application/octet-stream");
 			String headerKey = "Content-Disposition";
-			String headerValue = "attachment; filename=" + file.getName();
+			String headerValue = "attachment; filename=" + URLUtil.encode(file.getName());
 			response.setHeader(headerKey, headerValue);
 
 			InputStream inputStream = new FileInputStream(file);

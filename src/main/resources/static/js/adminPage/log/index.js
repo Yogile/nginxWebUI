@@ -105,16 +105,16 @@ function selectRootCustom(){
 	});
 }
 
-function tail(path){
+function tail(id,path){
 	layer.open({
 		  type: 2, 
 		  area : [ '1300px', '700px' ], // 宽高
 		  title : path,
 		  resize  : false,
-		  content: ctx + "adminPage/log/tail?path=" + path
+		  content: ctx + "adminPage/log/tail?id=" + id
 	}); 
 }
 
 function down(id){
-	window.open(ctx+"adminPage/log/down?id" + id);
+	window.open(ctx+"adminPage/log/down?id=" + id);
 }
