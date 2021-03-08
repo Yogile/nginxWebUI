@@ -21,6 +21,7 @@ import com.cym.service.LogService;
 import com.cym.service.SettingService;
 import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
+import com.cym.utils.SystemTool;
 
 import cn.craccd.sqlHelper.bean.Page;
 import cn.hutool.core.io.FileUtil;
@@ -39,8 +40,9 @@ public class LogController extends BaseController {
 	@RequestMapping("")
 	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView, Page page) {
 		page = logService.search(page);
-//
 		modelAndView.addObject("page", page);
+		
+		modelAndView.addObject("isLinux", SystemTool.isLinux());
 		modelAndView.setViewName("/adminPage/log/index");
 		return modelAndView;
 	}
