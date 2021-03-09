@@ -157,8 +157,6 @@ public class ConfController extends BaseController {
 			nginxDir = settingService.get("nginxDir");
 		}
 
-//		String decompose = settingService.get("decompose");
-
 		String rs = null;
 		String cmd = null;
 
@@ -172,13 +170,6 @@ public class ConfController extends BaseController {
 			ClassPathResource resource = new ClassPathResource("mime.types");
 			FileUtil.writeFromStream(resource.getInputStream(), InitConfig.home + "temp/mime.types");
 
-//			for (int i = 0; i < confExt.getFileList().size(); i++) {
-//				String subName = confExt.getFileList().get(i).getName();
-//				String subContent = confExt.getFileList().get(i).getConf();
-//
-//				String tagert = (new File(fileTemp).getParent() + "/conf.d/" + subName).replace(" ", "_");
-//				FileUtil.writeString(subContent, tagert, StandardCharsets.UTF_8); // 清空
-//			}
 
 			if (SystemTool.isWindows()) {
 				cmd = nginxExe + " -t -c " + fileTemp + " -p " + nginxDir;
