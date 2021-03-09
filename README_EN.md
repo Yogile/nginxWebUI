@@ -3,7 +3,8 @@
 #### Introduce
 Nginx web page configuration tool
 
-QQ Group: 1106758598
+QQ Group1: 1106758598
+QQ Group2: 560797506
 
 Email: cym1102@qq.com
 
