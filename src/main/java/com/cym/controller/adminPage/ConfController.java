@@ -114,12 +114,12 @@ public class ConfController extends BaseController {
 		if (nginxPath == null) {
 			nginxPath = settingService.get("nginxPath");
 		}
-		
+
 		if (FileUtil.isDirectory(nginxPath)) {
 			// 是文件夹, 提示
 			return renderError(m.get("confStr.error2"));
 		}
-		
+
 		try {
 			confService.replace(nginxPath, nginxContent, subContent, subName, true);
 			return renderSuccess(m.get("confStr.replaceSuccess"));
@@ -150,6 +150,7 @@ public class ConfController extends BaseController {
 
 	/**
 	 * 检查数据库内部配置
+	 * 
 	 * @param nginxPath
 	 * @param nginxExe
 	 * @param nginxDir
@@ -174,7 +175,6 @@ public class ConfController extends BaseController {
 			ClassPathResource resource = new ClassPathResource("mime.types");
 			FileUtil.writeFromStream(resource.getInputStream(), InitConfig.home + "temp/mime.types");
 
-
 			if (SystemTool.isWindows()) {
 				cmd = nginxExe + " -t -c " + fileTemp + " -p " + nginxDir;
 			} else {
@@ -197,9 +197,10 @@ public class ConfController extends BaseController {
 		}
 
 	}
-	
+
 	/**
 	 * 检查页面上的配置
+	 * 
 	 * @param nginxPath
 	 * @param nginxExe
 	 * @param nginxDir
@@ -215,15 +216,15 @@ public class ConfController extends BaseController {
 		if (nginxDir == null) {
 			nginxDir = settingService.get("nginxDir");
 		}
-		
+
 		JSONObject jsonObject = JSONUtil.parseObj(json);
 		String nginxContent = Base64.decodeStr(jsonObject.getStr("nginxContent"), CharsetUtil.CHARSET_UTF_8);
 		nginxContent = URLDecoder.decode(nginxContent, CharsetUtil.CHARSET_UTF_8).replace("<wave>", "~");
 
 		File pathFile = new File(nginxPath);
 		File tempFile = new File(InitConfig.home + "temp");
-		nginxContent = nginxContent.replace(ToolUtils.handlePath(pathFile.getParent()), ToolUtils.handlePath(tempFile.getPath()));
-		
+		nginxContent = nginxContent.replace("include " + ToolUtils.handlePath(pathFile.getParent()), "include " + ToolUtils.handlePath(tempFile.getPath()));
+
 		List<String> subContent = jsonObject.getJSONArray("subContent").toList(String.class);
 		for (int i = 0; i < subContent.size(); i++) {
 			String content = Base64.decodeStr(subContent.get(i), CharsetUtil.CHARSET_UTF_8);
@@ -232,20 +233,17 @@ public class ConfController extends BaseController {
 		}
 		List<String> subName = jsonObject.getJSONArray("subName").toList(String.class);
 
-		
 		FileUtil.del(InitConfig.home + "temp");
-		String fileTemp = InitConfig.home + "temp" + File.separator +"nginx.conf";
+		String fileTemp = InitConfig.home + "temp" + File.separator + "nginx.conf";
 
 		confService.replace(fileTemp, nginxContent, subContent, subName, false);
-		
+
 		String rs = null;
 		String cmd = null;
 
-	
 		try {
 			ClassPathResource resource = new ClassPathResource("mime.types");
 			FileUtil.writeFromStream(resource.getInputStream(), InitConfig.home + "temp/mime.types");
-
 
 			if (SystemTool.isWindows()) {
 				cmd = nginxExe + " -t -c " + fileTemp + " -p " + nginxDir;
@@ -270,8 +268,6 @@ public class ConfController extends BaseController {
 
 	}
 
-	
-
 	@RequestMapping(value = "saveCmd")
 	@ResponseBody
 	public JsonResult saveCmd(String nginxPath, String nginxExe, String nginxDir) {
@@ -281,7 +277,7 @@ public class ConfController extends BaseController {
 		nginxExe = ToolUtils.handlePath(nginxExe);
 		settingService.set("nginxExe", nginxExe);
 
-		nginxDir =  ToolUtils.handlePath(nginxDir);
+		nginxDir = ToolUtils.handlePath(nginxDir);
 		settingService.set("nginxDir", nginxDir);
 
 		return renderSuccess();
@@ -496,6 +492,5 @@ public class ConfController extends BaseController {
 		settingService.set(key, val);
 		return renderSuccess();
 	}
-	
 
 }
