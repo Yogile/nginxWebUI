@@ -9,6 +9,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -88,13 +90,11 @@ public class ScheduleTask {
 	}
 
 	// 分隔日志,每天
+	//@Scheduled(cron = "0/10 * * * * ?")
 	@Scheduled(cron = "0 55 23 * * ?")
 	public void diviLog() {
 		Http http = httpService.getName("access_log");
-		String path = null;
-		if (http != null && StrUtil.isNotEmpty(http.getValue())) {
-			path = http.getValue().split(" ")[0];
-		}
+		String path = http.getValue();
 
 		if (StrUtil.isNotEmpty(path) && FileUtil.exist(path)) {
 
