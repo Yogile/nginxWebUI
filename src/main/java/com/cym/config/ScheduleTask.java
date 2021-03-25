@@ -106,9 +106,6 @@ public class ScheduleTask {
 			FileUtil.del(dist); // 删除原文件
 			// 重载Nginx产生新的文件
 			confController.reload(null, null, null);
-			// 马上解析分隔出来的日志
-//			logInfoService.buildDataGroup(InitConfig.home + "log/access." + date + ".zip");
-//			logInfoService.clearDb();
 		}
 
 		// 删除多余文件

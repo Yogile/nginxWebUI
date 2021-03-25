@@ -355,9 +355,14 @@ public class ConfService {
 					}
 
 
+					NgxBlock ngxBlock = new NgxBlock();
+					ngxBlock.addValue("if ($scheme = http)");
 					ngxParam = new NgxParam();
-					ngxParam.addValue("error_page 497 https://$host:" + port + "$request_uri");
-					ngxBlockServer.addEntry(ngxParam);
+
+					ngxParam.addValue("return 301 https://$host:" + port + "$request_uri");
+					ngxBlock.addEntry(ngxParam);
+
+					ngxBlockServer.addEntry(ngxBlock);
 
 				}
 			}
