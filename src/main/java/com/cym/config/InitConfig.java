@@ -141,7 +141,7 @@ public class InitConfig {
 					// 启动nginx
 					String cmd = nginxExe + " -c " + nginxPath;
 					RuntimeUtil.execForStr("/bin/sh", "-c", cmd);
-				}
+				} 
 			}
 		}
 
