@@ -342,7 +342,7 @@ public class ConfController extends BaseController {
 				if (StrUtil.isNotEmpty(nginxDir)) {
 					cmd += " -p " + nginxDir;
 				}
-				rs = RuntimeUtil.execForStr(cmd);
+				rs = RuntimeUtil.execForStr("/bin/sh", "-c", cmd);
 			}
 
 			cmd = "<span class='blue'>" + cmd + "</span>";
