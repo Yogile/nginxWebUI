@@ -1,7 +1,6 @@
 package com.cym.config;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -20,13 +19,10 @@ import org.springframework.stereotype.Component;
 
 import com.cym.model.Basic;
 import com.cym.model.Http;
-import com.cym.model.Stream;
 import com.cym.service.BasicService;
 import com.cym.service.SettingService;
 import com.cym.utils.SystemTool;
 
-import cn.craccd.sqlHelper.bean.Update;
-import cn.craccd.sqlHelper.utils.ConditionAndWrapper;
 import cn.craccd.sqlHelper.utils.SqlHelper;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.CharsetUtil;
@@ -140,7 +136,8 @@ public class InitConfig {
 				// 设置nginx执行文件
 				settingService.set("nginxExe", nginxExe);
 				// 启动nginx
-				RuntimeUtil.exec(nginxExe, "-c", nginxPath);
+				String cmd = nginxExe + " -c " + nginxPath;
+				RuntimeUtil.execForStr("/bin/sh", "-c", cmd);
 			}
 		}
 
