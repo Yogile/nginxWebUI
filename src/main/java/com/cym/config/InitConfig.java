@@ -21,6 +21,7 @@ import com.cym.model.Basic;
 import com.cym.model.Http;
 import com.cym.service.BasicService;
 import com.cym.service.SettingService;
+import com.cym.utils.NginxUtils;
 import com.cym.utils.SystemTool;
 
 import cn.craccd.sqlHelper.utils.SqlHelper;
@@ -132,12 +133,15 @@ public class InitConfig {
 
 			// 判断是否是容器中
 			if (inDocker()) {
-				String nginxExe = "nginx";
-				// 设置nginx执行文件
-				settingService.set("nginxExe", nginxExe);
-				// 启动nginx
-				String cmd = nginxExe + " -c " + nginxPath;
-				RuntimeUtil.execForStr("/bin/sh", "-c", cmd);
+				if (!NginxUtils.isRun()) {
+
+					String nginxExe = "nginx";
+					// 设置nginx执行文件
+					settingService.set("nginxExe", nginxExe);
+					// 启动nginx
+					String cmd = nginxExe + " -c " + nginxPath;
+					RuntimeUtil.execForStr("/bin/sh", "-c", cmd);
+				}
 			}
 		}
 
