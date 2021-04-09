@@ -93,12 +93,25 @@ public class ScheduleTask {
 	//@Scheduled(cron = "0/10 * * * * ?")
 	@Scheduled(cron = "0 55 23 * * ?")
 	public void diviLog() {
-		Http http = httpService.getName("access_log");
-		if (http != null) {
-			String path = http.getValue();
+		Http access = httpService.getName("access_log");
+		if (access != null) {
+			cutLog(access);
+		}
+		
+		Http error = httpService.getName("error_log");
+		if (access != null) {
+			cutLog(error);
+		}
+		
+	}
 
-			if (StrUtil.isNotEmpty(path) && FileUtil.exist(path)) {
+	private void cutLog(Http http) {
+		String path = http.getValue();
 
+		if (StrUtil.isNotEmpty(path) ) {
+			// 去掉格式化
+			path = path.split(" ")[0];
+			if(FileUtil.exist(path)) {
 				String date = DateUtil.format(new Date(), "yyyy-MM-dd");
 				// 分隔日志
 				File dist = new File(path + "." + date);
@@ -107,31 +120,27 @@ public class ScheduleTask {
 				FileUtil.del(dist); // 删除原文件
 				// 重载Nginx产生新的文件
 				confController.reload(null, null, null);
-			}
+				
+				// 删除多余文件
+				long time = System.currentTimeMillis();
 
-			// 删除多余文件
-			long time = System.currentTimeMillis();
-
-			File dir = new File(path).getParentFile();
-			for (File file : dir.listFiles()) {
-				if (file.getName().contains(new File(path).getName()) && file.getName().endsWith(".zip")) {
-					String[] array = file.getName().split("[.]");
-					String dateStr = array[array.length - 2];
-					DateTime date = DateUtil.parse(dateStr, "yyyy-MM-dd");
-					if (time - date.getTime() > TimeUnit.DAYS.toMillis(8)) {
-						FileUtil.del(file);
+				File dir = new File(path).getParentFile();
+				for (File file : dir.listFiles()) {
+					if (file.getName().contains(new File(path).getName()) && file.getName().endsWith(".zip")) {
+						String[] array = file.getName().split("[.]");
+						String dateStr = array[array.length - 2];
+						DateTime dateTime = DateUtil.parse(dateStr, "yyyy-MM-dd");
+						if (time - dateTime.getTime() > TimeUnit.DAYS.toMillis(8)) {
+							FileUtil.del(file);
+						}
 					}
 				}
 			}
 		}
+
+		
 	}
 
-	public static void main(String[] args) {
-		String name = "access.log.2021-04-04.zip";
-		String[] array = name.split("[.]");
-		String dateStr = array[array.length - 2];
-		System.out.println(dateStr);
-	}
 
 	@Scheduled(cron = "0 0 0 * * ?")
 	public void delBak() {
