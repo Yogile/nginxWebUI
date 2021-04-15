@@ -8,8 +8,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.cym.NginxWebUI;
 import com.cym.controller.adminPage.ConfController;
+import com.cym.model.Admin;
 import com.cym.utils.MessageUtils;
 
+import cn.craccd.sqlHelper.utils.ConditionAndWrapper;
 import cn.craccd.sqlHelper.utils.SqlHelper;
 
 @SpringBootTest(classes = NginxWebUI.class)
@@ -25,7 +27,9 @@ public class MainTest {
 	
 	@Test
 	public void testStartUp() throws InterruptedException {
-		confController.reload(null, null, null);
+		
+		
+		
 	}
 
 	
