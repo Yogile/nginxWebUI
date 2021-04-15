@@ -28,6 +28,7 @@ import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
 import com.cym.utils.SystemTool;
 
+import cn.craccd.sqlHelper.bean.Page;
 import cn.craccd.sqlHelper.utils.ConditionAndWrapper;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.UUID;
@@ -48,10 +49,10 @@ public class CertController extends BaseController {
 	Boolean isInApply = false;
 
 	@RequestMapping("")
-	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView) {
-		List<Cert> certs = sqlHelper.findAll(Cert.class);
+	public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView, Page page) {
+		page = sqlHelper.findPage(page, Cert.class);
 
-		modelAndView.addObject("certs", certs);
+		modelAndView.addObject("page", page);
 		modelAndView.setViewName("/adminPage/cert/index");
 		return modelAndView;
 	}
