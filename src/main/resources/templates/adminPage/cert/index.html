@@ -77,11 +77,11 @@
 							</td>
 							<td>
 								<#if cert.type == 0>
-									<#if cert.pem== null>
+									<#if cert.pem == null || cert.pem == "">
 									<button class="layui-btn layui-btn-sm" onclick="issue('${cert.id}')">${commonStr.apply}</button>
 									</#if>
 									 
-									<#if cert.pem !=null>
+									<#if cert.pem != null && cert.pem != "">
 									<button class="layui-btn layui-btn-sm" onclick="renew('${cert.id}')">${certStr.renew}</button>
 									</#if>
 								</#if>

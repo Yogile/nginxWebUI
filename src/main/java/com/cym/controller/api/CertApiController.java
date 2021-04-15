@@ -71,7 +71,7 @@ public class CertApiController extends BaseController {
 
 	@ApiOperation("设置证书自动续签")
 	@PostMapping("setAutoRenew")
-	public JsonResult setAutoRenew(String id, Integer autoRenew) {
+	public JsonResult setAutoRenew(@ApiParam("主键id")String id, @ApiParam("是否自动续签:0否 1是")Integer autoRenew) {
 		Cert cert = new Cert();
 		cert.setId(id);
 		cert.setAutoRenew(autoRenew);
@@ -88,14 +88,14 @@ public class CertApiController extends BaseController {
 
 	@ApiOperation("执行申请")
 	@PostMapping("apply")
-	public JsonResult apply(String id, String type) {
+	public JsonResult apply(@ApiParam("主键id") String id,@ApiParam("申请类型 issue:申请 renew:续签") String type) {
 
 		return certController.apply(id, type);
 	}
 
 	@ApiOperation("下载证书文件")
 	@PostMapping("download")
-	public void download(String id, HttpServletResponse response) throws IOException {
+	public void download(@ApiParam("主键id")String id, HttpServletResponse response) throws IOException {
 		certController.download(id, response);
 	}
 }
