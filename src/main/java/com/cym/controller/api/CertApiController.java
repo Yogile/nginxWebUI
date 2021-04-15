@@ -17,6 +17,7 @@ import com.cym.utils.BaseController;
 import com.cym.utils.JsonResult;
 
 import cn.craccd.sqlHelper.bean.Page;
+import cn.hutool.core.util.StrUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -45,13 +46,31 @@ public class CertApiController extends BaseController {
 	}
 
 	@ApiOperation("添加或编辑证书")
-	@RequestMapping("addOver")
+	@PostMapping("addOver")
 	public JsonResult addOver(Cert cert) {
+		if (StrUtil.isEmpty(cert.getDomain())) {
+			return renderError("域名为空");
+		}
+		if (StrUtil.isEmpty(cert.getDnsType())) {
+			return renderError("dns提供商为空");
+		}
+		if(cert.getDnsType().equals("ali") && (StrUtil.isEmpty(cert.getAliKey()) || StrUtil.isEmpty(cert.getAliSecret()))) {
+			return renderError("aliKey 或 aliSecret为空");
+		}
+		if(cert.getDnsType().equals("dp") && (StrUtil.isEmpty(cert.getDpId()) || StrUtil.isEmpty(cert.getDpKey()))) {
+			return renderError("dpId 或 dpKey为空");
+		}
+		if(cert.getDnsType().equals("cf") && (StrUtil.isEmpty(cert.getCfEmail()) || StrUtil.isEmpty(cert.getCfKey()))) {
+			return renderError("cfEmail 或 cfKey为空");
+		}
+		if(cert.getDnsType().equals("gd") && (StrUtil.isEmpty(cert.getGdKey()) || StrUtil.isEmpty(cert.getGdSecret()))) {
+			return renderError("gdKey 或 gdSecret为空");
+		}
 		return certController.addOver(cert);
 	}
 
 	@ApiOperation("设置证书自动续签")
-	@RequestMapping("setAutoRenew")
+	@PostMapping("setAutoRenew")
 	public JsonResult setAutoRenew(String id, Integer autoRenew) {
 		Cert cert = new Cert();
 		cert.setId(id);
@@ -62,20 +81,20 @@ public class CertApiController extends BaseController {
 	}
 
 	@ApiOperation("删除证书")
-	@RequestMapping("del")
+	@PostMapping("del")
 	public JsonResult del(String id) {
 		return certController.del(id);
 	}
 
 	@ApiOperation("执行申请")
-	@RequestMapping("apply")
+	@PostMapping("apply")
 	public JsonResult apply(String id, String type) {
 
 		return certController.apply(id, type);
 	}
 
 	@ApiOperation("下载证书文件")
-	@RequestMapping("download")
+	@PostMapping("download")
 	public void download(String id, HttpServletResponse response) throws IOException {
 		certController.download(id, response);
 	}

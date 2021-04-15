@@ -28,11 +28,11 @@ public class Cert extends BaseModel {
 	@InitValue("0")
 	Integer autoRenew; 
 
-	@ApiModelProperty("pem文件内容")
-	String pemStr;
-	
-	@ApiModelProperty("key文件内容")
-	String keyStr;
+//	@ApiModelProperty("pem文件内容")
+//	String pemStr;
+//	
+//	@ApiModelProperty("key文件内容")
+//	String keyStr;
 
 	@ApiModelProperty("dns提供商 ali:阿里云  dp:腾讯云  cf:Cloudflare  gd:Godaddy")
 	String dnsType; 
@@ -133,21 +133,21 @@ public class Cert extends BaseModel {
 		this.aliSecret = aliSecret;
 	}
 
-	public String getPemStr() {
-		return pemStr;
-	}
-
-	public void setPemStr(String pemStr) {
-		this.pemStr = pemStr;
-	}
-
-	public String getKeyStr() {
-		return keyStr;
-	}
-
-	public void setKeyStr(String keyStr) {
-		this.keyStr = keyStr;
-	}
+//	public String getPemStr() {
+//		return pemStr;
+//	}
+//
+//	public void setPemStr(String pemStr) {
+//		this.pemStr = pemStr;
+//	}
+//
+//	public String getKeyStr() {
+//		return keyStr;
+//	}
+//
+//	public void setKeyStr(String keyStr) {
+//		this.keyStr = keyStr;
+//	}
 
 	public Integer getAutoRenew() {
 		return autoRenew;

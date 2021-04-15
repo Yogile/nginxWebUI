@@ -85,8 +85,10 @@ public class CertController extends BaseController {
 	@ResponseBody
 	public JsonResult del(String id) {
 		Cert cert = sqlHelper.findById(id, Cert.class);
-
-		FileUtil.del(InitConfig.acmeShDir + cert.getDomain());
+		String path = InitConfig.acmeShDir + cert.getDomain();
+		if (FileUtil.exist(path)) {
+			FileUtil.del(path);
+		}
 		sqlHelper.deleteById(id, Cert.class);
 		return renderSuccess();
 	}
