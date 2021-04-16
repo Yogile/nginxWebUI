@@ -85,16 +85,16 @@
 		</dependency>
 		
 		<!-- jsch支持 -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>com.jcraft</groupId>
 			<artifactId>jsch</artifactId>
 			<version>0.1.55</version>
-		</dependency>
-		<!-- WebSocket 支持 -->
-		<dependency>
+		</dependency> -->
+		 <!-- WebSocket 支持 -->
+		 <dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-websocket</artifactId>
-		</dependency>
+		</dependency> 
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

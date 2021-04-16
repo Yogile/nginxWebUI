@@ -75,7 +75,7 @@ public class ScheduleTask {
 	MessageUtils m;
 
 	// 使用TimeUnit.DAYS.toMillis()进行时间粒度转换。Modified by Sai on 2020-6-17.
-	@Scheduled(cron = "0 0 2 * * ?")
+	@Scheduled(cron = "0 0 7 * * ?")
 	public void certTasks() {
 		List<Cert> certList = sqlHelper.findAll(Cert.class);
 
