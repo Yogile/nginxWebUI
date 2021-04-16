@@ -141,10 +141,10 @@ public class ScheduleTask {
 		
 	}
 
-
+	// 删除7天前的备份
 	@Scheduled(cron = "0 0 0 * * ?")
 	public void delBak() {
-		// 删除7天前的备份
+		
 		long time = System.currentTimeMillis();
 		File dir = new File(InitConfig.home + "bak/");
 		if (dir.exists()) {
