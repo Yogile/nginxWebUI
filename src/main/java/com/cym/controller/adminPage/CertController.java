@@ -25,11 +25,11 @@ import com.cym.model.Cert;
 import com.cym.service.CertService;
 import com.cym.service.SettingService;
 import com.cym.utils.BaseController;
+import com.cym.utils.ExeUtils;
 import com.cym.utils.JsonResult;
 import com.cym.utils.SystemTool;
 
 import cn.craccd.sqlHelper.bean.Page;
-import cn.craccd.sqlHelper.utils.ConditionAndWrapper;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.RuntimeUtil;
@@ -43,6 +43,8 @@ public class CertController extends BaseController {
 	SettingService settingService;
 	@Autowired
 	CertService certService;
+	@Autowired
+	ExeUtils exeUtils;
 
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -137,7 +139,7 @@ public class CertController extends BaseController {
 			}
 			logger.info(cmd);
 
-			rs = RuntimeUtil.execForStr(cmd);
+			rs = exeUtils.execCMD(cmd, null,2 * 60 * 1000);
 			logger.info(rs);
 
 		} catch (Exception e) {
