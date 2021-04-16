@@ -139,7 +139,7 @@ public class CertController extends BaseController {
 			}
 			logger.info(cmd);
 
-			rs = exeUtils.execCMD(cmd, null,2 * 60 * 1000);
+			rs = exeUtils.execCMD(cmd, null, 2 * 60 * 1000);
 			logger.info(rs);
 
 		} catch (Exception e) {
