@@ -171,7 +171,7 @@ public class CertController extends BaseController {
 		} else {
 
 			isInApply = false;
-			return renderError(rs.replace("\n", "<br>"));
+			return renderError(m.get("certStr.applyFail") + "\n" + rs.replace("\n", "<br>"));
 		}
 	}
 
