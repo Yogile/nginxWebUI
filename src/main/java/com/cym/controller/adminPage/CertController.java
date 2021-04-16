@@ -44,7 +44,7 @@ public class CertController extends BaseController {
 	@Autowired
 	CertService certService;
 	@Autowired
-	TimeExeUtils exeUtils;
+	TimeExeUtils timeExeUtils;
 
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -139,7 +139,7 @@ public class CertController extends BaseController {
 			}
 			logger.info(cmd);
 
-			rs = exeUtils.execCMD(cmd, null, 2 * 60 * 1000);
+			rs = timeExeUtils.execCMD(cmd, null, 2 * 60 * 1000);
 			logger.info(rs);
 
 		} catch (Exception e) {
