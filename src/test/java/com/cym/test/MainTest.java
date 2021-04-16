@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.cym.NginxWebUI;
 import com.cym.controller.adminPage.ConfController;
-import com.cym.utils.ExeUtils;
+import com.cym.utils.TimeExeUtils;
 import com.cym.utils.MessageUtils;
 
 import cn.craccd.sqlHelper.utils.SqlHelper;
@@ -26,12 +26,12 @@ public class MainTest {
 	@Autowired
 	ConfController confController;
 	@Autowired
-	ExeUtils exeUtils;
+	TimeExeUtils exeUtils;
 
 	@Test
 	public void testStartUp() throws InterruptedException, IOException {
 
-		String rs = exeUtils.execCMD("ping www.baidu.com -t", null, 10000);
+		String rs = exeUtils.execCMD("ping www.baidu.com", null, 10000);
 		
 		System.err.println(rs);
 	}

@@ -25,7 +25,7 @@ import com.cym.model.Cert;
 import com.cym.service.CertService;
 import com.cym.service.SettingService;
 import com.cym.utils.BaseController;
-import com.cym.utils.ExeUtils;
+import com.cym.utils.TimeExeUtils;
 import com.cym.utils.JsonResult;
 import com.cym.utils.SystemTool;
 
@@ -44,7 +44,7 @@ public class CertController extends BaseController {
 	@Autowired
 	CertService certService;
 	@Autowired
-	ExeUtils exeUtils;
+	TimeExeUtils exeUtils;
 
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 

@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ExeUtils {
+public class TimeExeUtils {
 	
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 	/**
