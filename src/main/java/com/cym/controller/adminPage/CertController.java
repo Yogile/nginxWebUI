@@ -113,65 +113,54 @@ public class CertController extends BaseController {
 		isInApply = true;
 
 		String rs = "";
-		try {
-			// 设置dns账号
-			setEnv(cert);
+		String cmd = "";
+		// 设置dns账号
+		setEnv(cert);
 
-			String cmd = "";
-			if (type.equals("issue") || StrUtil.isEmpty(cert.getPem())) {
-				// 申请
-				String dnsType = "";
-				if (cert.getDnsType().equals("ali")) {
-					dnsType = "dns_ali";
-				} else if (cert.getDnsType().equals("dp")) {
-					dnsType = "dns_dp";
-				} else if (cert.getDnsType().equals("cf")) {
-					dnsType = "dns_cf";
-				} else if (cert.getDnsType().equals("gd")) {
-					dnsType = "dns_gd";
-				}
-
-				cmd = InitConfig.acmeSh + " --issue --dns " + dnsType + " -d " + cert.getDomain();
-			} else if (type.equals("renew")) {
-				// 续签,以第一个域名为证书名
-				String domain = cert.getDomain().split(",")[0];
-				cmd = InitConfig.acmeSh + " --renew --force -d " + domain;
+		if (type.equals("issue") || StrUtil.isEmpty(cert.getPem())) {
+			// 申请
+			String dnsType = "";
+			if (cert.getDnsType().equals("ali")) {
+				dnsType = "dns_ali";
+			} else if (cert.getDnsType().equals("dp")) {
+				dnsType = "dns_dp";
+			} else if (cert.getDnsType().equals("cf")) {
+				dnsType = "dns_cf";
+			} else if (cert.getDnsType().equals("gd")) {
+				dnsType = "dns_gd";
 			}
-			logger.info(cmd);
 
-			rs = timeExeUtils.execCMD(cmd, null, 2 * 60 * 1000);
-			logger.info(rs);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			rs = e.getMessage();
+			cmd = InitConfig.acmeSh + " --issue --dns " + dnsType + " -d " + cert.getDomain();
+		} else if (type.equals("renew")) {
+			// 续签,以第一个域名为证书名
+			String domain = cert.getDomain().split(",")[0];
+			cmd = InitConfig.acmeSh + " --renew --force -d " + domain;
 		}
+		logger.info(cmd);
+
+		rs = timeExeUtils.execCMD(cmd, null, 2 * 60 * 1000);
+		logger.info(rs);
 
 		if (rs.contains("Your cert is in")) {
-			try {
-				// 将证书复制到/home/nginxWebUI
-				String domain = cert.getDomain().split(",")[0];
-				String certDir = InitConfig.acmeShDir + domain + "/";
+			// 将证书复制到/home/nginxWebUI
+			String domain = cert.getDomain().split(",")[0];
+			String certDir = InitConfig.acmeShDir + domain + "/";
 
-				String dest = InitConfig.home + "cert/" + domain + ".fullchain.cer";
-				FileUtil.copy(new File(certDir + "fullchain.cer"), new File(dest), true);
-				cert.setPem(dest);
+			String dest = InitConfig.home + "cert/" + domain + ".fullchain.cer";
+			FileUtil.copy(new File(certDir + "fullchain.cer"), new File(dest), true);
+			cert.setPem(dest);
 
-				dest = InitConfig.home + "cert/" + domain + ".key";
-				FileUtil.copy(new File(certDir + domain + ".key"), new File(dest), true);
-				cert.setKey(dest);
+			dest = InitConfig.home + "cert/" + domain + ".key";
+			FileUtil.copy(new File(certDir + domain + ".key"), new File(dest), true);
+			cert.setKey(dest);
 
-				cert.setMakeTime(System.currentTimeMillis());
-				sqlHelper.updateById(cert);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			cert.setMakeTime(System.currentTimeMillis());
+			sqlHelper.updateById(cert);
 			isInApply = false;
 			return renderSuccess();
 		} else {
-
 			isInApply = false;
-			return renderError(m.get("certStr.applyFail") + "<br>" + rs.replace("\n", "<br>"));
+			return renderError("<span class='blue'>" + cmd + "</span><br>" + m.get("certStr.applyFail") + "<br>" + rs.replace("\n", "<br>"));
 		}
 	}
 
