@@ -13,6 +13,7 @@ RUN apt-get clean && apt-get update &&\
 ENV LANG C.UTF-8
 COPY target/nginxWebUI-*.jar /home/nginxWebUI.jar
 ADD jre.zip /home/
+RUN chmod 777 /home/jre/bin/java
 ADD nginxWebUI.sh /home/
 RUN chmod 777 /home/nginxWebUI.sh
 ENTRYPOINT ["sh","-c", "/home/nginxWebUI.sh ${BOOT_OPTIONS} && tail -f /dev/null"]
