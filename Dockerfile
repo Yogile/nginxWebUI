@@ -12,7 +12,7 @@ RUN apt-get clean && apt-get update &&\
 	apt-get install tzdata
 ENV LANG C.UTF-8
 COPY target/nginxWebUI-*.jar /home/nginxWebUI.jar
-ADD jre.zip /home/
+ADD jre.tar.gz /home/
 RUN chmod 777 /home/jre/bin/java
 ADD nginxWebUI.sh /home/
 RUN chmod 777 /home/nginxWebUI.sh
