@@ -235,10 +235,6 @@ Backup file management. Here you can see the backup history version of Nginx.cnF
 
 Finally, the conF file can be generated, which can be further modified manually. After the modification is confirmed to be correct, the native conF file can be overwritten, and the effectiveness and restart can be carried out. You can choose to generate a single Nginx.conf file or separate each configuration file under conF.d by domain name
  
-![输入图片说明](http://www.nginxwebui.cn/img/log.jpeg "log.jpg")
-
-Log management, if log monitoring is on in the HTTP configuration, log analysis reports are generated here every day.
-
 ![输入图片说明](http://www.nginxwebui.cn/img/remote.jpeg "remote.jpg")
 
 Remote server management. If you have multiple Nginx servers, you can deploy nginxWebUI, log in to one of them, add the IP and username and password of other servers to the remote management, and then you can manage all Nginx servers on one machine.
