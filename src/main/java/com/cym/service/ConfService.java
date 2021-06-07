@@ -293,7 +293,7 @@ public class ConfService {
 
 			// 监听端口
 			ngxParam = new NgxParam();
-			String value = "listen [::]:" + server.getListen();
+			String value = "listen " + server.getListen();
 			if (server.getDef() == 1) {
 				value += " default";
 			}
@@ -348,7 +348,7 @@ public class ConfService {
 				if (server.getRewrite() == 1) {
 					if (StrUtil.isNotEmpty(server.getRewriteListen())) {
 						ngxParam = new NgxParam();
-						String reValue = "listen [::]:" + server.getRewriteListen();
+						String reValue = "listen " + server.getRewriteListen();
 						if (server.getDef() == 1) {
 							reValue += " default";
 						}
