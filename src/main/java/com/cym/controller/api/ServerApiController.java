@@ -100,18 +100,18 @@ public class ServerApiController extends BaseController {
 	}
 	
 	
-	@ApiOperation("移动location")
-	@PostMapping("moveLocation")
-	public JsonResult<?> moveLocation(String locationId, @ApiParam("-1:上移 1:下移") @RequestParam Integer seq) {
-		if (seq == null) {
-			return renderError("seq" + m.get("apiStr.notFill"));
-		}
-		if (StrUtil.isEmpty(locationId)) {
-			return renderError("locationId" + m.get("apiStr.notFill"));
-		}
-		serverService.moveLocation(locationId, seq);
-
-		return renderSuccess();
-	}
+//	@ApiOperation("移动location")
+//	@PostMapping("moveLocation")
+//	public JsonResult<?> moveLocation(String locationId, @ApiParam("-1:上移 1:下移") @RequestParam Integer seq) {
+//		if (seq == null) {
+//			return renderError("seq" + m.get("apiStr.notFill"));
+//		}
+//		if (StrUtil.isEmpty(locationId)) {
+//			return renderError("locationId" + m.get("apiStr.notFill"));
+//		}
+//		serverService.moveLocation(locationId, seq);
+//
+//		return renderSuccess();
+//	}
 
 }
