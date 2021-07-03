@@ -147,9 +147,9 @@ function addGiudeOver() {
 		if ($(this).val() == 'css' && $(this).prop("checked")) {
 			http.value += "text/css ";
 		}
-		if ($(this).val() == 'html' && $(this).prop("checked")) {
+		/*if ($(this).val() == 'html' && $(this).prop("checked")) {
 			http.value += "text/html ";
-		}
+		}*/
 	})
 
 	if (http.value != "") {
