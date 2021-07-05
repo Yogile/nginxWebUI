@@ -489,6 +489,9 @@ public class ConfService {
 			// 监听端口
 			ngxParam = new NgxParam();
 			String value = "listen " + server.getListen();
+			if (server.getProxyProtocol() == 1) {
+				value += " proxy_protocol";
+			}
 			if (server.getProxyType() == 2) {
 				value += " udp reuseport";
 			}
