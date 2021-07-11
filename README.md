@@ -1,10 +1,11 @@
 # nginxWebUI
 
-> 本项目 forked from [陈钇蒙](https://gitee.com/cym1102) / [nginxWebUI](https://gitee.com/cym1102/nginxWebUI) ，提供基于 AArch64 （ARMv8）的 nginxwebui 编译，以及对应容器构建。
+> 本项目 forked from [陈钇蒙](https://gitee.com/cym1102) / [nginxWebUI](https://gitee.com/cym1102/nginxWebUI) ，提供基于 AArch64 （ARMv8）的 nginxwebui jar 包编译，以及对应容器构建。
 
 ### [README.md English version](https://gitee.com/Yogile/nginxWebUI/blob/master/README_EN.md)
 
 #### 介绍
+
 nginx网页配置工具
 
 QQ技术交流群1: 1106758598
@@ -37,6 +38,7 @@ nginx本身功能复杂, 本项目并不能涵盖nginx所有功能, 只能配置
 添加tcp/ip转发配置支持时, 一些低版本的nginx可能需要重新编译，通过添加–with-stream参数指定安装stream模块才能使用, 但在ubuntu 18.04下, 官方软件库中的nginx已经带有stream模块, 不需要重新编译. 本系统如果配置了tcp转发项的话, 会自动引入ngx_stream_module.so的配置项, 如果没有开启则不引入, 最大限度优化ngnix配置文件. 
 
 #### jar安装说明
+
 以Ubuntu操作系统为例,
 
  **注意：本项目需要在root用户下运行系统命令，极容易被黑客利用，请一定修改密码为复杂密码**
@@ -60,7 +62,7 @@ yum install nginx
 2.下载最新版发行包jar
 
 ```
-wget -O /home/nginxWebUI/nginxWebUI.jar http://file.nginxwebui.cn/nginxWebUI-2.6.4.jar
+wget -O /home/nginxWebUI/nginxWebUI.jar https://gitee.com/Yogile/nginxWebUI/blob/master/target/nginxWebUI-2.6.4.jar
 ```
 
 有新版本只需要修改路径中的版本即可
@@ -110,13 +112,13 @@ yum install docker
 2.拉取镜像: 
 
 ```
-docker pull cym1102/nginxwebui:latest
+docker pull yogile/nginxwebui-aarch64:latest
 ```
 
 3.启动容器: 
 
 ```
-docker run -itd -v /home/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--server.port=8080" --privileged=true --net=host  cym1102/nginxwebui:latest /bin/bash
+docker run -itd -v /home/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--server.port=8080" --privileged=true --net=host --name nginxwebui-aarch64 yogile/nginxwebui-aarch64:latest /bin/bash
 ```
 
 注意: 
@@ -137,7 +139,7 @@ docker run -itd -v /home/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--server.p
 version: "3.2"
 services:
   nginxWebUi-server:
-    image: cym1102/nginxwebui:2.6.4
+    image: yogile/nginxwebui-aarch64:2.6.4
     volumes:
       - type: bind
         source: "/home/nginxWebUI"
@@ -241,7 +243,7 @@ systemctl start nginxwebui.service
 ![输入图片说明](http://www.nginxwebui.cn/img/conf.jpeg "conf.jpg")
 
 最终生成conf文件,可在此进行进一步手动修改,确认修改无误后,可覆盖本机conf文件,并进行效验和重启, 可以选择生成单一nginx.conf文件还是按域名将各个配置文件分开放在conf.d下
- 
+
 ![输入图片说明](http://www.nginxwebui.cn/img/remote.jpeg "remote.jpg")
 
 远程服务器管理, 如果有多台nginx服务器, 可以都部署上nginxWebUI, 然后登录其中一台, 在远程管理中添加其他服务器的ip和用户名密码, 就可以在一台机器上管理所有的nginx服务器了.

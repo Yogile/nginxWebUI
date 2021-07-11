@@ -56,7 +56,7 @@ yum install nginx
 2.Download the latest release of the distribution jar
 
 ```
-wget -O /home/nginxWebUI/nginxWebUI.jar http://file.nginxwebui.cn/nginxWebUI-2.6.4.jar
+wget -O /home/nginxWebUI/nginxWebUI.jar https://gitee.com/Yogile/nginxWebUI/blob/master/target/nginxWebUI-2.6.4.jar
 ```
 
 With a new version, you just need to change the version in the path
@@ -106,13 +106,13 @@ yum install docker
 2.Download images:
 
 ```
-docker pull cym1102/nginxwebui:2.6.4
+docker pull yogile/nginxwebui-aarch64:latest
 ```
 
 3.start container
 
 ```
-docker run -itd -v /home/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--server.port=8080" --privileged=true --net=host  cym1102/nginxwebui:2.6.4 /bin/bash
+docker run -itd -v /home/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--server.port=8080" --privileged=true --net=host --name nginxwebui-aarch64 yogile/nginxwebui-aarch64:latest /bin/bash
 ```
 
 notice: 
@@ -133,7 +133,7 @@ moreover: The following configuration file is used when using docker-compose
 version: "3.2"
 services:
   nginxWebUi-server:
-    image: cym1102/nginxwebui:2.6.4
+    image: yogile/nginxwebui-aarch64:2.6.4
     volumes:
       - type: bind
         source: "/home/nginxWebUI"
@@ -236,7 +236,7 @@ Backup file management. Here you can see the backup history version of Nginx.cnF
 ![输入图片说明](http://www.nginxwebui.cn/img/conf.jpeg "conf.jpg")
 
 Finally, the conF file can be generated, which can be further modified manually. After the modification is confirmed to be correct, the native conF file can be overwritten, and the effectiveness and restart can be carried out. You can choose to generate a single Nginx.conf file or separate each configuration file under conF.d by domain name
- 
+
 ![输入图片说明](http://www.nginxwebui.cn/img/remote.jpeg "remote.jpg")
 
 Remote server management. If you have multiple Nginx servers, you can deploy nginxWebUI, log in to one of them, add the IP and username and password of other servers to the remote management, and then you can manage all Nginx servers on one machine.
